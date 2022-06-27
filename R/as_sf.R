@@ -48,16 +48,16 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
 
   x <-
     switch(x_is,
-      "bbox" = sf_bbox_to_sf(x, ...),
-      "sfg" = sf::st_sf(sf::st_sfc(x), ...),
-      "sfc" = sf::st_sf(x, ...),
-      "sf_list" = dplyr::bind_rows(x),
-      "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
-      "sp" = sf::st_as_sf(x, ...),
-      "df" = df_to_sf(x, ...),
-      "state" = get_states(x, class = "sf"),
-      "county" = get_counties(x, class = "sf"),
-      "address" = address_to_sf(x)
+           "bbox" = sf_bbox_to_sf(x, ...),
+           "sfg" = sf::st_sf(sf::st_sfc(x), ...),
+           "sfc" = sf::st_sf(x, ...),
+           "sf_list" = dplyr::bind_rows(x),
+           "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
+           "sp" = sf::st_as_sf(x, ...),
+           "df" = df_to_sf(x, ...),
+           "state" = get_states(x, class = "sf"),
+           "county" = get_counties(x, class = "sf"),
+           "address" = address_to_sf(x)
     )
 
   if (!is.null(sf_col)) {
@@ -89,15 +89,15 @@ as_bbox <- function(x, crs = NULL, ...) {
 
   x <-
     switch(x_is,
-      "sf_pt" = sf::st_bbox(st_buffer_ext(x, dist = 0.00000001), ...),
-      "sf_or_sfc" = sf::st_bbox(x, ...),
-      "num_bbox" = sf::st_bbox(c(
-        xmin = x[1], ymin = x[2],
-        xmax = x[3], ymax = x[4]
-      ),
-      crs = crs, ...
-      ),
-      "other" = sf::st_bbox(as_sf(x), ...)
+           "sf_pt" = sf::st_bbox(st_buffer_ext(x, dist = 0.00000001), ...),
+           "sf_or_sfc" = sf::st_bbox(x, ...),
+           "num_bbox" = sf::st_bbox(c(
+             xmin = x[1], ymin = x[2],
+             xmax = x[3], ymax = x[4]
+           ),
+           crs = crs, ...
+           ),
+           "other" = sf::st_bbox(as_sf(x), ...)
     )
 
   sf_bbox_transform(bbox = x, crs = crs)
@@ -122,9 +122,9 @@ as_sfc <- function(x, crs = NULL, ...) {
 
   x <-
     switch(x_is,
-      "sfg" = sf::st_sfc(x, ...),
-      "sf" = sf::st_geometry(x, ...),
-      "other" = sf::st_geometry(as_sf(x, ...))
+           "sfg" = sf::st_sfc(x, ...),
+           "sf" = sf::st_geometry(x, ...),
+           "other" = sf::st_geometry(as_sf(x, ...))
     )
 
   as_crs(x, crs = crs)
@@ -135,8 +135,8 @@ as_sfc <- function(x, crs = NULL, ...) {
 #'
 #' @noRd
 #' @importFrom sf st_crs st_transform
-as_crs <- function(x, crs = NULL, ...) {
-  if (is.null(crs)) {
+as_crs <- function(x, crs = NULL, null.ok = TRUE, ...) {
+  if (is.null(crs) && null.ok) {
     return(x)
   }
 
@@ -238,19 +238,21 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
 #' @param crs coordinate reference system
 #' @param ... Additional parameters passed to [as_sf], [as_sfc], [as_bbox], or
 #'   [as_sf_list]
-#' @noRd
-as_sf_class <- function(x, class = NULL, crs = NULL, ...) {
-  if (is.null(class)) {
+#' @name as_sf_class
+#' @rdname as_sf
+#' @export
+as_sf_class <- function(x, class = NULL, crs = NULL, null.ok = TRUE, ...) {
+  if (is.null(class) && null.ok) {
     return(x)
   }
 
   class <- match.arg(class, c("sf", "sfc", "bbox", "list"))
 
   switch(class,
-    "sf" = as_sf(x, crs = crs, ...),
-    "sfc" = as_sfc(x, crs = crs, ...),
-    "bbox" = as_bbox(x, crs = crs, ...),
-    "list" = as_sf_list(x, crs = crs, ...)
+         "sf" = as_sf(x, crs = crs, ...),
+         "sfc" = as_sfc(x, crs = crs, ...),
+         "bbox" = as_bbox(x, crs = crs, ...),
+         "list" = as_sf_list(x, crs = crs, ...)
   )
 }
 
