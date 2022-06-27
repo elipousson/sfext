@@ -40,7 +40,7 @@ sf_filter <- function(data, location, join = NULL, trim = FALSE) {
     location <- st_buffer_ext(x = location, dist = 0.00000001)
 
     if (trim) {
-      cli::cli_warn("location_filter does not support trim = TRUE for POINT or MULTIPOINT geometry.")
+      cli_warn("location_filter does not support trim = TRUE for POINT or MULTIPOINT geometry.")
       trim <- FALSE
     }
   }

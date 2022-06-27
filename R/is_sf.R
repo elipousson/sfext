@@ -118,7 +118,7 @@ is_sf_or_what <- function(x = NULL, return = NULL, us = FALSE, null.ok = TRUE) {
   is_null <- is.null(x)
 
   if (!null.ok && is_null) {
-    cli::cli_abort("is_sf_or_what found a NULL object when null.ok is FALSE")
+    cli_abort("is_sf_or_what found a NULL object when null.ok is FALSE")
   }
 
   type <-

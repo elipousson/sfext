@@ -61,9 +61,7 @@
 #' @name read_sf_ext
 #' @family read_write
 #' @export
-#' @importFrom rlang list2 exec
 #' @importFrom dplyr case_when
-#' @importFrom cli cli_abort
 read_sf_ext <- function(..., bbox = NULL) {
   params <- rlang::list2(...)
 
@@ -72,19 +70,23 @@ read_sf_ext <- function(..., bbox = NULL) {
       !is.null(params$package) ~ "pkg",
       !is.null(params$url) ~ "url",
       !is.null(params$path) && is.null(params$filename) ~ "path",
+      !is.null(params$dsn) ~ "sf",
       TRUE ~ "missing"
     )
 
-  if (read_sf_fn == "missing") {
-    cli::cli_abort("The parameters provided did not match any overedge read_sf function.
-                   Are you missing a {.arg package}, {.arg url}, or {.arg path} argument?")
-  }
+  cli_abort_ifnot(
+    c("The parameters provided can't be match to any {read_sf} function.",
+      "i" = "You must provide a {.arg url}, {.arg path}, {.arg package}, or {.arg dsn} argument."
+    ),
+    condition = (read_sf_fn == "missing")
+  )
 
   read_sf_fn <-
     switch(read_sf_fn,
       "path" = read_sf_path,
       "pkg" = read_sf_pkg,
-      "url" = read_sf_url
+      "url" = read_sf_url,
+      "sf" = read_sf_query
     )
 
   args <-
@@ -105,9 +107,7 @@ read_sf_ext <- function(..., bbox = NULL) {
 #' @importFrom cli cli_abort
 #' @importFrom dplyr case_when
 read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
-  stopifnot(
-    "The `package` argument is missing." = !is.null(package)
-  )
+  check_null(package)
 
   is_pkg_installed(package)
 
@@ -135,11 +135,12 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
 #' @export
 #' @importFrom sf read_sf
 read_sf_path <- function(path, bbox = NULL, ...) {
-  stopifnot(
-    "No file exists at `path` provided." = fs::file_exists(path)
+  cli_abort_ifnot(
+   "Can't find {.path {path}}.",
+    condition = fs::file_exists(path)
   )
 
-  filetype <- str_extract_filetype(path)
+  filetype <- overedge::str_extract_filetype(path)
 
   if (filetype %in% c("csv", "xlsx", "xls", "geojson")) {
     data <-
@@ -149,14 +150,28 @@ read_sf_path <- function(path, bbox = NULL, ...) {
         "xls" = read_sf_excel(path = path, bbox = bbox, ...),
         "geojson" = read_sf_geojson(geojson = path, bbox = bbox, ...)
       )
+
+    return(data)
   }
 
   read_sf_query(path = path, bbox = bbox, ...)
 }
 
-
-#' @noRd
-read_sf_query <- function(path, bbox = NULL, query = NA, table = NULL, name = NULL, name_col = NULL, wkt_filter = character(0), ...) {
+#' @name read_sf_query
+#' @rdname read_sf_ext
+#' @inheritParams sf::read_sf
+#' @export
+#' @importFrom stringr str_extract
+read_sf_query <- function(path,
+                          dsn = NULL,
+                          bbox = NULL,
+                          query = NA,
+                          table = NULL,
+                          name = NULL,
+                          name_col = NULL,
+                          wkt_filter = character(0),
+                          zm_drop = FALSE,
+                          ...) {
   if (!is.null(name) && !is.null(name_col)) {
     if (is.null(table)) {
       table <-
@@ -167,7 +182,7 @@ read_sf_query <- function(path, bbox = NULL, query = NA, table = NULL, name = NU
     }
 
     query <-
-      glue::glue("select * from {table} where {name_col} = '{name}'")
+      glue("select * from {table} where {name_col} = '{name}'")
   }
 
   if (!is.null(bbox)) {
@@ -175,13 +190,28 @@ read_sf_query <- function(path, bbox = NULL, query = NA, table = NULL, name = NU
     wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
   }
 
+  if (is.null(query)) {
+    query <- NA
+  }
+
+  if (is.null(wkt_filter)) {
+    wkt_filter <- character(0)
+  }
+
   # Read external, cached, or data at path with wkt_filter
-  sf::read_sf(
-    dsn = path,
-    wkt_filter = wkt_filter,
-    query = query,
-    ...
-  )
+  data <-
+    sf::read_sf(
+      dsn = dsn,
+      wkt_filter = wkt_filter,
+      query = query,
+      ...
+    )
+
+  if (!zm_drop) {
+    return(data)
+  }
+
+  sf::st_zm(data)
 }
 
 #' @name read_sf_excel
@@ -190,7 +220,14 @@ read_sf_query <- function(path, bbox = NULL, query = NA, table = NULL, name = NU
 #' @export
 #' @importFrom rlang list2
 #' @importFrom purrr map
-read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"), geo = FALSE, address = "address", from_crs = 4326, ...) {
+read_sf_excel <- function(path,
+                          sheet = NULL,
+                          bbox = NULL,
+                          coords = c("lon", "lat"),
+                          from_crs = 4326,
+                          geo = FALSE,
+                          address = "address",
+                          ...) {
   is_pkg_installed("readxl")
   # Convert XLS or XLSX file with coordinates to sf
 
@@ -222,10 +259,20 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
 #' @rdname read_sf_ext
 #' @inheritParams readr::read_csv
 #' @export
-read_sf_csv <- function(path, url = NULL, bbox = NULL, coords = c("lon", "lat"), geo = FALSE, address = "address", show_col_types = FALSE, from_crs = 4326, ...) {
+read_sf_csv <- function(path,
+                        url = NULL,
+                        bbox = NULL,
+                        coords = c("lon", "lat"),
+                        from_crs = 4326,
+                        geo = FALSE,
+                        address = "address",
+                        show_col_types = FALSE,
+                        ...) {
   if (rlang::is_missing(path) && !is.null(url)) {
     path <- url
   }
+
+  is_pkg_installed("readr")
 
   data <- readr::read_csv(file = path, show_col_types = show_col_types, ...)
 
@@ -242,7 +289,11 @@ read_sf_csv <- function(path, url = NULL, bbox = NULL, coords = c("lon", "lat"),
 #' @importFrom stringr str_detect
 #' @importFrom sf read_sf st_zm
 #' @importFrom dplyr case_when
-read_sf_url <- function(url, bbox = NULL, coords = NULL, zm_drop = TRUE, ...) {
+read_sf_url <- function(url,
+                        bbox = NULL,
+                        coords = NULL,
+                        zm_drop = TRUE,
+                        ...) {
   params <- rlang::list2(...)
 
   stopifnot(
@@ -251,79 +302,65 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, zm_drop = TRUE, ...) {
 
   url_type <-
     dplyr::case_when(
+      stringr::str_detect(url, "\\.csv$") ~ "csv",
+      !is.null(params$filename) ~ "download",
       is_esri_url(url) ~ "esri",
-      is_gsheet_url(url) ~ "gsheet",
+      stringr::str_detect(url, "\\.geojson$") ~ "geojson",
       is_gist_url(url) ~ "gist",
       is_gmap_url(url) ~ "gmap",
-      stringr::str_detect(url, "\\.csv$") ~ "csv",
-      stringr::str_detect(url, "\\.geojson$") ~ "geojson",
-      !is.null(params$filename) ~ "download",
+      is_gsheet_url(url) ~ "gsheet",
       TRUE ~ "other"
     )
 
-  if (url_type != "other") {
-    data <-
-      switch(url_type,
-        "esri" = get_esri_data(
-          url = url,
-          location = bbox,
-          name_col = params$name_col,
-          name = params$name,
-          where = params$where
-        ),
-        "gsheet" = read_sf_gsheet(
-          url = url,
-          bbox = bbox,
-          coords = coords,
-          sheet = params$sheet
-        ),
-        "gist" = read_sf_gist(
-          url = url,
-          bbox = bbox
-        ),
-        "gmap" = read_sf_gmap(
-          url = url,
-          bbox = bbox
-        ),
-        "csv" = read_sf_csv(
-          url = url,
-          bbox = bbox,
-          coords = coords
-        ),
-        "geojson" = read_sf_geojson(
-          url = url,
-          bbox = bbox
-        ),
-        "download" = read_sf_download(
-          url = url,
-          filename = params$filename,
-          bbox = bbox,
-          path = params$path
-        )
-      )
-
-    return(data)
-  }
-
-  if (is.null(params$query)) {
-    params$query <- NA
-  }
-
-  if (is.null(params$wkt_filter)) {
-    params$wkt_filter <- character(0)
-  }
-
-  data <- sf::read_sf(
-    dsn = url,
-    query = params$query,
-    wkt_filter = params$wkt_filter
+  switch(url_type,
+    "csv" = read_sf_csv(
+      url = url,
+      bbox = bbox,
+      coords = coords
+    ),
+    "download" = read_sf_download(
+      url = url,
+      filename = params$filename,
+      bbox = bbox,
+      path = params$path
+    ),
+    "esri" = get_esri_data(
+      url = url,
+      location = bbox,
+      name_col = params$name_col,
+      name = params$name,
+      where = params$where
+    ),
+    "geojson" = read_sf_geojson(
+      url = url,
+      bbox = bbox
+    ),
+    "gist" = read_sf_gist(
+      url = url,
+      bbox = bbox
+    ),
+    "gmap" = read_sf_gmap(
+      url = url,
+      bbox = bbox,
+      zm_drop = zm_drop
+    ),
+    "gsheet" = read_sf_gsheet(
+      url = url,
+      bbox = bbox,
+      coords = coords,
+      sheet = params$sheet
+    ),
+    "other" = read_sf_query(
+      dsn = url,
+      bbox = bbox,
+      query = params$query,
+      wkt_filter = params$wkt_filter,
+      table = params$table,
+      name = params$name,
+      name_col = params$name_col,
+      zm_drop = zm_drop
+    )
   )
-
-  if (zm_drop) {
-    data <- sf::st_zm(data)
-  }
-
-  bbox_filter(data, bbox = bbox)
 }
 
 
@@ -345,8 +382,9 @@ read_sf_geojson <- function(url,
     url <- geojson
   }
 
-  stopifnot(
-    "geojson `url` or `path` is missing." = !rlang::is_missing(url)
+  cli_abort_ifnot(
+    "A {.arg url}, {.arg path}, or {.arg geojson} parameter must be provided.",
+    condition = !rlang::is_missing(url)
   )
 
   data <-
@@ -376,17 +414,16 @@ read_sf_gist <- function(url,
       id = id
     )
 
-  stopifnot(
-    !is.null(gist_data$files)
-  )
+  check_null(gist_data$files)
 
   if (length(gist_data$files) > 1) {
-    cli::cli_alert_danger("This gist has {length(gist_data$files)} files but only the first file is read.")
+    cli_warn("This gist has {length(gist_data$files)} files but only the first file is read.")
   }
 
-  url <- gist_data$files[[1]]$raw_url
-
-  read_sf_url(url = url, bbox = bbox, ...)
+  read_sf_url(
+    url = gist_data$files[[1]]$raw_url,
+    bbox = bbox,
+    ...)
 }
 
 
@@ -445,8 +482,9 @@ get_gmap_id <- function(url) {
 #' Make a Google Maps KML format URL
 #' @noRd
 make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
-  stopifnot(
-    is_gmap_url(url)
+  cli_abort_ifnot(
+    "{.arg url} must be a valid Google Maps url.",
+    condition = is_gmap_url(url)
   )
 
   if (!is.null(url)) {
@@ -465,8 +503,8 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
 #'   into a temporary directory (created with [tempdir()]), and then read to a file using the specified
 #'   file type.
 #' @inheritParams utils::download.file
-#' @inheritParams get_data_dir
-#' @inheritParams make_filename
+#' @inheritParams overedge::get_data_dir
+#' @inheritParams overedge::make_filename
 #' @export
 #' @importFrom sf st_crs
 #' @importFrom utils download.file unzip
@@ -480,11 +518,10 @@ read_sf_download <-
            method = "auto",
            unzip = FALSE,
            ...) {
-    # TODO: Update read_sf_download to support unzipping downloads and reading files from folder
-    path <- get_data_dir(path = path)
+    path <- overedge::get_data_dir(path = path)
 
     destfile <-
-      make_filename(
+      overedge::make_filename(
         prefix = prefix,
         filename = filename,
         path = path,
@@ -499,7 +536,7 @@ read_sf_download <-
 
     if (unzip) {
       zipdest <-
-        make_filename(
+        overedge::make_filename(
           prefix = prefix,
           filename = filename,
           path = tempdir(),
@@ -515,7 +552,6 @@ read_sf_download <-
       destfile <- zipdest
     }
 
-
     read_sf_path(path = destfile, bbox = bbox, ...)
   }
 
@@ -526,7 +562,16 @@ read_sf_download <-
 #'   not provided to [read_sf_gsheet].
 #' @export
 #' @importFrom rlang is_missing
-read_sf_gsheet <- function(url, sheet = NULL, ss = NULL, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, geo = FALSE, address = "address", from_crs = 4326, ...) {
+read_sf_gsheet <- function(url,
+                           sheet = NULL,
+                           ss = NULL,
+                           bbox = NULL,
+                           ask = FALSE,
+                           coords = c("lon", "lat"),
+                           from_crs = 4326,
+                           geo = FALSE,
+                           address = "address",
+                           ...) {
   # Convert Google Sheet with coordinates to sf
   is_pkg_installed("googlesheets4")
 
@@ -573,5 +618,5 @@ join_sf_gsheet <- function(data, ss = NULL, sheet = 1, key = NULL, suffix = c(""
     }
   }
 
-  return(data)
+  data
 }

@@ -4,6 +4,7 @@
 \alias{read_sf_ext}
 \alias{read_sf_pkg}
 \alias{read_sf_path}
+\alias{read_sf_query}
 \alias{read_sf_excel}
 \alias{read_sf_csv}
 \alias{read_sf_url}
@@ -20,14 +21,27 @@ read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
 
 read_sf_path(path, bbox = NULL, ...)
 
+read_sf_query(
+  path,
+  dsn = NULL,
+  bbox = NULL,
+  query = NA,
+  table = NULL,
+  name = NULL,
+  name_col = NULL,
+  wkt_filter = character(0),
+  zm_drop = FALSE,
+  ...
+)
+
 read_sf_excel(
   path,
   sheet = NULL,
   bbox = NULL,
   coords = c("lon", "lat"),
+  from_crs = 4326,
   geo = FALSE,
   address = "address",
-  from_crs = 4326,
   ...
 )
 
@@ -36,10 +50,10 @@ read_sf_csv(
   url = NULL,
   bbox = NULL,
   coords = c("lon", "lat"),
+  from_crs = 4326,
   geo = FALSE,
   address = "address",
   show_col_types = FALSE,
-  from_crs = 4326,
   ...
 )
 
@@ -68,11 +82,11 @@ read_sf_gsheet(
   sheet = NULL,
   ss = NULL,
   bbox = NULL,
-  coords = c("lon", "lat"),
   ask = FALSE,
+  coords = c("lon", "lat"),
+  from_crs = 4326,
   geo = FALSE,
   address = "address",
-  from_crs = 4326,
   ...
 )
 }
@@ -92,6 +106,22 @@ is in the package cache directory or extdata system files.}
 
 \item{path}{A file path.}
 
+\item{dsn}{data source name (interpretation varies by driver - for some
+drivers, \code{dsn} is a file name, but may also be a folder, or contain
+the name and access credentials of a database); in case of GeoJSON,
+\code{dsn} may be the character string holding the geojson data. It can
+also be an open database connection.}
+
+\item{query}{SQL query to select records; see details}
+
+\item{name}{Name to make file name converted to snake case with
+\code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}, e.g. "Residential zoning map" becomes
+"residential_zoning_map"}
+
+\item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
+
+\item{zm_drop}{If `TRUE`, drop Z and/or M dimensions using [sf::st_zm]}
+
 \item{sheet}{Sheet to read. Either a string (the name of a sheet), or an
 integer (the position of the sheet). Ignored if the sheet is specified via
 \code{range}. If neither argument specifies the sheet, defaults to the first
@@ -100,13 +130,13 @@ sheet.}
 \item{coords}{Character vector with coordinate values. Coordinates must be
 latlon data (with coordinate reference system 4326).}
 
+\item{from_crs}{For [df_to_sf], coordinate reference system used by
+coordinates or well known text in data frame.}
+
 \item{geo}{If `TRUE`, use [address_to_sf] to geocode address column; defaults
 to `FALSE`.}
 
 \item{address}{Address column name, Default: 'address'}
-
-\item{from_crs}{For [df_to_sf], coordinate reference system used by
-coordinates or well known text in data frame.}
 
 \item{url}{A url for a spatial data file, a GitHub gist, or a ArcGIS
 FeatureServer or MapServer to access with [get_esri_data()]}
@@ -116,14 +146,18 @@ FeatureServer or MapServer to access with [get_esri_data()]}
 (the default) only show the column types if they are not explicitly supplied
 by the \code{col_types} argument.}
 
-\item{zm_drop}{If `TRUE`, drop Z and/or M dimensions using [sf::st_zm]}
-
 \item{geojson}{string or vector of GeoJSON, or a URL or file pointing to a geojson file}
 
 \item{id}{The name of a column in which to store the file path. This is
 useful when reading multiple input files and there is data in the file
 paths, such as the data collection date. If \code{NULL} (the default) no extra
 column is created.}
+
+\item{filename}{File name; if file name is \code{NULL}, name and file type are
+both required.}
+
+\item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
+date/time prefix; defaults to \code{NULL}.}
 
 \item{method}{Method to be used for downloading files.  Current
     download methods are \code{"internal"}, \code{"wininet"} (Windows

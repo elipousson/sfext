@@ -32,7 +32,7 @@ read_sf_exif <- function(path = NULL,
   is_pkg_installed("exiftoolr")
 
   if (!dir.exists(path)) {
-    cli::cli_abort("A valid path is required and the path provided does not exist.")
+    cli_abort("A valid path is required and the path provided does not exist.")
   }
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
@@ -63,7 +63,7 @@ read_sf_exif <- function(path = NULL,
         ...
       )
   } else if (!any(grepl("GPS", tags))) {
-    cli::cli_warn("The tags must include GPS values to create a simple feature object based on the file EXIF data.")
+    cli_warn("The tags must include GPS values to create a simple feature object based on the file EXIF data.")
   }
 
   file_list <- get_path_file_list(path, filetype)
@@ -180,7 +180,7 @@ get_path_filetype <- function(path, filetype = NULL) {
   if (length(filetype) > 1) {
     # https://stackoverflow.com/questions/17374651/find-the-n-most-common-values-in-a-vector
     filetype <- names(sort(table(filetype), decreasing = TRUE)[1])
-    cli::cli_warn("The path {.file {path}} includes multiple filetypes. Using most frequent filetype: {.val {filetype}}")
+    cli_warn("The path {.file {path}} includes multiple filetypes. Using most frequent filetype: {.val {filetype}}")
   }
 
   return(filetype)

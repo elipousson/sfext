@@ -64,6 +64,22 @@ rotation value can be provided to change the orientation of the shape, e.g.
 \code{rotate = -45} to return a diamond shape. \code{\link[=st_square]{st_square()}} wraps \code{\link[=st_bbox_ext]{st_bbox_ext()}} with
 \code{asp = 1}.
 }
+\examples{
+nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
+nc <- st_transform_ext(nc, crs = 3857)
+
+basemap <-
+  ggplot2::ggplot() +
+  ggplot2::geom_sf(data = nc) +
+  ggplot2::theme_void()
+
+basemap +
+  layer_location_data(
+    data = st_scale_rotate(nc, scale = 0.5, rotate = 15),
+    fill = NA,
+    color = "red"
+    )
+}
 \seealso{
 \itemize{
 \item \link[sf:geos_unary]{sf::geos_unary}

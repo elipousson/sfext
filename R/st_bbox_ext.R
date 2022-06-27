@@ -12,7 +12,7 @@
 #'   can be converted to an sf object or a list of sf, bbox, or sfc objects.
 #'   st_bbox_asp also supports vectors in the same format as a bbox object.
 #' @inheritParams st_buffer_ext
-#' @inheritParams get_asp
+#' @inheritParams overedge::get_asp
 #' @param crs Coordinate reference system of bounding box to return
 #' @param class Class of object to return (sf or bbox); defaults to "bbox".
 #' @param null.ok If `TRUE` and x is `NULL`, return `NULL`.
@@ -29,7 +29,7 @@ st_bbox_ext <- function(x = NULL,
                         crs = NULL,
                         class = "bbox",
                         null.ok = TRUE) {
-  if (is.null(x)) {
+  if (is.null(x) && null.ok) {
     return(x)
   }
 
@@ -59,8 +59,6 @@ st_bbox_ext <- function(x = NULL,
         unit = unit
       )
 
-    # FIXME: Switching back to the regular st_transform function means that CRS
-    # cannot be an sf object for this function
     if (!is.null(crs)) {
       x <- st_transform_ext(x, crs = crs)
     }
@@ -90,9 +88,13 @@ st_bbox_asp <- function(x = NULL,
     bbox_list <- purrr::map(x, ~ st_bbox_asp(x = .x, asp = asp, class = class))
     return(bbox_list)
   }
+
   bbox <- as_bbox(x)
   # Get adjusted aspect ratio
-  asp <- get_asp(asp = asp)
+
+  if (!is.numeric(asp)) {
+    asp <- overedge::get_asp(asp = asp)
+  }
 
   if (!is.null(asp) && is.numeric(asp)) {
     # Get width/height

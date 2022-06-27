@@ -10,9 +10,23 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
+    readr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
+    cli,
+    dplyr,
+    fs,
+    glue,
+    janitor,
+    purrr,
+    rlang,
     sf,
+    stringr,
+    tibble,
+    tidyr,
+    tidyselect,
     units
 RoxygenNote: 7.2.0.9000
+Depends: 
+    R (>= 2.10)

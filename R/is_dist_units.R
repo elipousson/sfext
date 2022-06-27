@@ -114,7 +114,7 @@ get_dist_units <- function(x, null.ok = TRUE) {
   if (is.null(x) && null.ok) {
     return(x)
   } else if (is.null(x)) {
-    cli::cli_abort(
+    cli_abort(
       "{.var units} must be a unit chracter string, a unit class object, or a sf object with a valid coordinate reference system."
     )
   }

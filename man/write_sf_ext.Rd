@@ -43,7 +43,7 @@ write_sf_gist(
   description = NULL,
   public = TRUE,
   browse = FALSE,
-  token = get_access_token(type = "GITHUB_PAT")
+  token = overedge::get_access_token(type = "GITHUB_PAT")
 )
 
 write_sf_gsheet(
@@ -61,13 +61,28 @@ write_sf_gsheet(
 \arguments{
 \item{data}{\code{sf} object to write.}
 
+\item{name}{Name to make file name converted to snake case with
+\code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}, e.g. "Residential zoning map" becomes
+"residential_zoning_map"}
+
+\item{label}{Label to combine with name converted to snake case with
+\code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}. The label is designed to identify the area
+or other shared characteristics across multiple data files, maps, or plots.}
+
+\item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
+date/time prefix; defaults to \code{NULL}.}
+
+\item{postfix}{File name postfix; defaults to \code{NULL}.}
+
 \item{filename}{File name to use. If filename is provided and the data is an
 \code{sf} object make sure to include the file type, e.g. "data.gpkg" or
 "data.csv". Objects that are not simple features are written to RDS with
-\code{readr::write_rds()}.}
+\code{\link[readr:read_rds]{readr::write_rds()}}.}
 
 \item{filetype}{File type to write and cache, Default: \code{NULL} for
 \code{write_sf_ext()}}
+
+\item{path}{Path to file or data directory.}
 
 \item{cache}{If \code{TRUE}, write \code{sf} object to file in cache directory;
 defaults to \code{FALSE}.}
@@ -102,7 +117,7 @@ provided data.}
 \description{
 The write_sf_ext and write_sf_cache helper functions wrap the \link[sf:st_write]{sf::write_sf}
 function to provide some additional options including consistent file naming
-with \code{\link[=make_filename]{make_filename()}} and features including:
+with \code{\link[overedge:make_filename]{overedge::make_filename()}} and features including:
 }
 \details{
 \itemize{

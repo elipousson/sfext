@@ -76,7 +76,7 @@ df_to_sf <- function(x,
                      geo = FALSE,
                      address = "address") {
   if (is_sf(x)) {
-    cli::cli_warn("df_to_sf requires a data frame. Dropping geometry from the provided simple feature object.")
+    cli_warn("df_to_sf requires a data frame. Dropping geometry from the provided simple feature object.")
     x <- sf::st_drop_geometry(x)
   }
 
@@ -138,7 +138,7 @@ check_coords <- function(x = NULL, coords = NULL, default = c("lon", "lat"), rev
   if (!is.null(x) && is.data.frame(x)) {
     if (!has_coords(x, coords = coords, value = FALSE)) {
       if (!is.null(coords)) {
-        cli::cli_warn(
+        cli_warn(
           "The provided coordinates do not appear to match the data and no standard coordinate column names could be found.
         Replacing coordinates with default values."
         )
@@ -219,7 +219,6 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
 #' @importFrom tidyr separate
 #' @importFrom tidyselect all_of
 #' @importFrom dplyr mutate across
-#' @importFrom readr parse_number
 separate_coords <- function(x, coords, into, sep) {
   into <- check_coords(x = NULL, coords = into)
 
@@ -230,6 +229,8 @@ separate_coords <- function(x, coords, into, sep) {
       into = into,
       sep = sep
     )
+
+  is_pkg_installed("readr")
 
   x <-
     dplyr::mutate(

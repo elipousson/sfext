@@ -86,6 +86,12 @@ Read EXIF data from folder of images.
 NA
 }
 
+\examples{
+read_sf_exif(
+  path = system.file("extdata/photos", package = "overedge"),
+  filetype = "jpeg"
+)
+}
 \seealso{
 Other read_write: 
 \code{\link{read_sf_ext}()}
