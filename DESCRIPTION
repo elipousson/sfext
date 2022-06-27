@@ -10,8 +10,19 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
+    exiftoolr,
+    geojsonsf,
+    ggplot2,
+    gistr,
+    googlesheets4,
+    httr2,
+    lwgeom,
+    naniar,
+    overedge,
     readr,
-    testthat (>= 3.0.0)
+    readxl,
+    testthat (>= 3.0.0),
+    tidygeocoder
 Config/testthat/edition: 3
 Imports: 
     cli,
