@@ -63,7 +63,7 @@
 #' @export
 #' @importFrom dplyr case_when
 read_sf_ext <- function(..., bbox = NULL) {
-  params <- rlang::list2(...)
+  params <- list2(...)
 
   read_sf_fn <-
     dplyr::case_when(
@@ -96,7 +96,7 @@ read_sf_ext <- function(..., bbox = NULL) {
       missing = TRUE
     )
 
-  rlang::exec(read_sf_fn, !!!args)
+  exec(read_sf_fn, !!!args)
 }
 
 #' @name read_sf_pkg
@@ -136,7 +136,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
 #' @importFrom sf read_sf
 read_sf_path <- function(path, bbox = NULL, ...) {
   cli_abort_ifnot(
-   "Can't find {.path {path}}.",
+    "Can't find {.path {path}}.",
     condition = fs::file_exists(path)
   )
 
@@ -218,7 +218,7 @@ read_sf_query <- function(path,
 #' @rdname read_sf_ext
 #' @inheritParams readxl::read_excel
 #' @export
-#' @importFrom rlang list2
+
 #' @importFrom purrr map
 read_sf_excel <- function(path,
                           sheet = NULL,
@@ -232,7 +232,7 @@ read_sf_excel <- function(path,
   # Convert XLS or XLSX file with coordinates to sf
 
   if (!is.null(sheet) && length(sheet) > 1) {
-    params <- rlang::list2(...)
+    params <- list2(...)
 
     data <- purrr::map(
       sheet,
@@ -268,7 +268,7 @@ read_sf_csv <- function(path,
                         address = "address",
                         show_col_types = FALSE,
                         ...) {
-  if (rlang::is_missing(path) && !is.null(url)) {
+  if (is_missing(path) && !is.null(url)) {
     path <- url
   }
 
@@ -285,7 +285,7 @@ read_sf_csv <- function(path,
 #' @rdname read_sf_ext
 #' @param zm_drop If `TRUE`, drop Z and/or M dimensions using [sf::st_zm]
 #' @export
-#' @importFrom rlang list2
+
 #' @importFrom stringr str_detect
 #' @importFrom sf read_sf st_zm
 #' @importFrom dplyr case_when
@@ -294,7 +294,7 @@ read_sf_url <- function(url,
                         coords = NULL,
                         zm_drop = TRUE,
                         ...) {
-  params <- rlang::list2(...)
+  params <- list2(...)
 
   stopifnot(
     is_url(url)
@@ -324,12 +324,12 @@ read_sf_url <- function(url,
       bbox = bbox,
       path = params$path
     ),
-    "esri" = get_esri_data(
+    "esri" = read_sf_esri(
       url = url,
       location = bbox,
-      name_col = params$name_col,
+      where = params$where,
       name = params$name,
-      where = params$where
+      name_col = params$name_col
     ),
     "geojson" = read_sf_geojson(
       url = url,
@@ -363,6 +363,68 @@ read_sf_url <- function(url,
   )
 }
 
+#' @name read_sf_esri
+#' @rdname read_sf_ext
+#' @export
+read_sf_esri <- function(url,
+                         bbox = NULL,
+                         where = NULL,
+                         name = NULL,
+                         name_col = NULL,
+                         coords = c("lon", "lat"),
+                         from_crs = 4326,
+                         ...) {
+  is_pkg_installed(pkg = "esri2sf", repo = "yonghah/esri2sf")
+
+  meta <- esri2sf::esrimeta(url)
+
+  if (!is.null(where)) {
+    where <- paste0("(", where, ")")
+  }
+
+  if (!is.null(name) && !is.null(name_col)) {
+    where <- c(where, glue("({name_col} = '{name}')"))
+  }
+
+  if (!is.null(bbox) && !is.null(coords) && (meta$type == "Table")) {
+    where <-
+      c(where, sf_bbox_to_lonlat_query(bbox = bbox, coords = coords))
+  }
+
+  if (!is.null(where)) {
+    where <- paste(where[!is.na(where)], collapse = " AND ")
+  }
+
+  if (meta$type != "Table") {
+    # Get FeatureServer with geometry
+    return(
+      esri2sf::esri2sf(
+        url = url,
+        where = where,
+        bbox = bbox,
+        crs = NULL,
+        progress = TRUE,
+        ...
+      )
+    )
+  }
+
+  # Get Table (no geometry) by filtering coordinate columns with bbox
+  data <-
+    esri2sf::esri2df(
+      url = url,
+      where = where,
+      progress = TRUE,
+      ...
+    )
+
+  if (is.null(coords)) {
+    return(data)
+  }
+
+  df_to_sf(data, from_crs = from_crs, coords = coords)
+}
+
 
 #' @name read_sf_geojson
 #' @rdname read_sf_ext
@@ -384,7 +446,7 @@ read_sf_geojson <- function(url,
 
   cli_abort_ifnot(
     "A {.arg url}, {.arg path}, or {.arg geojson} parameter must be provided.",
-    condition = !rlang::is_missing(url)
+    condition = !is_missing(url)
   )
 
   data <-
@@ -405,7 +467,7 @@ read_sf_gist <- function(url,
                          ...) {
   is_pkg_installed("gistr")
 
-  if (!rlang::is_missing(url) && is.null(id)) {
+  if (!is_missing(url) && is.null(id)) {
     id <- url
   }
 
@@ -423,7 +485,8 @@ read_sf_gist <- function(url,
   read_sf_url(
     url = gist_data$files[[1]]$raw_url,
     bbox = bbox,
-    ...)
+    ...
+  )
 }
 
 
@@ -576,7 +639,7 @@ read_sf_gsheet <- function(url,
   is_pkg_installed("googlesheets4")
 
   if (is.null(ss)) {
-    if (!rlang::is_missing(url)) {
+    if (!is_missing(url)) {
       ss <- url
     } else if (ask) {
       ss <-
