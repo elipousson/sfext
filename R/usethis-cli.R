@@ -76,7 +76,7 @@ cli_abort_ifnot <- function(..., condition = FALSE, .data = NULL, call = caller_
 
   if (!condition) {
     cli_abort(...,
-              call = call
+      call = call
     )
   }
 

@@ -35,7 +35,7 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
 
     if (!quiet) {
       cli_inform(
-       c("v" = "The existing column '{col}' to '{new_col}' to avoid overwriting any existing values.")
+        c("v" = "The existing column '{col}' to '{new_col}' to avoid overwriting any existing values.")
       )
     }
 

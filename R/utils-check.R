@@ -95,9 +95,9 @@ check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NU
 
   cli_abort(
     c("{.arg {arg}} must be a character vector.",
-      "i" = "You've supplied a {class(x)} object."),
+      "i" = "You've supplied a {class(x)} object."
+    ),
     call = call,
     ...
   )
 }
-
