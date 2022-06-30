@@ -32,12 +32,18 @@ check_character <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, ...)
 check_len <- function(x = NULL, len = 1, arg = caller_arg(x), null.ok = FALSE, ...) {
   check_null(x, arg, null.ok)
 
-  if (length(x) == len) {
+  if ((length(x) >= min(len)) && (length(x) <= max(len))) {
     invisible(return(TRUE))
   }
 
+  if (length(len) > 1) {
+    len <- glue("have a length between {min(len)} and {max(len)}")
+  } else {
+    len <- glue("be length {len}")
+  }
+
   cli_abort(
-    c("{.arg {arg}} must be length {len}.",
+    c("{.arg {arg}} must {len}.",
       "i" = "You've supplied a length {length(x)} object."
     ),
     ...
@@ -79,27 +85,19 @@ check_starts_with <- function(x = NULL, string = NULL, arg = caller_arg(x), null
   cli_abort(message = message, ...)
 }
 
-#' @noRd
-cli_abort_ifnot <- function(..., condition = FALSE, x) {
-  if (!is_logical(condition)) {
-    condition <- as_function(condition)
-    condition <- condition(x)
+
+check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NULL, call = caller_env(), ...) {
+  check_null(x, arg, null.ok, FALSE, call)
+
+  if (is_logical(x, n = n)) {
+    invisible(return(TRUE))
   }
 
-  if (is_logical(condition) && !condition) {
-    cli_abort(...)
-  }
-
-  invisible(return(NULL))
-}
-
-#' Add default user agent to request
-#'
-#' @noRd
-req_getdata_user <- function(req,
-                             string = getOption("getdata.useragent", default = "getdata (https://github.com/elipousson/getdata)")) {
-  httr2::req_user_agent(
-    req = req,
-    string = string
+  cli_abort(
+    c("{.arg {arg}} must be a character vector.",
+      "i" = "You've supplied a {class(x)} object."),
+    call = call,
+    ...
   )
 }
+
