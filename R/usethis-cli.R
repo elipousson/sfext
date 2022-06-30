@@ -67,14 +67,36 @@ cli_ask <- function(message, prompt = ">> ", ..., .envir = parent.frame()) {
 }
 
 #' @noRd
-cli_abort_ifnot <- function(..., condition = FALSE, x) {
+cli_abort_ifnot <- function(..., condition = FALSE, .data = NULL, call = caller_env()) {
   if (!is_logical(condition)) {
     condition <- as_function(condition)
-    condition <- condition(x)
+    condition <- condition(.data)
+    check_logical(condition, call = call)
   }
 
-  if (is_logical(condition) && !condition) {
-    cli_abort(...)
+  if (!condition) {
+    cli_abort(...,
+              call = call
+    )
+  }
+
+  invisible(return(NULL))
+}
+
+#' @noRd
+cli_warn_ifnot <- function(..., condition = FALSE, .data = NULL, call = caller_env()) {
+  if (!is_logical(condition)) {
+    condition <- as_function(condition)
+    condition <- condition(.data)
+    check_logical(condition, call = call)
+  }
+
+
+  if (!condition) {
+    cli_warn(
+      ...,
+      call = call
+    )
   }
 
   invisible(return(NULL))
