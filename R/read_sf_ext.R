@@ -99,6 +99,27 @@ read_sf_ext <- function(..., bbox = NULL) {
   exec(read_sf_fn, !!!args)
 }
 
+
+#' Modify function parameters
+#'
+#' @noRd
+modify_fn_fmls <- function(params, fn, keep_missing = FALSE, keep.null = FALSE, ...) {
+  fmls <- rlang::fn_fmls(fn)
+
+  if (!keep_missing) {
+    fmls <- purrr::discard(fmls, rlang::is_missing)
+  }
+
+  params <- c(rlang::list2(...), params)
+
+  utils::modifyList(
+    fmls,
+    params,
+    keep.null = keep.null
+  )
+}
+
+
 #' @name read_sf_pkg
 #' @rdname read_sf_ext
 #' @export
@@ -124,7 +145,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
       # If data is in extdata folder
       filename %in% ls_pkg_extdata(package) ~ system.file("extdata", filename, package = package),
       # If data is in the cache directory
-      filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(package = package), filename)
+      filename %in% ls_pkg_cache(package) ~ file.path(overedge::get_data_dir(package = package), filename)
     )
 
   read_sf_path(path = path, bbox = bbox, ...)
@@ -140,7 +161,7 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     condition = fs::file_exists(path)
   )
 
-  filetype <- overedge::str_extract_filetype(path)
+  filetype <- str_extract_filetype(path)
 
   if (filetype %in% c("csv", "xlsx", "xls", "geojson")) {
     data <-
@@ -154,7 +175,7 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     return(data)
   }
 
-  read_sf_query(path = path, bbox = bbox, ...)
+  read_sf_query(dsn = path, bbox = bbox, ...)
 }
 
 #' @name read_sf_query
@@ -172,6 +193,10 @@ read_sf_query <- function(path,
                           wkt_filter = character(0),
                           zm_drop = FALSE,
                           ...) {
+  if (!is_missing(path)) {
+    dsn <- path
+  }
+
   if (!is.null(name) && !is.null(name_col)) {
     if (is.null(table)) {
       table <-
@@ -555,7 +580,7 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
   }
 
   if (format == "kml") {
-    glue::glue("https://www.google.com/maps/d/u/0/kml?forcekml=1&mid={mid}")
+    glue("https://www.google.com/maps/d/u/0/kml?forcekml=1&mid={mid}")
   }
 }
 
