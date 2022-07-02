@@ -126,7 +126,7 @@ sort_features <- function(data,
   if (any(sort %in% c(latlon_opts, minmax_opts))) {
     sort <- match.arg(sort, choices = c(latlon_opts, minmax_opts), several.ok = TRUE)
 
-    if ((sort %in% latlon_opts) && !all(rlang::has_name(data, sort))) {
+    if ((sort %in% latlon_opts) && !all(has_name(data, sort))) {
       data <-
         get_coords(
           data,
@@ -135,7 +135,7 @@ sort_features <- function(data,
           keep_all = TRUE,
           drop = FALSE
         )
-    } else if ((sort %in% minmax_opts) && !all(rlang::has_name(data, sort))) {
+    } else if ((sort %in% minmax_opts) && !all(has_name(data, sort))) {
       data <-
         get_minmax(
           data,
@@ -180,8 +180,8 @@ sort_features <- function(data,
   }
 
 
-  if (!rlang::has_name(data, sort)) {
-    cli::cli_warn("The provided value for {.field {'sort'}} ({.val {sort}}) is not found in the data.")
+  if (!has_name(data, sort)) {
+    cli_warn("The provided value for {.field {'sort'}} ({.val {sort}}) is not found in the data.")
   }
 
   by_group <- FALSE
