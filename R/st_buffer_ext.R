@@ -38,59 +38,71 @@ st_buffer_ext <- function(x,
                           single_side = FALSE,
                           ...) {
   if (is_sf_list(x, ext = TRUE)) {
-    x_list <-
+    return(
       purrr::map(
         x,
         ~ st_buffer_ext(x = .x, dist = dist, diag_ratio = diag_ratio, unit = unit, dist_limits = dist_limits, single_side = single_side)
       )
-
-    return(x_list)
+    )
   }
 
-  # If bbox, convert to sf
-  x <- as_sf(x)
-
   # If dist is NULL and diag_ratio is NULL return x (with bbox converted to sf if no buffer applied)
-  if (!is.null(dist) | !is.null(diag_ratio)) {
+  if (is.null(dist) && is.null(diag_ratio)) {
+    return(x)
+  }
 
-    # If longlat, save crs and transform to suggested crs
-    is_lonlat <- sf::st_is_longlat(x)
+  check_sf(x, ext = TRUE)
 
-    if (is_lonlat) {
-      lonlat_crs <- sf::st_crs(x)
-      x <- sf::st_transform(x, 3857)
-    }
+  # If bbox, convert to sf
+  if (is_bbox(x)) {
+    x <- as_sf(x)
+  }
 
-    # Get crs and rename gdal units to match options for set_units
-    crs <- sf::st_crs(x)
+  # If longlat, save crs and transform to suggested crs
+  is_lonlat <- sf::st_is_longlat(x)
 
-    if (is_units(dist)) {
-      if (is.null(unit)) {
-        unit <- get_dist_units(dist)
-      }
-      dist <- units::drop_units(dist)
-    } else if (is.null(dist) && !is.null(diag_ratio)) {
-      # Use the bbox diagonal distance to make proportional buffer distance
-      dist <- sf_bbox_diagdist(bbox = as_bbox(x), drop = TRUE) * diag_ratio
-    }
+  if (is_lonlat) {
+    lonlat_crs <- sf::st_crs(x)
+    x <- sf::st_transform(x, 3857)
+  }
 
-    dist <- convert_dist_units(dist = dist, from = unit, to = crs$units_gdal)
+  # Get crs and rename gdal units to match options for set_units
+  crs <- sf::st_crs(x)
 
-    if (!is.null(dist_limits)) {
-      dist_limits <-
-        convert_dist_units(dist = dist_limits, from = unit, to = crs$units_gdal)
+  dist <- diag_ratio_to_dist(x, dist, diag_ratio)
 
-      dist <- limit_dist(dist = dist, dist_limits = dist_limits)
-    }
+  if (is.null(unit)) {
+    unit <- get_dist_units(dist, quiet = TRUE)
+  }
 
-    x <- sf::st_buffer(x = x, dist = dist, singleSide = single_side, ...)
+  units_gdal <- crs$units_gdal
 
-    if (is_lonlat) {
-      x <- sf::st_transform(x, lonlat_crs)
-    }
+  dist <- convert_dist_units(dist = dist, from = unit, to = units_gdal)
+
+  dist <- limit_dist(dist = dist, dist_limits = dist_limits, unit = unit, crs = crs)
+
+  x <- sf::st_buffer(x = x, dist = dist, singleSide = single_side, ...)
+
+  if (is_lonlat) {
+    x <- sf::st_transform(x, lonlat_crs)
   }
 
   x
+}
+
+#' Return distance based on diagonal ratio if dist is NULL
+#'
+#' @noRd
+diag_ratio_to_dist <- function(x = NULL, dist = NULL, diag_ratio = NULL) {
+  if (is.null(x) | !is.null(dist)) {
+    return(dist)
+  }
+
+  if (!is.null(diag_ratio)) {
+    sf_bbox_diagdist(bbox = as_bbox(x), drop = TRUE) * diag_ratio
+  } else {
+    dist
+  }
 }
 
 #' Limit distance to the min/max values of dist_limits
@@ -98,34 +110,93 @@ st_buffer_ext <- function(x,
 #' @noRd
 #' @importFrom dplyr between
 #' @importFrom cli cli_alert_info
-limit_dist <- function(dist = NULL, dist_limits = NULL) {
-  if (!is.null(dist_limits) && (length(dist_limits) >= 2) && is_class(dist_limits, "units")) {
-    min_limit <- min(dist_limits)
-    max_limit <- max(dist_limits)
-
-    check_between_dist <-
-      suppressWarnings(
-        dplyr::between(
-          dist,
-          min_limit,
-          max_limit
-        )
-      )
-
-    if (check_between_dist) {
-      cli::cli_alert_info("The buffer dist ({dist} {units_gdal}) is between the min/max distance limits.")
-      dist <- dist_limits[[which.min(abs(dist_limits - dist))]]
-      cli::cli_alert_info("Replacing with nearest distance limit ({dist} {units_gdal}).")
-    } else if (dist < min_limit) {
-      dist <- min_limit
-      cli::cli_alert_info("Replacing buffer dist ({num_dist} {units_gdal}) with the minimum limit ({min_limit} {units_gdal}).")
-    } else if (dist > max_limit) {
-      dist <- max_limit
-      cli::cli_alert_info("Replacing buffer dist ({num_dist} {units_gdal})with the maximum limit ({max_limit} {units_gdal}).")
-    }
+limit_dist <- function(dist = NULL, dist_limits = NULL, unit = NULL, crs = NULL, between.ok = FALSE, call = caller_env()) {
+  if (is.null(dist_limits)) {
+    return(dist)
   }
 
-  return(dist)
+  units_gdal <- crs$units_gdal
+
+  # dist should already be a units object
+  input_dist <-
+    convert_dist_units(
+      dist = dist,
+      from = unit,
+      to = units_gdal
+    )
+
+  dist_limits <-
+    convert_dist_units(
+      dist = dist_limits,
+      from = unit,
+      to = units_gdal
+    )
+
+  cli_abort_ifnot(
+    "{.arg dist_limits} must be length 2 or greater and a {.code units} class object.",
+    condition = (length(dist_limits) >= 2) && is_units(dist_limits),
+    call = call
+  )
+
+  min_limit <- min(dist_limits)
+  max_limit <- max(dist_limits)
+
+  dist_between <-
+    suppressWarnings(
+      dplyr::between(
+        input_dist,
+        min_limit,
+        max_limit
+      )
+    )
+
+  if (dist_between && between.ok) {
+    return(dist)
+  }
+
+  compared_to <-
+    dplyr::case_when(
+      dist_between ~ "between",
+      (input_dist < min_limit) ~ "below",
+      (input_dist > max_limit) ~ "above"
+    )
+
+  dist <-
+    switch(compared_to,
+      "between" = dist_limits[[which.min(abs(dist_limits - input_dist))]],
+      "below" = min_limit,
+      "above" = max_limit
+    )
+
+  input_lab <- dist_unit_lab(input_dist, to = unit)
+  limit_lab <- dist_unit_lab(dist, to = unit)
+
+  message <-
+    switch(compared_to,
+      "between" = c("The buffer dist ({input_lab}) is between the min/max distance limits.",
+        "v" = "Replacing with nearest distance limit ({limit_lab})."
+      ),
+      "below" = "Replacing buffer dist ({input_lab}) with the minimum limit ({limit_lab}).",
+      "above" = "Replacing buffer dist ({input_lab}) with the maximum limit ({limit_lab})."
+    )
+
+  cli_inform(
+    message = message
+  )
+
+  dist
+}
+
+#' @noRd
+dist_unit_lab <- function(x, to = NULL) {
+  if (!is.null(to)) {
+    x <- convert_dist_units(x, to = to)
+    unit_lab <- to
+  } else {
+    unit_lab <- get_dist_units(x)
+  }
+
+  paste(as.character(x), unit_lab)
 }
 
 #' @rdname st_buffer_ext
@@ -136,19 +207,23 @@ st_edge <- function(x,
                     diag_ratio = NULL,
                     unit = "meter",
                     ...) {
+  if (is_null(c(dist, diag_ratio))) {
+    return(x)
+  }
 
-  # If bbox, convert to sf
-  x <- as_sf(x)
+  check_sf(x, ext = TRUE)
+
+  if (is_bbox(x)) {
+    x <- as_sf(x)
+  }
 
   x_dist <-
     st_buffer_ext(x, dist = dist, diag_ratio = diag_ratio, unit = unit, ...)
 
-  # FIXME: What if dist or diag_ratio = 0?
-  if (dist > 0 | diag_ratio > 0) {
-    x <- st_erase(x_dist, x)
-  } else if (dist < 0 | diag_ratio < 0) {
-    x <- st_erase(x, x_dist)
+  if (any(c(dist, diag_ratio) > 0)) {
+    st_erase(x_dist, x)
+  } else if (any(c(dist, diag_ratio) <= 0)) {
+    # FIXME: Does this cause an error when dist or diag_ratio = 0?
+    st_erase(x, x_dist)
   }
-
-  x
 }
