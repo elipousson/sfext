@@ -4,7 +4,8 @@
 \alias{read_sf_exif}
 \alias{write_exif}
 \alias{write_exif_keywords}
-\title{Read location data from images to a simple feature object using EXIF or write EXIF metadata}
+\title{Read location data from images to a simple feature object using EXIF or write
+EXIF metadata}
 \usage{
 read_sf_exif(
   path = NULL,
@@ -40,7 +41,7 @@ write_exif_keywords(
 \item{path}{A path to folder of one or more files with EXIF location
 metadata.}
 
-\item{filetype}{The file extension or file type; defaults to `NULL`.}
+\item{filetype}{The file extension or file type; defaults to \code{NULL}.}
 
 \item{bbox}{Optional bounding box to crop returned file (excluding images
 with location data outside the bounding box). If bbox is provided the
@@ -52,21 +53,21 @@ returned data will match the crs of the bbox.}
 \item{tags}{Optional list of EXIF tags to read from files. Must include GPS
 tags to create an sf object.}
 
-\item{...}{Additional EXIF tags to pass to [exiftoolr::exif_read]}
+\item{...}{Additional EXIF tags to pass to \link[exiftoolr:exif_read]{exiftoolr::exif_read}}
 
-\item{title}{Title to add to file metadata with exiftoolr, Default: `NULL`.}
+\item{title}{Title to add to file metadata with exiftoolr, Default: \code{NULL}.}
 
-\item{author}{Author to add to file metadata with exiftoolr, Default: `NULL`.}
+\item{author}{Author to add to file metadata with exiftoolr, Default: \code{NULL}.}
 
 \item{date}{Date to add to file metadata with exiftoolr (not currently
-working), Default: `NULL`.}
+working), Default: \code{NULL}.}
 
 \item{keywords}{Keyword(s) added to file metadata with with exiftoolr,
-Default: `NULL`.}
+Default: \code{NULL}.}
 
-\item{args}{Alternate arguments passed to [exiftoolr::exif_call()]. If args
-is not `NULL`, title, author, date, and keywords are ignored; defaults to
-`NULL`.}
+\item{args}{Alternate arguments passed to \code{\link[exiftoolr:exif_call]{exiftoolr::exif_call()}}. If args
+is not \code{NULL}, title, author, date, and keywords are ignored; defaults to
+\code{NULL}.}
 
 \item{overwrite}{If TRUE, overwrite any existing EXIF metadata present in the
 provided fields; defaults to TRUE}
@@ -75,9 +76,9 @@ provided fields; defaults to TRUE}
 
 \item{key_col}{Column name in key_list with the values to use for keywords.}
 
-\item{join}{geometry predicate function; defaults to `NULL`, set to
-[sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON objects
-or [sf::st_nearest_feature] if key_list contains other types.}
+\item{join}{geometry predicate function; defaults to \code{NULL}, set to
+\link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON objects
+or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}
 }
 \description{
 Read EXIF data from folder of images.
@@ -87,10 +88,12 @@ NA
 }
 
 \examples{
-read_sf_exif(
-  path = system.file("extdata/photos", package = "overedge"),
-  filetype = "jpeg"
-)
+\dontrun{
+  read_sf_exif(
+    path = system.file("extdata/photos", package = "overedge"),
+    filetype = "jpeg"
+  )
+}
 }
 \seealso{
 Other read_write: 

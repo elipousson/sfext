@@ -22,22 +22,22 @@ address_to_sf(
 \item{coords}{Coordinate columns for input dataframe or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 
-\item{remove_coords}{For [df_to_sf], if `TRUE`, remove the coordinate columns
+\item{remove_coords}{For \link{df_to_sf}, if \code{TRUE}, remove the coordinate columns
 after converting a data frame to simple feature object; defaults to
-`FALSE`.}
+\code{FALSE}.}
 
-\item{crs}{Cordinate reference system to return, Default: 4326 for [sf_to_df]
-and NULL for [df_to_sf]}
+\item{crs}{Cordinate reference system to return, Default: 4326 for \link{sf_to_df}
+and NULL for \link{df_to_sf}.}
 
-\item{...}{Additional parameters passed to [tidygeocoder::geo] or [tidygeocoder::geocode]}
+\item{...}{Additional parameters passed to \link[tidygeocoder:geo]{tidygeocoder::geo} or \link[tidygeocoder:geocode]{tidygeocoder::geocode}}
 }
 \value{
-A `sf` object with POINT geometry for all geocoded addresses with valid coordinates.
+A \code{sf} object with POINT geometry for all geocoded addresses with valid coordinates.
 }
 \description{
-Wraps [tidygeocoder::geo] and [tidygeocoder::geocode] to convert a character
+Wraps \link[tidygeocoder:geo]{tidygeocoder::geo} and \link[tidygeocoder:geocode]{tidygeocoder::geocode} to convert a character
 string or a data frame with an address column.
 }
 \seealso{
-\code{\link[tidygeocoder]{geo}}, \code{\link[tidygeocoder]{geocode}}
+\code{\link[tidygeocoder:geo]{tidygeocoder::geo()}}, \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode()}}
 }

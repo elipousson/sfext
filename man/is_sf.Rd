@@ -9,7 +9,6 @@
 \alias{is_raster}
 \alias{is_sp}
 \alias{is_same_crs}
-\alias{is_sf_or_what}
 \title{What is the class or spatial attributes of this feature?}
 \usage{
 is_sf(x, ext = FALSE, null.ok = FALSE)
@@ -27,8 +26,6 @@ is_raster(x, null.ok = FALSE)
 is_sp(x, null.ok = FALSE)
 
 is_same_crs(x, y)
-
-is_sf_or_what(x = NULL, return = NULL, us = FALSE, null.ok = TRUE)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}
@@ -38,15 +35,10 @@ not; defaults to \code{FALSE}. (used by \link{is_sf})}
 
 \item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
 
-\item{named}{If `TRUE`, check if sf list is named; defaults `FALSE`.}
+\item{named}{If \code{TRUE}, check if sf list is named; defaults \code{FALSE}.}
 
 \item{y}{An sf object or a character or numeric object supported by
 \link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{is_same_crs})}
-
-\item{return}{type of object to return; "list" or `NULL` (default).}
-
-\item{us}{If `TRUE`, check if x is a U.S. state or county name; defaults to
-`FALSE`.}
 }
 \description{
 What is the class or spatial attributes of this feature?

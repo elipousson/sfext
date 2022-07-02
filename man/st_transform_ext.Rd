@@ -6,34 +6,34 @@
 \alias{st_omerc}
 \title{Transform or convert coordinates of a simple feature or bounding box object}
 \usage{
-st_transform_ext(x = NULL, crs = NULL, class = NULL, rotate = 0)
+st_transform_ext(x, crs = NULL, class = NULL, rotate = 0)
 
 st_omerc(x, rotate = 0)
 }
 \arguments{
-\item{x}{An `sf`, `sfc`, or `bbox` object, a list of sf objects.}
+\item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object, a list of sf objects.}
 
 \item{crs}{A character or numeric reference to a coordinate reference system
-supported by [sf::st_crs()] or another  `sf`, `sfc`, or `bbox` object that
+supported by \code{\link[sf:st_crs]{sf::st_crs()}} or another  \code{sf}, \code{sfc}, or \code{bbox} object that
 is used to provide crs.}
 
-\item{class}{Class of object to return (`sf` or `bbox`). If x is an sf list,
-the returned object remains a list but may be converted to `bbox` if class
+\item{class}{Class of object to return (\code{sf} or \code{bbox}). If x is an sf list,
+the returned object remains a list but may be converted to \code{bbox} if class
 = "sf".}
 
-\item{rotate}{If rotate is greater or less than 0, [st_transform_ext] calls
-[st_omerc] and returns an object with the oblique mercator projection
+\item{rotate}{If rotate is greater or less than 0, \link{st_transform_ext} calls
+\link{st_omerc} and returns an object with the oblique mercator projection
 passing the value of rotate to the gamma parameter of the projection.
 rotate must be between -45 and 45 degrees.}
 }
 \value{
-An `sf`, `sfc`, or `bbox` object transformed to a new coordinate
-  reference system.
+An \code{sf}, \code{sfc}, or \code{bbox} object transformed to a new coordinate
+reference system.
 }
 \description{
-Take a `sf`, `sfc`, or `bbox` object and transform to coordinate reference
-system to match the object provided to `crs`.
+Take a \code{sf}, \code{sfc}, or \code{bbox} object and transform to coordinate reference
+system to match the object provided to \code{crs}.
 }
 \seealso{
-[sf::st_transform()],[sf::st_crs()]
+\code{\link[sf:st_transform]{sf::st_transform()}},\code{\link[sf:st_crs]{sf::st_crs()}}
 }

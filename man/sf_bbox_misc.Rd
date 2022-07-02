@@ -20,9 +20,9 @@
 \usage{
 sf_bbox_asp(bbox, orientation = FALSE)
 
-sf_bbox_point(bbox, point = NULL)
+sf_bbox_point(bbox, point = NULL, call = caller_env())
 
-sf_bbox_dist(bbox, from, to, units = NULL, drop = TRUE)
+sf_bbox_dist(bbox, from, to, units = NULL, drop = TRUE, call = caller_env())
 
 sf_bbox_xdist(bbox, units = NULL, drop = TRUE)
 
@@ -45,7 +45,8 @@ sf_bbox_shift(
   x_nudge = 0,
   y_nudge = 0,
   side = c("all", "top", "bottom", "left", "right"),
-  dir = NULL
+  dir = NULL,
+  call = caller_env()
 )
 
 sf_bbox_contract(bbox, x_nudge = 0, y_nudge = 0)
@@ -55,20 +56,23 @@ sf_bbox_expand(bbox, x_nudge = 0, y_nudge = 0)
 \arguments{
 \item{bbox}{A bbox object.}
 
-\item{orientation}{If `TRUE`, sf_bbox_asp returns a suggested orientation
+\item{orientation}{If \code{TRUE}, sf_bbox_asp returns a suggested orientation
 based on aspect ratio (< 0.9 "portrait"; > 1.1 "landscape"; else "square");
-defaults to `FALSE`.}
+defaults to \code{FALSE}.}
 
 \item{point}{Length 2 character vector representing a coordinate pair at a
 corner, midpoint, or center of the bounding box ("xmin", "ymin", "xmax",
 "ymax", "xmid", "ymid")}
+
+\item{call}{passed to error_call parameter of \link{arg_match} to improve error
+messages where sf_misc functions are being used by other package functions.}
 
 \item{from, to}{xy pairs (e.g. c("xmax", "ymax) defining points to measure
 distance from and to.}
 
 \item{units}{The units to return for sf_bbox_dist. Defaults to NULL.}
 
-\item{drop}{If `FALSE`, distance functions return with units. If `FALSE`
+\item{drop}{If \code{FALSE}, distance functions return with units. If \code{FALSE}
 (default), distance functions return numeric values.}
 
 \item{crs}{coordinate reference system to use for query; default 4326}
@@ -84,9 +88,9 @@ c("lat", "lon")}
 \item{side}{one or more sides to shift: "top", "bottom", "left", "right", or
 "all"}
 
-\item{dir}{If "in", contract the `bbox` by x_nudge and y_nudge. If "out",
-expand the bbox by x_nudge and y_nudge. If dir is not `NULL`; absolute
-values are used for x_nudge and y_nudge. Defaults to `NULL`.}
+\item{dir}{If "in", contract the \code{bbox} by x_nudge and y_nudge. If "out",
+expand the bbox by x_nudge and y_nudge. If dir is not \code{NULL}; absolute
+values are used for x_nudge and y_nudge. Defaults to \code{NULL}.}
 }
 \value{
 sf object
@@ -95,24 +99,29 @@ sf object
 Simple bounding box functions that you can use to:
 }
 \details{
-- Measure distances ([sf_bbox_dist], [sf_bbox_xdist], [sf_bbox_ydist], and [sf_bbox_diagdist])
-- Get an aspect ratio or orientation ([sf_bbox_asp]) (counts asp between 0.9 and 1.1 as "square")
-- Return a point from any of the corners, center, or midpoints ([sf_bbox_point])
-- Transform the coordinate reference system ([sf_bbox_transform])
-- Convert a bounding box to a SQL style query ([sf_bbox_to_lonlat_query]), well
-known text ([sf_bbox_to_wkt]), or a simple feature object ([sf_bbox_to_sf])
-- Shift, expand, or contract a bounding box ([sf_bbox_shift], [sf_bbox_expand], [sf_bbox_contract])
+\itemize{
+\item Measure distances (\link{sf_bbox_dist}, \link{sf_bbox_xdist}, \link{sf_bbox_ydist}, and \link{sf_bbox_diagdist})
+\item Get an aspect ratio or orientation (\link{sf_bbox_asp}) (counts asp between 0.9 and 1.1 as "square")
+\item Return a point from any of the corners, center, or midpoints (\link{sf_bbox_point})
+\item Transform the coordinate reference system (\link{sf_bbox_transform})
+\item Convert a bounding box to a SQL style query (\link{sf_bbox_to_lonlat_query}), well
+known text (\link{sf_bbox_to_wkt}), or a simple feature object (\link{sf_bbox_to_sf})
+\item Shift, expand, or contract a bounding box (\link{sf_bbox_shift}, \link{sf_bbox_expand}, \link{sf_bbox_contract})
+}
 
 The only functions with additional parameters are sf_bbox_to_lonlat_query and
 sf_bbox_dist. All other functions only take a bbox parameter.
 }
 \seealso{
-- [sf::st_as_sf()],[sf::st_as_sfc()]
- - [sfx::st_extent()]
+\itemize{
+\item \code{\link[sf:st_as_sf]{sf::st_as_sf()}},\code{\link[sf:st_as_sfc]{sf::st_as_sfc()}}
+\item \code{\link[sfx:st_extent]{sfx::st_extent()}}
+}
 
 Other dist: 
 \code{\link{convert_dist_scale}()},
 \code{\link{convert_dist_units}()},
+\code{\link{get_measurements}},
 \code{\link{is_dist_units}()}
 }
 \concept{dist}

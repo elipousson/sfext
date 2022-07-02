@@ -28,7 +28,7 @@ st_bbox_asp also supports vectors in the same format as a bbox object.}
 
 \item{diag_ratio}{ratio of diagonal distance of area's bounding box used as
 buffer distance. e.g. if the diagonal distance is 3000 meters and the
-"diag_ratio = 0.1"  a 300 meter will be used. Ignored when `dist` is
+"diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
 provided.}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
@@ -44,10 +44,10 @@ to units matching GDAL units for x; defaults to "meter"}
 
 \item{class}{Class of object to return (sf or bbox); defaults to "bbox".}
 
-\item{null.ok}{If `TRUE` and x is `NULL`, return `NULL`.}
+\item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{NULL}.}
 }
 \value{
-Class `bbox` object
+Class \code{bbox} object
 }
 \description{
 Takes an area as an sf object or a bounding box and returns a bounding box

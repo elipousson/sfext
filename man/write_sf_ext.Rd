@@ -106,12 +106,12 @@ gists; defaults to Sys.getenv("GITHUB_PAT")}
 
 \item{sheet}{Sheet to write into, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number.}
 
-\item{ask}{If `TRUE`, the user is prompted to make revisions to the created
+\item{ask}{If \code{TRUE}, the user is prompted to make revisions to the created
 Google Sheet. When user responds to the prompt, the date is read back into
-the environment using [read_sf_gsheet] and joined to the provided data with
-the column name provided to key. Defaults to `FALSE`.}
+the environment using \link{read_sf_gsheet} and joined to the provided data with
+the column name provided to key. Defaults to \code{FALSE}.}
 
-\item{key}{If ask is `TRUE`, a key is required to join the sheet data to the
+\item{key}{If ask is \code{TRUE}, a key is required to join the sheet data to the
 provided data.}
 }
 \description{

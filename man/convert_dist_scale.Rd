@@ -33,22 +33,23 @@ are used as dist.}
 
 \item{scale_factor}{factor for converting from scale_unit to actual_unit,
 e.g. if 1" = 1', the scale factor is 12. optional if scale if provided;
-defaults to `NULL`.}
+defaults to \code{NULL}.}
 
 \item{dpi}{dots per square inch (used as conversion factor for "px" to "in")}
 }
 \value{
 dist values converted from scale_unit to actual_unit based on
-  scale_factor or information from standard_scales object. If paper is
-  provided, return a data frame with converted distances as actual_width and
-  actual_height
+scale_factor or information from standard_scales object. If paper is
+provided, return a data frame with converted distances as actual_width and
+actual_height
 }
 \description{
-Convert distance from scale to actual units based on named `standard_scales`
+Convert distance from scale to actual units based on named \code{standard_scales}
 }
 \seealso{
 Other dist: 
 \code{\link{convert_dist_units}()},
+\code{\link{get_measurements}},
 \code{\link{is_dist_units}()},
 \code{\link{sf_bbox_misc}}
 }

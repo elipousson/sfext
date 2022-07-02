@@ -14,13 +14,13 @@
 \usage{
 as_point(..., to = "POINT")
 
-as_points(..., to = "POINT")
+as_points(..., to = "POINT", call = caller_env())
 
 as_startpoint(...)
 
 as_endpoint(...)
 
-as_line(..., to = "LINESTRING")
+as_line(..., to = "LINESTRING", call = caller_env())
 
 as_lines(..., to = "LINESTRING")
 
@@ -33,37 +33,37 @@ as_polygons(..., to = "POLYGON")
 LINESTRING or MULTILINESTRING.}
 }
 \description{
-Works with sf, sfc, and bbox objects using [sf::st_centroid]. Works with
-[sf_bbox_point]
+Works with sf, sfc, and bbox objects using \link[sf:geos_unary]{sf::st_centroid}. Works with
+\link{sf_bbox_point}
 }
 \details{
 Using as_point:
 
-For [as_point], ... is passed to [sf::st_centroid] if ... is a sf, sfc,
-or bbox object, [sf_bbox_point] includes a bbox object and a string
-indicating the requested point position, or [sf::st_point] if ... includes a
+For \link{as_point}, ... is passed to \link[sf:geos_unary]{sf::st_centroid} if ... is a sf, sfc,
+or bbox object, \link{sf_bbox_point} includes a bbox object and a string
+indicating the requested point position, or \link[sf:st]{sf::st_point} if ... includes a
 numeric vector.
 
 Using as_points:
 
-For [as_points] parameters are passed to as_point using [purrr::map] and then
-converted to sfc using [sf::st_as_sfc]. The ... parameters must include a
+For \link{as_points} parameters are passed to as_point using \link[purrr:map]{purrr::map} and then
+converted to sfc using \link[sf:st_as_sfc]{sf::st_as_sfc}. The ... parameters must include a
 crs, otherwise the crs will be NA for the resulting sfc object.
 
-Using [as_startpoint] and [as_endpoint]:
+Using \link{as_startpoint} and \link{as_endpoint}:
 
-[as_startpoint] and [as_endpoint] require a line parameter that is passed to
-[lwgeom::st_startpoint] or [lwgeom::st_endpoint] respectively. Both functions
+\link{as_startpoint} and \link{as_endpoint} require a line parameter that is passed to
+\link[lwgeom:st_startpoint]{lwgeom::st_startpoint} or \link[lwgeom:st_startpoint]{lwgeom::st_endpoint} respectively. Both functions
 always return a sfc object matching the CRS of the input geometry.
 
-Using [as_lines]:
+Using \link{as_lines}:
 
 If params do not have POINT or MULTIPOINT geometry, they are passed to
-[as_points] to convert to an `sfc` object. If the parameters have  POINT
+\link{as_points} to convert to an \code{sfc} object. If the parameters have  POINT
 geometry, they are combined to create a MULTIPOINT geometry.
 
-For [as_lines] the ... parameters are passed to [as_points] and/or
-[sf::st_cast].
+For \link{as_lines} the ... parameters are passed to \link{as_points} and/or
+\link[sf:st_cast]{sf::st_cast}.
 
 Both as_line and as_lines do not consistently retain the coordinate reference
 system of the original object but this should be improved in the future.

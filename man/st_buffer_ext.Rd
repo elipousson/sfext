@@ -24,7 +24,7 @@ st_edge(x, dist = NULL, diag_ratio = NULL, unit = "meter", ...)
 
 \item{diag_ratio}{ratio of diagonal distance of area's bounding box used as
 buffer distance. e.g. if the diagonal distance is 3000 meters and the
-"diag_ratio = 0.1"  a 300 meter will be used. Ignored when `dist` is
+"diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
 provided.}
 
 \item{unit}{Units for buffer. Supported options include "meter", "foot",
@@ -36,15 +36,15 @@ to units matching GDAL units for x; defaults to "meter"}
 used as lower and upper limits on distance buffer). Units must match the
 provided units; defaults to NULL.}
 
-\item{single_side}{If `TRUE`, single-sided buffers are returned for linear
+\item{single_side}{If \code{TRUE}, single-sided buffers are returned for linear
 geometries, in which case negative dist values give buffers on the
 right-hand side, positive on the left.}
 
-\item{...}{additional parameters passed to [sf::st_buffer()]}
+\item{...}{additional parameters passed to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
 }
 \description{
-Return an sf object with a buffer based on `dist` or a proportion of the
-diagonal distance defined by `diag_ratio`. If x uses geographic coordinates,
+Return an sf object with a buffer based on \code{dist} or a proportion of the
+diagonal distance defined by \code{diag_ratio}. If x uses geographic coordinates,
 the coordinate reference system is transformed into EPSG:3857 and then
 transformed back into the original CRS after the buffer has been applied.
 }

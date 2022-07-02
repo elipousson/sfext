@@ -8,6 +8,7 @@
 \alias{read_sf_excel}
 \alias{read_sf_csv}
 \alias{read_sf_url}
+\alias{read_sf_esri}
 \alias{read_sf_geojson}
 \alias{read_sf_gist}
 \alias{read_sf_gmap}
@@ -59,6 +60,17 @@ read_sf_csv(
 
 read_sf_url(url, bbox = NULL, coords = NULL, zm_drop = TRUE, ...)
 
+read_sf_esri(
+  url,
+  bbox = NULL,
+  where = NULL,
+  name = NULL,
+  name_col = NULL,
+  coords = c("lon", "lat"),
+  from_crs = 4326,
+  ...
+)
+
 read_sf_geojson(url, path = NULL, geojson = NULL, bbox = NULL, ...)
 
 read_sf_gist(url, id = NULL, bbox = NULL, ...)
@@ -93,16 +105,16 @@ read_sf_gsheet(
 \arguments{
 \item{...}{Additional parameters passed to multiple functions; see details.}
 
-\item{bbox}{A bounding box object; defaults to `NULL`. If `"bbox"` is provided,
+\item{bbox}{A bounding box object; defaults to \code{NULL}. If \code{"bbox"} is provided,
 only returns features intersecting the bounding box.}
 
-\item{data}{Character; name of dataset; used by [read_sf_pkg()] only.}
+\item{data}{Name of a package dataset; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
 
-\item{package}{Character; package name; used by [read_sf_pkg()] only.}
+\item{package}{Package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
 
-\item{filetype}{File type supported for dsn parameter of [sf::read_sf()];
-Default: 'gpkg'; used by [read_sf_pkg()] only and required only if the data
-is in the package cache directory or extdata system files.}
+\item{filetype}{File type supported by \code{\link[sf:st_read]{sf::read_sf()}}; Default: 'gpkg'; used
+by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data is in the package
+cache directory or extdata system files.}
 
 \item{path}{A file path.}
 
@@ -120,26 +132,26 @@ also be an open database connection.}
 
 \item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
 
-\item{zm_drop}{If `TRUE`, drop Z and/or M dimensions using [sf::st_zm]}
+\item{zm_drop}{If \code{TRUE}, drop Z and/or M dimensions using \link[sf:st_zm]{sf::st_zm}}
 
 \item{sheet}{Sheet to read. Either a string (the name of a sheet), or an
 integer (the position of the sheet). Ignored if the sheet is specified via
 \code{range}. If neither argument specifies the sheet, defaults to the first
 sheet.}
 
-\item{coords}{Character vector with coordinate values. Coordinates must be
-latlon data (with coordinate reference system 4326).}
+\item{coords}{Character vector with coordinate values. Coordinates must use
+the same crs as the \code{from_crs} parameter.}
 
-\item{from_crs}{For [df_to_sf], coordinate reference system used by
+\item{from_crs}{For \link{df_to_sf}, coordinate reference system used by
 coordinates or well known text in data frame.}
 
-\item{geo}{If `TRUE`, use [address_to_sf] to geocode address column; defaults
-to `FALSE`.}
+\item{geo}{If \code{TRUE}, use \link{address_to_sf} to geocode address column; defaults
+to \code{FALSE}.}
 
 \item{address}{Address column name, Default: 'address'}
 
-\item{url}{A url for a spatial data file, a GitHub gist, or a ArcGIS
-FeatureServer or MapServer to access with [get_esri_data()]}
+\item{url}{A url for a spatial data file, tabular data with coordinates, or a
+ArcGIS FeatureServer or MapServer to access with \code{\link[esri2sf:esri2sf]{esri2sf::esri2sf()}}}
 
 \item{show_col_types}{If \code{FALSE}, do not show the guessed column types. If
 \code{TRUE} always show the column types, even if they are supplied. If \code{NULL}
@@ -168,8 +180,8 @@ date/time prefix; defaults to \code{NULL}.}
     \code{"download.file.method"}: see \code{\link{options}()}.
   }
 
-\item{unzip}{If `TRUE`, url must be a zip file that is downloaded, unzipped
-into a temporary directory (created with [tempdir()]), and then read to a file using the specified
+\item{unzip}{If \code{TRUE}, url must be a zip file that is downloaded, unzipped
+into a temporary directory (created with \code{\link[=tempdir]{tempdir()}}), and then read to a file using the specified
 file type.}
 
 \item{ss}{Something that identifies a Google Sheet:
@@ -184,49 +196,51 @@ returns
 
 Processed through \code{\link[googlesheets4:as_sheets_id]{as_sheets_id()}}.}
 
-\item{ask}{If `TRUE`, ask for the name of the Google Sheet to read if ss is
-not provided to [read_sf_gsheet].}
+\item{ask}{If \code{TRUE}, ask for the name of the Google Sheet to read if ss is
+not provided to \link{read_sf_gsheet}.}
 }
 \description{
-An extended version of [sf::read_sf()] that support reading spatial data
+An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support reading spatial data
 based on a file path, URL, or the data name and associated package.
 Optionally provide a bounding box to filter data (not supported for all data
 types). If a file path or url is provided for a GeoJSON file, the
-[read_sf_geojson] function (using the suggested
-[{geojsonsf}](https://github.com/SymbolixAU/geojsonsf) package) is used.
+\link{read_sf_geojson} function (using the suggested
+\href{https://github.com/SymbolixAU/geojsonsf}{{geojsonsf}} package) is used.
 }
 \details{
 Reading data from a url:
 
-[read_sf_url] supports multiple types of urls:
-
-  - A MapServer or FeatureServer URL
-  - A URL for a GitHub gist with a single spatial data file (first file used if gist contains multiple)
-  - A URL for a spatial data file or a CSV file
-  - A Google Sheets URL
-  - A public Google Maps URL
+\link{read_sf_url} supports multiple types of urls:
+\itemize{
+\item A MapServer or FeatureServer URL
+\item A URL for a GitHub gist with a single spatial data file (first file used if gist contains multiple)
+\item A URL for a spatial data file or a CSV file
+\item A Google Sheets URL
+\item A public Google Maps URL
+}
 
 Reading data from a package:
 
-[read_sf_pkg] looks for three types of package data:
-
-  - Data loaded with the package
-  - External data in the `extdata` system files folder.
-  - Cached data in the cache directory returned by [rappdirs::user_cache_dir]
+\link{read_sf_pkg} looks for three types of package data:
+\itemize{
+\item Data loaded with the package
+\item External data in the \code{extdata} system files folder.
+\item Cached data in the cache directory returned by \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
+}
 
 Additional ... parameters:
 
-[read_sf_pkg] and [read_sf_download] both pass additional parameters
-to [read_sf_path] which supports query, name_col, name, and table. name and
+\link{read_sf_pkg} and \link{read_sf_download} both pass additional parameters
+to \link{read_sf_path} which supports query, name_col, name, and table. name and
 name_col are ignored if a query parameter is provided. If table is not
 provided, a expected layer name is created based on the file path.
 
-[read_sf_url] pass the where, name_col, and name for any ArcGIS FeatureServer or
-MapServer url (passed to [get_esri_data]) or sheet if the url is for a Google
-Sheet (passed to [googlesheets4::read_sheet]), or a query or wkt filter
-parameter if the url is some other type (passed to [sf::read_sf]).
+\link{read_sf_url} pass the where, name_col, and name for any ArcGIS FeatureServer or
+MapServer url (passed to \link{read_sf_esri}) or sheet if the url is for a Google
+Sheet (passed to \link[googlesheets4:range_read]{googlesheets4::read_sheet}), or a query or wkt filter
+parameter if the url is some other type (passed to \link[sf:st_read]{sf::read_sf}).
 
-[read_sf_ext] is a flexible function that only has bbox as a named parameter
+\link{read_sf_ext} is a flexible function that only has bbox as a named parameter
 and all other parameters in ... are passed to one of the other overedge
 read_sf functions.
 }

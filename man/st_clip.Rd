@@ -15,7 +15,7 @@ st_clip(
 )
 }
 \arguments{
-\item{x}{`sf` or `bbox` object to clip}
+\item{x}{\code{sf} or \code{bbox} object to clip}
 
 \item{clip}{Character string describing the part of the area to clip or
 remove. Options include c("top", "right", "bottom", "left", "topright",
@@ -39,7 +39,7 @@ instead of "kilometer") are also supported. Distance in units is converted
 to units matching GDAL units for x; defaults to "meter"}
 }
 \value{
-`sf` object clipped based on parameters
+\code{sf} object clipped based on parameters
 }
 \description{
 Clip based on the corner of the object bounding box.

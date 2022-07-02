@@ -7,21 +7,22 @@
 st_cast_ext(x, to = "POINT", simplify = TRUE, ...)
 }
 \arguments{
-\item{x}{A `sf` or `sfc` object to cast to another type.}
+\item{x}{A \code{sf} or \code{sfc} object to cast to another type.}
 
 \item{to}{character; target type, if missing, simplification is tried; when \code{x} is of type \code{sfg} (i.e., a single geometry) then \code{to} needs to be specified.}
 
-\item{simplify}{If TRUE, simplify geometry type; defaults to TRUE.}
+\item{simplify}{If \code{TRUE}, simplify geometry type; defaults to \code{TRUE}.}
 
-\item{...}{ignored}
+\item{...}{
+  Arguments passed on to \code{\link[sf:st_cast]{sf::st_cast}}
+  \describe{
+    \item{\code{}}{}
+  }}
 }
 \description{
-Wrapper for [sf::st_cast()] that currently supports casting MULTIPOLYGON to
+Wrapper for \code{\link[sf:st_cast]{sf::st_cast()}} that currently supports casting MULTIPOLYGON to
 POLYGON or MULTIPOLYGON or POLYGON to POINT or, if simplify = FALSE, can cast
 MULTIPOINT to LINESTRING. This is not very different than the basic
 functionality of st_cast but further development may improve the utility of
 this function.
-}
-\seealso{
-[sf::st_cast()]
 }

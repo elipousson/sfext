@@ -29,12 +29,12 @@ st_circumscribed_circle(x, scale = 1)
 
 \item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
 
-\item{ext}{If `TRUE`, st_center returns a list with the centroid as a sfc
+\item{ext}{If \code{TRUE}, st_center returns a list with the centroid as a sfc
 object, as an sf object (with lon and lat values), the original geometry
-(x), and the original crs. objects; defaults TRUE. If `FALSE`, return an sf
+(x), and the original crs. objects; defaults TRUE. If \code{FALSE}, return an sf
 object.}
 
-\item{...}{Additional parameters passed to `sf::st_centroid()` by st_center}
+\item{...}{Additional parameters passed to \code{sf::st_centroid()} by st_center}
 
 \item{inscribed}{If \code{TRUE}, make circle or square inscribed within x, if
 \code{FALSE}, make it circumscribed.}
@@ -65,7 +65,11 @@ rotation value can be provided to change the orientation of the shape, e.g.
 \code{asp = 1}.
 }
 \examples{
-nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
+nc <-
+  read_sf_ext(
+    path = system.file("shape/nc.shp", package = "sf")
+  )
+
 nc <- st_transform_ext(nc, crs = 3857)
 
 basemap <-
@@ -74,11 +78,11 @@ basemap <-
   ggplot2::theme_void()
 
 basemap +
-  layer_location_data(
-    data = st_scale_rotate(nc, scale = 0.5, rotate = 15),
+  ggplot2::geom_sf(
+    data = st_scale_rotate(nc, scale = 0.6, rotate = 15),
     fill = NA,
     color = "red"
-    )
+  )
 }
 \seealso{
 \itemize{

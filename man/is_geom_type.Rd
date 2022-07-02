@@ -25,21 +25,21 @@ is_polygon(x, by_geometry = FALSE)
 is_multipolygon(x, by_geometry = FALSE)
 }
 \arguments{
-\item{x}{A `sf` or `sfc` object passed to [sf::st_geometry_type]}
+\item{x}{A \code{sf} or \code{sfc} object passed to \link[sf:st_geometry_type]{sf::st_geometry_type}}
 
 \item{type}{If "POINT", check if geometry type is POINT. Same for all
-available geometry types; not case sensitive; Default: `NULL`}
+available geometry types; not case sensitive; Default: \code{NULL}}
 
-\item{by_geometry}{Passed to [sf::st_geometry_type]; defaults to `FALSE`}
+\item{by_geometry}{Passed to \link[sf:st_geometry_type]{sf::st_geometry_type}; defaults to \code{FALSE}}
 
-\item{ext}{For st_geom_type, if ext `TRUE` and check is `NULL`, return a list
+\item{ext}{For st_geom_type, if ext \code{TRUE} and check is \code{NULL}, return a list
 with checks for POINTS, POLYGONS, LINESTRING, and the returned types.}
 }
 \value{
 If ext is FALSE and type is NULL, returns vector with geometry types
-  identical to [sf::st_geometry_type]. If ext is `TRUE`, returns a list and,
-  if type is not `NULL`, returns a logical vector.
+identical to \link[sf:st_geometry_type]{sf::st_geometry_type}. If ext is \code{TRUE}, returns a list and,
+if type is not \code{NULL}, returns a logical vector.
 }
 \description{
-A flexible wrapper for [sf::st_geometry_type] and [sf::st_is].
+A flexible wrapper for \link[sf:st_geometry_type]{sf::st_geometry_type} and \link[sf:st_is]{sf::st_is}.
 }
