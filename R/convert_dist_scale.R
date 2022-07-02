@@ -67,10 +67,10 @@ convert_dist_scale <- function(dist = NULL,
   }
 
   dist <-
-    overedge::convert_dist_units(
-    dist = dist * scale_factor,
-    to = actual_unit
-  )
+    convert_dist_units(
+      dist = dist * scale_factor,
+      to = actual_unit
+    )
 
   if (is.null(paper)) {
     return(dist)
