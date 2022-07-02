@@ -8,11 +8,11 @@
 #' appends the xmin, ymin, xmax, and ymax values for each feature to the simple
 #' feature object.
 #'
-#' @param x `sf`, `bbox`, or `sfc` object
+#' @param x `sf`, `bbox`, or `sfc` object.
 #' @param coords Column names to use for coordinates in results, Default: `NULL`;
-#'   which is set to c("lon", "lat") by [check_coords]
+#'   which is set to c("lon", "lat") by [check_coords].
 #' @param geometry geometry to use for coordinates "centroid", "surface point",
-#'   or alternatively "wkt"; defaults to `NULL` ("centroid")
+#'   or alternatively "wkt"; defaults to `NULL` ("centroid").
 #' @param keep_all If `TRUE`, bind the coordinates columns to the provided object x,
 #'   Default: `TRUE`.
 #' @param crs Coordinate reference system to use for coordinates; defaults to `NULL`.
@@ -23,31 +23,40 @@
 #' @importFrom sf st_as_text st_point_on_surface st_coordinates
 #'   st_drop_geometry st_zm
 #' @importFrom dplyr select bind_cols
-get_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = TRUE, drop = TRUE) {
-  geometry <- match.arg(geometry, c("centroid", "surface point", "wkt"))
+get_coords <- function(x, coords = NULL, geometry = "centroid", crs = NULL, keep_all = TRUE, drop = TRUE, call = caller_env()) {
+  geometry <-
+    arg_match(
+      geometry,
+      c("centroid", "surface point", "wkt"),
+      error_call = call
+    )
 
-  stopifnot(
-    is_sf(x, ext = TRUE)
+  cli_abort_ifnot(
+    "{.arg x} must be a sf, sfc, or bbox object.",
+    condition = is_sf(x, ext = TRUE)
   )
 
-  x_coords <- st_transform_ext(x = x, crs = crs)
+  if (is_point(x)) {
+    # FIXME: This approach may be an issue if a sf object has mixed geometry
+    geometry <- "point"
+  }
+
 
   if (geometry == "wkt") {
     x <- has_same_name_col(x, "wkt", quiet = TRUE)
     # Convert geometry to wkt
-    x_coords <- data.frame("wkt" = sf::st_as_text(as_sfc(x)))
+    x_coords <- data.frame("wkt" = sf::st_as_text(as_sfc(x, crs = crs)))
   } else {
-    # Convert to coordinates at centroid or as a point on surface
-    # FIXME: This approach may be an issue if a sf object has mixed geometry
+    x_coords <- st_transform_ext(x = x, crs = crs)
 
-    if (!is_point(x)) {
-      if (geometry == "centroid") {
+    x_coords <-
+      switch(geometry,
+        "point" = x_coords,
         # FIXME: Double check that this doesn't cause issues for sfc objects
-        x_coords <- st_center(x_coords, ext = FALSE)
-      } else if (geometry == "surface point") {
-        x_coords <- suppressMessages(sf::st_point_on_surface(sf::st_zm(x_coords)))
-      }
-    }
+        "centroid" = st_center(x_coords, ext = FALSE),
+        # Convert to coordinates at centroid or as a point on surface
+        "surface point" = suppressMessages(sf::st_point_on_surface(sf::st_zm(x_coords)))
+      )
 
     x_coords <- as.data.frame(sf::st_coordinates(x_coords))
 
@@ -89,39 +98,37 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
   stopifnot(
     is_sf(x, ext = TRUE)
   )
+  col <- "minmax_row_num"
 
   x <- dplyr::mutate(
     x,
-    minmax_row_num = as.character(dplyr::row_number())
+    "{col}" := as.character(dplyr::row_number())
   )
 
-  col <- "minmax_row_num"
 
   # Get bbox for each feature (col must be unique)
   x_bbox_list <-
     st_bbox_ext(as_sf_list(x, col = col), crs = crs, class = "list")
-  # Drop bbox class
 
+  # Drop bbox class
   x_bbox_list <-
     purrr::map(
       x_bbox_list,
       ~ as.numeric(.x)
     )
 
-  x <- dplyr::select(x, -col)
-
-  minmax_opts <- c("xmin", "ymin", "xmax", "ymax")
+  x <- dplyr::select(x, -.data[[col]])
 
   minmax_df <-
     tidyr::unnest_wider(
       tibble::enframe(x_bbox_list, value = "bbox"),
       "bbox",
-      names_repair = ~ c(col, minmax_opts),
+      names_repair = ~ c(col, c("xmin", "ymin", "xmax", "ymax")),
       names_sep = ""
     )
 
   minmax_df <-
-    dplyr::select(minmax_df, -col)
+    dplyr::select(minmax_df, -.data[[col]])
 
 
   if (!keep_all) {
@@ -139,4 +146,15 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
     )
 
   relocate_sf_col(x)
+}
+
+#' Exported function in getdata but hoping to avoid importing getdata into sfext
+#'
+#' @noRd
+relocate_sf_col <- function(x, .after = dplyr::everything()) {
+  dplyr::relocate(
+    x,
+    dplyr::all_of(attributes(x)$sf_column),
+    .after = .after
+  )
 }
