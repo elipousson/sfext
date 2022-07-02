@@ -32,12 +32,13 @@ use_eval_parse <- function(data, package = NULL) {
 #' @param data Data frame or simple feature object
 #' @param col Column name/value
 #' @noRd
+#' @importFrom group_by
 group_by_col <- function(data, col = NULL) {
   if (is.null(col) || is.null(data)) {
     return(data)
   }
 
-  if ((rlang::has_length(col, 1)) && rlang::has_name(data, col)) {
+  if ((has_length(col, 1)) && has_name(data, col)) {
     return(dplyr::group_by(data, .data[[col]]))
   }
 }
@@ -46,9 +47,7 @@ group_by_col <- function(data, col = NULL) {
 #'
 #' @name has_same_name_col
 #' @noRd
-#' @importFrom rlang has_name
-#' @importFrom cli cli_abort cli_alert_success
-#' @importFrom dplyr rename
+#' @importFrom dplyr select all_of rename
 has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet = FALSE, drop = TRUE) {
   if (!has_name(x, col)) {
     return(x)
@@ -68,8 +67,8 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
   }
 
   if (!quiet) {
-    cli::cli_alert_success(
-      "The existing column '{col}' to '{new_col}' to avoid overwriting any existing values."
+    cli_inform(
+      c("v" = "The existing column '{col}' to '{new_col}' to avoid overwriting any existing values.")
     )
   }
 

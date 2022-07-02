@@ -36,9 +36,10 @@ is_diff_dist <- function(x, y, units = NULL) {
       TRUE ~ "neither"
     )
 
-  if ((which_is_units == "neither") && is.null(units)) {
-    cli::cli_alert_danger("No units could be determined for x or y.")
-  }
+  cli_abort_ifnot(
+    "units can't be determined for {.arg x} or {.arg y}.",
+    condition = !((which_is_units == "neither") && is.null(units))
+  )
 
   switch(which_is_units,
     "x" = diff(c(x, as_dist_units(y, units = x))),
@@ -57,12 +58,12 @@ is_diff_dist <- function(x, y, units = NULL) {
 #' @param ... Additional parameters passed to all.equal
 #' @export
 #' @importFrom sf st_area
-is_same_dist <- function(x, y, dist = NULL, diff = FALSE, ...) {
+is_same_dist <- function(x, y, dist = NULL, diff = FALSE, call = caller_env(), ...) {
   if (is.character(dist) && is_sf(x, ext = TRUE) && is_sf(y, ext = TRUE)) {
     x <- as_bbox(x)
     y <- as_bbox(x)
 
-    dist <- match.arg(dist, c("diagdist", "xdist", "ydist"))
+    dist <- arg_match(dist, c("diagdist", "xdist", "ydist"), error_call = call)
 
     x <-
       switch(dist,
@@ -108,32 +109,42 @@ is_shorter <- function(x, y) {
 #' @param null.ok If null.ok is `TRUE`, allow x to return a `NULL` value; if
 #'   `FALSE`, error on `NULL` values.
 #' @export
-#' @importFrom cli cli_abort
 #' @importFrom sf st_crs
-get_dist_units <- function(x, null.ok = TRUE) {
+get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
   if (is.null(x) && null.ok) {
     return(x)
-  } else if (is.null(x)) {
-    cli_abort(
-      "{.var units} must be a unit chracter string, a unit class object, or a sf object with a valid coordinate reference system."
-    )
   }
+
+  check_null(x)
 
   if (is_sf(x)) {
     return(sf::st_crs(x)$units_gdal)
   }
 
-  if (is_units(x) && all(as.character(units(x)[["numerator"]]) %in% dist_unit_options) && !(as.character(units(x)) %in% area_unit_options)) {
-    return(as.character(units(x)[["numerator"]]))
-  }
-
   if (is_units(x)) {
+    if (all(as.character(units(x)[["numerator"]]) %in% dist_unit_options) && !(as.character(units(x)) %in% area_unit_options)) {
+      return(as.character(units(x)[["numerator"]]))
+    }
+
     return(as.character(units(x)))
   }
 
-  if (is.character(x)) {
-    return(x[x %in% c(dist_unit_options, area_unit_options)])
+  if (is.numeric(x)) {
+    cli_warn_ifnot(
+      "{.var units} can't be determined for a numeric vector with no {.arg units} attribute.",
+      condition = quiet
+    )
+
+    invisible(return(NULL))
   }
+
+  cli_abort_ifnot(
+    "{.var units} must be a chracter string from {.code dist_unit_options} or {.code area_unit_options},
+    a {.code unit} class object, or a `sf` object with a valid crs.",
+    condition = class(x) %in% c("character", "units", "sf")
+  )
+
+  arg_match(x, c(dist_unit_options, area_unit_options), multiple = multiple)
 }
 
 #' @name as_dist_units
@@ -141,11 +152,11 @@ get_dist_units <- function(x, null.ok = TRUE) {
 #' @export
 #' @importFrom sf st_crs
 #' @importFrom units as_units
-as_dist_units <- function(x, units = NULL, null.ok = FALSE) {
+as_dist_units <- function(x, units = NULL, null.ok = FALSE, call = caller_env()) {
   units <- get_dist_units(units, null.ok = null.ok)
 
   if (!is.null(units)) {
-    units <- match.arg(units, c(dist_unit_options, area_unit_options))
+    units <- arg_match(units, c(dist_unit_options, area_unit_options), error_call = call)
   } else if (null.ok) {
     return(x)
   }
