@@ -33,7 +33,7 @@
 #' provided, a expected layer name is created based on the file path.
 #'
 #' [read_sf_url] pass the where, name_col, and name for any ArcGIS FeatureServer or
-#' MapServer url (passed to [get_esri_data]) or sheet if the url is for a Google
+#' MapServer url (passed to [read_sf_esri]) or sheet if the url is for a Google
 #' Sheet (passed to [googlesheets4::read_sheet]), or a query or wkt filter
 #' parameter if the url is some other type (passed to [sf::read_sf]).
 #'
@@ -44,15 +44,15 @@
 #' @param bbox A bounding box object; defaults to `NULL`. If `"bbox"` is provided,
 #'   only returns features intersecting the bounding box.
 #' @param path A file path.
-#' @param url A url for a spatial data file, a GitHub gist, or a ArcGIS
-#'   FeatureServer or MapServer to access with [get_esri_data()]
-#' @param data Character; name of dataset; used by [read_sf_pkg()] only.
-#' @param package Character; package name; used by [read_sf_pkg()] only.
-#' @param filetype File type supported for dsn parameter of [sf::read_sf()];
-#'   Default: 'gpkg'; used by [read_sf_pkg()] only and required only if the data
-#'   is in the package cache directory or extdata system files.
-#' @param coords Character vector with coordinate values. Coordinates must be
-#'   latlon data (with coordinate reference system 4326).
+#' @param url A url for a spatial data file, tabular data with coordinates, or a
+#'   ArcGIS FeatureServer or MapServer to access with [esri2sf::esri2sf()]
+#' @param data Name of a package dataset; used by [read_sf_pkg()] only.
+#' @param package Package name; used by [read_sf_pkg()] only.
+#' @param filetype File type supported by [sf::read_sf()]; Default: 'gpkg'; used
+#'   by [read_sf_pkg()] only and required only if the data is in the package
+#'   cache directory or extdata system files.
+#' @param coords Character vector with coordinate values. Coordinates must use
+#'   the same crs as the `from_crs` parameter.
 #' @param geo If `TRUE`, use [address_to_sf] to geocode address column; defaults
 #'   to `FALSE`.
 #' @inheritParams address_to_sf
@@ -69,16 +69,16 @@ read_sf_ext <- function(..., bbox = NULL) {
     dplyr::case_when(
       !is.null(params$package) ~ "pkg",
       !is.null(params$url) ~ "url",
-      !is.null(params$path) && is.null(params$filename) ~ "path",
+      !is.null(params$path) ~ "path",
       !is.null(params$dsn) ~ "sf",
       TRUE ~ "missing"
     )
 
   cli_abort_ifnot(
-    c("The parameters provided can't be match to any {read_sf} function.",
+    c("The parameters provided can't be matched to a function.",
       "i" = "You must provide a {.arg url}, {.arg path}, {.arg package}, or {.arg dsn} argument."
     ),
-    condition = (read_sf_fn == "missing")
+    condition = (read_sf_fn != "missing")
   )
 
   read_sf_fn <-
@@ -103,14 +103,16 @@ read_sf_ext <- function(..., bbox = NULL) {
 #' Modify function parameters
 #'
 #' @noRd
+#' @importFrom purrr discard
+#' @importFrom utils modifyList
 modify_fn_fmls <- function(params, fn, keep_missing = FALSE, keep.null = FALSE, ...) {
-  fmls <- rlang::fn_fmls(fn)
+  fmls <- fn_fmls(fn)
 
   if (!keep_missing) {
-    fmls <- purrr::discard(fmls, rlang::is_missing)
+    fmls <- purrr::discard(fmls, is_missing)
   }
 
-  params <- c(rlang::list2(...), params)
+  params <- c(list2(...), params)
 
   utils::modifyList(
     fmls,
@@ -123,9 +125,6 @@ modify_fn_fmls <- function(params, fn, keep_missing = FALSE, keep.null = FALSE, 
 #' @name read_sf_pkg
 #' @rdname read_sf_ext
 #' @export
-#' @md
-#' @importFrom utils data
-#' @importFrom cli cli_abort
 #' @importFrom dplyr case_when
 read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
   check_null(package)
@@ -155,6 +154,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
 #' @rdname read_sf_ext
 #' @export
 #' @importFrom sf read_sf
+#' @importFrom fs file_exists
 read_sf_path <- function(path, bbox = NULL, ...) {
   cli_abort_ifnot(
     "Can't find {.path {path}}.",
@@ -175,7 +175,7 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     return(data)
   }
 
-  read_sf_query(dsn = path, bbox = bbox, ...)
+  read_sf_query(path = path, bbox = bbox, ...)
 }
 
 #' @name read_sf_query
@@ -183,6 +183,7 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 #' @inheritParams sf::read_sf
 #' @export
 #' @importFrom stringr str_extract
+#' @importFrom sf read_sf st_zm
 read_sf_query <- function(path,
                           dsn = NULL,
                           bbox = NULL,
@@ -228,8 +229,7 @@ read_sf_query <- function(path,
     sf::read_sf(
       dsn = dsn,
       wkt_filter = wkt_filter,
-      query = query,
-      ...
+      query = query
     )
 
   if (!zm_drop) {
@@ -277,7 +277,7 @@ read_sf_excel <- function(path,
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
 
-  bbox_filter(data, bbox = bbox)
+  st_filter_ext(data, bbox, crop = TRUE)
 }
 
 #' @name read_sf_csv
@@ -303,14 +303,13 @@ read_sf_csv <- function(path,
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, crs = NULL, from_crs = from_crs)
 
-  bbox_filter(data, bbox = bbox)
+  st_filter_ext(data, bbox, crop = TRUE)
 }
 
 #' @name read_sf_url
 #' @rdname read_sf_ext
 #' @param zm_drop If `TRUE`, drop Z and/or M dimensions using [sf::st_zm]
 #' @export
-
 #' @importFrom stringr str_detect
 #' @importFrom sf read_sf st_zm
 #' @importFrom dplyr case_when
@@ -321,16 +320,17 @@ read_sf_url <- function(url,
                         ...) {
   params <- list2(...)
 
-  stopifnot(
-    is_url(url)
+  cli_abort_ifnot(
+    c("{.arg url} must be a valid url."),
+    condition = is_url(url)
   )
 
   url_type <-
     dplyr::case_when(
-      stringr::str_detect(url, "\\.csv$") ~ "csv",
+      is_csv_path(url) ~ "csv",
       !is.null(params$filename) ~ "download",
       is_esri_url(url) ~ "esri",
-      stringr::str_detect(url, "\\.geojson$") ~ "geojson",
+      is_geojson_path(url) ~ "geojson",
       is_gist_url(url) ~ "gist",
       is_gmap_url(url) ~ "gmap",
       is_gsheet_url(url) ~ "gsheet",
@@ -479,7 +479,7 @@ read_sf_geojson <- function(url,
       geojsonsf::geojson_sf(geojson = url, ...)
     )
 
-  bbox_filter(data, bbox = bbox)
+  st_filter_ext(data, bbox, crop = TRUE)
 }
 
 #' @name read_sf_gist
@@ -555,7 +555,7 @@ read_sf_gmap <- function(url,
     data <- sf::st_zm(data)
   }
 
-  bbox_filter(data, bbox = bbox)
+  st_filter_ext(data, bbox, crop = TRUE)
 }
 
 #' Get map ID from url
@@ -676,7 +676,7 @@ read_sf_gsheet <- function(url,
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
 
-  bbox_filter(data, bbox = bbox)
+  st_filter_ext(data, bbox, crop = TRUE)
 }
 
 #' Join data from a Google Sheet to a simple feature object
