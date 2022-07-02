@@ -30,6 +30,8 @@
 #' @param dir If "in", contract the `bbox` by x_nudge and y_nudge. If "out",
 #'   expand the bbox by x_nudge and y_nudge. If dir is not `NULL`; absolute
 #'   values are used for x_nudge and y_nudge. Defaults to `NULL`.
+#' @param call passed to error_call parameter of [arg_match] to improve error
+#'   messages where sf_misc functions are being used by other package functions.
 #' @family dist
 #' @name sf_bbox_misc
 NULL
@@ -61,12 +63,13 @@ sf_bbox_asp <- function(bbox, orientation = FALSE) {
 #'   corner, midpoint, or center of the bounding box ("xmin", "ymin", "xmax",
 #'   "ymax", "xmid", "ymid")
 #' @export
-sf_bbox_point <- function(bbox, point = NULL) {
-  point <- match.arg(
-    point,
-    c("xmin", "ymin", "xmax", "ymax", "xmid", "ymid"),
-    several.ok = TRUE
-  )
+sf_bbox_point <- function(bbox, point = NULL, call = caller_env()) {
+  point <-
+    arg_match(
+      point,
+      c("xmin", "ymin", "xmax", "ymax", "xmid", "ymid"),
+      multiple = TRUE, error_call = call
+    )
 
   if (any(c("xmid", "ymid") %in% point)) {
     bbox <-
@@ -92,29 +95,36 @@ sf_bbox_point <- function(bbox, point = NULL) {
 #' @export
 #' @importFrom sf st_distance st_point st_crs
 #' @importFrom units drop_units as_units
-sf_bbox_dist <- function(bbox, from, to, units = NULL, drop = TRUE) {
+sf_bbox_dist <- function(bbox, from, to, units = NULL, drop = TRUE, call = caller_env()) {
+  check_required(from)
+  check_required(to)
+
   dist <-
     sf::st_distance(
       sf_bbox_point(bbox, from),
       sf_bbox_point(bbox, to)
     )
 
-  if (is_class(dist, "units")) {
+  if (is_units(dist)) {
     dist <- units::drop_units(dist)
   }
-
-  dist <- as.numeric(dist)
 
   if (drop) {
     return(dist)
   }
 
+  units_gdal <-
+    sf::st_crs(bbox)$units_gdal
+
   units <-
-    match.arg(units, c(sf::st_crs(bbox)$units_gdal, dist_unit_options))
+    arg_match(
+      units,
+      c(units_gdal, dist_unit_options)
+    )
 
   convert_dist_units(
     dist = dist,
-    from = sf::st_crs(bbox)$units_gdal,
+    from = units_gdal,
     to = units
   )
 }
@@ -170,23 +180,20 @@ sf_bbox_transform <- function(bbox, crs = NULL) {
     return(bbox)
   }
 
-  if (is_sf(crs, ext = TRUE)) {
-    crs <- sf::st_crs(crs)
-  }
-
   if (is_same_crs(bbox, crs)) {
     return(bbox)
   }
 
-  bbox <-
-    sf::st_bbox(
-      sf::st_transform(
-        sf_bbox_to_sf(bbox),
-        crs
-      )
-    )
+  if (is_sf(crs, ext = TRUE)) {
+    crs <- sf::st_crs(crs)
+  }
 
-  return(bbox)
+  sf::st_bbox(
+    sf::st_transform(
+      sf_bbox_to_sfc(bbox),
+      crs
+    )
+  )
 }
 
 #' @param bbox A bbox object.
@@ -226,7 +233,6 @@ sf_bbox_to_wkt <- function(bbox) {
 
 #' @rdname sf_bbox_misc
 #' @export
-#' @importFrom glue glue
 #' @importFrom sf st_transform st_bbox
 sf_bbox_to_lonlat_query <- function(bbox, coords = c("longitude", "latitude"), crs = 4326) {
   bbox <- sf_bbox_transform(bbox, crs = crs)
@@ -236,7 +242,7 @@ sf_bbox_to_lonlat_query <- function(bbox, coords = c("longitude", "latitude"), c
     coords <- rev(coords)
   }
 
-  glue::glue("({coords[1]} >= {bbox$xmin[[1]]}) AND ({coords[1]} <= {bbox$xmax[[1]]}) AND ({coords[2]} >= {bbox$ymin[[1]]}) AND ({coords[2]} <= {bbox$ymax[[1]]})")
+  glue("({coords[1]} >= {bbox$xmin[[1]]}) AND ({coords[1]} <= {bbox$xmax[[1]]}) AND ({coords[2]} >= {bbox$ymin[[1]]}) AND ({coords[2]} <= {bbox$ymax[[1]]})")
 }
 
 
@@ -247,8 +253,9 @@ sf_bbox_shift <- function(bbox,
                           x_nudge = 0,
                           y_nudge = 0,
                           side = c("all", "top", "bottom", "left", "right"),
-                          dir = NULL) {
-  side <- match.arg(side, several.ok = TRUE)
+                          dir = NULL,
+                          call = caller_env()) {
+  side <- arg_match(side, multiple = TRUE, error_call = call)
 
   if (is.character(dir)) {
     dir <-
