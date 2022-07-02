@@ -21,6 +21,7 @@
 #' @name st_bbox_ext
 #' @export
 #' @importFrom sf st_bbox
+#' @importFrom purrr map
 st_bbox_ext <- function(x = NULL,
                         dist = NULL,
                         diag_ratio = NULL,
@@ -49,49 +50,53 @@ st_bbox_ext <- function(x = NULL,
       )
 
     return(bbox_list)
-  } else {
-    # Get buffered area
-    x <-
-      st_buffer_ext(
-        x = x,
-        dist = dist,
-        diag_ratio = diag_ratio,
-        unit = unit
-      )
-
-    if (!is.null(crs)) {
-      x <- st_transform_ext(x, crs = crs)
-    }
-
-    # Get aspect adjusted bbox
-    bbox <-
-      st_bbox_asp(
-        x = x,
-        asp = asp
-      )
-
-    if ("sf" %in% class) {
-      return(sf_bbox_to_sf(bbox))
-    }
-
-    bbox
   }
+
+  # Get buffered area
+  x <-
+    st_buffer_ext(
+      x = x,
+      dist = dist,
+      diag_ratio = diag_ratio,
+      unit = unit
+    )
+
+  # Transform crs of sf object
+  x <- as_crs(x, crs = crs)
+
+  # Get aspect adjusted bbox
+  bbox <-
+    st_bbox_asp(
+      x = x,
+      asp = asp
+    )
+
+  as_sf_class(bbox, class = class)
 }
 
 #' @rdname st_bbox_ext
 #' @name st_bbox_asp
 #' @export
+#' @importFrom purrr map
 st_bbox_asp <- function(x = NULL,
                         asp = NULL,
                         class = "bbox") {
   if (is_sf_list(x, ext = TRUE)) {
-    bbox_list <- purrr::map(x, ~ st_bbox_asp(x = .x, asp = asp, class = class))
-    return(bbox_list)
+    return(
+      purrr::map(
+        x,
+        ~ st_bbox_asp(
+          .x,
+          asp = asp,
+          class = class
+        )
+      )
+    )
   }
 
   bbox <- as_bbox(x)
-  # Get adjusted aspect ratio
 
+  # Get adjusted aspect ratio
   if (!is.numeric(asp)) {
     asp <- overedge::get_asp(asp = asp)
   }
@@ -124,9 +129,5 @@ st_bbox_asp <- function(x = NULL,
       )
   }
 
-  if ("sf" %in% class) {
-    return(sf_bbox_to_sf(bbox))
-  }
-
-  bbox
+  as_sf_class(bbox, class = class)
 }
