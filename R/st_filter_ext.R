@@ -65,8 +65,8 @@ st_filter_ext <- function(x,
 
   type <-
     dplyr::case_when(
-      trim ~ "trim",
       crop ~ "crop",
+      trim ~ "trim",
       erase ~ "erase",
       TRUE ~ "filter"
     )
@@ -83,8 +83,8 @@ st_filter_ext <- function(x,
 
   x <-
     switch(type,
-      "trim" = st_trim(x, y),
       "crop" = suppressWarnings(sf::st_crop(x, y)),
+      "trim" = st_trim(x, y),
       "erase" = st_erase(x, y),
       "filter" = x
     )
