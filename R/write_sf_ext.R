@@ -38,7 +38,6 @@
 #' @md
 #' @importFrom purrr discard walk
 #' @importFrom sf write_sf
-#' @importFrom glue glue
 write_sf_ext <- function(data,
                          name = NULL,
                          label = NULL,
@@ -79,7 +78,7 @@ write_sf_ext <- function(data,
       )
 
     if (is.null(filetype)) {
-      filetype <- overedge::str_extract_filetype(filenname)
+      filetype <- str_extract_filetype(filenname)
     }
 
     if (is.null(path)) {
@@ -127,7 +126,7 @@ write_sf_cache <- function(data,
                            filetype = NULL,
                            data_dir = NULL,
                            overwrite = FALSE) {
-  data_dir <- get_data_dir(path = data_dir)
+  data_dir <- overedge::get_data_dir(path = data_dir)
 
   filename <-
     overedge::make_filename(
