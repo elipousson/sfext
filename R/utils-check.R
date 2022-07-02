@@ -101,3 +101,26 @@ check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NU
     ...
   )
 }
+
+#' @noRd
+check_sf <- function(x, arg = caller_arg(x), null.ok = FALSE, ext = FALSE, call = caller_env(), ...) {
+  check_null(x, arg, null.ok)
+
+  if (is_sf(x, ext, null.ok)) {
+    invisible(return(TRUE))
+  }
+
+  sf <- "sf"
+
+  if (ext) {
+    sf <- c(sf, "sfc", "sfg", "bbox")
+  }
+
+  cli_abort(
+    c("{.arg {arg}} must be a {.code sf} object.",
+      "i" = "You've supplied a {class(x)} object."
+    ),
+    call = call,
+    ...
+  )
+}

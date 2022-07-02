@@ -9,6 +9,20 @@ is_class <- function(x, classes = NULL, null.ok = FALSE) {
   any(classes %in% class(x))
 }
 
+#' Is this a GeoJSON file path or url?
+#'
+#' @noRd
+is_geojson_path <- function(x) {
+  grepl("\\.geojson$", x)
+}
+
+#' Is this a CSV file path or url?
+#'
+#' @noRd
+is_csv_path <- function(x) {
+  grepl("\\.csv$", x)
+}
+
 #' Is this a URL?
 #'
 #' @noRd
