@@ -70,8 +70,16 @@ st_clip <- function(x,
 #'   style is determined by the selected "clip" value.
 #' @noRd
 #' @importFrom sf st_sf st_sfc st_convex_hull st_union
-make_clip <- function(x, clip, crs, style = NULL) {
-  clip <- match.arg(clip, c("top", "right", "bottom", "left", "topright", "bottomright", "bottomleft", "topleft"))
+make_clip <- function(x, clip, crs, style = NULL, call = caller_env()) {
+  clip <-
+    arg_match(
+      clip,
+      c(
+        "top", "right", "bottom", "left",
+        "topright", "bottomright", "bottomleft", "topleft"
+      ),
+      error_call = call
+    )
 
   top <- grepl("top", clip)
   bottom <- grepl("bottom", clip)
@@ -148,7 +156,7 @@ get_edges <- function(x) {
   x <- sf::st_union(x)
   x <- as_sf(x)
   bbox <- as_bbox(x)
-  center <- st_center(as_sf(x), ext = TRUE)$sf
+  center <- suppressWarnings(get_coords(sf::st_centroid(x)))
 
   h_top <-
     as_points(
