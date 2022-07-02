@@ -8,13 +8,16 @@
 #'
 #' @param x A `sf` or `sfc` object to cast to another type.
 #' @inheritParams sf::st_cast
-#' @param simplify If TRUE, simplify geometry type; defaults to TRUE.
-#' @seealso
-#'  [sf::st_cast()]
+#' @param simplify If `TRUE`, simplify geometry type; defaults to `TRUE`.
+#' @inheritDotParams sf::st_cast
 #' @rdname st_cast_ext
 #' @export
 #' @importFrom sf st_cast
 st_cast_ext <- function(x, to = "POINT", simplify = TRUE, ...) {
+  cli_abort_ifnot(
+    condition = is_sf(x) | is_sfc(x)
+  )
+
   geom_type <- is_geom_type(x, ext = FALSE)
 
   if (any(geom_type %in% c("MULTIPOLYGON", "POLYGON")) && simplify) {

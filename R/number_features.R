@@ -1,6 +1,6 @@
 #' Sort and number features by coordinates or distance
 #'
-#' Used with [layer_numbers()]. Supports multiple types of sorting including
+#' Used with [maplayer::layer_numbers()]. Supports multiple types of sorting including
 #' sorting:
 #'
 #' - by centroid coordinates ("lon", "lat") appended with [get_coords()]

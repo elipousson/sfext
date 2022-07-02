@@ -1,47 +1,65 @@
-#' Filter, crop, trim, or erase data
+#' Filter, crop, trim, or erase simple feature or
 #'
-#' Location can be:
-#'
-#' - A `sf`, `bbox`, or `sfc` object
-#' - A U.S. state (name, abbreviation, or GeoID) or county (GeoID)
-#' - An address
-#'
-#' @param data Data to filter by location.
-#' @param location A sf, sfc, or bbox object or a character string that is an
-#'   address, county GeoID, state name, abbreviation, or GeoID (dist parameters
-#'   are ignored if location is a character string).
-#' @inheritParams sf::st_filter
-#' @inheritParams st_bbox_ext
-#' @param crop  If `TRUE`, data is cropped to location or bounding box
-#'   [sf::st_crop] adjusted by the `dist`, `diag_ratio`, and `asp` parameters
-#'   provided. Default TRUE.
-#' @param trim  If `TRUE`, data is trimmed to area with [sf::st_intersection].
-#'   This option ignores any `dist`, `diag_ratio`, or `asp` parameters. Default
-#'   `FALSE`.
-#' @param ... Additional parameters; bbox (used instead of location or adjusted
-#'   location), county and state (used with get_counties or get_states), join
-#'   (passed to [sf::st_filter])
+#' @param x,y A `sf`, `sfc`, or `bbox` object. x may also be a `sf` list
+#'   objects. If x is an `sf` list, additional parameters in ... will be ignored.
+#' @param crop  If `TRUE`, x is cropped to y using [sf::st_crop()].
+#' @param trim  If `TRUE`, x is trimmed to y with [st_trim()].
+#' @param erase If `TRUE`, x is erased by y with [st_erase()].
+#' @param .predicate geometry predicate function with the same profile as
+#'   [sf::st_intersects()]; see details for [sf::st_filter()] for more options.
+#' @param null.ok If y is `NULL` and null.ok is `TRUE`, x is returned without
+#'   changes. Defaults to `TRUE`.
+#' @inheritDotParams sf::st_filter -x -y
+#' @name st_filter_ext
 #' @export
 st_filter_ext <- function(x,
                           y = NULL,
-                          trim = FALSE,
                           crop = FALSE,
+                          trim = FALSE,
                           erase = FALSE,
                           crs = NULL,
                           .predicate = sf::st_intersects,
+                          null.ok = TRUE,
                           ...) {
-  if (!is_sf(x)) {
-    x <- as_sf(x)
+  if (is.null(y) && null.ok) {
+    return(x)
   }
 
-  if (is.null(y)) {
+  if (is_sf_list(x, ext = TRUE)) {
+    x <-
+      purrr::map(
+        x,
+        ~ st_filter_ext(
+          x = .x,
+          y = y,
+          trim = trim,
+          crop = crop,
+          erase = erase,
+          crs = crs,
+          .predicate = sf::st_intersects
+        )
+      )
+
     return(x)
+  }
+
+  cli_abort_ifnot(
+    "{.arg x} and {.arg y} must be either sf, sfc or bbox objects.",
+    condition = is_sf(x, ext = TRUE) && is_sf(y, ext = TRUE)
+  )
+
+  if (is_bbox(x)) {
+    x <- as_sfc(x)
+  }
+
+  if (is_bbox(y)) {
+    y <- as_sfc(y)
   }
 
   if (erase) {
     cli_warn_ifnot(
-      "{.arg erase} is ignored when {.arg trim} or {.arg crop} are {.val TRUE}.",
-      condition = !trim && !crop
+      "{.arg erase} is ignored if {.arg trim} or {.arg crop} are {.val TRUE}.",
+      condition = !trim | !crop
     )
   }
 
@@ -54,10 +72,6 @@ st_filter_ext <- function(x,
     )
 
   if (!crop) {
-    if (is_bbox(y)) {
-      y <- as_sfc(y)
-    }
-
     x <-
       sf::st_filter(
         x,

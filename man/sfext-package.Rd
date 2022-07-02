@@ -4,8 +4,21 @@
 \name{sfext-package}
 \alias{sfext}
 \alias{sfext-package}
-\title{sfext: What the Package Does (Title Case)}
+\title{sfext: Extra Functions for Simple Feature Data}
 \description{
-More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
+Extra functions with additional options for reading, writing, and transforming spatial data. Includes a variety of utility functions for working with tabular data with coordinates and distance and area units.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/elipousson/sfx}
+  \item \url{https://elipousson.github.io/sfx/}
+  \item Report bugs at \url{https://github.com/elipousson/sfx/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Eli Pousson \email{eli.pousson@gmail.com} (\href{https://orcid.org/0000-0001-8280-1706}{ORCID}) [copyright holder]
+
 }
 \keyword{internal}

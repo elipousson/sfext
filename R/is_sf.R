@@ -61,7 +61,6 @@ is_bbox <- function(x, null.ok = FALSE) {
 #' @name is_sf_list
 #' @param named If `TRUE`, check if sf list is named; defaults `FALSE`.
 #' @export
-#' @importFrom rlang is_named
 is_sf_list <- function(x, named = FALSE, ext = FALSE, null.ok = FALSE) {
   if (is.null(x) && null.ok) {
     return(TRUE)
