@@ -12,7 +12,7 @@
 #' @param x A `sf` or `sfc` object or a data frame with lat/lon coordinates in a
 #'   single column or two separated columns.
 #' @param crs Cordinate reference system to return, Default: 4326 for [sf_to_df]
-#'   and NULL for [df_to_sf]
+#'   and NULL for [df_to_sf].
 #' @param geometry Type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'.
 #' @param coords Coordinate columns for input dataframe or output sf object (if
@@ -31,6 +31,7 @@
 #' @return [sf_to_df()] returns a data frame with geometry dropped or converted
 #'   to wkt or coordinates for the centroid or point on surface; [df_to_sf()]
 #'   returns a simple feature object with POINT geometry.
+#' @inheritParams dplyr::left_join
 #' @seealso [sf::st_coordinates()]
 #' @example examples/sf_to_df.R
 #' @rdname sf_to_df
@@ -74,7 +75,10 @@ df_to_sf <- function(x,
                      rev = TRUE,
                      remove_coords = FALSE,
                      geo = FALSE,
-                     address = "address") {
+                     address = "address",
+                     y = NULL,
+                     by = NULL,
+                     ...) {
   if (is_sf(x)) {
     cli_warn("df_to_sf requires a data frame. Dropping geometry from the provided simple feature object.")
     x <- sf::st_drop_geometry(x)
@@ -82,15 +86,17 @@ df_to_sf <- function(x,
 
   type <-
     dplyr::case_when(
-      rlang::has_name(x, "geometry") && !all(rlang::has_name(x, coords)) ~ "geometry_df",
-      geo && rlang::has_name(x, address) && !all(rlang::has_name(x, coords)) ~ "address_df",
-      rlang::has_name(x, "wkt") ~ "wkt_df",
+      has_name(x, "geometry") && !all(has_name(x, coords)) ~ "geometry_df",
+      geo && has_name(x, address) && !all(has_name(x, coords)) ~ "address_df",
+      has_name(x, "wkt") ~ "wkt_df",
+      !is.null(by) && is_sf(y) ~ "join_sf",
       TRUE ~ "coords_df"
     )
 
   x <-
     switch(type,
       "geometry_df" = geometry_df_to_sf(x),
+      "join_sf" = join_sf_to_df(x, y, by = by, ...),
       "address_df" = address_to_sf(x, address = address, coords = coords, crs = crs, remove_coords = remove_coords),
       "wkt_df" = wkt_df_to_sf(x, crs = from_crs),
       "coords_df" = coords_df_to_sf(x, coords = coords, crs = from_crs, into = into, sep = sep, rev = rev, remove_coords = remove_coords),
@@ -100,12 +106,20 @@ df_to_sf <- function(x,
 }
 
 #' Convert a data frame with a geometry list column to an sf object
+#' @noRd
+join_sf_to_df <- function(x, y, by = NULL, ...) {
+  x <- dplyr::left_join(x = x, y = y, by = by, ...)
+
+  sf::st_as_sf(x)
+}
+
+#' Convert a data frame with a geometry list column to an sf object
 #' @name coords_df_to_sf
 #' @noRd
 #' @importFrom rlang has_length
 #' @importFrom sf st_as_sf
 coords_df_to_sf <- function(x, coords = c("lon", "lat"), into = NULL, sep = ",", rev = FALSE, remove_coords = FALSE, crs = 4326) {
-  if (rlang::has_length(coords, 1) && rlang::has_length(into, 2)) {
+  if (has_length(coords, 1) && has_length(into, 2)) {
     x <- separate_coords(x = x, coords = coords, into = into, sep = sep)
     coords <- into
   } else {
@@ -159,12 +173,12 @@ check_coords <- function(x = NULL, coords = NULL, default = c("lon", "lat"), rev
     coords <- default
   }
 
-  stopifnot(
-    length(coords) == 2,
-    is.character(coords) || is.numeric(coords)
+  cli_abort_ifnot(
+    # FIXME: What about the coord_col value where coordinates are split in two?
+    "{.arg coords} must be length 2 and a character or numeric vector.",
+    condition =  length(coords) == 2 && (is.character(coords) || is.numeric(coords))
   )
 
-  # FIXME: This automatic reversal needs to be documented
   if (rev && grepl("LAT|lat|Y|y", coords[1])) {
     coords <- rev(coords)
   }
@@ -184,25 +198,25 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
     !is.null(x) && is.data.frame(x)
   )
 
-  x_nm <- names(x)
+  x_names <- names(x)
   x <- janitor::clean_names(x)
 
   x_coords <- NULL
 
   x_coords <-
     dplyr::case_when(
-      all(rlang::has_name(x, coords)) ~ coords,
-      rlang::has_name(x, "lon") ~ c("lon", "lat"),
-      rlang::has_name(x, "long") ~ c("long", "lat"),
-      rlang::has_name(x, "longitude") ~ c("longitude", "latitude"),
-      rlang::has_name(x, "y") ~ c("y", "x"),
-      rlang::has_name(x, "geo_longitude") ~ c("geo_longitude", "geo_latitude")
+      all(has_name(x, coords)) ~ coords,
+      has_name(x, "lon") ~ c("lon", "lat"),
+      has_name(x, "long") ~ c("long", "lat"),
+      has_name(x, "longitude") ~ c("longitude", "latitude"),
+      has_name(x, "y") ~ c("y", "x"),
+      has_name(x, "geo_longitude") ~ c("geo_longitude", "geo_latitude")
     )
 
   x_has_coords <-
     grep(
       paste0(paste0("^", x_coords, "$"), collapse = "|"),
-      x_nm,
+      x_names,
       ignore.case = TRUE,
       value = value
     )
@@ -211,7 +225,7 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
     return(x_has_coords)
   }
 
-  return(length(x_has_coords) == length(x_coords))
+  length(x_has_coords) == length(x_coords)
 }
 
 #' Separate coordinates from a single combined column into two columns
@@ -303,7 +317,7 @@ format_coords <- function(x, coords = c("lon", "lat")) {
 #' @param ... Additional parameters passed to [tidygeocoder::geo] or [tidygeocoder::geocode]
 #' @return A `sf` object with POINT geometry for all geocoded addresses with valid coordinates.
 #' @seealso
-#'  \code{\link[tidygeocoder]{geo}}, \code{\link[tidygeocoder]{geocode}}
+#'  [tidygeocoder::geo()], [tidygeocoder::geocode()]
 #' @rdname address_to_sf
 #' @export
 #' @importFrom rlang is_interactive
@@ -327,7 +341,7 @@ address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), remo
       address = address,
       long = "lon",
       lat = "lat",
-      quiet = rlang::is_interactive(),
+      quiet = is_interactive(),
       ...
     )
 
