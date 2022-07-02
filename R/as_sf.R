@@ -20,7 +20,7 @@
 #' @export
 #' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf st_geometry
 #' @importFrom dplyr bind_rows rename
-as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
+as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
   if (is_sf(x)) {
     return(as_crs(x, crs = crs))
   }
@@ -34,30 +34,26 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
       is_sf_list(x) ~ "sf_list",
       is_raster(x) ~ "raster",
       is_sp(x) ~ "sp",
-      is.data.frame(x) ~ "df",
-      # FIXME: Converting character strings to sf using as_sf may be an inappropriate pattern
-      is_state_name(x) | is_state_geoid(x) ~ "state",
-      is_county_geoid(x) | is_county_name(x) ~ "county",
+      ext && is.data.frame(x) ~ "df",
       # FIXME: Is there any better way of testing an address than just confirming it is a character?
-      is.character(x) ~ "address"
+      ext && is.character(x) ~ "address"
     )
 
+  # FIXME: When is x_is more than length 1?
   if (length(x_is) > 1) {
     x_is <- unique(x_is)
   }
 
   x <-
     switch(x_is,
-           "bbox" = sf_bbox_to_sf(x, ...),
-           "sfg" = sf::st_sf(sf::st_sfc(x), ...),
-           "sfc" = sf::st_sf(x, ...),
-           "sf_list" = dplyr::bind_rows(x),
-           "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
-           "sp" = sf::st_as_sf(x, ...),
-           "df" = df_to_sf(x, ...),
-           "state" = get_states(x, class = "sf"),
-           "county" = get_counties(x, class = "sf"),
-           "address" = address_to_sf(x)
+      "bbox" = sf_bbox_to_sf(x, ...),
+      "sfg" = sf::st_sf(sf::st_sfc(x), ...),
+      "sfc" = sf::st_sf(x, ...),
+      "sf_list" = dplyr::bind_rows(x),
+      "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
+      "sp" = sf::st_as_sf(x, ...),
+      "df" = df_to_sf(x, ...),
+      "address" = address_to_sf(x) # FIXME: is there a reason why this doesn't pass the ... parameters?
     )
 
   if (!is.null(sf_col)) {
@@ -72,8 +68,7 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
 #' @export
 #' @importFrom sf st_bbox st_as_sf
 #' @importFrom dplyr bind_rows
-#' @importFrom rlang has_length
-as_bbox <- function(x, crs = NULL, ...) {
+as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
   if (is_bbox(x)) {
     return(sf_bbox_transform(bbox = x, crs = crs))
   }
@@ -81,7 +76,7 @@ as_bbox <- function(x, crs = NULL, ...) {
   # Convert objects to sf if needed
   x_is <-
     dplyr::case_when(
-      rlang::has_length(x, 4) && all(is.numeric(x)) ~ "num_bbox",
+      has_length(x, 4) && all(is.numeric(x)) ~ "num_bbox",
       is_geom_type(x, type = c("POINT", "MULTIPOINT")) ~ "sf_pt",
       is_sf(x, ext = TRUE) ~ "sf_or_sfc",
       TRUE ~ "other"
@@ -89,15 +84,15 @@ as_bbox <- function(x, crs = NULL, ...) {
 
   x <-
     switch(x_is,
-           "sf_pt" = sf::st_bbox(st_buffer_ext(x, dist = 0.00000001), ...),
-           "sf_or_sfc" = sf::st_bbox(x, ...),
-           "num_bbox" = sf::st_bbox(c(
-             xmin = x[1], ymin = x[2],
-             xmax = x[3], ymax = x[4]
-           ),
-           crs = crs, ...
-           ),
-           "other" = sf::st_bbox(as_sf(x), ...)
+      "sf_pt" = sf::st_bbox(st_buffer_ext(x, dist = 0.00000001), ...),
+      "sf_or_sfc" = sf::st_bbox(x, ...),
+      "num_bbox" = sf::st_bbox(c(
+        xmin = x[1], ymin = x[2],
+        xmax = x[3], ymax = x[4]
+      ),
+      crs = crs, ...
+      ),
+      "other" = sf::st_bbox(as_sf(x, ext = ext), ...)
     )
 
   sf_bbox_transform(bbox = x, crs = crs)
@@ -108,7 +103,7 @@ as_bbox <- function(x, crs = NULL, ...) {
 #' @rdname as_sf
 #' @export
 #' @importFrom sf st_geometry st_as_sfc
-as_sfc <- function(x, crs = NULL, ...) {
+as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
   if (is_sfc(x)) {
     return(as_crs(x, crs = crs))
   }
@@ -122,9 +117,9 @@ as_sfc <- function(x, crs = NULL, ...) {
 
   x <-
     switch(x_is,
-           "sfg" = sf::st_sfc(x, ...),
-           "sf" = sf::st_geometry(x, ...),
-           "other" = sf::st_geometry(as_sf(x, ...))
+      "sfg" = sf::st_sfc(x, ...),
+      "sf" = sf::st_geometry(x, ...),
+      "other" = sf::st_geometry(as_sf(x, ext = ext, ...))
     )
 
   as_crs(x, crs = crs)
@@ -136,7 +131,7 @@ as_sfc <- function(x, crs = NULL, ...) {
 #' @noRd
 #' @importFrom sf st_crs st_transform
 as_crs <- function(x, crs = NULL, null.ok = TRUE, ...) {
-  if (is.null(crs) && null.ok) {
+  if ((is.null(crs) && null.ok) | is_same_crs(x, crs)) {
     return(x)
   }
 
@@ -149,8 +144,8 @@ as_crs <- function(x, crs = NULL, null.ok = TRUE, ...) {
     return(x)
   }
 
-  if (is_same_crs(x, crs)) {
-    return(x)
+  if (is_bbox(x)) {
+    return(sf_bbox_transform(x, crs = crs))
   }
 
   sf::st_transform(x, crs = crs, ...)
@@ -169,6 +164,10 @@ as_crs <- function(x, crs = NULL, null.ok = TRUE, ...) {
 #' @importFrom dplyr summarize group_keys group_nest
 #' @importFrom janitor make_clean_names
 as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE) {
+  check_null(x)
+  check_character(col, null.ok = TRUE)
+  check_len(col)
+
   stopifnot(
     is.null(col) || (is.character(col) && (length(col) == 1)),
     !is.null(x)
@@ -181,7 +180,7 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
 
     # data frame with nested list column named data
     # produced by group_nest w/ keep_all = TRUE
-    if (is.data.frame(x) && (rlang::has_name(x, "data")) && is_sf_list(x$data)) {
+    if (is.data.frame(x) && (has_name(x, "data")) && is_sf_list(x$data)) {
       if (nm == "data") {
         nm <- NULL
       }
@@ -203,8 +202,8 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
     }
   }
 
-  stopifnot(
-    is_sf_list(x, ext = TRUE)
+  cli_abort_ifnot(
+    condition = is_sf_list(x, ext = TRUE)
   )
 
   if (is.null(names(x)) && !is.null(nm)) {
@@ -241,18 +240,31 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
 #' @name as_sf_class
 #' @rdname as_sf
 #' @export
-as_sf_class <- function(x, class = NULL, crs = NULL, null.ok = TRUE, ...) {
+as_sf_class <- function(x, class = NULL, crs = NULL, null.ok = TRUE, call = caller_env(), ...) {
   if (is.null(class) && null.ok) {
-    return(x)
+    return(as_crs(x, crs))
   }
 
-  class <- match.arg(class, c("sf", "sfc", "bbox", "list"))
+  class <-
+    arg_match(class, c("sf", "sfc", "bbox", "list", "df"), error_call = call)
+
+  if (is_class(x, class)) {
+    return(as_crs(x, crs))
+  }
+
+  if (class == "df") {
+    cli_abort_ifnot(
+      "{.arg x} must be an {.arg sf} object if {.arg class} is {.val df}.",
+      condition = is_sf(x)
+    )
+  }
 
   switch(class,
-         "sf" = as_sf(x, crs = crs, ...),
-         "sfc" = as_sfc(x, crs = crs, ...),
-         "bbox" = as_bbox(x, crs = crs, ...),
-         "list" = as_sf_list(x, crs = crs, ...)
+    "sf" = as_sf(x, crs = crs, ...),
+    "sfc" = as_sfc(x, crs = crs, ...),
+    "bbox" = as_bbox(x, crs = crs, ...),
+    "list" = as_sf_list(x, crs = crs, ...),
+    "df" = sf_to_df(x)
   )
 }
 
@@ -281,11 +293,10 @@ as_sf_class <- function(x, class = NULL, crs = NULL, null.ok = TRUE, ...) {
 #' @param to The geometry type to return, either POINT or MULTIPOINT or
 #'   LINESTRING or MULTILINESTRING.
 #' @export
-#' @importFrom rlang list2 exec
 #' @importFrom sf st_union st_centroid st_point st_cast
 as_point <- function(..., to = "POINT") {
   params <-
-    rlang::list2(...)
+    list2(...)
 
   if (length(params) == 1) {
     params <- params[[1]]
@@ -306,7 +317,7 @@ as_point <- function(..., to = "POINT") {
   }
 
   if (any(sapply(params, is_bbox))) {
-    return(rlang::exec(sf_bbox_point, !!!params))
+    return(exec(sf_bbox_point, !!!params))
   }
 
   params <- sf::st_point(params)
@@ -317,19 +328,18 @@ as_point <- function(..., to = "POINT") {
 #' @rdname as_point
 #' @name as_points
 #' @export
-#' @importFrom rlang list2 has_name
 #' @importFrom purrr map
 #' @importFrom sf st_as_sfc st_cast
-as_points <- function(..., to = "POINT") {
-  params <- rlang::list2(...)
-  to <- match.arg(to, c("POINT", "MULTIPOINT"))
+as_points <- function(..., to = "POINT", call = caller_env()) {
+  params <- list2(...)
+  to <- arg_match(to, c("POINT", "MULTIPOINT"), error_call = call)
 
   if ((is_point(params) && (to == "POINT")) | (is_multipoint(params) && (to == "MULTIPOINT"))) {
     return(params)
   }
 
   crs <- NULL
-  if (rlang::has_name(params, "crs")) {
+  if (has_name(params, "crs")) {
     crs <- params$crs
     params <- params[names(params) != "crs"]
   } else if (is_sf(params[[1]], ext = TRUE)) {
@@ -360,23 +370,21 @@ as_points <- function(..., to = "POINT") {
 #' @name as_startpoints
 #' @rdname as_point
 #' @export
-#' @importFrom rlang list2
 as_startpoint <- function(...) {
   is_pkg_installed("lwgeom")
-  params <- rlang::list2(...)
-  stopifnot(all(sapply(params, is_line)))
-  rlang::exec(lwgeom::st_startpoint, !!!params)
+  params <- list2(...)
+  cli_abort_ifnot(condition = all(sapply(params, is_line)))
+  exec(lwgeom::st_startpoint, !!!params)
 }
 
 #' @name as_endpoints
 #' @rdname as_point
 #' @export
-#' @importFrom rlang list2
 as_endpoint <- function(...) {
   is_pkg_installed("lwgeom")
-  params <- rlang::list2(...)
-  stopifnot(all(sapply(params, is_line)))
-  rlang::exec(lwgeom::st_endpoint, !!!params)
+  params <- list2(...)
+  cli_abort_ifnot(condition = all(sapply(params, is_line)))
+  exec(lwgeom::st_endpoint, !!!params)
 }
 
 #' @details Using [as_lines]:
@@ -394,18 +402,18 @@ as_endpoint <- function(...) {
 #' @name as_line
 #' @rdname as_point
 #' @export
-#' @importFrom rlang list2
-#' @importFrom sf st_combine st_cast
-as_line <- function(..., to = "LINESTRING") {
-  params <- rlang::list2(...)
-  to <- match.arg(to, c("LINESTRING", "MULTILINESTRING"))
+#' @importFrom sf st_crs st_combine st_cast
+#' @importFrom purrr map_dfr
+as_line <- function(..., to = "LINESTRING", call = caller_env()) {
+  params <- list2(...)
+  to <- arg_match(to, c("LINESTRING", "MULTILINESTRING"), error_call = call)
 
   if (all(sapply(params, is_line)) | all(sapply(params, is_multiline))) {
     return(purrr::map_dfr(params, ~ as_sf(.x, crs = crs)))
   }
 
   crs <- NULL
-  if (rlang::has_name(params, "crs")) {
+  if (has_name(params, "crs")) {
     crs <- params$crs
     params$crs <- NULL
   } else if (is_sf(params[[1]], ext = TRUE)) {
@@ -415,7 +423,7 @@ as_line <- function(..., to = "LINESTRING") {
   params <- pluck_len1(params)
 
   if (!any(c(is_point(params), is_multipoint(params)))) {
-    params <- rlang::exec(as_points, !!!params, crs = crs)
+    params <- exec(as_points, !!!params, crs = crs)
   }
 
   if (is_point(params)) {
@@ -432,12 +440,12 @@ as_line <- function(..., to = "LINESTRING") {
 #' @name as_lines
 #' @rdname as_point
 #' @export
-#' @importFrom rlang list2
-#' @importFrom purrr map_dfr
+#' @importFrom sf st_crs st_cast
+#' @importFrom purrr map_lgl map_dfr
 as_lines <- function(..., to = "LINESTRING") {
-  params <- rlang::list2(...)
+  params <- list2(...)
   crs <- NULL
-  if (rlang::has_name(params, "crs")) {
+  if (has_name(params, "crs")) {
     crs <- params$crs
     params$crs <- NULL
   } else if (is_sf(params[[1]], ext = TRUE)) {
@@ -460,12 +468,11 @@ as_lines <- function(..., to = "LINESTRING") {
 #' @name as_polygons
 #' @rdname as_point
 #' @export
-#' @importFrom rlang list2
-#' @importFrom purrr map_dfr
+#' @importFrom purrr map_dfr map_lgl
 as_polygons <- function(..., to = "POLYGON") {
-  params <- rlang::list2(...)
+  params <- list2(...)
   crs <- NULL
-  if (rlang::has_name(params, "crs")) {
+  if (has_name(params, "crs")) {
     crs <- params$crs
     params$crs <- NULL
   } else if (is_sf(params[[1]], ext = TRUE)) {
@@ -524,17 +531,16 @@ as_start_end_points <- function(x, crs = 4326, class = "df") {
 #' Create a LINESTRING based on start and end points
 #'
 #' @noRd
+#' @importFrom purrr map2
+#' @importFrom sf st_cast st_combine
 get_start_end_line <- function(x) {
-  pts <- get_start_end_point(x, class = NULL)
+  pts <- as_start_end_points(x, class = NULL)
   # FIXME: What does as_lines do with similar geometry?
-  pts_combined <-
-    purrr::map2(
-      pts$start,
-      pts$end,
-      ~ sf::st_cast(sf::st_combine(
-        c(.x, .y)
-      ), "LINESTRING")
-    )
-
-  return(pts_combined)
+  purrr::map2(
+    pts$start,
+    pts$end,
+    ~ sf::st_cast(sf::st_combine(
+      c(.x, .y)
+    ), "LINESTRING")
+  )
 }
