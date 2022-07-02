@@ -1,4 +1,3 @@
-#' @import sf
 #' @import rlang
 #' @importFrom cli cli_abort cli_warn cli_inform
 #' @importFrom glue glue glue_collapse

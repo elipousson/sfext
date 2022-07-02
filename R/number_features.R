@@ -112,7 +112,6 @@ int_to_alph <- function(num, suffix = NULL, base = 26) {
 #'   if "sort" any of the following: "lon", "lat", "longitude", "latitude",
 #'   "xmin", "ymin", "xmax", "ymax"
 #' @export
-#' @importFrom rlang has_name
 #' @importFrom dplyr arrange desc across all_of
 sort_features <- function(data,
                           col = NULL,

@@ -32,7 +32,7 @@ use_eval_parse <- function(data, package = NULL) {
 #' @param data Data frame or simple feature object
 #' @param col Column name/value
 #' @noRd
-#' @importFrom group_by
+#' @importFrom dplyr group_by
 group_by_col <- function(data, col = NULL) {
   if (is.null(col) || is.null(data)) {
     return(data)

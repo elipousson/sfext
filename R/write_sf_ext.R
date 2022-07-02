@@ -340,7 +340,6 @@ write_sf_types <- function(data,
 #' Check before overwriting file
 #'
 #' @noRd
-#' @importFrom cli cli_abort cli_alert_success
 #' @importFrom stringr str_detect
 check_file_overwrite <- function(filename = NULL,
                                  path = NULL,
