@@ -20,40 +20,39 @@
 #' @rdname st_transform_ext
 #' @export
 #' @importFrom sf st_transform st_crs
-st_transform_ext <- function(x = NULL,
+st_transform_ext <- function(x,
                              crs = NULL,
                              class = NULL,
                              rotate = 0) {
   if (is_sf_list(x, ext = TRUE)) {
-    x <-
+    return(
       purrr::map(
         x,
         ~ st_transform_ext(
           x = .x,
           crs = crs,
-          class = class
+          class = class,
+          rotate = rotate
         )
       )
-
-    return(x)
+    )
   }
 
-  stopifnot(
-    is_sf(x, ext = TRUE)
-  )
+  check_sf(x, ext = TRUE)
 
   if (rotate != 0) {
     crs <- NULL
     x <- st_omerc(x, rotate = rotate)
   }
 
-  # if x has a different crs than the sf object passed to crs
-  if (is_sf(crs, ext = TRUE)) {
-    crs <- sf::st_crs(x = crs)
-  }
-
   if (is.null(crs) || is_same_crs(x = x, y = crs)) {
     return(as_sf_class(x, class = class))
+  }
+
+  # if x has a different crs than the sf object passed to crs
+  # FIXME: try incorporating try_fetch here
+  if (is_sf(crs, ext = TRUE)) {
+    crs <- sf::st_crs(x = crs)
   }
 
   if (is_bbox(x)) {
@@ -71,21 +70,22 @@ st_transform_ext <- function(x = NULL,
 #' @rdname st_transform_ext
 #' @export
 #' @importFrom dplyr between
-#' @importFrom cli cli_alert_warning
-#' @importFrom glue glue
 #' @importFrom sf st_transform
 st_omerc <- function(x, rotate = 0) {
-  if (!dplyr::between(rotate, -45, 45)) {
-    cli::cli_alert_warning(
-      "st_omerc may have an error with rotate values greater than or less than 45 degrees."
-    )
-  }
+  cli_abort_ifnot(
+    condition = is_sf(x) | is_sfc(x)
+  )
+
+  cli_warn_ifnot(
+    "{.fn st_omerc} may return an error when {.arg rotate} is greater than or less than 45 degrees.",
+    condition = dplyr::between(rotate, -45, 45)
+  )
 
   coords <-
     get_coords(sf::st_union(x), keep_all = FALSE, crs = 4326)
 
   crs <-
-    glue::glue(
+    glue(
       "+proj=omerc +lat_0={coords$lat} +lonc={coords$lon} +datum=WGS84 +units=m +no_defs +gamma={rotate}"
     )
 

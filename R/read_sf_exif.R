@@ -1,5 +1,6 @@
 
-#' Read location data from images to a simple feature object using EXIF or write EXIF metadata
+#' Read location data from images to a simple feature object using EXIF or write
+#' EXIF metadata
 #'
 #' Read EXIF data from folder of images.
 #'
@@ -87,7 +88,7 @@ read_sf_exif <- function(path = NULL,
       ~ sub("^gps_", "", .x)
     )
 
-  if (rlang::has_name(data, "image_description")) {
+  if (has_name(data, "image_description")) {
     data <-
       dplyr::rename(
         data,
@@ -95,7 +96,7 @@ read_sf_exif <- function(path = NULL,
       )
   }
 
-  if (all(rlang::has_name(data, c("latitude", "longitude")))) {
+  if (all(has_name(data, c("latitude", "longitude")))) {
     data <-
       dplyr::rename(
         data,
@@ -104,7 +105,7 @@ read_sf_exif <- function(path = NULL,
       )
   }
 
-  if (all(rlang::has_name(data, c("longitude_ref", "latitude_ref", "img_direction", "img_direction_ref", "source_file")))) {
+  if (all(has_name(data, c("longitude_ref", "latitude_ref", "img_direction", "img_direction_ref", "source_file")))) {
     data <-
       dplyr::rename(
         data,
@@ -114,7 +115,7 @@ read_sf_exif <- function(path = NULL,
       )
   }
 
-  if (all(rlang::has_name(data, c("orientation", "image_width", "image_height")))) {
+  if (all(has_name(data, c("orientation", "image_width", "image_height")))) {
     data <-
       dplyr::rename(
         data,
@@ -148,45 +149,41 @@ read_sf_exif <- function(path = NULL,
 
   data <- sort_features(data = data, sort = sort)
 
-  exif_crs <- 4326
-
-  data <- df_to_sf(data, crs = exif_crs)
+  data <- df_to_sf(data, from_crs = 4326, crs = sf::st_crs(bbox))
 
   if (is.null(bbox)) {
     return(data)
   }
 
-  get_location_data(
-    location = bbox,
-    data = data,
-    from_crs = exif_crs,
-    crs = sf::st_crs(bbox)
-  )
+  st_filter_ext(data, bbox, crop = TRUE)
 }
 
-#' Get filetype from the path (using most frequent type if multiple are at the path)
+#' Get a single filetype from the path (using most frequent type if multiple are at the path)
 #'
 #' @noRd
 #' @importFrom fs dir_ls
 #' @importFrom stringr str_extract
-#' @importFrom cli cli_warn
 get_path_filetype <- function(path, filetype = NULL) {
   if (!is.null(filetype)) {
     return(filetype)
   }
-  dir_files <- fs::dir_ls(path)
-  filetype <- unique(stringr::str_extract(dir_files, "(?<=\\.).+$"))
 
-  if (length(filetype) > 1) {
-    # https://stackoverflow.com/questions/17374651/find-the-n-most-common-values-in-a-vector
-    filetype <- names(sort(table(filetype), decreasing = TRUE)[1])
-    cli_warn("The path {.file {path}} includes multiple filetypes. Using most frequent filetype: {.val {filetype}}")
+  filetype <- unique(stringr::str_extract(fs::dir_ls(path), "(?<=\\.).+$"))
+
+  if (length(filetype) == 1) {
+   return(filetype)
   }
 
-  return(filetype)
+  cli_warn(
+    c("The path {.file {path}} includes multiple filetypes.",
+    "i" = "Using most frequent filetype: {.val {filetype}}")
+  )
+
+  # https://stackoverflow.com/questions/17374651/find-the-n-most-common-values-in-a-vector
+  names(sort(table(filetype), decreasing = TRUE)[1])
 }
 
-#' Get list of files at
+#' Get list of files at a path (using a single file type at a time)
 #' @noRd
 #' @importFrom fs dir_ls
 get_path_file_list <- function(path, filetype = NULL) {
@@ -209,7 +206,6 @@ get_path_file_list <- function(path, filetype = NULL) {
 #' @param overwrite If TRUE, overwrite any existing EXIF metadata present in the
 #'   provided fields; defaults to TRUE
 #' @export
-#' @importFrom glue glue
 write_exif <- function(path = NULL,
                        filetype = NULL,
                        title = NULL,
@@ -225,11 +221,11 @@ write_exif <- function(path = NULL,
     if (!is.null(title)) {
       args <- c(args, "-Title=Untitled")
     } else {
-      args <- c(args, glue::glue("-Title={title}"))
+      args <- c(args, glue("-Title={title}"))
     }
 
     if (!is.null(author)) {
-      args <- c(args, glue::glue("-Author={author}"))
+      args <- c(args, glue("-Author={author}"))
     }
 
     if (!is.null(date)) {
@@ -238,7 +234,7 @@ write_exif <- function(path = NULL,
       # TODO: Add support for subjects (partially complete with keywords) https://stackoverflow.com/questions/28588696/python-exiftool-combining-subject-and-keyword-tags#28609886
       date <- "now"
       if ("png" %in% filetype) {
-        args <- c(args, glue::glue("-CreationTime={date}"))
+        args <- c(args, glue("-CreationTime={date}"))
       } else {
         args <- c(args, c("-CreateDate={date}", "-ModifyDate={date}"))
       }
@@ -265,7 +261,7 @@ write_exif <- function(path = NULL,
         )
       )
 
-      cli::cli_alert_success("EXIF metadata updated for {.file {path}}")
+      cli_inform(c("v" = "EXIF metadata updated for {.file {path}}"))
     } else {
       suppressMessages(
         suppressWarnings(
