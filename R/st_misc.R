@@ -32,17 +32,18 @@ NULL
 #' @importFrom sf st_geometry st_crs
 st_scale_rotate <- function(x, scale = 1, rotate = 0) {
   x <- as_sf(x)
+  crs <- sf::st_crs(x)
 
   # rotate function (see here: https://r-spatial.github.io/sf/articles/sf3.html#affine-transformations
   rot <- function(a) matrix(c(cos(a), sin(a), -sin(a), cos(a)), 2, 2)
 
-  center <- st_center(x, ext = TRUE)
+  geometry <- as_sfc(x)
+  centroid <- suppressWarnings(sf::st_centroid(geometry))
+  geometry <- (geometry - centroid) * rot(pi / (360 / (rotate * 2)))
+  geometry <- geometry * scale + centroid
 
-  y <- (center$geometry - center$sfc) * rot(pi / (360 / (rotate * 2)))
-  y <- y * scale + center$sfc
-
-  sf::st_geometry(x) <- y
-  sf::st_crs(x) <- center$crs
+  sf::st_geometry(x) <- geometry
+  sf::st_crs(x) <- crs
 
   x
 }
@@ -96,7 +97,7 @@ st_square <- function(x, scale = 1, rotate = 0, inscribed = FALSE) {
     geom <- sf::st_inscribed_circle(as_sfc(x), nQuadSegs = 1)
     geom <- purrr::discard(geom, ~ is.na(sf::st_dimension(.x)))
     x <- sf::st_set_geometry(x, geom)
-    square <- st_scale_rotate(x, rotate = (rotate + 45), scale = scale)
+    rotate <- rotate + 45
   } else {
     x <-
       st_bbox_ext(
@@ -104,9 +105,9 @@ st_square <- function(x, scale = 1, rotate = 0, inscribed = FALSE) {
         asp = 1,
         class = "sf"
       )
-
-    square <- st_scale_rotate(x, rotate = rotate, scale = scale)
   }
+
+  square <- st_scale_rotate(x, rotate = rotate, scale = scale)
 
   if (is_lonlat) {
     square <- sf::st_transform(square, crs = crs)
