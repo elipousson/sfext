@@ -10,8 +10,9 @@ Description: Extra functions with additional options for reading, writing,
     for working with tabular data with coordinates and distance and area
     units.
 License: MIT + file LICENSE
-URL: https://github.com/elipousson/sfx, https://elipousson.github.io/sfx/
-BugReports: https://github.com/elipousson/sfx/issues
+URL: https://github.com/elipousson/sfext,
+    https://elipousson.github.io/sfext/
+BugReports: https://github.com/elipousson/sfext/issues
 Depends: 
     R (>= 2.10)
 Imports: 
