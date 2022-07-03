@@ -11,9 +11,9 @@ Extra functions with additional options for reading, writing, and transforming s
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/elipousson/sfx}
-  \item \url{https://elipousson.github.io/sfx/}
-  \item Report bugs at \url{https://github.com/elipousson/sfx/issues}
+  \item \url{https://github.com/elipousson/sfext}
+  \item \url{https://elipousson.github.io/sfext/}
+  \item Report bugs at \url{https://github.com/elipousson/sfext/issues}
 }
 
 }
