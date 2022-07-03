@@ -26,7 +26,7 @@ str_trim_squish <- function(string) {
   dplyr::mutate(
     string,
     dplyr::across(
-      tidyselect::where(is.character),
+      where(is.character),
       ~ dplyr::if_else(
         !is.null(.x) & !is.na(.x),
         stringr::str_trim(stringr::str_squish(.x)),
@@ -91,8 +91,8 @@ str_prefix <- function(string = NULL, prefix = NULL, sep = "_", clean_names = TR
   }
 
   prefix <- switch(prefix,
-                   "date" = gsub("^x", "", janitor::make_clean_names(Sys.Date(), sep_out = dttm_sep)),
-                   "time" = gsub("^x", "", janitor::make_clean_names(Sys.time(), sep_out = dttm_sep))
+    "date" = gsub("^x", "", janitor::make_clean_names(Sys.Date(), sep_out = dttm_sep)),
+    "time" = gsub("^x", "", janitor::make_clean_names(Sys.time(), sep_out = dttm_sep))
   )
 
   if (!post) {

@@ -13,7 +13,6 @@
 #' @export
 #' @importFrom sf st_union st_combine st_intersection st_difference
 st_erase <- function(x, y, flip = FALSE, union = TRUE) {
-
   check_sf(x, ext = TRUE)
 
   if (is_bbox(x)) {

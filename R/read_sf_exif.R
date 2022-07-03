@@ -171,12 +171,13 @@ get_path_filetype <- function(path, filetype = NULL) {
   filetype <- unique(stringr::str_extract(fs::dir_ls(path), "(?<=\\.).+$"))
 
   if (length(filetype) == 1) {
-   return(filetype)
+    return(filetype)
   }
 
   cli_warn(
     c("The path {.file {path}} includes multiple filetypes.",
-    "i" = "Using most frequent filetype: {.val {filetype}}")
+      "i" = "Using most frequent filetype: {.val {filetype}}"
+    )
   )
 
   # https://stackoverflow.com/questions/17374651/find-the-n-most-common-values-in-a-vector

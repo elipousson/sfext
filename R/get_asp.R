@@ -32,11 +32,11 @@ get_asp <- function(asp = NULL,
   )
 
   switch(type,
-         "null" = asp,
-         "num" = asp,
-         "char" = as.numeric(stringr::str_extract(asp, ".+(?=:)")) / as.numeric(stringr::str_extract(asp, "(?<=:).+"))#,
-        # "paper" = get_paper(paper = paper, orientation = orientation)[["asp"]],
-        # "block" = get_block_asp(paper = get_paper(paper = paper, orientation = orientation), margin = margin, unit = unit)
+    "null" = asp,
+    "num" = asp,
+    "char" = as.numeric(stringr::str_extract(asp, ".+(?=:)")) / as.numeric(stringr::str_extract(asp, "(?<=:).+")) # ,
+    # "paper" = get_paper(paper = paper, orientation = orientation)[["asp"]],
+    # "block" = get_block_asp(paper = get_paper(paper = paper, orientation = orientation), margin = margin, unit = unit)
   )
 }
 

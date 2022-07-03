@@ -363,7 +363,7 @@ check_file_overwrite <- function(filename = NULL,
 
     cli_inform(
       c("v" = "Removing {.val {filename}} from {.file {path}}")
-      )
+    )
 
     if (!stringr::str_detect(path, paste0(filename, "$"))) {
       file.remove(file.path(path, filename))
