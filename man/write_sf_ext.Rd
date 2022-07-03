@@ -43,7 +43,7 @@ write_sf_gist(
   description = NULL,
   public = TRUE,
   browse = FALSE,
-  token = overedge::get_access_token(type = "GITHUB_PAT")
+  token = Sys.getenv("GITHUB_PAT")
 )
 
 write_sf_gsheet(
@@ -117,7 +117,7 @@ provided data.}
 \description{
 The write_sf_ext and write_sf_cache helper functions wrap the \link[sf:st_write]{sf::write_sf}
 function to provide some additional options including consistent file naming
-with \code{\link[overedge:make_filename]{overedge::make_filename()}} and features including:
+with \code{\link[=make_filename]{make_filename()}} and features including:
 }
 \details{
 \itemize{

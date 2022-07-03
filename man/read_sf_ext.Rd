@@ -246,6 +246,7 @@ read_sf functions.
 }
 \seealso{
 Other read_write: 
+\code{\link{make_filename}()},
 \code{\link{read_sf_exif}()}
 }
 \concept{read_write}

@@ -19,11 +19,6 @@ convert_dist_scale(
 \item{dist}{distance to convert. If paper is provided, paper width and height
 are used as dist.}
 
-\item{paper}{Paper, Default: 'letter'.}
-
-\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
-'portrait'.}
-
 \item{scale}{Scale name}
 
 \item{scale_unit}{"mm" (converted to cm by dividing by 10), "cm", "px"

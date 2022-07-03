@@ -32,7 +32,7 @@ buffer distance. e.g. if the diagonal distance is 3000 meters and the
 provided.}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3"). If numeric, \code{\link[overedge:get_asp]{get_asp()}} returns the same value
+character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
 \item{unit}{Units for buffer. Supported options include "meter", "foot",
