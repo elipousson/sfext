@@ -1,6 +1,5 @@
 url: https://elipousson.github.io/sfext/
 template:
-  package: preferably
   bootstrap: 5
 reference:
 - title: Reading and writing spatial data
