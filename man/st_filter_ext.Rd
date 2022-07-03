@@ -26,6 +26,8 @@ objects. If x is an \code{sf} list, additional parameters in ... will be ignored
 
 \item{erase}{If \code{TRUE}, x is erased by y with \code{\link[=st_erase]{st_erase()}}.}
 
+\item{crs}{Coordinate reference system to return.}
+
 \item{.predicate}{geometry predicate function with the same profile as
 \code{\link[sf:geos_binary_pred]{sf::st_intersects()}}; see details for \code{\link[sf:st_join]{sf::st_filter()}} for more options.}
 

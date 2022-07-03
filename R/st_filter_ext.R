@@ -5,6 +5,7 @@
 #' @param crop  If `TRUE`, x is cropped to y using [sf::st_crop()].
 #' @param trim  If `TRUE`, x is trimmed to y with [st_trim()].
 #' @param erase If `TRUE`, x is erased by y with [st_erase()].
+#' @param crs Coordinate reference system to return.
 #' @param .predicate geometry predicate function with the same profile as
 #'   [sf::st_intersects()]; see details for [sf::st_filter()] for more options.
 #' @param null.ok If y is `NULL` and null.ok is `TRUE`, x is returned without

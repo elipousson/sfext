@@ -26,7 +26,6 @@ is_dist_units <- function(x) {
 #'   units; default to `NULL`.
 #' @export
 #' @importFrom dplyr case_when
-#' @importFrom cli cli_alert_danger
 is_diff_dist <- function(x, y, units = NULL) {
   which_is_units <-
     dplyr::case_when(
@@ -55,6 +54,7 @@ is_diff_dist <- function(x, y, units = NULL) {
 #'   objects; "diagdist", "xdist", "ydist". defaults to `NULL`.
 #' @param diff If `TRUE`, return results from [is_diff_dist] or [is_diff_area];
 #'   if `FALSE`, return logical indicator; defaults to `FALSE`
+#' @param call Passed as the error_call parameter for [rlang::arg_match].
 #' @param ... Additional parameters passed to all.equal
 #' @export
 #' @importFrom sf st_area
@@ -108,6 +108,9 @@ is_shorter <- function(x, y) {
 #' @rdname is_dist_units
 #' @param null.ok If null.ok is `TRUE`, allow x to return a `NULL` value; if
 #'   `FALSE`, error on `NULL` values.
+#' @param multiple If `TRUE` and x is a character vector with distance/area
+#'   units, [get_dist_units] may return multiple units. Passed to [rlang::arg_match].
+#' @param quiet If `TRUE`, suppress warning messages.
 #' @export
 #' @importFrom sf st_crs
 get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {

@@ -43,10 +43,17 @@ objects; "diagdist", "xdist", "ydist". defaults to \code{NULL}.}
 \item{diff}{If \code{TRUE}, return results from \link{is_diff_dist} or \link{is_diff_area};
 if \code{FALSE}, return logical indicator; defaults to \code{FALSE}}
 
+\item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match}.}
+
 \item{...}{Additional parameters passed to all.equal}
 
 \item{null.ok}{If null.ok is \code{TRUE}, allow x to return a \code{NULL} value; if
 \code{FALSE}, error on \code{NULL} values.}
+
+\item{multiple}{If \code{TRUE} and x is a character vector with distance/area
+units, \link{get_dist_units} may return multiple units. Passed to \link[rlang:arg_match]{rlang::arg_match}.}
+
+\item{quiet}{If \code{TRUE}, suppress warning messages.}
 
 \item{union}{If \code{TRUE}, union objects before comparing area with
 \code{\link[=is_diff_area]{is_diff_area()}} or \code{\link[=is_same_area]{is_same_area()}}, defaults to \code{TRUE}.}
