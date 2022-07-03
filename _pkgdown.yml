@@ -28,7 +28,6 @@ reference:
   - '`get_dist`'
   - '`get_length`'
   - '`number_features`'
-  - '`count_features`'
 - title: Unit and formatting utilities
   contents:
   - starts_with("is_dist")
