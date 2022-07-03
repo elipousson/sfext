@@ -59,7 +59,11 @@ sf_to_df <- function(x,
 #'   coordinates or well known text in data frame.
 #' @param geo If `TRUE`, use [address_to_sf] to geocode address column; defaults
 #'   to `FALSE`.
-#' @param address Address column name passed to [tidygeocoder::geocode] or [tidygeocoder::geo]
+#' @param address Address column name passed to [tidygeocoder::geocode] or
+#'   [tidygeocoder::geo]
+#' @param y A sf object passed as y argument to [dplyr::left_join].
+#' @param by A character vector of variables to join by passed to
+#'   [dplyr::left_join].
 #' @seealso
 #'  [ggspatial::df_spatial()]
 #'  [sf::st_as_sf()]
@@ -79,17 +83,17 @@ df_to_sf <- function(x,
                      y = NULL,
                      by = NULL,
                      ...) {
-  if (is_sf(x)) {
-    cli_warn("df_to_sf requires a data frame. Dropping geometry from the provided simple feature object.")
-    x <- sf::st_drop_geometry(x)
-  }
+  cli_abort_ifnot(
+    "{.arg x} can't be an sf object.",
+    condition = !is_sf(x)
+  )
 
   type <-
     dplyr::case_when(
       has_name(x, "geometry") && !all(has_name(x, coords)) ~ "geometry_df",
       geo && has_name(x, address) && !all(has_name(x, coords)) ~ "address_df",
       has_name(x, "wkt") ~ "wkt_df",
-      !is.null(by) && is_sf(y) ~ "join_sf",
+      !is.null(y) ~ "join_sf",
       TRUE ~ "coords_df"
     )
 
@@ -108,6 +112,9 @@ df_to_sf <- function(x,
 #' Convert a data frame with a geometry list column to an sf object
 #' @noRd
 join_sf_to_df <- function(x, y, by = NULL, ...) {
+  # FIXME: y could also be a dataframe that could be converted into an sf object
+  check_sf(y)
+
   x <- dplyr::left_join(x = x, y = y, by = by, ...)
 
   sf::st_as_sf(x)
