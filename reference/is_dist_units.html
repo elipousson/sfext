@@ -109,6 +109,10 @@ objects; "diagdist", "xdist", "ydist". defaults to <code>NULL</code>.</p></dd>
 if <code>FALSE</code>, return logical indicator; defaults to <code>FALSE</code></p></dd>
 
 
+<dt>call</dt>
+<dd><p>Passed as the error_call parameter for <a href="https://rlang.r-lib.org/reference/arg_match.html" class="external-link">rlang::arg_match</a>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional parameters passed to all.equal</p></dd>
 
@@ -116,6 +120,15 @@ if <code>FALSE</code>, return logical indicator; defaults to <code>FALSE</code><
 <dt>null.ok</dt>
 <dd><p>If null.ok is <code>TRUE</code>, allow x to return a <code>NULL</code> value; if
 <code>FALSE</code>, error on <code>NULL</code> values.</p></dd>
+
+
+<dt>multiple</dt>
+<dd><p>If <code>TRUE</code> and x is a character vector with distance/area
+units, get_dist_units may return multiple units. Passed to <a href="https://rlang.r-lib.org/reference/arg_match.html" class="external-link">rlang::arg_match</a>.</p></dd>
+
+
+<dt>quiet</dt>
+<dd><p>If <code>TRUE</code>, suppress warning messages.</p></dd>
 
 
 <dt>union</dt>
