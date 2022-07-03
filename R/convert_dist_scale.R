@@ -5,8 +5,7 @@
 #'
 #' @param dist distance to convert. If paper is provided, paper width and height
 #'   are used as dist.
-#' @inheritParams overedge::get_paper
-#' @inheritParams overedge::get_scale
+#' @inheritParams get_scale
 #' @param scale_unit "mm" (converted to cm by dividing by 10), "cm", "px"
 #'   (converted to inches by dividing by dpi), or "in".
 #' @param actual_unit any unit supported by convert_dist_units
@@ -29,14 +28,14 @@ convert_dist_scale <- function(dist = NULL,
                                scale_factor = NULL,
                                dpi = 120) {
   if (!is.null(scale)) {
-    scale <- overedge::get_scale(scale = scale)
+    scale <- get_scale(scale = scale)
   }
 
-  if (!is.null(paper) && is.null(dist)) {
-    paper <- overedge::get_paper(paper = paper, orientation = orientation)
-    dist <- c(paper$width, paper$height)
-    scale_unit <- paper$units
-  }
+  # if (!is.null(paper) && is.null(dist)) {
+  #  paper <- overedge::get_paper(paper = paper, orientation = orientation)
+  #  dist <- c(paper$width, paper$height)
+  #  scale_unit <- paper$units
+  # }
 
   dist <-
     switch(scale_unit,

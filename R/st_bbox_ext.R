@@ -12,7 +12,7 @@
 #'   can be converted to an sf object or a list of sf, bbox, or sfc objects.
 #'   st_bbox_asp also supports vectors in the same format as a bbox object.
 #' @inheritParams st_buffer_ext
-#' @inheritParams overedge::get_asp
+#' @inheritParams get_asp
 #' @param crs Coordinate reference system of bounding box to return
 #' @param class Class of object to return (sf or bbox); defaults to "bbox".
 #' @param null.ok If `TRUE` and x is `NULL`, return `NULL`.
@@ -98,7 +98,7 @@ st_bbox_asp <- function(x = NULL,
 
   # Get adjusted aspect ratio
   if (!is.numeric(asp)) {
-    asp <- overedge::get_asp(asp = asp)
+    asp <- get_asp(asp = asp)
   }
 
   if (!is.null(asp) && is.numeric(asp)) {

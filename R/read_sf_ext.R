@@ -144,7 +144,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
       # If data is in extdata folder
       filename %in% ls_pkg_extdata(package) ~ system.file("extdata", filename, package = package),
       # If data is in the cache directory
-      filename %in% ls_pkg_cache(package) ~ file.path(overedge::get_data_dir(package = package), filename)
+      filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(package = package), filename)
     )
 
   read_sf_path(path = path, bbox = bbox, ...)
@@ -591,8 +591,8 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
 #'   into a temporary directory (created with [tempdir()]), and then read to a file using the specified
 #'   file type.
 #' @inheritParams utils::download.file
-#' @inheritParams overedge::get_data_dir
-#' @inheritParams overedge::make_filename
+#' @inheritParams get_data_dir
+#' @inheritParams make_filename
 #' @export
 #' @importFrom sf st_crs
 #' @importFrom utils download.file unzip
@@ -606,10 +606,10 @@ read_sf_download <-
            method = "auto",
            unzip = FALSE,
            ...) {
-    path <- overedge::get_data_dir(path = path)
+    path <- get_data_dir(path = path)
 
     destfile <-
-      overedge::make_filename(
+      make_filename(
         prefix = prefix,
         filename = filename,
         path = path,
@@ -624,7 +624,7 @@ read_sf_download <-
 
     if (unzip) {
       zipdest <-
-        overedge::make_filename(
+        make_filename(
           prefix = prefix,
           filename = filename,
           path = tempdir(),

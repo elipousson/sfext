@@ -2,7 +2,7 @@
 #'
 #' The write_sf_ext and write_sf_cache helper functions wrap the [sf::write_sf]
 #' function to provide some additional options including consistent file naming
-#' with [overedge::make_filename()] and features including:
+#' with [make_filename()] and features including:
 #'
 #' - If the data is not an sf object, optionally save as an RDS file.
 #' - If filetype is "csv" or the filename ends in ".csv" the file is
@@ -30,7 +30,7 @@
 #'   `write_sf_ext()`
 #' @param cache If `TRUE`, write `sf` object to file in cache directory;
 #'   defaults to `FALSE`.
-#' @inheritParams overedge::make_filename
+#' @inheritParams make_filename
 #' @inheritParams write_sf_cache
 #' @seealso
 #'  [sf::st_write()]
@@ -67,7 +67,7 @@ write_sf_ext <- function(data,
 
     # If data is sf object, write or cache it
     filename <-
-      overedge::make_filename(
+      make_filename(
         name = name,
         label = label,
         filetype = filetype,
@@ -126,10 +126,10 @@ write_sf_cache <- function(data,
                            filetype = NULL,
                            data_dir = NULL,
                            overwrite = FALSE) {
-  data_dir <- overedge::get_data_dir(path = data_dir)
+  data_dir <- get_data_dir(path = data_dir)
 
   filename <-
-    overedge::make_filename(
+    make_filename(
       name = name,
       label = label,
       filetype = filetype,
@@ -166,11 +166,11 @@ write_sf_gist <- function(data,
                           description = NULL,
                           public = TRUE,
                           browse = FALSE,
-                          token = overedge::get_access_token(type = "GITHUB_PAT")) {
+                          token = Sys.getenv("GITHUB_PAT")) {
   is_pkg_installed("gistr")
 
   filename <-
-    overedge::make_filename(
+    make_filename(
       name = name,
       label = label,
       filetype = filetype,
@@ -244,11 +244,11 @@ write_sf_gsheet <- function(data,
 
   if (!is.null(filename)) {
     filename <-
-      overedge::str_remove_filetype(filename, filetype = "gsheet")
+      str_remove_filetype(filename, filetype = "gsheet")
   }
 
   filename <-
-    overedge::make_filename(
+    make_filename(
       name = name,
       label = label,
       filetype = NULL,

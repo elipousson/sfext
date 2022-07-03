@@ -17,7 +17,7 @@ ls_pkg_extdata <- function(pkg) {
 #'
 #' @noRd
 ls_pkg_cache <- function(pkg) {
-  list.files(overedge::get_data_dir(path = NULL, package = pkg))
+  list.files(get_data_dir(path = NULL, package = pkg))
 }
 
 #' Is this package installed?
