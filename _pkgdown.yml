@@ -2,7 +2,7 @@ url: https://elipousson.github.io/sfext/
 template:
   bootstrap: 5
 reference:
-- title: Reading and writing spatial data
+- title: Read and write spatial data
   contents:
   - '`read_sf_ext`'
   - '`write_sf_ext`'
@@ -18,21 +18,26 @@ reference:
 - title: Modify the geometry of simple feature objects
   contents:
   - starts_with("st")
-- title: Utility functions for bounding boxes
+- title: Add columns to simple feature objects based on geometry
   contents:
-  - starts_with("sf_bbox")
-- title: Create or modify simple feature objects
-  contents:
+  - '`bind_sf_col`'
   - '`get_coords`'
   - '`get_dist`'
   - '`get_length`'
   - '`number_features`'
+- title: Utility functions for bounding boxes
+  contents:
+  - starts_with("sf_bbox")
 - title: Unit and formatting utilities
   contents:
   - starts_with("is_dist")
   - starts_with("convert_dist")
   - '`get_scale`'
   - '`get_asp`'
+- title: File utilities
+  contents:
+  - '`get_data_dir`'
+  - '`make_filename`'
 - title: Reference data for units and scales
   contents:
   - '`dist_units`'
