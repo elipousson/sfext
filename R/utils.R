@@ -14,7 +14,7 @@
 
 utils::globalVariables(
   c( # Variables for format_md_crash_data
-    "filenname", "image_description", "image_height", "image_width", "latitude", "latitude_ref",
+    "filename", "image_description", "image_height", "image_width", "latitude", "latitude_ref",
     "longitude", "longitude_ref", "name", "orientation", "source_file"
   )
 )
