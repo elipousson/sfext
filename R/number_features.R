@@ -64,7 +64,7 @@ number_features <- function(data,
       .before = dplyr::everything()
     )
 
-  num_style <- match.arg(num_style, c("arabic", "alph", "Alph", "roman", "Roman"))
+  num_style <- arg_match(num_style, c("arabic", "alph", "Alph", "roman", "Roman"))
 
   data$number <-
     switch(num_style,
@@ -95,7 +95,7 @@ int_to_alph <- function(num, suffix = NULL, base = 26) {
     )
 
   if (rest > 0) {
-    return(Recall(rest, base, suffix))
+    return(Recall(rest, suffix, base))
   }
 
   suffix
@@ -123,7 +123,7 @@ sort_features <- function(data,
   minmax_opts <- c("xmin", "ymin", "xmax", "ymax")
 
   if (any(sort %in% c(latlon_opts, minmax_opts))) {
-    sort <- match.arg(sort, choices = c(latlon_opts, minmax_opts), several.ok = TRUE)
+    sort <- arg_match(sort, choices = c(latlon_opts, minmax_opts), multiple = TRUE)
 
     if ((sort %in% latlon_opts) && !all(has_name(data, sort))) {
       data <-
@@ -157,13 +157,12 @@ sort_features <- function(data,
   if (any(sort %in% c(dist_opts)) | !is.null(to)) {
     if (is.null(to)) {
       # FIXME: Shouldn't this split the sort string first and then match to the options?
-      sort <- match.arg(sort, dist_opts, several.ok = FALSE)
+      sort <- arg_match(sort, dist_opts, multiple = FALSE)
       to <-
         strsplit(sort, "_")[[1]][2:3]
     } else if (any(sort %in% c(dist_opts))) {
-      cli::cli_alert_danger(
-        "If the {.field {'sort'}} and {.field {'to'}} are both provided,
-        the value of {.field {'sort'}} ({.val {sort}}) is ignored."
+      cli_warn(
+        "If the {.arg sort} and {.arg to} are both provided, the value of {.arg sort} ({.val {sort}}) is ignored."
       )
     }
 
@@ -180,7 +179,7 @@ sort_features <- function(data,
 
 
   if (!has_name(data, sort)) {
-    cli_warn("The provided value for {.field {'sort'}} ({.val {sort}}) is not found in the data.")
+    cli_warn("The provided value for {.arg sort} ({.val {sort}}) can't be found in the data.")
   }
 
   by_group <- FALSE
