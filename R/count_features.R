@@ -25,7 +25,6 @@ count_features <- function(x = NULL,
                            col = NULL,
                            ...) {
   if (is_sf(x)) {
-
     check_sf(x)
 
     if (is_sf(y)) {

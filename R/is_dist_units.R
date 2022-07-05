@@ -103,7 +103,6 @@ is_shorter <- function(x, y) {
   as.numeric(is_diff_dist(x, y)) < 0
 }
 
-
 #' @name get_dist_units
 #' @rdname is_dist_units
 #' @param null.ok If null.ok is `TRUE`, allow x to return a `NULL` value; if
@@ -207,7 +206,6 @@ is_same_area <- function(x, y, units = NULL, union = TRUE, diff = FALSE, ...) {
 is_units <- function(x) {
   is_class(x, "units")
 }
-
 
 #' @noRd
 is_same_units <- function(x, y) {

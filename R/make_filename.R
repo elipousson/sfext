@@ -50,15 +50,15 @@ make_filename <- function(name = NULL,
   }
 
   # If file name is not provided, file name is based on label, name, pad and width
-    filename <-
-      filename %||%
-      str_fix(
-        prefix = label,
-        string = name,
-        clean_names = TRUE,
-        pad = pad,
-        width = width
-      )
+  filename <-
+    filename %||%
+    str_fix(
+      prefix = label,
+      string = name,
+      clean_names = TRUE,
+      pad = pad,
+      width = width
+    )
 
   # Apply prefix and postfix to the filename
   filename <-

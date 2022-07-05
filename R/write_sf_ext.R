@@ -200,8 +200,8 @@ write_sf_gist <- function(data,
 
   gistr::gist_auth(app = token)
 
-    description <-
-      description %||% glue("A {filetype} format spatial data file.")
+  description <-
+    description %||% glue("A {filetype} format spatial data file.")
 
   cli_inform(c("v" = "Creating gist for {.file filename}"))
 

@@ -72,7 +72,8 @@ check_starts_with <- function(x = NULL, string = NULL, arg = caller_arg(x), null
 
   message <-
     message %||% c("{.arg {arg}} must start with {.val {string}}.",
-                   "i" = "The provided string is {.val {x}}.")
+      "i" = "The provided string is {.val {x}}."
+    )
 
   cli_abort(message = message, ...)
 }
