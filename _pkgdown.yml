@@ -7,40 +7,44 @@ reference:
   - '`read_sf_ext`'
   - '`write_sf_ext`'
   - '`read_sf_exif`'
-- title: Check and convert simple feature objects
+- title: Check and convert sf, sfc, and bbox objects
   contents:
   - '`is_sf`'
   - '`is_geom_type`'
   - starts_with("as_point")
   - starts_with("as_sf")
+- title: Converting sf and data frame objects
+  contents:
   - '`sf_to_df`'
   - '`address_to_sf`'
-- title: Modify the geometry of simple feature objects
+- title: Modify the geometry of sf, sfc, and bbox objects
   contents:
-  - starts_with("st")
-- title: Add columns to simple feature objects based on geometry
+  - starts_with("st_")
+- title: Get information about the geometry of sf, sfc, and bbox objects
   contents:
-  - '`bind_sf_col`'
   - '`get_coords`'
   - '`get_dist`'
   - '`get_length`'
-  - '`number_features`'
-- title: Utility functions for bounding boxes
+- title: Additional helper and utility functions
   contents:
+  - '`number_features`'
+  - '`count_features`'
+  - '`get_asp`'
   - starts_with("sf_bbox")
-- title: Unit and formatting utilities
+- title: Utility functions for units and scales
   contents:
   - starts_with("is_dist")
   - starts_with("convert_dist")
+  - starts_with("bind_units")
   - '`get_scale`'
-  - '`get_asp`'
-- title: File utilities
-  contents:
-  - '`get_data_dir`'
-  - '`make_filename`'
 - title: Reference data for units and scales
   contents:
   - '`dist_units`'
   - '`dist_unit_options`'
   - '`area_unit_options`'
   - '`standard_scales`'
+- title: File utility functions
+  contents:
+  - '`get_data_dir`'
+  - '`make_filename`'
+  - '`str_misc`'
