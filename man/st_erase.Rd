@@ -10,7 +10,9 @@ st_erase(x, y, flip = FALSE, union = TRUE)
 st_trim(x, y, union = TRUE)
 }
 \arguments{
-\item{x, y}{sf objects}
+\item{x}{A sf, sfc, or bbox object to erase or trim.}
+
+\item{y}{A sf, sfc, or bbox object to use to erase or trim.}
 
 \item{flip}{If \code{TRUE}, use st_intersection; if \code{FALSE} use st_difference,
 Default: \code{FALSE}}

@@ -3,15 +3,22 @@
 \name{get_measurements}
 \alias{get_measurements}
 \alias{get_area}
+\alias{st_area_ext}
 \alias{get_length}
+\alias{st_length_ext}
 \alias{get_dist}
+\alias{st_distance_ext}
 \alias{get_bearing}
 \alias{st_bearing}
 \title{Get measurements for simple feature objects}
 \usage{
 get_area(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "area")
 
+st_area_ext(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "area")
+
 get_length(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "length")
+
+st_length_ext(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "length")
 
 get_dist(
   x,
@@ -24,7 +31,20 @@ get_dist(
   ...
 )
 
+st_distance_ext(
+  x,
+  to,
+  by_element = TRUE,
+  units = NULL,
+  drop = FALSE,
+  keep_all = TRUE,
+  .id = "dist",
+  ...
+)
+
 get_bearing(x, dir = FALSE, keep_all = TRUE, .id = "bearing")
+
+st_bearing(x, dir = FALSE, keep_all = TRUE, .id = "bearing")
 }
 \arguments{
 \item{x}{A \code{sf} or \code{sfc} object to measure.}
@@ -60,21 +80,21 @@ Get measurements for simple feature objects
 \details{
 Wrapper functions for \link[sf:geos_measures]{sf::geos_measures}:
 \itemize{
-\item \link{get_area}: Wraps on \link[sf:geos_measures]{sf::st_area} but MULTIPOINT or MULTILINESTRING
-geometry is converted to a polygon using \link[sf:geos_unary]{sf::st_polygonize} which is used to
+\item \code{\link[=get_area]{get_area()}}: Wraps on \code{\link[sf:geos_measures]{sf::st_area()}} but MULTIPOINT or MULTILINESTRING
+geometry is converted to a polygon using \code{\link[sf:geos_unary]{sf::st_polygonize()}} which is used to
 determine the coverage area.
-\item \link{get_length}: Wraps to \link[sf:geos_measures]{sf::st_length} but POINT and MULTIPOINT geometry is
-converted to LINESTRING using \link{as_lines}. If x has POLYGON geometry,
-\link[lwgeom:perimeter]{lwgeom::st_perimeter} is used to return the perimeter instead of the length.
-\item \link{get_dist}: Wraps \link[sf:geos_measures]{sf::st_distance} but x is converted to a POINT using
-\link{st_center} and "to" can be a POINT, a sf object that can be converted to a
+\item \code{\link[=get_length]{get_length()}}: Wraps to \code{\link[sf:geos_measures]{sf::st_length()}} but POINT and MULTIPOINT geometry is
+converted to LINESTRING using \code{\link[=as_lines]{as_lines()}}. If x has POLYGON geometry,
+\code{\link[lwgeom:perimeter]{lwgeom::st_perimeter()}} is used to return the perimeter instead of the length.
+\item \code{\link[=get_dist]{get_dist()}}: Wraps \code{\link[sf:geos_measures]{sf::st_distance()}} but x is converted to a POINT using
+\code{\link[=st_center]{st_center()}} and "to" can be a POINT, a sf object that can be converted to a
 POINT, or a character vector indicating a point on the overall bounding box
 for x.
 }
 
 Additional measurement functions:
 \itemize{
-\item \link{get_bearing}: Wraps \link[geosphere:bearing]{geosphere::bearing}.
+\item \code{\link[=get_bearing]{get_bearing()}}: Wraps \code{\link[geosphere:bearing]{geosphere::bearing()}}.
 }
 }
 \examples{

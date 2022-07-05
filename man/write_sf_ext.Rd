@@ -55,7 +55,8 @@ write_sf_gsheet(
   filename = NULL,
   sheet = 1,
   ask = FALSE,
-  key = NULL
+  key = NULL,
+  ...
 )
 }
 \arguments{
@@ -113,6 +114,8 @@ the column name provided to key. Defaults to \code{FALSE}.}
 
 \item{key}{If ask is \code{TRUE}, a key is required to join the sheet data to the
 provided data.}
+
+\item{...}{Further args passed on to \code{\link[crul]{verb-POST}}}
 }
 \description{
 The write_sf_ext and write_sf_cache helper functions wrap the \link[sf:st_write]{sf::write_sf}
