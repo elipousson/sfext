@@ -77,9 +77,7 @@ write_sf_ext <- function(data,
         postfix = postfix
       )
 
-    if (is.null(filetype)) {
-      filetype <- str_extract_filetype(filenname)
-    }
+    filetype <- filetype %||% str_extract_filetype(filename)
 
     if (is.null(path)) {
       path <- filename
@@ -202,10 +200,8 @@ write_sf_gist <- function(data,
 
   gistr::gist_auth(app = token)
 
-  if (is.null(description)) {
     description <-
-      glue("A {filetype} format spatial data file.")
-  }
+      description %||% glue("A {filetype} format spatial data file.")
 
   cli_inform(c("v" = "Creating gist for {.file filename}"))
 
@@ -239,7 +235,8 @@ write_sf_gsheet <- function(data,
                             filename = NULL,
                             sheet = 1,
                             ask = FALSE,
-                            key = NULL) {
+                            key = NULL,
+                            ...) {
   is_pkg_installed("googlesheets4")
 
   if (!is.null(filename)) {
@@ -264,7 +261,7 @@ write_sf_gsheet <- function(data,
       name = filename
     )
 
-  data <- sf_to_df(data)
+  data <- sf_to_df(data, ...)
 
   googlesheets4::write_sheet(
     data = data,
