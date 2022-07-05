@@ -216,13 +216,8 @@ read_sf_query <- function(path,
     wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
   }
 
-  if (is.null(query)) {
-    query <- NA
-  }
-
-  if (is.null(wkt_filter)) {
-    wkt_filter <- character(0)
-  }
+  query <- query %||% NA
+  wkt_filter <- wkt_filter %||% character(0)
 
   # Read external, cached, or data at path with wkt_filter
   data <-

@@ -176,9 +176,7 @@ check_coords <- function(x = NULL, coords = NULL, default = c("lon", "lat"), rev
   }
 
   # If X is NUll or not a dataframe check_coords just validates coord pairs or sets a default value
-  if (is.null(coords)) {
-    coords <- default
-  }
+  coords <- coords %||% default
 
   cli_abort_ifnot(
     # FIXME: What about the coord_col value where coordinates are split in two?

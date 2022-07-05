@@ -71,9 +71,7 @@ st_buffer_ext <- function(x,
 
   dist <- diag_ratio_to_dist(x, dist, diag_ratio)
 
-  if (is.null(unit)) {
-    unit <- get_dist_units(dist, quiet = TRUE)
-  }
+  unit <- unit %||% get_dist_units(dist, quiet = TRUE)
 
   units_gdal <- crs$units_gdal
 

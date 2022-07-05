@@ -32,8 +32,9 @@ make_filename <- function(name = NULL,
                           cache = FALSE,
                           pad = NULL,
                           width = NULL) {
-  stopifnot(
-    is.character(name) || is.character(filename)
+  cli_abort_ifnot(
+    "{.arg name} or {.arg filename} must be provided.",
+    condition = is.character(name) || is.character(filename)
   )
 
   if (cache) {
@@ -44,16 +45,13 @@ make_filename <- function(name = NULL,
 
   # If file name is provided, remove file type
   if (!is.null(filename)) {
-    if (is.null(filetype)) {
-      filetype <- str_extract_filetype(filename)
-    }
-
+    filetype <- filetype %||% str_extract_filetype(filename)
     filename <- str_remove_filetype(filename, filetype)
   }
 
   # If file name is not provided, file name is based on label, name, pad and width
-  if (is.null(filename)) {
     filename <-
+      filename %||%
       str_fix(
         prefix = label,
         string = name,
@@ -61,7 +59,6 @@ make_filename <- function(name = NULL,
         pad = pad,
         width = width
       )
-  }
 
   # Apply prefix and postfix to the filename
   filename <-

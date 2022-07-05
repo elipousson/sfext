@@ -57,11 +57,8 @@ check_grepl <- function(x = NULL, pattern = NULL, arg = caller_arg(x), null.ok =
     invisible(return(TRUE))
   }
 
-  if (is.null(message)) {
-    cli_abort(
-      "Can't detect pattern {.val {pattern}} in {.arg {arg}}."
-    )
-  }
+  message <-
+    message %||% "Can't detect pattern {.val {pattern}} in {.arg {arg}}."
 
   cli_abort(message = message)
 }
@@ -73,14 +70,9 @@ check_starts_with <- function(x = NULL, string = NULL, arg = caller_arg(x), null
     invisible(return(TRUE))
   }
 
-  if (is.null(message)) {
-    cli_abort(
-      c("{.arg {arg}} must start with {.val {string}}.",
-        "i" = "The provided string is {.val {x}}."
-      ),
-      ...
-    )
-  }
+  message <-
+    message %||% c("{.arg {arg}} must start with {.val {string}}.",
+                   "i" = "The provided string is {.val {x}}.")
 
   cli_abort(message = message, ...)
 }
