@@ -2,20 +2,20 @@
 #'
 #' @details Wrapper functions for [sf::geos_measures]:
 #'
-#' - [get_area]: Wraps on [sf::st_area] but MULTIPOINT or MULTILINESTRING
-#' geometry is converted to a polygon using [sf::st_polygonize] which is used to
+#' - [get_area()]: Wraps on [sf::st_area()] but MULTIPOINT or MULTILINESTRING
+#' geometry is converted to a polygon using [sf::st_polygonize()] which is used to
 #' determine the coverage area.
-#' - [get_length]: Wraps to [sf::st_length] but POINT and MULTIPOINT geometry is
-#' converted to LINESTRING using [as_lines]. If x has POLYGON geometry,
-#' [lwgeom::st_perimeter] is used to return the perimeter instead of the length.
-#' - [get_dist]: Wraps [sf::st_distance] but x is converted to a POINT using
-#' [st_center] and "to" can be a POINT, a sf object that can be converted to a
+#' - [get_length()]: Wraps to [sf::st_length()] but POINT and MULTIPOINT geometry is
+#' converted to LINESTRING using [as_lines()]. If x has POLYGON geometry,
+#' [lwgeom::st_perimeter()] is used to return the perimeter instead of the length.
+#' - [get_dist()]: Wraps [sf::st_distance()] but x is converted to a POINT using
+#' [st_center()] and "to" can be a POINT, a sf object that can be converted to a
 #' POINT, or a character vector indicating a point on the overall bounding box
 #' for x.
 #'
 #' @details Additional measurement functions:
 #'
-#' - [get_bearing]: Wraps [geosphere::bearing].
+#' - [get_bearing()]: Wraps [geosphere::bearing()].
 #'
 #' @param x A `sf` or `sfc` object to measure.
 #' @param units Units to return for area, length, perimeter, or distance;
@@ -29,8 +29,8 @@
 #' @example examples/get_measurements.R
 NULL
 
-#' @rdname get_measurements
 #' @name get_area
+#' @rdname get_measurements
 #' @export
 #' @importFrom sf st_length
 #' @importFrom units drop_units
@@ -59,6 +59,11 @@ get_area <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "area
     .id = .id
   )
 }
+
+#' @name st_area_ext
+#' @rdname get_measurements
+#' @export
+st_area_ext <- get_area
 
 #' @name get_length
 #' @rdname get_measurements
@@ -104,6 +109,12 @@ get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "le
     .id = .id
   )
 }
+
+#' @name st_length_ext
+#' @rdname get_measurements
+#' @export
+st_length_ext <- get_length
+
 
 #' @param to A `sf`, `sfc`, or `bbox` object or a length 2 character vector. If
 #'   "to" is an `sf` or `sfc` object, it must have either a single feature or
@@ -159,11 +170,15 @@ get_dist <- function(x, to, by_element = TRUE, units = NULL, drop = FALSE, keep_
   )
 }
 
+#' @name st_distance_ext
+#' @rdname get_measurements
+#' @export
+st_distance_ext <- get_dist
+
 #' @param dir Logical indicator whether to include direction in bearing; If
 #'   `FALSE`, return the absolute (positive) bearing value. If `TRUE`, return
 #'   negative and positive bearing values. Default: `FALSE`.
 #' @name get_bearing
-#' @aliases st_bearing
 #' @rdname get_measurements
 #' @export
 get_bearing <- function(x, dir = FALSE, keep_all = TRUE, .id = "bearing") {
@@ -208,8 +223,12 @@ get_bearing <- function(x, dir = FALSE, keep_all = TRUE, .id = "bearing") {
   )
 }
 
+#' @name st_bearing
+#' @rdname get_measurements
+#' @export
+st_bearing <- get_bearing
+
 #' @noRd
-#' @importFrom cli cli_alert_info
 convert_geom_type_alert <- function(x, to = NULL, with = NULL) {
-  cli::cli_alert_info("Converting {as.character(is_geom_type(x, ext = FALSE))} object to {to} with {.fun {'fn'}}.")
+  cli_inform("Converting {as.character(is_geom_type(x, ext = FALSE))} object to {to} with {.fun {fn}}.")
 }
