@@ -50,7 +50,11 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_area</span><span class="op">(</span><span class="va">x</span>, units <span class="op">=</span> <span class="cn">NULL</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, .id <span class="op">=</span> <span class="st">"area"</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">st_area_ext</span><span class="op">(</span><span class="va">x</span>, units <span class="op">=</span> <span class="cn">NULL</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, .id <span class="op">=</span> <span class="st">"area"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">get_length</span><span class="op">(</span><span class="va">x</span>, units <span class="op">=</span> <span class="cn">NULL</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, .id <span class="op">=</span> <span class="st">"length"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_length_ext</span><span class="op">(</span><span class="va">x</span>, units <span class="op">=</span> <span class="cn">NULL</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, .id <span class="op">=</span> <span class="st">"length"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">get_dist</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
@@ -63,7 +67,20 @@
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">get_bearing</span><span class="op">(</span><span class="va">x</span>, dir <span class="op">=</span> <span class="cn">FALSE</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, .id <span class="op">=</span> <span class="st">"bearing"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">st_distance_ext</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">to</span>,</span>
+<span>  by_element <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  units <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  drop <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  keep_all <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  .id <span class="op">=</span> <span class="st">"dist"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_bearing</span><span class="op">(</span><span class="va">x</span>, dir <span class="op">=</span> <span class="cn">FALSE</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, .id <span class="op">=</span> <span class="st">"bearing"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_bearing</span><span class="op">(</span><span class="va">x</span>, dir <span class="op">=</span> <span class="cn">FALSE</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, .id <span class="op">=</span> <span class="st">"bearing"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -115,17 +132,17 @@ negative and positive bearing values. Default: <code>FALSE</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Wrapper functions for <a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::geos_measures</a>:</p><ul><li><p>get_area: Wraps on <a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_area</a> but MULTIPOINT or MULTILINESTRING
-geometry is converted to a polygon using <a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_polygonize</a> which is used to
+    <p>Wrapper functions for <a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::geos_measures</a>:</p><ul><li><p><code>get_area()</code>: Wraps on <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_area()</a></code> but MULTIPOINT or MULTILINESTRING
+geometry is converted to a polygon using <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_polygonize()</a></code> which is used to
 determine the coverage area.</p></li>
-<li><p>get_length: Wraps to <a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_length</a> but POINT and MULTIPOINT geometry is
-converted to LINESTRING using <a href="as_point.html">as_lines</a>. If x has POLYGON geometry,
-<a href="https://rdrr.io/pkg/lwgeom/man/perimeter.html" class="external-link">lwgeom::st_perimeter</a> is used to return the perimeter instead of the length.</p></li>
-<li><p>get_dist: Wraps <a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_distance</a> but x is converted to a POINT using
-<a href="st_misc.html">st_center</a> and "to" can be a POINT, a sf object that can be converted to a
+<li><p><code>get_length()</code>: Wraps to <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_length()</a></code> but POINT and MULTIPOINT geometry is
+converted to LINESTRING using <code><a href="as_point.html">as_lines()</a></code>. If x has POLYGON geometry,
+<code><a href="https://rdrr.io/pkg/lwgeom/man/perimeter.html" class="external-link">lwgeom::st_perimeter()</a></code> is used to return the perimeter instead of the length.</p></li>
+<li><p><code>get_dist()</code>: Wraps <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_distance()</a></code> but x is converted to a POINT using
+<code><a href="st_misc.html">st_center()</a></code> and "to" can be a POINT, a sf object that can be converted to a
 POINT, or a character vector indicating a point on the overall bounding box
 for x.</p></li>
-</ul><p>Additional measurement functions:</p><ul><li><p>get_bearing: Wraps <a href="https://rdrr.io/pkg/geosphere/man/bearing.html" class="external-link">geosphere::bearing</a>.</p></li>
+</ul><p>Additional measurement functions:</p><ul><li><p><code>get_bearing()</code>: Wraps <code><a href="https://rdrr.io/pkg/geosphere/man/bearing.html" class="external-link">geosphere::bearing()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

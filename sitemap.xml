@@ -4,6 +4,9 @@
     <loc>https://elipousson.github.io/sfext/404.html</loc>
   </url>
   <url>
+    <loc>https://elipousson.github.io/sfext/LICENSE-text.html</loc>
+  </url>
+  <url>
     <loc>https://elipousson.github.io/sfext/LICENSE.html</loc>
   </url>
   <url>
@@ -25,13 +28,16 @@
     <loc>https://elipousson.github.io/sfext/reference/as_sf.html</loc>
   </url>
   <url>
-    <loc>https://elipousson.github.io/sfext/reference/bind_sf_col.html</loc>
+    <loc>https://elipousson.github.io/sfext/reference/bind_units_col.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/convert_dist_scale.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/convert_dist_units.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/sfext/reference/count_features.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/dist_unit_options.html</loc>
@@ -104,6 +110,12 @@
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/st_filter_ext.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/sfext/reference/st_join_ext.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/sfext/reference/st_make_grid_ext.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/st_misc.html</loc>

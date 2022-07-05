@@ -102,7 +102,8 @@ with <code><a href="make_filename.html">make_filename()</a></code> and features 
 <span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sheet <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  ask <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  key <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -197,6 +198,10 @@ the column name provided to key. Defaults to <code>FALSE</code>.</p></dd>
 <dt>key</dt>
 <dd><p>If ask is <code>TRUE</code>, a key is required to join the sheet data to the
 provided data.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Further args passed on to <code><a href="https://docs.ropensci.org/crul/reference/verb-POST.html" class="external-link">verb-POST</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
