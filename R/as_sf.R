@@ -264,7 +264,7 @@ as_sf_class <- function(x, class = NULL, crs = NULL, null.ok = TRUE, call = call
     "sfc" = as_sfc(x, crs = crs, ...),
     "bbox" = as_bbox(x, crs = crs, ...),
     "list" = as_sf_list(x, crs = crs, ...),
-    "df" = sf_to_df(x)
+    "df" = sf_to_df(x, crs = crs, ...)
   )
 }
 
