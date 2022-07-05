@@ -5,7 +5,8 @@
 #' optionally call [sf::st_intersection] and combines and unions the second
 #' object by default. [st_trim] is [st_erase] with flip set to `TRUE`.
 #'
-#' @param x,y sf objects
+#' @param x A sf, sfc, or bbox object to erase or trim.
+#' @param y A sf, sfc, or bbox object to use to erase or trim.
 #' @param flip If `TRUE`, use st_intersection; if `FALSE` use st_difference,
 #'   Default: `FALSE`
 #' @param union If `TRUE`, use [sf::st_combine] and [sf::st_union] on y before
