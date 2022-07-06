@@ -1,11 +1,20 @@
 test_that("sf_bbox functions work", {
   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
   nc_bbox <- sf::st_bbox(nc)
+
   expect_s3_class(sf_bbox_to_sf(nc_bbox), "sf")
   expect_s3_class(sf_bbox_to_sf(nc), "sf")
-  expect_match(sf_bbox_to_wkt(nc_bbox), "^POLYGON")
+
+  expect_equal(sf::st_crs(sf_bbox_transform(nc_bbox, crs = 4267)), sf::st_crs(nc_bbox))
+
+  expect_s3_class(sf_bbox_expand(nc_bbox, 50, 50), "bbox")
+  expect_s3_class(sf_bbox_contract(nc_bbox, 50, 50), "bbox")
+  expect_s3_class(sf_bbox_shift(nc_bbox, c(0, 10), c(0, 10)), "bbox")
+
   expect_s3_class(sf_bbox_to_lonlat_query(nc_bbox), "character")
+  expect_s3_class(sf_bbox_to_lonlat_query(nc_bbox, coords = c("lat", "lon")), "character")
   expect_error(sf_bbox_to_lonlat_query("nc_bbox"))
-  # Some functions also work with sf objects directly
+
+  expect_match(sf_bbox_to_wkt(nc_bbox), "^POLYGON")
   expect_length(sf_bbox_to_wkt(nc), 100)
 })
