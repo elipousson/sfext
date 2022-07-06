@@ -20,7 +20,7 @@
 #' [number_features] also supports a range of different numbering styles
 #' designed to match the standard enumeration options available in LaTeX.
 #'
-#' @param data Marker data
+#' @param x A sf or sfc object.
 #' @param num_style Style of enumeration, either "arabic", "alph", "Alph",
 #'   "roman", "Roman"
 #' @param num_start Starting number; defaults to 1.
@@ -33,7 +33,7 @@
 #' @export
 #' @importFrom dplyr mutate row_number everything
 #' @importFrom utils as.roman
-number_features <- function(data,
+number_features <- function(x,
                             col = NULL,
                             sort = "dist_xmin_ymax",
                             to = NULL,
@@ -43,12 +43,18 @@ number_features <- function(data,
                             num_start = 1,
                             suffix = NULL,
                             .id = "number") {
-  data <- has_same_name_col(data, col = .id)
+  check_sf(x, ext = TRUE)
+
+  if (!is_sf(x)) {
+    x <- as_sf(x)
+  }
+
+  x <- has_same_name_col(x, col = .id)
 
   if (!is.null(sort)) {
     data <-
       sort_features(
-        data,
+        x,
         col = col,
         sort = sort,
         to = to,
@@ -57,29 +63,29 @@ number_features <- function(data,
       )
   }
 
-  data <-
+  x <-
     dplyr::mutate(
-      data,
+      x,
       "{.id}" := dplyr::row_number() + (num_start - 1),
       .before = dplyr::everything()
     )
 
   num_style <- arg_match(num_style, c("arabic", "alph", "Alph", "roman", "Roman"))
 
-  data$number <-
+  x[[.id]] <-
     switch(num_style,
-      "arabic" = data$number,
-      "alph" = tolower(sapply(data[[.id]], int_to_alph)),
-      "Alph" = toupper(sapply(data[[.id]], int_to_alph)),
-      "roman" = tolower(utils::as.roman(data[[.id]])),
-      "Roman" = toupper(utils::as.roman(data[[.id]]))
+      "arabic" = x[[.id]],
+      "alph" = tolower(sapply(x[[.id]], int_to_alph)),
+      "Alph" = toupper(sapply(x[[.id]], int_to_alph)),
+      "roman" = tolower(utils::as.roman(x[[.id]])),
+      "Roman" = toupper(utils::as.roman(x[[.id]]))
     )
 
   if (!is.null(suffix)) {
-    data[[.id]] <- paste0(data[[.id]], suffix)
+    x[[.id]] <- paste0(x[[.id]], suffix)
   }
 
-  data
+  x
 }
 
 #' Adapted from https://stackoverflow.com/a/44274075
@@ -113,7 +119,7 @@ int_to_alph <- function(num, suffix = NULL, base = 26) {
 #'   "xmin", "ymin", "xmax", "ymax"
 #' @export
 #' @importFrom dplyr arrange desc across all_of
-sort_features <- function(data,
+sort_features <- function(x,
                           col = NULL,
                           sort = c("lon", "lat"),
                           to = NULL,
@@ -125,19 +131,19 @@ sort_features <- function(data,
   if (any(sort %in% c(latlon_opts, minmax_opts))) {
     sort <- arg_match(sort, choices = c(latlon_opts, minmax_opts), multiple = TRUE)
 
-    if ((sort %in% latlon_opts) && !all(has_name(data, sort))) {
-      data <-
+    if ((sort %in% latlon_opts) && !all(has_name(x, sort))) {
+      x <-
         get_coords(
-          data,
+          x,
           geometry = "centroid",
           crs = crs,
           keep_all = TRUE,
           drop = FALSE
         )
-    } else if ((sort %in% minmax_opts) && !all(has_name(data, sort))) {
-      data <-
+    } else if ((sort %in% minmax_opts) && !all(has_name(x, sort))) {
+      x <-
         get_minmax(
-          data,
+          x,
           crs = crs,
           keep_all = TRUE,
           drop = FALSE
@@ -158,17 +164,16 @@ sort_features <- function(data,
     if (is.null(to)) {
       # FIXME: Shouldn't this split the sort string first and then match to the options?
       sort <- arg_match(sort, dist_opts, multiple = FALSE)
-      to <-
-        strsplit(sort, "_")[[1]][2:3]
+      to <- strsplit(sort, "_")[[1]][2:3]
     } else if (any(sort %in% c(dist_opts))) {
       cli_warn(
-        "If the {.arg sort} and {.arg to} are both provided, the value of {.arg sort} ({.val {sort}}) is ignored."
+        "If {.arg sort} and {.arg to} are both provided, the value of {.arg sort} ({.val {sort}}) is ignored."
       )
     }
 
-    data <-
+    x <-
       get_dist(
-        data,
+        x,
         to = to,
         keep_all = TRUE,
         drop = FALSE
@@ -177,22 +182,22 @@ sort_features <- function(data,
     sort <- "dist"
   }
 
-
-  if (!has_name(data, sort)) {
-    cli_warn("The provided value for {.arg sort} ({.val {sort}}) can't be found in the data.")
-  }
+  cli_warn_ifnot(
+    "{.arg sort} column ({.val {sort}}) can't be found in {.arg x}.",
+    condition = has_name(x, sort)
+  )
 
   by_group <- FALSE
 
   if (!is.null(col)) {
-    data <- group_by_col(data, col = col)
+    x <- group_by_col(x, col = col)
     # FIXME: Is there a reason to allow grouping by column even if not numbering by group
     by_group <- TRUE
   }
 
   if (desc) {
-    return(dplyr::arrange(data, dplyr::desc(dplyr::across(dplyr::all_of(sort))), .by_group = by_group))
+    return(dplyr::arrange(x, dplyr::desc(dplyr::across(dplyr::all_of(sort))), .by_group = by_group))
   }
 
-  dplyr::arrange(data, dplyr::across(dplyr::all_of(sort)), .by_group = by_group)
+  dplyr::arrange(x, dplyr::across(dplyr::all_of(sort)), .by_group = by_group)
 }

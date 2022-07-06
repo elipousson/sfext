@@ -6,7 +6,7 @@
 \title{Sort and number features by coordinates or distance}
 \usage{
 number_features(
-  data,
+  x,
   col = NULL,
   sort = "dist_xmin_ymax",
   to = NULL,
@@ -19,7 +19,7 @@ number_features(
 )
 
 sort_features(
-  data,
+  x,
   col = NULL,
   sort = c("lon", "lat"),
   to = NULL,
@@ -28,7 +28,7 @@ sort_features(
 )
 }
 \arguments{
-\item{data}{Marker data}
+\item{x}{A sf or sfc object.}
 
 \item{col}{Group column name, Default: \code{NULL}}
 
