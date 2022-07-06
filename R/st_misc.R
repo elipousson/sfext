@@ -84,7 +84,11 @@ st_center <- function(x,
 #' @importFrom sf st_is_longlat st_inscribed_circle st_geometry st_dimension st_set_geometry
 #' @importFrom purrr discard
 st_square <- function(x, scale = 1, rotate = 0, inscribed = FALSE) {
-  x <- as_sf(x)
+  check_sf(x, ext = TRUE)
+
+  if (!is_sf(x)) {
+    x <- as_sfc(x)
+  }
 
   is_lonlat <- sf::st_is_longlat(x)
 
@@ -129,10 +133,16 @@ st_inscribed_square <- function(x, scale = 1, rotate = 0) {
 #' @export
 #' @importFrom sf st_inscribed_circle
 st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0) {
+  check_sf(x, ext = TRUE)
+
+  if (!is_sf(x)) {
+    x <- as_sfc(x)
+  }
+
   if (inscribed) {
     circle <-
       sf::st_inscribed_circle(
-        x = sf::st_union(as_sf(x)),
+        x = sf::st_union(x),
         dTolerance = dTolerance
       )
 
@@ -143,7 +153,7 @@ st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0) {
   center <- st_center(x, ext = FALSE)
 
   st_buffer_ext(
-    x = center,
+    x = as_sf(center),
     dist = radius * scale
   )
 }
