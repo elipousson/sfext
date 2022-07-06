@@ -3,7 +3,7 @@ select_unit_options <-
   c(
     "arc_degree", "arc_minute", "arc_second", "cm", "m", "metre", "meter", "meters", "km", "kilometer", "kilometers",
     "inch", "in", "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile", "radian",
-    "mm", "millimeter", "millimeters", "millimetre", "millimetres"
+    "mm", "millimeter", "millimeters", "millimetre", "millimetres", "US_survey_foot", "US_survey_feet", "US_survey_yard", "US_survey_mile", "US_statute_mile"
   )
 
 add_metric_units <-
@@ -77,7 +77,7 @@ area_unit_options <-
     "international_yard", "international_mile", "kilometer", "centimeter", "m", "in",
     "ft", "yd", "mi", "km", "cm", "metre", "inch", "foot", "yard", "mile", "kilometre",
     "centimetre", "international_feet", "kilometers", "centimeters", "feet", "kilometres",
-    "centimetres"
+    "centimetres", "US_survey_foot", "US_survey_feet", "US_survey_yard", "US_survey_mile", "US_statute_mile"
   ), "^2"), "hectare", "hectares", "acre", "acres", "acre_foot", "acre_feet")
 
 usethis::use_data(
