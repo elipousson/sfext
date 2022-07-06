@@ -30,6 +30,7 @@ Imports:
     tidyselect,
     units
 Suggests: 
+    covr,
     esri2sf (>= 0.1.1),
     exiftoolr,
     geojsonsf,
