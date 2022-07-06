@@ -65,7 +65,7 @@
 read_sf_ext <- function(..., bbox = NULL) {
   params <- list2(...)
 
-  read_sf_fn <-
+  type <-
     dplyr::case_when(
       !is.null(params$package) ~ "pkg",
       !is.null(params$url) ~ "url",
@@ -78,11 +78,11 @@ read_sf_ext <- function(..., bbox = NULL) {
     c("The parameters provided can't be matched to a function.",
       "i" = "You must provide a {.arg url}, {.arg path}, {.arg package}, or {.arg dsn} argument."
     ),
-    condition = (read_sf_fn != "missing")
+    condition = (type != "missing")
   )
 
   read_sf_fn <-
-    switch(read_sf_fn,
+    switch(type,
       "path" = read_sf_path,
       "pkg" = read_sf_pkg,
       "url" = read_sf_url,
@@ -93,7 +93,7 @@ read_sf_ext <- function(..., bbox = NULL) {
     modify_fn_fmls(
       params = params,
       fn = read_sf_fn,
-      missing = TRUE
+      keep_missing = TRUE
     )
 
   exec(read_sf_fn, !!!args)
