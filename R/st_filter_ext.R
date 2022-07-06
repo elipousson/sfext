@@ -64,6 +64,8 @@ st_filter_ext <- function(x,
     )
   }
 
+  y <- st_transform_ext(y, crs = x)
+
   type <-
     dplyr::case_when(
       crop ~ "crop",
@@ -76,7 +78,7 @@ st_filter_ext <- function(x,
     x <-
       sf::st_filter(
         x,
-        st_transform_ext(y, crs = x),
+        y,
         ...,
         .predicate = .predicate
       )
