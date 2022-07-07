@@ -23,5 +23,5 @@ applying difference/intersection, Default: \code{FALSE}}
 \description{
 An extended version of \link[sf:geos_binary_ops]{sf::st_difference} that uses the flip parameter to
 optionally call \link[sf:geos_binary_ops]{sf::st_intersection} and combines and unions the second
-object by default. \link{st_trim} is \link{st_erase} with flip set to \code{TRUE}.
+object by default. \link{st_trim} is \link{st_erase} with \code{flip = TRUE}.
 }

@@ -3,7 +3,7 @@
 #'
 #' An extended version of [sf::st_difference] that uses the flip parameter to
 #' optionally call [sf::st_intersection] and combines and unions the second
-#' object by default. [st_trim] is [st_erase] with flip set to `TRUE`.
+#' object by default. [st_trim] is [st_erase] with `flip = TRUE`.
 #'
 #' @param x A sf, sfc, or bbox object to erase or trim.
 #' @param y A sf, sfc, or bbox object to use to erase or trim.
@@ -20,8 +20,6 @@ st_erase <- function(x, y, flip = FALSE, union = TRUE) {
     x <- as_sf(x)
   }
 
-  check_sf(y, ext = TRUE)
-
   is_lonlat <- sf::st_is_longlat(x)
 
   if (is_lonlat) {
@@ -29,11 +27,18 @@ st_erase <- function(x, y, flip = FALSE, union = TRUE) {
     x <- st_transform_ext(x, crs = 3857)
   }
 
+  x <- st_make_valid_ext(x)
+
+  check_sf(y, ext = TRUE)
+
   y <- st_transform_ext(y, crs = x, class = "sfc")
 
   if (union) {
-    y <- sf::st_union(sf::st_combine(y))
+    # FIXME: Is this identical to sf::st_union(sf::st_combine(y)) ?
+    y <- sf::st_combine(sf::st_union(y))
   }
+
+  y <- st_make_valid_ext(y)
 
   if (flip) {
     x <- suppressWarnings(sf::st_intersection(x, y))
@@ -58,4 +63,13 @@ st_trim <- function(x, y, union = TRUE) {
     flip = TRUE,
     union = union
   )
+}
+
+#' @noRd
+st_make_valid_ext <- function(x, ...) {
+  if (all(sf::st_is_valid(x))) {
+    return(x)
+  }
+
+  sf::st_make_valid(x, ...)
 }
