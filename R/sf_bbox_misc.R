@@ -176,11 +176,7 @@ sf_bbox_diagdist <- function(bbox, units = NULL, drop = TRUE) {
 #' @export
 #' @importFrom sf st_crs st_transform st_bbox
 sf_bbox_transform <- function(bbox, crs = NULL) {
-  if (is.null(crs)) {
-    return(bbox)
-  }
-
-  if (is_same_crs(bbox, crs)) {
+  if (is.null(crs) | is_same_crs(bbox, crs)) {
     return(bbox)
   }
 
