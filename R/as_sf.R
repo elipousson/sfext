@@ -1,6 +1,6 @@
 #' Convert an object to a simple feature or bounding box object
 #'
-#' Both functions will pass a NULL value without returning an error. If a POINT
+#' Both functions will pass a `NULL` value without returning an error. If a POINT
 #' or MULTIPOINT object is passed to [as_bbox] a 0.00000001 meter buffer is
 #' applied.
 #'
@@ -53,7 +53,7 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
       "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
       "sp" = sf::st_as_sf(x, ...),
       "data.frame" = df_to_sf(x, ...),
-      "address" = address_to_sf(x, ...) # FIXME: is there a reason why this doesn't pass the ... parameters?
+      "address" = address_to_sf(x, ...)
     )
 
   if (!is.null(sf_col)) {

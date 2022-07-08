@@ -51,7 +51,7 @@ provided.}
 \item{data}{Data that can be converted to sf, sfc, bbox or a sf list object.}
 }
 \description{
-Both functions will pass a NULL value without returning an error. If a POINT
+Both functions will pass a \code{NULL} value without returning an error. If a POINT
 or MULTIPOINT object is passed to \link{as_bbox} a 0.00000001 meter buffer is
 applied.
 }
