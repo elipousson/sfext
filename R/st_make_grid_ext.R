@@ -111,7 +111,7 @@ st_make_grid_ext <- function(x,
       )
   }
 
-  return(as_crs(grid, crs = crs))
+  sf_transform(grid, crs = crs)
 }
 
 #' Get parameters for make_location_grid
