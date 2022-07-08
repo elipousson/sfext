@@ -10,6 +10,7 @@ reference:
 - title: Check and convert sf, sfc, and bbox objects
   contents:
   - '`is_sf`'
+  - '`check_sf`'
   - '`is_geom_type`'
   - starts_with("as_point")
   - starts_with("as_sf")
