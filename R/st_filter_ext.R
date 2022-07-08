@@ -21,12 +21,13 @@ st_filter_ext <- function(x,
                           crs = NULL,
                           .predicate = sf::st_intersects,
                           null.ok = TRUE,
+                          list.ok = TRUE,
                           ...) {
   if (is.null(y) && null.ok) {
     return(x)
   }
 
-  if (is_sf_list(x, ext = TRUE)) {
+  if (is_sf_list(x, ext = TRUE) && list.ok) {
     x <-
       purrr::map(
         x,
@@ -53,10 +54,6 @@ st_filter_ext <- function(x,
     x <- as_sfc(x)
   }
 
-  if (is_bbox(y)) {
-    y <- as_sfc(y)
-  }
-
   if (erase) {
     cli_warn_ifnot(
       "{.arg erase} is ignored if {.arg trim} or {.arg crop} are {.val TRUE}.",
@@ -74,15 +71,21 @@ st_filter_ext <- function(x,
       TRUE ~ "filter"
     )
 
-  if (!crop) {
-    x <-
-      sf::st_filter(
-        x,
-        y,
-        ...,
-        .predicate = .predicate
-      )
+  if (crop) {
+    y <- sf::st_bbox(y)
   }
+
+  if (is_bbox(y)) {
+    y <- as_sfc(y)
+  }
+
+  x <-
+    sf::st_filter(
+      x,
+      y,
+      ...,
+      .predicate = .predicate
+    )
 
   x <-
     switch(type,
@@ -92,5 +95,5 @@ st_filter_ext <- function(x,
       "filter" = x
     )
 
-  as_crs(x, crs = crs)
+  sf_transform(x, crs = crs)
 }
