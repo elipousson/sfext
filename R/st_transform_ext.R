@@ -23,47 +23,58 @@
 st_transform_ext <- function(x,
                              crs = NULL,
                              class = NULL,
-                             rotate = 0) {
-  if (is_sf_list(x, ext = TRUE)) {
-    return(
-      purrr::map(
-        x,
-        ~ st_transform_ext(
-          x = .x,
-          crs = crs,
-          class = class,
-          rotate = rotate
-        )
-      )
+                             rotate = 0,
+                             null.ok = FALSE,
+                             list.ok = TRUE) {
+  check_sf(x, ext = TRUE, null.ok = null.ok, list.ok = list.ok)
+
+  type <-
+    dplyr::case_when(
+      is.null(x) ~ "null_x",
+      is.null(crs) && is.null(class) ~ "null_crs",
+      is.null(crs) && !is.null(class) ~ "as_class",
+      is_sf_list(x, ext = TRUE) ~ "list",
+      rotate != 0 ~ "omerc",
+      is_same_crs(x, crs) ~ "same_crs",
+      is_bbox(x) ~ "bbox",
+      is_sf(x, ext = TRUE) ~ "sf"
     )
+
+  if (type %in% c("null_x", "null_crs")) {
+    return(x)
   }
 
-  check_sf(x, ext = TRUE)
+  x <-
+    switch(type,
+      "as_class" = x,
+      "same_crs" = x,
+      "list" = purrr::map(x, ~ st_transform_ext(.x, crs, class, rotate)),
+      "bbox" = sf_bbox_transform(x, crs = crs),
+      "omerc" = st_omerc(x, rotate = rotate),
+      "sf" = sf_transform(x, crs = crs)
+    )
 
-  if (rotate != 0) {
-    crs <- NULL
-    x <- st_omerc(x, rotate = rotate)
+  as_sf_class(x, class = class)
+}
+
+#' Helper function for sf and sfc objects
+#'
+#' @noRd
+sf_transform <- function(x, crs = NULL, null.ok = TRUE, ...) {
+  if ((is.null(crs) && null.ok) | is_same_crs(x, crs)) {
+    return(x)
   }
 
-  if (is.null(crs) || is_same_crs(x = x, y = crs)) {
-    return(as_sf_class(x, class = class))
+  if (is.na(sf::st_crs(x))) {
+    sf::st_crs(x) <- crs
+    return(x)
   }
 
-  # if x has a different crs than the sf object passed to crs
-  # FIXME: try incorporating try_fetch here
   if (is_sf(crs, ext = TRUE)) {
     crs <- sf::st_crs(x = crs)
   }
 
-  if (is_bbox(x)) {
-    # If x is a bbox
-    x <- sf_bbox_transform(bbox = x, crs = crs)
-  } else {
-    # If x is an sf or sfc object
-    x <- sf::st_transform(x = x, crs = crs)
-  }
-
-  as_sf_class(x, class = class)
+  sf::st_transform(x, crs, ...)
 }
 
 #' @name st_transform_omerc

@@ -19,4 +19,16 @@ test_that("st_transform_ext works", {
   expect_error(
     st_transform_ext(x = "A")
   )
+
+  # Check sf_transform helper
+  expect_identical(
+    sf_transform(nc, crs = NULL),
+    nc
+  )
+
+  expect_identical(
+    sf_transform(nc, crs = nc),
+    nc
+  )
+
 })
