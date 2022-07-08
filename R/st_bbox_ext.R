@@ -29,12 +29,13 @@ st_bbox_ext <- function(x = NULL,
                         unit = NULL,
                         crs = NULL,
                         class = "bbox",
-                        null.ok = TRUE) {
+                        null.ok = TRUE,
+                        list.ok = TRUE) {
   if (is.null(x) && null.ok) {
     return(x)
   }
 
-  if (is_sf_list(x, ext = TRUE)) {
+  if (is_sf_list(x, ext = TRUE) && list.ok) {
     bbox_list <-
       purrr::map(
         x,
@@ -62,7 +63,7 @@ st_bbox_ext <- function(x = NULL,
     )
 
   # Transform crs of sf object
-  x <- as_crs(x, crs = crs)
+  x <- sf_transform(x, crs = crs)
 
   # Get aspect adjusted bbox
   bbox <-
@@ -80,8 +81,9 @@ st_bbox_ext <- function(x = NULL,
 #' @importFrom purrr map
 st_bbox_asp <- function(x = NULL,
                         asp = NULL,
-                        class = "bbox") {
-  if (is_sf_list(x, ext = TRUE)) {
+                        class = "bbox",
+                        list.ok = TRUE) {
+  if (is_sf_list(x, ext = TRUE) && list.ok) {
     return(
       purrr::map(
         x,

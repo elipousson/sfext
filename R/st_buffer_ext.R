@@ -36,8 +36,9 @@ st_buffer_ext <- function(x,
                           unit = "meter",
                           dist_limits = NULL,
                           single_side = FALSE,
+                          list.ok = TRUE,
                           ...) {
-  if (is_sf_list(x, ext = TRUE)) {
+  if (is_sf_list(x, ext = TRUE) && list.ok) {
     return(
       purrr::map(
         x,
