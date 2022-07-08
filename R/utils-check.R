@@ -16,8 +16,9 @@ check_null <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, null.req 
 
 check_character <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, ...) {
   check_null(x, arg, null.ok)
+  null.ok <- is.null(x) && null.ok
 
-  if (is.character(x)) {
+  if (is.character(x) | null.ok) {
     invisible(return(TRUE))
   }
 
@@ -31,8 +32,9 @@ check_character <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, ...)
 
 check_len <- function(x = NULL, len = 1, arg = caller_arg(x), null.ok = FALSE, ...) {
   check_null(x, arg, null.ok)
+  null.ok <- is.null(x) && null.ok
 
-  if ((length(x) >= min(len)) && (length(x) <= max(len))) {
+  if (((length(x) >= min(len)) && (length(x) <= max(len))) | null.ok) {
     invisible(return(TRUE))
   }
 
@@ -52,8 +54,9 @@ check_len <- function(x = NULL, len = 1, arg = caller_arg(x), null.ok = FALSE, .
 
 check_grepl <- function(x = NULL, pattern = NULL, arg = caller_arg(x), null.ok = FALSE, ignore.case = FALSE, perl = FALSE, message = NULL, ...) {
   check_null(x, arg, null.ok)
+  null.ok <- is.null(x) && null.ok
 
-  if (grepl(pattern, x, ignore.case = ignore.case, perl = perl)) {
+  if (grepl(pattern, x, ignore.case = ignore.case, perl = perl) | null.ok) {
     invisible(return(TRUE))
   }
 
@@ -65,8 +68,9 @@ check_grepl <- function(x = NULL, pattern = NULL, arg = caller_arg(x), null.ok =
 
 check_starts_with <- function(x = NULL, string = NULL, arg = caller_arg(x), null.ok = FALSE, ignore.case = FALSE, perl = FALSE, message = NULL, ...) {
   check_character(x, arg, null.ok)
+  null.ok <- is.null(x) && null.ok
 
-  if (all(grepl(paste0("^", string), x, ignore.case = ignore.case, perl = perl))) {
+  if (all(grepl(paste0("^", string), x, ignore.case = ignore.case, perl = perl)) | null.ok) {
     invisible(return(TRUE))
   }
 
@@ -81,8 +85,9 @@ check_starts_with <- function(x = NULL, string = NULL, arg = caller_arg(x), null
 
 check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NULL, call = caller_env(), ...) {
   check_null(x, arg, null.ok, FALSE, call)
+  null.ok <- is.null(x) && null.ok
 
-  if (is_logical(x, n = n)) {
+  if (is_logical(x, n = n) | null.ok) {
     invisible(return(TRUE))
   }
 
@@ -95,7 +100,14 @@ check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NU
   )
 }
 
-#' @noRd
+#' Check if x is an `sf` object
+#'
+#' If x is an `sf` object invisibly return TRUE. If not, return an error with [cli::cli_abort]
+#'
+#' @inheritParams is_sf
+#' @inheritParams cli::cli_abort
+#' @inheritDotParams cli::cli_abort
+#' @export
 check_sf <- function(x, arg = caller_arg(x), null.ok = FALSE, ext = FALSE, call = caller_env(), ...) {
   check_null(x, arg, null.ok)
 
