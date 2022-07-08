@@ -34,7 +34,7 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
       is_sf_list(x) ~ "sf_list",
       is_raster(x) ~ "raster",
       is_sp(x) ~ "sp",
-      ext && is.data.frame(x) ~ "df",
+      ext && is.data.frame(x) ~ "data.frame",
       # FIXME: Is there any better way of testing an address than just confirming it is a character?
       ext && is.character(x) ~ "address"
     )
@@ -52,8 +52,8 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
       "sf_list" = dplyr::bind_rows(x),
       "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
       "sp" = sf::st_as_sf(x, ...),
-      "df" = df_to_sf(x, ...),
-      "address" = address_to_sf(x) # FIXME: is there a reason why this doesn't pass the ... parameters?
+      "data.frame" = df_to_sf(x, ...),
+      "address" = address_to_sf(x, ...) # FIXME: is there a reason why this doesn't pass the ... parameters?
     )
 
   if (!is.null(sf_col)) {
@@ -207,7 +207,7 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
       c("{.arg x} and {.arg nm} must be the same length.",
         "i" = "{.arg x} is length {.val {length(x)}}.",
         "i" = "{.arg nm} is length {.val {length(nm)}}."
-        ),
+      ),
       condition = length(nm) == length(x)
     )
 
@@ -237,40 +237,36 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
 #' @param data Data that can be converted to sf, sfc, bbox or a sf list object.
 #' @param class A class to convert data to; defaults to NULL (which returns
 #'   "sf")
-#' @param crs coordinate reference system
 #' @param ... Additional parameters passed to [as_sf], [as_sfc], [as_bbox], or
 #'   [as_sf_list]
 #' @name as_sf_class
 #' @rdname as_sf
 #' @export
-as_sf_class <- function(x, class = NULL, crs = NULL, null.ok = TRUE, call = caller_env(), ...) {
+as_sf_class <- function(x, class = NULL, null.ok = TRUE, call = caller_env(), ...) {
   if (is.null(class) && null.ok) {
-    return(as_crs(x, crs))
+    return(x)
   }
 
   class <-
-    arg_match(class, c("sf", "sfc", "bbox", "list", "df"), error_call = call)
+    arg_match(class, c("sf", "sfc", "bbox", "list", "data.frame"), error_call = call)
 
   if (is_class(x, class)) {
-    return(as_crs(x, crs))
+    return(x)
   }
 
-  if (class == "df") {
-    cli_abort_ifnot(
-      "{.arg x} must be an {.arg sf} object if {.arg class} is {.val df}.",
-      condition = is_sf(x)
-    )
-  }
+  cli_abort_ifnot(
+    "{.arg x} must be an {.arg sf} object if {.arg class} is {.val data.frame}.",
+    condition = (class != "data.frame") | (is_sf(x) && class == "data.frame")
+  )
 
   switch(class,
-    "sf" = as_sf(x, crs = crs, ...),
-    "sfc" = as_sfc(x, crs = crs, ...),
-    "bbox" = as_bbox(x, crs = crs, ...),
-    "list" = as_sf_list(x, crs = crs, ...),
-    "df" = sf_to_df(x, crs = crs, ...)
+    "sf" = as_sf(x, ...),
+    "sfc" = as_sfc(x, ...),
+    "bbox" = as_bbox(x, ...),
+    "list" = as_sf_list(x, ...),
+    "data.frame" = sf_to_df(x, ...)
   )
 }
-
 
 #' Convert an sf, numeric, or other object to a POINT (sfg) or POINT, MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object
 #'
@@ -510,7 +506,7 @@ pluck_len1 <- function(x) {
 #' Get a list of start and end points for an object
 #'
 #' @noRd
-as_start_end_points <- function(x, crs = 4326, class = "df") {
+as_start_end_points <- function(x, crs = 4326, class = "data.frame") {
   is_pkg_installed("lwgeom")
 
   if (!is_line(x)) {
@@ -523,7 +519,7 @@ as_start_end_points <- function(x, crs = 4326, class = "df") {
       end = as_sf(lwgeom::st_endpoint(x))
     )
 
-  if (!is.null(class) && class == "df") {
+  if (!is.null(class) && class == "data.frame") {
     pts$start <- sf_to_df(pts$start, crs = crs)
     pts$end <- sf_to_df(pts$end, crs = crs)
   }

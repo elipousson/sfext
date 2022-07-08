@@ -37,8 +37,8 @@ test_that("is_sf and as_sf functions work", {
   expect_s3_class(as_sf_class(nc, class = "bbox"), "bbox")
   expect_type(as_sf_class(nc, class = "list"), "list")
   expect_type(as_sf_class(nc_col, col = "col", class = "list"), "list")
-  expect_s3_class(as_sf_class(nc, class = "df"), "data.frame")
-  expect_error(as_sf_class(bbox, class = "df"))
+  expect_s3_class(as_sf_class(nc, class = "data.frame"), "data.frame")
+  expect_error(as_sf_class(bbox, class = "data.frame"))
 
   expect_true(is_same_crs(nc, nc))
   expect_true(is_same_crs(nc, bbox))
