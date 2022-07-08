@@ -1,6 +1,7 @@
 #' Spatial join with support for simple feature lists
 #'
-#' @name st_join_ext
+#' Wrapper for [sf::st_join] that works with sf lists.
+#'
 #' @param boundary An sf object with a column named "name" or a list of sf
 #'   objects where all items in the list have a "name" column.
 #' @param join geometry predicate function; defaults to `NULL`, set to
@@ -11,7 +12,6 @@
 #' @param .id Column name with the values that should be added as a column to
 #'   the input `sf` object.
 #' @export
-#' @importFrom rlang has_name
 #' @importFrom dplyr rename select
 #' @importFrom sf st_join
 st_join_ext <- function(x,
@@ -20,7 +20,11 @@ st_join_ext <- function(x,
                         .id = "name",
                         join = NULL,
                         ...) {
-  check_sf(x)
+  check_sf(x, ext = TRUE)
+
+  if (is_bbox(x)) {
+    x <- as_sfc(x)
+  }
 
   join <- set_join_by_geom_type(y, join = join)
 
@@ -57,8 +61,10 @@ st_join_ext <- function(x,
       x <- suppressWarnings(sf::st_join(x, y, join = join))
     }
 
+    return(x)
+
+    # FIXME: Everything below here isn't working
     if (length(y_list) == 1) {
-      # FIXME: This isn't working
       col <- names(y_list)
 
       x <-
