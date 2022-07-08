@@ -1,72 +1,89 @@
-
-#' Count simple feature objects
+#' Count simple features based on relationship with a second simple feature object
 #'
-#' Count the number of simple feature objects within a geometry or by some
-#' attribute contained in both the data and the corresponding boundary geometry.
+#' Use [st_join_ext] and [dplyr::count] to count features in x based on their
+#' spatial relationship with y.
 #'
-#' @param data Data frame or `sf` object, Default: `NULL`
-#' @param boundaries Boundary data as an `sf` object, Default: `NULL`
-#' @param by Character string to join data by if data is not an `sf` object,
-#'   Default: `NULL`
-#' @param join The join function used by [sf::st_join()] if data is an `sf`
-#'   object, Default: [sf::st_intersects]
-#' @param .id Count column, Default: "count"
-#' @param ... Additional parameters (not in use)
-#' @rdname count_features
+#' @param x Data frame or `sf` object, Default: `NULL`
+#' @param y Length 1 named `sf` list (name of y is used as count if count is
+#'   `NULL`) or a `sf` object if nm is not `NULL`. y must include a column name
+#'   matching the value of .id. If y is `NULL`, count is required. Default: `NULL`
+#' @inheritParams st_join_ext
+#' @inheritParams df_to_sf
+#' @param count Name of column to count. If `NULL`, count is set to `names(y)`
+#'   (assuming y is a length 1 named `sf` list).
+#' @inheritParams dplyr::count
+#' @param geometry If "y", replace x geometry with y geometry joining based on
+#'   by. If by is `NULL`, by is set to the same value as count.
 #' @export
-#' @importFrom sf st_intersects st_nearest_feature st_drop_geometry st_join st_as_sf
-#' @importFrom purrr map_dfr
-#' @importFrom dplyr pull left_join
+#' @importFrom sf st_drop_geometry
+#' @importFrom dplyr count rename
 count_features <- function(x = NULL,
                            y = NULL,
+                           nm = "data",
                            join = NULL,
+                           .id = "name",
                            by = NULL,
-                           .id = "count",
-                           col = NULL,
-                           ...) {
-  if (is_sf(x)) {
-    check_sf(x)
-
-    if (is_sf(y)) {
-      y <- as_sf_list(y, col = col)
-    }
-
-    join <- set_join_by_geom_type(x, join = join)
-
-    x <-
-      purrr::map_dfr(
-        # Taken from write_exif_keywords
-        y,
-        ~ sf::st_drop_geometry(
-          sf::st_join(
-            x,
-            dplyr::select(.x, geometry, id),
-            join = join
-          )
-        ),
-        .id = .id
-      )
-
-    return(count(x, .id))
-  } else if (is.data.frame(x) && is_sf(y)) {
-    if (class(dplyr::pull(x, by)) != class(dplyr::pull(y, by))) {
-
-    }
-
-    # If features is count data
-    # If boundary data is provided
-    data <-
-      dplyr::left_join(
-        data,
-        boundaries,
-        by = by
-      )
-
-    data <- sf::st_as_sf(data)
-    data <- rename_sf_col(data)
-
-    # Return boundary data geometry
+                           count = NULL,
+                           sort = FALSE,
+                           name = NULL,
+                           geometry = "y") {
+  if (!is_sf_list(y, null.ok = TRUE) && !is.null(nm)) {
+    y <- as_sf_list(y, nm = nm, crs = x)
   }
 
-  data
+  cli_abort_ifnot(
+    "{.arg y} must be an sf object (if {.arg nm} is provided), an sf list, or NULL (if {.arg count} is provided).",
+    condition = is_sf_list(y) | !is.null(count),
+  )
+
+  if (is_sf(x) && is_sf_list(y)) {
+    cli_abort_ifnot(
+      "{.arg y} must be length 1 if it is an sf list.",
+      condition = (length(y) == 1)
+    )
+
+    x <- st_join_ext(x, y, join = join, .id = .id)
+
+    if (is.null(count)) {
+      count <- names(y)
+    }
+
+    # Convert y back into a sf object
+    y <- as_sf(y)
+  }
+
+  cli_abort_ifnot(
+    "{.arg count} must be a length 1 character vector.",
+    condition = is.character(count) && (length(count) == 1)
+  )
+
+  x <-
+    dplyr::count(
+      x,
+      .data[[count]],
+      wt = NULL,
+      sort = sort,
+      name = name
+    )
+
+  geometry <- arg_match(geometry, c("y", "x", "drop"))
+
+  if (!is_sf(y) | (geometry == "x")) {
+    return(x)
+  }
+
+  if (is_sf(x)) {
+    x <- sf::st_drop_geometry(x)
+  }
+
+  if (geometry == "drop") {
+    return(x)
+  }
+
+  if (is.null(by)) {
+    y <- dplyr::rename(y, "{count}" := .id)
+    by <- count
+  }
+
+  join_sf_to_df(x = x, y = y, by = by)
 }
