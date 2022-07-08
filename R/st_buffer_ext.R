@@ -28,6 +28,7 @@
 #'   right-hand side, positive on the left.
 #' @param ... additional parameters passed to [sf::st_buffer()]
 #' @export
+#' @importFrom purrr map
 #' @importFrom sf st_is_longlat st_crs st_transform st_bbox st_buffer
 #' @importFrom units set_units drop_units
 st_buffer_ext <- function(x,
@@ -42,7 +43,7 @@ st_buffer_ext <- function(x,
     return(
       purrr::map(
         x,
-        ~ st_buffer_ext(x = .x, dist = dist, diag_ratio = diag_ratio, unit = unit, dist_limits = dist_limits, single_side = single_side)
+        ~ st_buffer_ext(.x, dist, diag_ratio, unit, dist_limits, single_side)
       )
     )
   }
