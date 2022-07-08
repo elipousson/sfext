@@ -22,7 +22,7 @@
 #' @importFrom dplyr bind_rows rename
 as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
   if (is_sf(x)) {
-    return(as_crs(x, crs = crs))
+    return(sf_transform(x, crs = crs))
   }
 
   # Convert objects to sf if needed
@@ -60,7 +60,7 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
     sf::st_geometry(x) <- sf_col
   }
 
-  as_crs(x, crs = crs)
+  sf_transform(x, crs = crs)
 }
 
 #' @name as_bbox
@@ -105,7 +105,7 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
 #' @importFrom sf st_geometry st_as_sfc
 as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
   if (is_sfc(x)) {
-    return(as_crs(x, crs = crs))
+    return(sf_transform(x, crs = crs))
   }
 
   x_is <-
@@ -122,33 +122,7 @@ as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
       "other" = sf::st_geometry(as_sf(x, ext = ext, ...))
     )
 
-  as_crs(x, crs = crs)
-}
-
-#' Lightweight alternative to st_transform_ext that assumes x is a sf or sfc
-#' object
-#'
-#' @noRd
-#' @importFrom sf st_crs st_transform
-as_crs <- function(x, crs = NULL, null.ok = TRUE, ...) {
-  if ((is.null(crs) && null.ok) | is_same_crs(x, crs)) {
-    return(x)
-  }
-
-  if (is_sf(crs, ext = TRUE)) {
-    crs <- sf::st_crs(crs)
-  }
-
-  if (is.na(sf::st_crs(x))) {
-    sf::st_crs(x) <- crs
-    return(x)
-  }
-
-  if (is_bbox(x)) {
-    return(sf_bbox_transform(x, crs = crs))
-  }
-
-  sf::st_transform(x, crs = crs, ...)
+  sf_transform(x, crs = crs)
 }
 
 #' @name as_sf_list
@@ -169,7 +143,6 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
   check_len(col, len = 1, null.ok = TRUE)
 
   if (!is_sf_list(x, ext = TRUE)) {
-
     # data frame with nested list column named data
     # produced by group_nest w/ keep_all = TRUE
     if (is.data.frame(x) && (has_name(x, "data")) && is_sf_list(x$data)) {
@@ -214,22 +187,7 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
     names(x) <- nm
   }
 
-  if (!is.null(crs)) {
-    if (is_sf(crs, ext = TRUE)) {
-      crs <- sf::st_crs(crs)
-    }
-
-    # FIXME: This sets up the possibility of an error if the sf list is bounding
-    # boxes
-    # TODO: This could be replaced by
-    # x <- st_transform_ext(x, crs = crs)
-
-    if (is_sf_list(x)) {
-      x <- purrr::map(x, ~ as_crs(.x, crs = crs))
-    }
-  }
-
-  x
+  st_transform_ext(x, crs = crs)
 }
 
 #' Convert data to a different class
