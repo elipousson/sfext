@@ -14,7 +14,8 @@ count_features(
   count = NULL,
   sort = FALSE,
   name = NULL,
-  geometry = "y"
+  geometry = "y",
+  ...
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ it will error, and require you to specify the name.}
 
 \item{geometry}{If "y", replace x geometry with y geometry joining based on
 by. If by is \code{NULL}, by is set to the same value as count.}
+
+\item{...}{Additional parameters passed to \link{st_join_ext}}
 }
 \description{
 Use \link{st_join_ext} and \link[dplyr:count]{dplyr::count} to count features in x based on their

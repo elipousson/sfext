@@ -17,6 +17,8 @@ the input \code{sf} object.}
 \link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON
 objects or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}
 
+\item{...}{Additional parameters passed to \link[sf:st_join]{sf::st_join}}
+
 \item{boundary}{An sf object with a column named "name" or a list of sf
 objects where all items in the list have a "name" column.}
 }

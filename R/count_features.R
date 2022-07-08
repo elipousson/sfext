@@ -14,6 +14,7 @@
 #' @inheritParams dplyr::count
 #' @param geometry If "y", replace x geometry with y geometry joining based on
 #'   by. If by is `NULL`, by is set to the same value as count.
+#' @param ... Additional parameters passed to [st_join_ext]
 #' @export
 #' @importFrom sf st_drop_geometry
 #' @importFrom dplyr count rename
@@ -26,7 +27,8 @@ count_features <- function(x = NULL,
                            count = NULL,
                            sort = FALSE,
                            name = NULL,
-                           geometry = "y") {
+                           geometry = "y",
+                           ...) {
   if (!is_sf_list(y, null.ok = TRUE) && !is.null(nm)) {
     y <- as_sf_list(y, nm = nm, crs = x)
   }
@@ -42,7 +44,7 @@ count_features <- function(x = NULL,
       condition = (length(y) == 1)
     )
 
-    x <- st_join_ext(x, y, join = join, .id = .id)
+    x <- st_join_ext(x, y, join = join, .id = .id, ...)
 
     if (is.null(count)) {
       count <- names(y)

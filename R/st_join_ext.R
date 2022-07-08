@@ -11,6 +11,7 @@
 #'   already.
 #' @param .id Column name with the values that should be added as a column to
 #'   the input `sf` object.
+#' @param ... Additional parameters passed to [sf::st_join]
 #' @export
 #' @importFrom dplyr rename select
 #' @importFrom sf st_join
