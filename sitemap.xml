@@ -31,6 +31,9 @@
     <loc>https://elipousson.github.io/sfext/reference/bind_units_col.html</loc>
   </url>
   <url>
+    <loc>https://elipousson.github.io/sfext/reference/check_sf.html</loc>
+  </url>
+  <url>
     <loc>https://elipousson.github.io/sfext/reference/convert_dist_scale.html</loc>
   </url>
   <url>
@@ -122,6 +125,9 @@
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/st_transform_ext.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/sfext/reference/st_union_ext.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/standard_scales.html</loc>

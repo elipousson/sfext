@@ -176,25 +176,13 @@ for x.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Create a line between two counties</span></span></span>
 <span class="r-in"><span><span class="va">nc_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_point.html">as_line</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">30</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">nc</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (is.na(x)) NA_crs_ else if (inherits(x, "crs")) x else if (is.character(x)) {    if (grepl("+init=epsg:", x) &amp;&amp; sf_extSoftVersion()[["proj.4"]] &gt;=         "6.0.0" &amp;&amp; sf_extSoftVersion()[["proj.4"]] &lt; "6.3.1") {        x = strsplit(x, " ")[[1]]        if (length(x) &gt; 1)             warning(paste("the following proj4string elements are ignored:",                 paste(x[-1], collapse = " "), "; remove the +init=epsg:XXXX to undo this"))        x = paste0("EPSG:", as.integer(substr(x[1], 12, 20)))    }    CPL_crs_from_input(x)} else stop(paste("cannot create a crs from an object of class",     class(x)), call. = FALSE):</span> the condition has length &gt; 1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get length and bearing of the line</span></span></span>
 <span class="r-in"><span><span class="fu">get_length</span><span class="op">(</span><span class="va">nc_line</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 1 field</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -81.49823 ymin: 36.02862 xmax: -78.87809 ymax: 36.4314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         length                       geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 239236.5 [m] LINESTRING (-81.49823 36.43...</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is_class(x, classes = classes, null.ok = null.ok):</span> object 'nc_line' not found</span>
 <span class="r-in"><span><span class="fu">get_bearing</span><span class="op">(</span><span class="va">nc_line</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 1 field</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -81.49823 ymin: 36.02862 xmax: -78.87809 ymax: 36.4314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    bearing                       geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 99.96725 LINESTRING (-81.49823 36.43...</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is_class(x, classes = "sfc", null.ok = null.ok):</span> object 'nc_line' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

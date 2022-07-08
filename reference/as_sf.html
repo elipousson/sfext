@@ -47,7 +47,7 @@ applied."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
     </div>
 
     <div class="ref-description section level2">
-    <p>Both functions will pass a NULL value without returning an error. If a POINT
+    <p>Both functions will pass a <code>NULL</code> value without returning an error. If a POINT
 or MULTIPOINT object is passed to as_bbox a 0.00000001 meter buffer is
 applied.</p>
     </div>
@@ -62,14 +62,7 @@ applied.</p>
 <span></span>
 <span><span class="fu">as_sf_list</span><span class="op">(</span><span class="va">x</span>, nm <span class="op">=</span> <span class="st">"data"</span>, col <span class="op">=</span> <span class="cn">NULL</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, clean_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">as_sf_class</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  class <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  null.ok <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">as_sf_class</span><span class="op">(</span><span class="va">x</span>, class <span class="op">=</span> <span class="cn">NULL</span>, null.ok <span class="op">=</span> <span class="cn">TRUE</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -84,7 +77,8 @@ sf object.</p></dd>
 
 
 <dt>crs</dt>
-<dd><p>coordinate reference system</p></dd>
+<dd><p>Coordinate reference system for <code>sf</code>, <code>bbox</code>, <code>sfc</code> or <code>sf</code> list
+object to return.</p></dd>
 
 
 <dt>sf_col</dt>
