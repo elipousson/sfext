@@ -147,7 +147,7 @@ read_sf_exif <- function(path = NULL,
       )
   }
 
-  data <- sort_features(data = data, sort = sort)
+  data <- sort_features(data, sort = sort)
 
   data <- df_to_sf(data, from_crs = 4326, crs = sf::st_crs(bbox))
 
