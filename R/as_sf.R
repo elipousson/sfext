@@ -166,17 +166,9 @@ as_crs <- function(x, crs = NULL, null.ok = TRUE, ...) {
 as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE) {
   check_null(x)
   check_character(col, null.ok = TRUE)
-  check_len(col)
+  check_len(col, len = 1, null.ok = TRUE)
 
-  stopifnot(
-    is.null(col) || (is.character(col) && (length(col) == 1)),
-    !is.null(x)
-  )
-
-  x_is_sf <- is_sf(x)
-  x_is_sf_list <- is_sf_list(x, ext = TRUE)
-
-  if (!x_is_sf_list) {
+  if (!is_sf_list(x, ext = TRUE)) {
 
     # data frame with nested list column named data
     # produced by group_nest w/ keep_all = TRUE
@@ -190,7 +182,7 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
       }
 
       x <- x$data
-    } else if (x_is_sf) {
+    } else if (is_sf(x)) {
       if (is.null(col)) {
         x <- list(x) # coercible sf object in list length 1
       } else {
@@ -211,6 +203,14 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
       nm <- janitor::make_clean_names(nm)
     }
 
+    cli_abort_ifnot(
+      c("{.arg x} and {.arg nm} must be the same length.",
+        "i" = "{.arg x} is length {.val {length(x)}}.",
+        "i" = "{.arg nm} is length {.val {length(nm)}}."
+        ),
+      condition = length(nm) == length(x)
+    )
+
     names(x) <- nm
   }
 
@@ -221,7 +221,10 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
 
     # FIXME: This sets up the possibility of an error if the sf list is bounding
     # boxes
-    if (x_is_sf || x_is_sf_list) {
+    # TODO: This could be replaced by
+    # x <- st_transform_ext(x, crs = crs)
+
+    if (is_sf_list(x)) {
       x <- purrr::map(x, ~ as_crs(.x, crs = crs))
     }
   }

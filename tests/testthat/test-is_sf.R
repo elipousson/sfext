@@ -8,8 +8,7 @@ test_that("is_sf and as_sf functions work", {
   expect_false(is_sf(bbox))
   expect_true(is_sf(bbox, ext = TRUE))
 
-  null_ok <- NULL
-  expect_true(is_sf(null_ok, ext = TRUE, null.ok = TRUE))
+  expect_true(is_sf(NULL, ext = TRUE, null.ok = TRUE))
 
   expect_true(is_sfc(sfc))
   expect_true(is_sf(sfc, ext = TRUE))
@@ -36,7 +35,7 @@ test_that("is_sf and as_sf functions work", {
 
   expect_s3_class(as_sf_class(nc, class = "sfc"), "sfc")
   expect_s3_class(as_sf_class(nc, class = "bbox"), "bbox")
-  expect_error(as_sf_class(nc, class = "list"))
+  expect_type(as_sf_class(nc, class = "list"), "list")
   expect_type(as_sf_class(nc_col, col = "col", class = "list"), "list")
   expect_s3_class(as_sf_class(nc, class = "df"), "data.frame")
   expect_error(as_sf_class(bbox, class = "df"))
