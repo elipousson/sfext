@@ -13,6 +13,7 @@ st_filter_ext(
   crs = NULL,
   .predicate = sf::st_intersects,
   null.ok = TRUE,
+  list.ok = TRUE,
   ...
 )
 }

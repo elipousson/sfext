@@ -14,10 +14,11 @@ st_bbox_ext(
   unit = NULL,
   crs = NULL,
   class = "bbox",
-  null.ok = TRUE
+  null.ok = TRUE,
+  list.ok = TRUE
 )
 
-st_bbox_asp(x = NULL, asp = NULL, class = "bbox")
+st_bbox_asp(x = NULL, asp = NULL, class = "bbox", list.ok = TRUE)
 }
 \arguments{
 \item{x}{An object sf, bbox, sfc, raster, or sp object or a data frame that

@@ -6,7 +6,14 @@
 \alias{st_omerc}
 \title{Transform or convert coordinates of a simple feature or bounding box object}
 \usage{
-st_transform_ext(x, crs = NULL, class = NULL, rotate = 0)
+st_transform_ext(
+  x,
+  crs = NULL,
+  class = NULL,
+  rotate = 0,
+  null.ok = FALSE,
+  list.ok = TRUE
+)
 
 st_omerc(x, rotate = 0)
 }

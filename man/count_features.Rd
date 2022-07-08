@@ -2,34 +2,52 @@
 % Please edit documentation in R/count_features.R
 \name{count_features}
 \alias{count_features}
-\title{Count simple feature objects}
+\title{Count simple features based on relationship with a second simple feature object}
 \usage{
 count_features(
   x = NULL,
   y = NULL,
+  nm = "data",
   join = NULL,
+  .id = "name",
   by = NULL,
-  .id = "count",
-  col = NULL,
-  ...
+  count = NULL,
+  sort = FALSE,
+  name = NULL,
+  geometry = "y"
 )
 }
 \arguments{
-\item{join}{The join function used by \code{\link[sf:st_join]{sf::st_join()}} if data is an \code{sf}
-object, Default: \link[sf:geos_binary_pred]{sf::st_intersects}}
+\item{x}{Data frame or \code{sf} object, Default: \code{NULL}}
 
-\item{by}{Character string to join data by if data is not an \code{sf} object,
-Default: \code{NULL}}
+\item{y}{Length 1 named \code{sf} list (name of y is used as count if count is
+\code{NULL}) or a \code{sf} object if nm is not \code{NULL}. y must include a column name
+matching the value of .id. If y is \code{NULL}, count is required. Default: \code{NULL}}
 
-\item{.id}{Count column, Default: "count"}
+\item{join}{geometry predicate function; defaults to \code{NULL}, set to
+\link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON
+objects or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}
 
-\item{...}{Additional parameters (not in use)}
+\item{.id}{Column name with the values that should be added as a column to
+the input \code{sf} object.}
 
-\item{data}{Data frame or \code{sf} object, Default: \code{NULL}}
+\item{by}{A character vector of variables to join by passed to
+\link[dplyr:mutate-joins]{dplyr::left_join}.}
 
-\item{boundaries}{Boundary data as an \code{sf} object, Default: \code{NULL}}
+\item{count}{Name of column to count. If \code{NULL}, count is set to \code{names(y)}
+(assuming y is a length 1 named \code{sf} list).}
+
+\item{sort}{If \code{TRUE}, will show the largest groups at the top.}
+
+\item{name}{The name of the new column in the output.
+
+If omitted, it will default to \code{n}. If there's already a column called \code{n},
+it will error, and require you to specify the name.}
+
+\item{geometry}{If "y", replace x geometry with y geometry joining based on
+by. If by is \code{NULL}, by is set to the same value as count.}
 }
 \description{
-Count the number of simple feature objects within a geometry or by some
-attribute contained in both the data and the corresponding boundary geometry.
+Use \link{st_join_ext} and \link[dplyr:count]{dplyr::count} to count features in x based on their
+spatial relationship with y.
 }

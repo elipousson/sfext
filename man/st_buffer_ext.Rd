@@ -12,6 +12,7 @@ st_buffer_ext(
   unit = "meter",
   dist_limits = NULL,
   single_side = FALSE,
+  list.ok = TRUE,
   ...
 )
 

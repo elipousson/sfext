@@ -16,14 +16,7 @@ as_sfc(x, crs = NULL, ext = TRUE, ...)
 
 as_sf_list(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE)
 
-as_sf_class(
-  x,
-  class = NULL,
-  crs = NULL,
-  null.ok = TRUE,
-  call = caller_env(),
-  ...
-)
+as_sf_class(x, class = NULL, null.ok = TRUE, call = caller_env(), ...)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that can
@@ -33,7 +26,8 @@ also convert a vector with xmin, ymin, xmax, and ymax values.
 column named "data" (typically created by using \code{\link[dplyr:group_nest]{dplyr::group_nest()}} on an
 sf object.}
 
-\item{crs}{coordinate reference system}
+\item{crs}{Coordinate reference system for \code{sf}, \code{bbox}, \code{sfc} or \code{sf} list
+object to return.}
 
 \item{sf_col}{A column name to use for the geometry column created by
 \link{as_sf}; defaults to "geometry".}

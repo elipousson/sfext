@@ -21,5 +21,5 @@ objects or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list cont
 objects where all items in the list have a "name" column.}
 }
 \description{
-Spatial join with support for simple feature lists
+Wrapper for \link[sf:st_join]{sf::st_join} that works with sf lists.
 }
