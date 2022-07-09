@@ -53,7 +53,16 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>col</dt>
+    <dl><dt>x</dt>
+<dd><p>A sf, sfc, or bbox object.</p></dd>
+
+
+<dt>y</dt>
+<dd><p>An sf object with a column named "name" or a list of sf
+objects where all items in the list have a "name" column.</p></dd>
+
+
+<dt>col</dt>
 <dd><p>Column name used to convert y into a <code>sf</code> list if it is not
 already.</p></dd>
 
@@ -71,11 +80,6 @@ objects or <a href="https://r-spatial.github.io/sf/reference/st_nearest_feature.
 
 <dt>...</dt>
 <dd><p>Additional parameters passed to <a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">sf::st_join</a></p></dd>
-
-
-<dt>boundary</dt>
-<dd><p>An sf object with a column named "name" or a list of sf
-objects where all items in the list have a "name" column.</p></dd>
 
 </dl></div>
 

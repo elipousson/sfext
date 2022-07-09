@@ -91,9 +91,19 @@ objects. If x is an <code>sf</code> list, additional parameters in ... will be i
 <code><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">sf::st_intersects()</a></code>; see details for <code><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">sf::st_filter()</a></code> for more options.</p></dd>
 
 
+<dt>geom_type</dt>
+<dd><p>Character string passed to type argument of <a href="is_geom_type.html">is_geom_type</a>
+to filter features to only those matching the specified geometry type.</p></dd>
+
+
 <dt>null.ok</dt>
 <dd><p>If y is <code>NULL</code> and null.ok is <code>TRUE</code>, x is returned without
 changes. Defaults to <code>TRUE</code>.</p></dd>
+
+
+<dt>list.ok</dt>
+<dd><p>If <code>TRUE</code>, x can be a list of sf, sfc, or bbox objects. If
+<code>FALSE</code>, only sf, sfc, or bbox objects are supported. Defaults to <code>TRUE</code>.</p></dd>
 
 
 <dt>...</dt>
