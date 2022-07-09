@@ -12,30 +12,9 @@
 #' - [str_extract_filetype]: Extract file type from string
 #' - [str_pad_digits]: Pad a string with digits
 #' - [str_extract_digits]: Extract digits from a string
-#' - [str_trim_squish]: remove double-spaces, trailing and leading spaces
 #'
 #' @name str_misc
 NULL
-
-#' @name str_trim_squish
-#' @rdname str_misc
-#' @export
-#' @importFrom dplyr mutate across
-#' @importFrom stringr str_trim str_squish
-str_trim_squish <- function(string) {
-  dplyr::mutate(
-    string,
-    dplyr::across(
-      where(is.character),
-      ~ dplyr::if_else(
-        !is.null(.x) & !is.na(.x),
-        stringr::str_trim(stringr::str_squish(.x)),
-        .x
-      )
-    )
-  )
-}
-
 
 #' @param prefix Character string or character vector to add to string parameter
 #'   as a prefix.
@@ -63,9 +42,9 @@ str_fix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", cle
     string <- janitor::make_clean_names(string)
   }
 
-  string <- str_prefix(string, prefix, sep = sep)
+  string <- str_prefix(string, prefix = prefix, sep = sep)
 
-  string <- str_prefix(string, postfix, sep = sep, post = TRUE)
+  string <- str_prefix(string, prefix = postfix, sep = sep, post = TRUE)
 
   string <- gsub("_{2}", "_", string)
 
@@ -76,12 +55,18 @@ str_fix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", cle
 #' @rdname str_misc
 #' @param post If `TRUE`, use the prefix string as a postfix; defaults to
 #'   `FALSE`.
-#' @param dttm_sep Date time separator. Only used by [str_prefix] if prefix is
-#'   "date" or "time" and not accessible when using [str_fix] or
-#'   [make_filename].
+#' @param date_fmt,time_fmt Date or time format Only used by [str_prefix] if
+#'   prefix is "date" or "time" and not currently accessible when using
+#'   [str_fix] or [make_filename].
 #' @export
 #' @importFrom janitor make_clean_names
-str_prefix <- function(string = NULL, prefix = NULL, sep = "_", clean_names = TRUE, post = FALSE, dttm_sep = "-") {
+str_prefix <- function(string = NULL,
+                       prefix = NULL,
+                       sep = "_",
+                       clean_names = TRUE,
+                       post = FALSE,
+                       date_fmt = "%F",
+                       time_fmt = "%Y-%m-%d_%I-%M-%S_%p") {
   if (is.null(prefix)) {
     return(string)
   }
@@ -90,9 +75,10 @@ str_prefix <- function(string = NULL, prefix = NULL, sep = "_", clean_names = TR
     prefix <- janitor::make_clean_names(prefix)
   }
 
+  if (prefix %in% c("date", "time"))
   prefix <- switch(prefix,
-    "date" = gsub("^x", "", janitor::make_clean_names(Sys.Date(), sep_out = dttm_sep)),
-    "time" = gsub("^x", "", janitor::make_clean_names(Sys.time(), sep_out = dttm_sep))
+    "date" = format(Sys.Date(), date_fmt),
+    "time" = format(Sys.time(), time_fmt)
   )
 
   if (!post) {
