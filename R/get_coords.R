@@ -147,14 +147,3 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
 
   relocate_sf_col(x)
 }
-
-#' Exported function in getdata but hoping to avoid importing getdata into sfext
-#'
-#' @noRd
-relocate_sf_col <- function(x, .after = dplyr::everything()) {
-  dplyr::relocate(
-    x,
-    dplyr::all_of(attributes(x)$sf_column),
-    .after = .after
-  )
-}
