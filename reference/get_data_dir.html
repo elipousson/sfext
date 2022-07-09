@@ -64,14 +64,15 @@
 
 
 <dt>cache</dt>
-<dd><p>If <code>TRUE</code>, replace a NULL path with <a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir</a>
+<dd><p>If <code>TRUE</code>, and path is NULL set path to <a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir</a>
 (using value of package as appname).</p></dd>
 
 
 <dt>create</dt>
 <dd><p>If <code>FALSE</code> and path does not exist, return path with a warning.
-If <code>TRUE</code> and interactive, ask user if directory should be created. If not
-interactive and create is <code>TRUE</code>, a new directory will be created.</p></dd>
+If <code>TRUE</code> and <a href="https://rlang.r-lib.org/reference/is_interactive.html" class="external-link">rlang::is_interactive</a> is <code>TRUE</code>, ask user if directory
+should be created. If the session not interactive and create is <code>TRUE</code>, a
+new directory will be created.</p></dd>
 
 
 <dt>package</dt>
