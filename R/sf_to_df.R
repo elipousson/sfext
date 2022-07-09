@@ -41,16 +41,18 @@ sf_to_df <- function(x,
                      coords = c("lon", "lat"),
                      geometry = "centroid",
                      keep_all = TRUE) {
-  x <-
-    st_transform_ext(x, crs = crs)
+  if (geometry == "drop") {
+    return(sf::st_drop_geometry(x))
+  }
 
-  get_coords(
-    x,
-    geometry = geometry,
-    coords = coords,
-    keep_all = keep_all,
-    drop = TRUE
-  )
+    get_coords(
+      x,
+      geometry = geometry,
+      crs = crs,
+      coords = coords,
+      keep_all = keep_all,
+      drop = TRUE
+    )
 }
 
 #' @rdname sf_to_df
