@@ -10,7 +10,7 @@ get_dist(nc[1,], to = c("xmax", "ymax"), units = "mile")$dist
 get_dist(nc[1,], to = nc[30,], units = "km")$dist
 
 # Create a line between two counties
-nc_line <- as_line(c(as_point(nc[1,]), as_point(nc[30,])), crs = nc)
+nc_line <- as_line(c(as_point(nc[1,]), as_point(nc[30,])), crs = sf::st_crs(nc))
 
 # Get length and bearing of the line
 get_length(nc_line)

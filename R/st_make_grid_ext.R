@@ -1,15 +1,10 @@
-#' Make a grid over a location bounding box
+#' Make a grid over a simple feature bounding box
 #'
 #' Create a grid with an id column and optionally a set number of columns and
 #' rows. This documentation is incomplete the function may change.
 #'
-#' @param location A `sf`, `sfc`, or `bbox` object, Default: `NULL`. Required.
-#' @inheritParams st_bbox_ext
-#' @param n If n is NULL and square is `TRUE`, the grid is set automatically to
-#'   be 10 cells wide, Default: `NULL`
-#' @param what "polygons", "corners", "centers"; set to centers automatically if
-#'   style is "circle", "circle_offset" but a buffer is applied to return
-#'   circular polygons.
+#' @param x A `sf`, `sfc`, or `bbox` object, Default: `NULL`. Required.
+#' @inheritDotParams st_bbox_ext -class -null.ok
 #' @param cols,rows Used to set n if either are not `NULL`; defaults to `NULL`.
 #'   row and id are added as columns to the grid if they are provided.
 #' @param gutter Distance in units between each column cell; gutter effectively
@@ -17,10 +12,16 @@
 #'   (including those at the edges of the grid).
 #' @param desc If TRUE, reverse standard order of cell id numbering; defaults
 #'   `FALSE`
+#' @param n If n is NULL and square is `TRUE`, the grid is set automatically to
+#'   be 10 cells wide, Default: `NULL`
+#' @param what "polygons", "corners", "centers"; set to centers automatically if
+#'   style is "circle", "circle_offset" but a buffer is applied to return
+#'   circular polygons.
 #' @param style Style of cell to return with options including "rect", "square",
 #'   "hex", "flat_top_hex", "circle", "circle_offset"
-#' @param .id A name to use for the cell id column.
+#' @param .id A name to use for the cell id column. Defaults to "id".
 #' @inheritParams sf::st_make_grid
+#' @inheritParams st_filter_ext
 #' @example examples/st_make_grid_ext.R
 #' @seealso [sf::st_make_grid]
 #' @rdname st_make_grid_ext
@@ -28,6 +29,8 @@
 #' @importFrom sf st_make_grid st_filter
 #' @importFrom dplyr mutate arrange row_number everything
 st_make_grid_ext <- function(x,
+                             ...,
+                             unit = NULL,
                              crs = NULL,
                              cols = NULL,
                              rows = NULL,
@@ -37,19 +40,35 @@ st_make_grid_ext <- function(x,
                              cellsize = NULL,
                              what = NULL,
                              style = "rect",
-                             .id = "id") {
+                             .id = "id",
+                             filter = FALSE,
+                             trim = FALSE) {
   check_sf(x, ext = TRUE)
 
   style <- arg_match(style, c("rect", "square", "hex", "flat_top_hex", "circle", "circle_offset"))
+
+  lonlat_crs <- NULL
+
+  if ((style %in% c("circle", "circle_offset")) && sf::st_is_longlat(x)) {
+    lonlat_crs <- sf::st_crs(x)
+    x <- st_transform_ext(x, 3857)
+  }
 
   # Get adjusted bounding box using any adjustment variables provided
   if (is_bbox(x)) {
     x <- as_sfc(x)
   }
 
+  bbox <-
+    st_bbox_ext(
+      x = x,
+      ...,
+      unit = unit
+    )
+
   params <-
     get_grid_params(
-      bbox = as_bbox(x),
+      bbox = bbox,
       cellsize = cellsize,
       unit = unit,
       n = n,
@@ -70,8 +89,7 @@ st_make_grid_ext <- function(x,
     )
 
   grid <- as_sf(grid, crs = x)
-
-  grid <- sf::st_filter(x = grid, y = x)
+  # grid <- st_filter_ext(x = grid, y = as_sfc(bbox))
 
   if (style %in% c("rect", "square", "circle")) {
     grid <-
@@ -81,8 +99,7 @@ st_make_grid_ext <- function(x,
         row = sort(rep(seq(params$rows), params$cols), decreasing = !desc)
       )
 
-    grid <-
-      dplyr::arrange(grid, row, col)
+    grid <- dplyr::arrange(grid, row, col)
   }
 
   grid <-
@@ -111,7 +128,15 @@ st_make_grid_ext <- function(x,
       )
   }
 
-  sf_transform(grid, crs = crs)
+  if (filter | trim) {
+    grid <- st_filter_ext(grid, x, crop = FALSE, trim = trim)
+  }
+
+  if (!is.null(lonlat_crs)) {
+    grid <- st_transform_ext(grid, crs = lonlat_crs)
+  }
+
+  transform_sf(grid, crs = crs)
 }
 
 #' Get parameters for make_location_grid
@@ -207,5 +232,12 @@ get_grid_params <- function(bbox,
     what <- "centers"
   }
 
-  list(cellsize = cellsize, n = n, cols = n[1], rows = n[2], square = square, what = what, flat_topped = flat_topped)
+  list(
+    cellsize = cellsize,
+    n = n,
+    cols = n[1], rows = n[2],
+    square = square,
+    what = what,
+    flat_topped = flat_topped
+  )
 }
