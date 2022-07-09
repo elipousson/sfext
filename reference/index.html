@@ -55,7 +55,7 @@
           
           <code><a href="read_sf_ext.html">read_sf_ext()</a></code> <code><a href="read_sf_ext.html">read_sf_pkg()</a></code> <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_query()</a></code> <code><a href="read_sf_ext.html">read_sf_excel()</a></code> <code><a href="read_sf_ext.html">read_sf_csv()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_esri()</a></code> <code><a href="read_sf_ext.html">read_sf_geojson()</a></code> <code><a href="read_sf_ext.html">read_sf_gist()</a></code> <code><a href="read_sf_ext.html">read_sf_gmap()</a></code> <code><a href="read_sf_ext.html">read_sf_download()</a></code> <code><a href="read_sf_ext.html">read_sf_gsheet()</a></code> 
         </dt>
-        <dd>Read spatial data in a bounding box to a simple feature object</dd>
+        <dd>Read spatial data in a bounding box to a simple feature object from multiple sources</dd>
       </dl><dl><dt>
           
           <code><a href="write_sf_ext.html">write_sf_ext()</a></code> <code><a href="write_sf_ext.html">write_sf_cache()</a></code> <code><a href="write_sf_ext.html">write_sf_gist()</a></code> <code><a href="write_sf_ext.html">write_sf_gsheet()</a></code> 
@@ -65,8 +65,23 @@
           
           <code><a href="read_sf_exif.html">read_sf_exif()</a></code> <code><a href="read_sf_exif.html">write_exif()</a></code> <code><a href="read_sf_exif.html">write_exif_keywords()</a></code> 
         </dt>
-        <dd>Read location data from images to a simple feature object using EXIF or write
-EXIF metadata</dd>
+        <dd>Read EXIF metadata to create a simple feature object or write
+EXIF metadata to image files</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_data_dir.html">get_data_dir()</a></code> 
+        </dt>
+        <dd>Check if data directory exists and create a new directory if needed</dd>
+      </dl><dl><dt>
+          
+          <code><a href="make_filename.html">make_filename()</a></code> 
+        </dt>
+        <dd>Make file name and path with optional label, prefix, or postfix</dd>
+      </dl><dl><dt>
+          
+          <code><a href="str_misc.html">str_fix()</a></code> <code><a href="str_misc.html">str_prefix()</a></code> <code><a href="str_misc.html">str_pad_digits()</a></code> <code><a href="str_misc.html">str_extract_digits()</a></code> <code><a href="str_misc.html">str_add_filetype()</a></code> <code><a href="str_misc.html">str_remove_filetype()</a></code> <code><a href="str_misc.html">str_extract_filetype()</a></code> 
+        </dt>
+        <dd>Use the stringr package to help make consistent file names</dd>
       </dl></div><div class="section level2">
       <h2 id="check-and-convert-sf-sfc-and-bbox-objects">Check and convert sf, sfc, and bbox objects<a class="anchor" aria-label="anchor" href="#check-and-convert-sf-sfc-and-bbox-objects"></a></h2>
       
@@ -126,7 +141,7 @@ EXIF metadata</dd>
         <dd>Use tidygeocoder to convert an address or data frame with an address column
 to an sf object</dd>
       </dl></div><div class="section level2">
-      <h2 id="modify-the-geometry-of-sf-sfc-and-bbox-objects">Modify the geometry of sf, sfc, and bbox objects<a class="anchor" aria-label="anchor" href="#modify-the-geometry-of-sf-sfc-and-bbox-objects"></a></h2>
+      <h2 id="modify-sf-sfc-and-bbox-objects">Modify sf, sfc, and bbox objects<a class="anchor" aria-label="anchor" href="#modify-sf-sfc-and-bbox-objects"></a></h2>
       
       
 
@@ -138,16 +153,6 @@ to an sf object</dd>
 
       <dl><dt>
           
-          <code><a href="get_coords.html">get_coords()</a></code> <code><a href="get_coords.html">get_minmax()</a></code> 
-        </dt>
-        <dd>Get coordinates for a simple feature or bounding box object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_measurements.html">get_area()</a></code> <code><a href="get_measurements.html">st_area_ext()</a></code> <code><a href="get_measurements.html">get_length()</a></code> <code><a href="get_measurements.html">st_length_ext()</a></code> <code><a href="get_measurements.html">get_dist()</a></code> <code><a href="get_measurements.html">st_distance_ext()</a></code> <code><a href="get_measurements.html">get_bearing()</a></code> <code><a href="get_measurements.html">st_bearing()</a></code> 
-        </dt>
-        <dd>Get measurements for simple feature objects</dd>
-      </dl><dl><dt>
-          
           <code><a href="st_bbox_ext.html">st_bbox_ext()</a></code> <code><a href="st_bbox_ext.html">st_bbox_asp()</a></code> 
         </dt>
         <dd>Get a bounding box buffered to match an aspect ratio</dd>
@@ -158,9 +163,9 @@ to an sf object</dd>
         <dd>Buffer a simple feature or bounding box object</dd>
       </dl><dl><dt>
           
-          <code><a href="st_cast_ext.html">st_cast_ext()</a></code> 
+          <code><a href="st_erase.html">st_erase()</a></code> <code><a href="st_erase.html">st_trim()</a></code> 
         </dt>
-        <dd>Cast geometry to another type</dd>
+        <dd>Erase an area of a simple feature object</dd>
       </dl><dl><dt>
           
           <code><a href="st_clip.html">st_clip()</a></code> 
@@ -168,24 +173,19 @@ to an sf object</dd>
         <dd>Clip the side or corner of a simple feature or bounding box object</dd>
       </dl><dl><dt>
           
-          <code><a href="st_erase.html">st_erase()</a></code> <code><a href="st_erase.html">st_trim()</a></code> 
+          <code><a href="st_union_ext.html">st_union_ext()</a></code> 
         </dt>
-        <dd>Erase an area of a simple feature object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_filter_ext.html">st_filter_ext()</a></code> 
-        </dt>
-        <dd>Filter, crop, trim, or erase simple feature or</dd>
+        <dd>Union simple feature objects and combine name column values</dd>
       </dl><dl><dt>
           
           <code><a href="st_join_ext.html">st_join_ext()</a></code> 
         </dt>
-        <dd>Spatial join with support for simple feature lists</dd>
+        <dd>Complete a spatial join using a simple feature objects or an object and list</dd>
       </dl><dl><dt>
           
-          <code><a href="st_make_grid_ext.html">st_make_grid_ext()</a></code> 
+          <code><a href="st_filter_ext.html">st_filter_ext()</a></code> 
         </dt>
-        <dd>Make a grid over a location bounding box</dd>
+        <dd>Filter, crop, trim, or erase a simple feature object or list</dd>
       </dl><dl><dt>
           
           <code><a href="st_misc.html">st_scale_rotate()</a></code> <code><a href="st_misc.html">st_center()</a></code> <code><a href="st_misc.html">st_square()</a></code> <code><a href="st_misc.html">st_inscribed_square()</a></code> <code><a href="st_misc.html">st_circle()</a></code> <code><a href="st_misc.html">st_circumscribed_circle()</a></code> 
@@ -198,11 +198,16 @@ to an sf object</dd>
         <dd>Transform or convert coordinates of a simple feature or bounding box object</dd>
       </dl><dl><dt>
           
-          <code><a href="st_union_ext.html">st_union_ext()</a></code> 
+          <code><a href="st_cast_ext.html">st_cast_ext()</a></code> 
         </dt>
-        <dd>Union simple feature objects</dd>
+        <dd>Cast geometry of a simple feature object or simple feature collection to another type</dd>
+      </dl><dl><dt>
+          
+          <code><a href="st_make_grid_ext.html">st_make_grid_ext()</a></code> 
+        </dt>
+        <dd>Make a grid over a simple feature bounding box</dd>
       </dl></div><div class="section level2">
-      <h2 id="get-information-about-the-geometry-of-sf-sfc-and-bbox-objects">Get information about the geometry of sf, sfc, and bbox objects<a class="anchor" aria-label="anchor" href="#get-information-about-the-geometry-of-sf-sfc-and-bbox-objects"></a></h2>
+      <h2 id="get-information-about-sf-sfc-and-bbox-objects">Get information about sf, sfc, and bbox objects<a class="anchor" aria-label="anchor" href="#get-information-about-sf-sfc-and-bbox-objects"></a></h2>
       
       
 
@@ -223,7 +228,7 @@ to an sf object</dd>
         </dt>
         <dd>Get measurements for simple feature objects</dd>
       </dl></div><div class="section level2">
-      <h2 id="additional-helper-and-utility-functions">Additional helper and utility functions<a class="anchor" aria-label="anchor" href="#additional-helper-and-utility-functions"></a></h2>
+      <h2 id="additional-helper-functions-for-sf-and-bbox-objects">Additional helper functions for sf and bbox objects<a class="anchor" aria-label="anchor" href="#additional-helper-functions-for-sf-and-bbox-objects"></a></h2>
       
       
 
@@ -235,6 +240,11 @@ to an sf object</dd>
 
       <dl><dt>
           
+          <code><a href="misc_sf.html">transform_sf()</a></code> <code><a href="misc_sf.html">relocate_sf_col()</a></code> <code><a href="misc_sf.html">rename_sf_col()</a></code> 
+        </dt>
+        <dd>Additional utility functions for sf objects</dd>
+      </dl><dl><dt>
+          
           <code><a href="number_features.html">number_features()</a></code> <code><a href="number_features.html">sort_features()</a></code> 
         </dt>
         <dd>Sort and number features by coordinates or distance</dd>
@@ -243,11 +253,6 @@ to an sf object</dd>
           <code><a href="count_features.html">count_features()</a></code> 
         </dt>
         <dd>Count simple features based on relationship with a second simple feature object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_asp.html">get_asp()</a></code> 
-        </dt>
-        <dd>Get aspect ratio from string or based on specific paper and margins</dd>
       </dl><dl><dt>
           
           <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_point()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_xdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_ydist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_diagdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_transform()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sfc()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_wkt()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_lonlat_query()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_expand()</a></code> 
@@ -271,14 +276,14 @@ to an sf object</dd>
         <dd>General utility functions for working with distance units objects</dd>
       </dl><dl><dt>
           
-          <code><a href="convert_dist_scale.html">convert_dist_scale()</a></code> 
-        </dt>
-        <dd>Convert distance from scale to actual units</dd>
-      </dl><dl><dt>
-          
           <code><a href="convert_dist_units.html">convert_dist_units()</a></code> 
         </dt>
         <dd>Convert distance (and area) values between different units</dd>
+      </dl><dl><dt>
+          
+          <code><a href="convert_dist_scale.html">convert_dist_scale()</a></code> 
+        </dt>
+        <dd>Convert distance from scale to actual units</dd>
       </dl><dl><dt>
           
           <code><a href="bind_units_col.html">bind_units_col()</a></code> 
@@ -289,6 +294,11 @@ to an sf object</dd>
           <code><a href="get_scale.html">get_scale()</a></code> 
         </dt>
         <dd>Get standard scales and convert to scale distances</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_asp.html">get_asp()</a></code> 
+        </dt>
+        <dd>Get aspect ratio from string or based on specific paper and margins</dd>
       </dl></div><div class="section level2">
       <h2 id="reference-data-for-units-and-scales">Reference data for units and scales<a class="anchor" aria-label="anchor" href="#reference-data-for-units-and-scales"></a></h2>
       
@@ -320,32 +330,6 @@ to an sf object</dd>
           <code><a href="standard_scales.html">standard_scales</a></code> 
         </dt>
         <dd>Standard map, architectural, and engineering scales</dd>
-      </dl></div><div class="section level2">
-      <h2 id="file-utility-functions">File utility functions<a class="anchor" aria-label="anchor" href="#file-utility-functions"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="get_data_dir.html">get_data_dir()</a></code> <code><a href="get_data_dir.html">create_data_dir()</a></code> 
-        </dt>
-        <dd>Check data directory and create if needed</dd>
-      </dl><dl><dt>
-          
-          <code><a href="make_filename.html">make_filename()</a></code> 
-        </dt>
-        <dd>Make file name and path with optional label, prefix, or postfix</dd>
-      </dl><dl><dt>
-          
-          <code><a href="str_misc.html">str_trim_squish()</a></code> <code><a href="str_misc.html">str_fix()</a></code> <code><a href="str_misc.html">str_prefix()</a></code> <code><a href="str_misc.html">str_pad_digits()</a></code> <code><a href="str_misc.html">str_extract_digits()</a></code> <code><a href="str_misc.html">str_add_filetype()</a></code> <code><a href="str_misc.html">str_remove_filetype()</a></code> <code><a href="str_misc.html">str_extract_filetype()</a></code> 
-        </dt>
-        <dd>Use the stringr package to help make consistent file names</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

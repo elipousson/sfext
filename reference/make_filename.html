@@ -59,9 +59,10 @@ files exported with <code><a href="write_sf_ext.html">write_sf_ext()</a></code>.
 <span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  prefix <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  postfix <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  pad <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  width <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  create <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -101,11 +102,6 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 <dd><p>File name postfix; defaults to <code>NULL</code>.</p></dd>
 
 
-<dt>cache</dt>
-<dd><p>If TRUE, path is set to the package cache directory using
-<code><a href="get_data_dir.html">get_data_dir()</a></code>; defaults to <code>FALSE</code>.</p></dd>
-
-
 <dt>pad</dt>
 <dd><p>Single padding character added to digits in string; defaults to
 "0"</p></dd>
@@ -113,6 +109,17 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 
 <dt>width</dt>
 <dd><p>Minimum width of padded strings.</p></dd>
+
+
+<dt>cache</dt>
+<dd><p>If <code>TRUE</code>, path is set to the package cache directory using
+<code><a href="get_data_dir.html">get_data_dir()</a></code>; defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt>create</dt>
+<dd><p>If <code>FALSE</code> and path does not exist, return path with a warning.
+If <code>TRUE</code> and interactive, ask user if directory should be created. If not
+interactive and create is <code>TRUE</code>, a new directory will be created.</p></dd>
 
 </dl></div>
     <div class="section level2">
