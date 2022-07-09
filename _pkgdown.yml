@@ -7,6 +7,9 @@ reference:
   - '`read_sf_ext`'
   - '`write_sf_ext`'
   - '`read_sf_exif`'
+  - '`get_data_dir`'
+  - '`make_filename`'
+  - '`str_misc`'
 - title: Check and convert sf, sfc, and bbox objects
   contents:
   - '`is_sf`'
@@ -18,34 +21,41 @@ reference:
   contents:
   - '`sf_to_df`'
   - '`address_to_sf`'
-- title: Modify the geometry of sf, sfc, and bbox objects
+- title: Modify sf, sfc, and bbox objects
   contents:
-  - starts_with("st_")
-- title: Get information about the geometry of sf, sfc, and bbox objects
+  - '`st_bbox_ext`'
+  - '`st_buffer_ext`'
+  - '`st_erase`'
+  - '`st_clip`'
+  - '`st_union_ext`'
+  - '`st_join_ext`'
+  - '`st_filter_ext`'
+  - '`st_misc`'
+  - '`st_transform_ext`'
+  - '`st_cast_ext`'
+  - '`st_make_grid_ext`'
+- title: Get information about sf, sfc, and bbox objects
   contents:
   - '`get_coords`'
   - '`get_dist`'
   - '`get_length`'
-- title: Additional helper and utility functions
+- title: Additional helper functions for sf and bbox objects
   contents:
+  - '`misc_sf`'
   - '`number_features`'
   - '`count_features`'
-  - '`get_asp`'
   - starts_with("sf_bbox")
 - title: Utility functions for units and scales
   contents:
   - starts_with("is_dist")
-  - starts_with("convert_dist")
+  - '`convert_dist_units`'
+  - '`convert_dist_scale`'
   - starts_with("bind_units")
   - '`get_scale`'
+  - '`get_asp`'
 - title: Reference data for units and scales
   contents:
   - '`dist_units`'
   - '`dist_unit_options`'
   - '`area_unit_options`'
   - '`standard_scales`'
-- title: File utility functions
-  contents:
-  - '`get_data_dir`'
-  - '`make_filename`'
-  - '`str_misc`'
