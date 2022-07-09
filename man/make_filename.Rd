@@ -48,8 +48,9 @@ date/time prefix; defaults to \code{NULL}.}
 \code{\link[=get_data_dir]{get_data_dir()}}; defaults to \code{FALSE}.}
 
 \item{create}{If \code{FALSE} and path does not exist, return path with a warning.
-If \code{TRUE} and interactive, ask user if directory should be created. If not
-interactive and create is \code{TRUE}, a new directory will be created.}
+If \code{TRUE} and \link[rlang:is_interactive]{rlang::is_interactive} is \code{TRUE}, ask user if directory
+should be created. If the session not interactive and create is \code{TRUE}, a
+new directory will be created.}
 }
 \description{
 A helper function to create consistent file names for plots created with data

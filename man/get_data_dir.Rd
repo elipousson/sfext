@@ -15,12 +15,13 @@ get_data_dir(
 \arguments{
 \item{path}{Path to directory to use as data directory.}
 
-\item{cache}{If \code{TRUE}, replace a NULL path with \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
+\item{cache}{If \code{TRUE}, and path is NULL set path to \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
 (using value of package as appname).}
 
 \item{create}{If \code{FALSE} and path does not exist, return path with a warning.
-If \code{TRUE} and interactive, ask user if directory should be created. If not
-interactive and create is \code{TRUE}, a new directory will be created.}
+If \code{TRUE} and \link[rlang:is_interactive]{rlang::is_interactive} is \code{TRUE}, ask user if directory
+should be created. If the session not interactive and create is \code{TRUE}, a
+new directory will be created.}
 
 \item{package}{Package name; defaults to "sfext"}
 }

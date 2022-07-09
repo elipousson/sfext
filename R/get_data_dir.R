@@ -3,15 +3,16 @@
 #' A utility function that wraps [rappdirs::user_cache_dir].
 #'
 #' @param path Path to directory to use as data directory.
-#' @param cache If `TRUE`, replace a NULL path with [rappdirs::user_cache_dir]
-#'   (using value of package as appname).
+#' @param cache If `TRUE`, and path is NULL set path to [rappdirs::user_cache_dir]
+#' (using value of package as appname).
 #' @param create If `FALSE` and path does not exist, return path with a warning.
-#'   If `TRUE` and interactive, ask user if directory should be created. If not
-#'   interactive and create is `TRUE`, a new directory will be created.
+#'   If `TRUE` and [rlang::is_interactive] is `TRUE`, ask user if directory
+#'   should be created. If the session not interactive and create is `TRUE`, a
+#'   new directory will be created.
 #' @param package Package name; defaults to "sfext"
 #' @export
 get_data_dir <- function(path = NULL, cache = FALSE, create = TRUE, package = "sfext", null.ok = TRUE) {
-  if (cache) {
+  if (is.null(path) && cache) {
     is_pkg_installed("rappdirs")
 
     path <- rappdirs::user_cache_dir(package)
