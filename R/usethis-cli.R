@@ -28,24 +28,20 @@
 #' @noRd
 #' @importFrom cli cli_alert
 #' @importFrom utils menu
-cli_yeah <- function(x,
+cli_yeah <- function(message,
                      yes = c("Yes", "Definitely", "For sure", "Yup", "Yeah", "I agree", "Absolutely"),
                      no = c("No way", "Not now", "Negative", "No", "Nope", "Absolutely not"),
                      n_yes = 1,
                      n_no = 2,
                      shuffle = TRUE,
                      .envir = parent.frame()) {
-  x <- glue_collapse(x, "\n")
-  x <- glue(x, .envir = .envir)
-
-  if (!is_interactive()) {
-    cli_abort(
-      c(
-        "User input required, but session is not interactive.",
-        "Query: {x}"
-      )
-    )
-  }
+  cli_abort_ifnot(
+    c(
+      "User input required, but session is not interactive.",
+      "Query: ", message
+    ),
+    condition = is_interactive()
+  )
 
   n_yes <- min(n_yes, length(yes))
   n_no <- min(n_no, length(no))
@@ -55,7 +51,7 @@ cli_yeah <- function(x,
     qs <- sample(qs)
   }
 
-  cli::cli_alert(x)
+  cli_inform(message, .envir = .envir)
   out <- utils::menu(qs)
   out != 0L && qs[[out]] %in% yes
 }
