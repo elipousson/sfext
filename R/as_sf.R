@@ -22,7 +22,7 @@
 #' @importFrom dplyr bind_rows rename
 as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
   if (is_sf(x)) {
-    return(sf_transform(x, crs = crs))
+    return(transform_sf(x, crs = crs))
   }
 
   # Convert objects to sf if needed
@@ -60,7 +60,7 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
     sf::st_geometry(x) <- sf_col
   }
 
-  sf_transform(x, crs = crs)
+  transform_sf(x, crs = crs)
 }
 
 #' @name as_bbox
@@ -105,7 +105,7 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
 #' @importFrom sf st_geometry st_as_sfc
 as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
   if (is_sfc(x)) {
-    return(sf_transform(x, crs = crs))
+    return(transform_sf(x, crs = crs))
   }
 
   x_is <-
@@ -122,7 +122,7 @@ as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
       "other" = sf::st_geometry(as_sf(x, ext = ext, ...))
     )
 
-  sf_transform(x, crs = crs)
+  transform_sf(x, crs = crs)
 }
 
 #' @name as_sf_list
@@ -297,7 +297,7 @@ as_points <- function(..., to = "POINT", call = caller_env()) {
 
   crs <- NULL
   if (has_name(params, "crs")) {
-    crs <- params$crs
+    crs <- sf::st_crs(params$crs)
     params <- params[names(params) != "crs"]
   } else if (is_sf(params[[1]], ext = TRUE)) {
     crs <- sf::st_crs(params[[1]])

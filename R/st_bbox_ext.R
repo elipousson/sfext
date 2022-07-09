@@ -63,7 +63,7 @@ st_bbox_ext <- function(x = NULL,
     )
 
   # Transform crs of sf object
-  x <- sf_transform(x, crs = crs)
+  x <- transform_sf(x, crs = crs)
 
   # Get aspect adjusted bbox
   bbox <-
