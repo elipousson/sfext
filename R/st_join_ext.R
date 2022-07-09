@@ -2,7 +2,8 @@
 #'
 #' Wrapper for [sf::st_join] that works with sf lists.
 #'
-#' @param boundary An sf object with a column named "name" or a list of sf
+#' @param x A sf, sfc, or bbox object.
+#' @param y An sf object with a column named "name" or a list of sf
 #'   objects where all items in the list have a "name" column.
 #' @param join geometry predicate function; defaults to `NULL`, set to
 #'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON

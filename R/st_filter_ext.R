@@ -8,8 +8,12 @@
 #' @param crs Coordinate reference system to return.
 #' @param .predicate geometry predicate function with the same profile as
 #'   [sf::st_intersects()]; see details for [sf::st_filter()] for more options.
+#' @param geom_type Character string passed to type argument of [is_geom_type]
+#'   to filter features to only those matching the specified geometry type.
 #' @param null.ok If y is `NULL` and null.ok is `TRUE`, x is returned without
 #'   changes. Defaults to `TRUE`.
+#' @param list.ok If `TRUE`, x can be a list of sf, sfc, or bbox objects. If
+#'   `FALSE`, only sf, sfc, or bbox objects are supported. Defaults to `TRUE`.
 #' @inheritDotParams sf::st_filter -x -y
 #' @name st_filter_ext
 #' @export

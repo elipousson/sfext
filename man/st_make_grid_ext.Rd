@@ -33,16 +33,17 @@ st_make_grid_ext(
 buffer distance. e.g. if the diagonal distance is 3000 meters and the
 "diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
 provided.}
-    \item{\code{unit}}{Units for buffer. Supported options include "meter", "foot",
-"kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
-instead of "kilometer") are also supported. Distance in units is converted
-to units matching GDAL units for x; defaults to "meter"}
     \item{\code{asp}}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
   }}
 
-\item{crs}{object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.}
+\item{unit}{Units for buffer. Supported options include "meter", "foot",
+"kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
+instead of "kilometer") are also supported. Distance in units is converted
+to units matching GDAL units for x; defaults to "meter"}
+
+\item{crs}{Coordinate reference system of bounding box to return}
 
 \item{cols, rows}{Used to set n if either are not \code{NULL}; defaults to \code{NULL}.
 row and id are added as columns to the grid if they are provided.}
@@ -67,6 +68,8 @@ circular polygons.}
 "hex", "flat_top_hex", "circle", "circle_offset"}
 
 \item{.id}{A name to use for the cell id column. Defaults to "id".}
+
+\item{filter}{If \code{TRUE} (or if trim is \code{TRUE}) filter grid geometry by x using \link{st_filter_ext}}
 
 \item{trim}{If \code{TRUE}, x is trimmed to y with \code{\link[=st_trim]{st_trim()}}.}
 }

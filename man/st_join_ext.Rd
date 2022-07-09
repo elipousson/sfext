@@ -7,6 +7,11 @@
 st_join_ext(x, y, col = NULL, .id = "name", join = NULL, ...)
 }
 \arguments{
+\item{x}{A sf, sfc, or bbox object.}
+
+\item{y}{An sf object with a column named "name" or a list of sf
+objects where all items in the list have a "name" column.}
+
 \item{col}{Column name used to convert y into a \code{sf} list if it is not
 already.}
 
@@ -18,9 +23,6 @@ the input \code{sf} object.}
 objects or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}
 
 \item{...}{Additional parameters passed to \link[sf:st_join]{sf::st_join}}
-
-\item{boundary}{An sf object with a column named "name" or a list of sf
-objects where all items in the list have a "name" column.}
 }
 \description{
 Wrapper for \link[sf:st_join]{sf::st_join} that works with sf lists.

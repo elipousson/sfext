@@ -14,6 +14,10 @@
 #'   [st_omerc] and returns an object with the oblique mercator projection
 #'   passing the value of rotate to the gamma parameter of the projection.
 #'   rotate must be between -45 and 45 degrees.
+#' @param null.ok If `TRUE` and x is `NULL` return x without an error. Defaults
+#'   to `FALSE`.
+#' @param list.ok If `TRUE`, x can be a list of sf, sfc, or bbox objects. If
+#'   `FALSE`, only sf, sfc, or bbox objects are supported. Defaults to `TRUE`.
 #' @return An `sf`, `sfc`, or `bbox` object transformed to a new coordinate
 #'   reference system.
 #' @seealso [sf::st_transform()],[sf::st_crs()]

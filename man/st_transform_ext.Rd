@@ -32,6 +32,12 @@ the returned object remains a list but may be converted to \code{bbox} if class
 \link{st_omerc} and returns an object with the oblique mercator projection
 passing the value of rotate to the gamma parameter of the projection.
 rotate must be between -45 and 45 degrees.}
+
+\item{null.ok}{If \code{TRUE} and x is \code{NULL} return x without an error. Defaults
+to \code{FALSE}.}
+
+\item{list.ok}{If \code{TRUE}, x can be a list of sf, sfc, or bbox objects. If
+\code{FALSE}, only sf, sfc, or bbox objects are supported. Defaults to \code{TRUE}.}
 }
 \value{
 An \code{sf}, \code{sfc}, or \code{bbox} object transformed to a new coordinate
