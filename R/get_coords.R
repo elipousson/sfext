@@ -36,11 +36,9 @@ get_coords <- function(x, coords = NULL, geometry = "centroid", crs = NULL, keep
     condition = is_sf(x, ext = TRUE)
   )
 
-  if (is_point(x)) {
-    # FIXME: This approach may be an issue if a sf object has mixed geometry
+  if (all(is_point(x, by_geometry = TRUE))) {
     geometry <- "point"
   }
-
 
   if (geometry == "wkt") {
     x <- has_same_name_col(x, "wkt", quiet = TRUE)
@@ -53,7 +51,7 @@ get_coords <- function(x, coords = NULL, geometry = "centroid", crs = NULL, keep
       switch(geometry,
         "point" = x_coords,
         # FIXME: Double check that this doesn't cause issues for sfc objects
-        "centroid" = st_center(x_coords, ext = FALSE),
+        "centroid" = suppressWarnings(sf::st_centroid(x_coords)),
         # Convert to coordinates at centroid or as a point on surface
         "surface point" = suppressMessages(sf::st_point_on_surface(sf::st_zm(x_coords)))
       )
