@@ -51,30 +51,10 @@ st_transform_ext <- function(x,
       "list" = purrr::map(x, ~ st_transform_ext(.x, crs, class, rotate)),
       "bbox" = sf_bbox_transform(x, crs = crs),
       "omerc" = st_omerc(x, rotate = rotate),
-      "sf" = sf_transform(x, crs = crs)
+      "sf" = transform_sf(x, crs = crs)
     )
 
   as_sf_class(x, class = class)
-}
-
-#' Helper function for sf and sfc objects
-#'
-#' @noRd
-sf_transform <- function(x, crs = NULL, null.ok = TRUE, ...) {
-  if ((is.null(crs) && null.ok) | is_same_crs(x, crs)) {
-    return(x)
-  }
-
-  if (is.na(sf::st_crs(x))) {
-    sf::st_crs(x) <- crs
-    return(x)
-  }
-
-  if (is_sf(crs, ext = TRUE)) {
-    crs <- sf::st_crs(x = crs)
-  }
-
-  sf::st_transform(x, crs, ...)
 }
 
 #' @name st_transform_omerc
