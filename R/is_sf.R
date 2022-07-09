@@ -15,6 +15,7 @@ is_class <- function(x, classes = NULL, null.ok = FALSE) {
 #' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
 #'   not; defaults to `FALSE`. (used by [is_sf])
 #' @param null.ok If `TRUE` and x is `NULL`, return `TRUE`; defaults to `FALSE`.
+#' @param list.ok If `TRUE`, [is_sf] will return TRUE if x is a list of sf objects.
 #' @details
 #' - [is_sf]: is x a `sf` class object?
 #' - [is_sfc]: is x is a `sfc` class object?
@@ -26,14 +27,18 @@ is_class <- function(x, classes = NULL, null.ok = FALSE) {
 #'
 #' @export
 #' @md
-is_sf <- function(x, ext = FALSE, null.ok = FALSE) {
+is_sf <- function(x, ext = FALSE, null.ok = FALSE, list.ok = FALSE) {
   classes <- "sf"
 
   if (ext) {
     classes <- c(classes, "sfc", "bbox")
   }
 
-  is_class(x, classes = classes, null.ok = null.ok)
+  if (!list.ok) {
+    return(is_class(x, classes = classes, null.ok = null.ok))
+  }
+
+  is_class(x, classes = classes, null.ok = null.ok) | is_sf_list(x, ext = ext, null.ok = null.ok)
 }
 
 #' @name is_sfg
@@ -66,7 +71,7 @@ is_sf_list <- function(x, named = FALSE, ext = FALSE, null.ok = FALSE) {
     return(TRUE)
   }
 
-  if (is_sf(x, ext = TRUE, null.ok = FALSE)) {
+  if (is_sf(x, ext = TRUE)) {
     return(FALSE)
   }
 
