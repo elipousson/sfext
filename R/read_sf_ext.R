@@ -1,4 +1,4 @@
-#' Read spatial data in a bounding box to a simple feature object
+#' Read spatial data in a bounding box to a simple feature object from multiple sources
 #'
 #' An extended version of [sf::read_sf()] that support reading spatial data
 #' based on a file path, URL, or the data name and associated package.
@@ -272,7 +272,7 @@ read_sf_excel <- function(path,
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
 
-  st_filter_ext(data, bbox, crop = TRUE)
+  st_filter_ext(data, bbox, crop = FALSE)
 }
 
 #' @name read_sf_csv
@@ -298,7 +298,7 @@ read_sf_csv <- function(path,
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, crs = NULL, from_crs = from_crs)
 
-  st_filter_ext(data, bbox, crop = TRUE)
+  st_filter_ext(data, bbox, crop = FALSE)
 }
 
 #' @name read_sf_url
@@ -474,7 +474,7 @@ read_sf_geojson <- function(url,
       geojsonsf::geojson_sf(geojson = url, ...)
     )
 
-  st_filter_ext(data, bbox, crop = TRUE)
+  st_filter_ext(data, bbox, crop = FALSE)
 }
 
 #' @name read_sf_gist
@@ -550,7 +550,7 @@ read_sf_gmap <- function(url,
     data <- sf::st_zm(data)
   }
 
-  st_filter_ext(data, bbox, crop = TRUE)
+  st_filter_ext(data, bbox, crop = FALSE)
 }
 
 #' Get map ID from url
@@ -671,7 +671,7 @@ read_sf_gsheet <- function(url,
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
 
-  st_filter_ext(data, bbox, crop = TRUE)
+  st_filter_ext(data, bbox, crop = FALSE)
 }
 
 #' Join data from a Google Sheet to a simple feature object
