@@ -16,10 +16,11 @@
 #' @param path Path to file or data directory.
 #' @param prefix File name prefix. "date" adds a date prefix, "time" adds a
 #'   date/time prefix; defaults to `NULL`.
-#' @param postfix File name postfix; defaults to `NULL`.
-#' @param cache If TRUE, path is set to the package cache directory using
-#'   [get_data_dir()]; defaults to `FALSE`.
 #' @inheritParams str_pad_digits
+#' @param postfix File name postfix; defaults to `NULL`.
+#' @param cache If `TRUE`, path is set to the package cache directory using
+#'   [get_data_dir()]; defaults to `FALSE`.
+#' @inheritParams get_data_dir
 #' @family read_write
 #' @export
 make_filename <- function(name = NULL,
@@ -29,19 +30,16 @@ make_filename <- function(name = NULL,
                           path = NULL,
                           prefix = NULL,
                           postfix = NULL,
-                          cache = FALSE,
                           pad = NULL,
-                          width = NULL) {
+                          width = NULL,
+                          cache = FALSE,
+                          create = TRUE) {
   cli_abort_ifnot(
     "{.arg name} or {.arg filename} must be provided.",
     condition = is.character(name) || is.character(filename)
   )
 
-  if (cache) {
-    path <- get_data_dir(path = path)
-  } else if (!is.null(path)) {
-    path <- create_data_dir(path, create = TRUE)
-  }
+  path <- get_data_dir(path = path, cache = cache, create = create)
 
   # If file name is provided, remove file type
   if (!is.null(filename)) {
@@ -50,15 +48,21 @@ make_filename <- function(name = NULL,
   }
 
   # If file name is not provided, file name is based on label, name, pad and width
-  filename <-
-    filename %||%
-    str_fix(
-      prefix = label,
-      string = name,
-      clean_names = TRUE,
-      pad = pad,
-      width = width
+  if (!is.null(name)) {
+    cli_warn_ifnot(
+      "The provided {.arg filename} can't be used if {.arg name} is also provided.",
+      condition = is.null(filename)
     )
+
+    filename <-
+      str_fix(
+        prefix = label,
+        string = name,
+        clean_names = TRUE,
+        pad = pad,
+        width = width
+      )
+  }
 
   # Apply prefix and postfix to the filename
   filename <-

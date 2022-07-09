@@ -75,11 +75,12 @@ str_prefix <- function(string = NULL,
     prefix <- janitor::make_clean_names(prefix)
   }
 
-  if (prefix %in% c("date", "time"))
-  prefix <- switch(prefix,
-    "date" = format(Sys.Date(), date_fmt),
-    "time" = format(Sys.time(), time_fmt)
-  )
+  if (prefix %in% c("date", "time")) {
+    prefix <- switch(prefix,
+      "date" = format(Sys.Date(), date_fmt),
+      "time" = format(Sys.time(), time_fmt)
+    )
+  }
 
   if (!post) {
     return(paste(c(prefix, string), collapse = sep))
