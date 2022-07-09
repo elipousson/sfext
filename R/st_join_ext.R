@@ -1,4 +1,4 @@
-#' Spatial join with support for simple feature lists
+#' Complete a spatial join using a simple feature objects or an object and list
 #'
 #' Wrapper for [sf::st_join] that works with sf lists.
 #'

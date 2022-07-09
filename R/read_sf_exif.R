@@ -1,6 +1,6 @@
 
-#' Read location data from images to a simple feature object using EXIF or write
-#' EXIF metadata
+#' Read EXIF metadata to create a simple feature object or write
+#' EXIF metadata to image files
 #'
 #' Read EXIF data from folder of images.
 #'

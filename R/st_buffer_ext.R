@@ -5,7 +5,7 @@
 #' the coordinate reference system is transformed into EPSG:3857 and then
 #' transformed back into the original CRS after the buffer has been applied.
 #'
-#' st_edge is a variation on st_buffer_ext where dist or diag_ratio is used to
+#' [st_edge] is a variation on [st_buffer_ext] where dist or diag_ratio is used to
 #' define the width of the edge to return either outside the existing geometry
 #' (for positive dist values) or inside the existing geometry (for negative dist
 #' values).
@@ -26,7 +26,7 @@
 #' @param single_side If `TRUE`, single-sided buffers are returned for linear
 #'   geometries, in which case negative dist values give buffers on the
 #'   right-hand side, positive on the left.
-#' @param ... additional parameters passed to [sf::st_buffer()]
+#' @param ... additional parameters passed to [sf::st_buffer]
 #' @export
 #' @importFrom purrr map
 #' @importFrom sf st_is_longlat st_crs st_transform st_bbox st_buffer
