@@ -1,4 +1,4 @@
-#' Union simple feature objects
+#' Union simple feature objects and combine name column values
 #'
 #' Wrapper for [sf::st_union] supporting the additional feature of a combined
 #' name column collapsed into a single vector with [cli::pluralize].
@@ -16,6 +16,7 @@
 #'   sf object and y is `NULL`. If y is provided, [st_union_ext] is identical to
 #'   [sf::st_union]
 #' @rdname st_union_ext
+#' @example examples/st_union_ext.R
 #' @export
 #' @importFrom sf st_union st_geometry
 #' @importFrom cli pluralize
@@ -52,8 +53,10 @@ st_union_ext <- function(x = NULL, y = NULL, name_col = "name", sf_col = "geomet
     name_col <- names(x)[[1]]
   }
 
-  dplyr::tibble(
-    "{name_col}" := as.character(cli::pluralize("{x[[name_col]]}")),
-    "{sf_col}" := sfc
+  as_sf(
+    dplyr::tibble(
+      "{name_col}" := as.character(cli::pluralize("{x[[name_col]]}")),
+      "{sf_col}" := sfc
+    )
   )
 }
