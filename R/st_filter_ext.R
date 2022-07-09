@@ -1,4 +1,4 @@
-#' Filter, crop, trim, or erase simple feature or
+#' Filter, crop, trim, or erase a simple feature object or list
 #'
 #' @param x,y A `sf`, `sfc`, or `bbox` object. x may also be a `sf` list
 #'   objects. If x is an `sf` list, additional parameters in ... will be ignored.
@@ -20,6 +20,7 @@ st_filter_ext <- function(x,
                           erase = FALSE,
                           crs = NULL,
                           .predicate = sf::st_intersects,
+                          geom_type = NULL,
                           null.ok = TRUE,
                           list.ok = TRUE,
                           ...) {
@@ -34,11 +35,14 @@ st_filter_ext <- function(x,
         ~ st_filter_ext(
           x = .x,
           y = y,
-          trim = trim,
           crop = crop,
+          trim = trim,
           erase = erase,
           crs = crs,
-          .predicate = sf::st_intersects
+          .predicate = sf::st_intersects,
+          geom_type = geom_type,
+          null.ok = null.ok,
+          list.ok = list.ok
         )
       )
 
@@ -95,5 +99,15 @@ st_filter_ext <- function(x,
       "filter" = x
     )
 
-  sf_transform(x, crs = crs)
+  if (!is.null(geom_type)) {
+    geom_type <- is_geom_type(x, type = geom_type, by_geometry = TRUE)
+
+    if (is_sf(x)) {
+      x <- x[geom_type, ]
+    } else {
+      x <- x[geom_type]
+    }
+  }
+
+  transform_sf(x, crs = crs)
 }
