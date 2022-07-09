@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_join_ext.R
 \name{st_join_ext}
 \alias{st_join_ext}
-\title{Spatial join with support for simple feature lists}
+\title{Complete a spatial join using a simple feature objects or an object and list}
 \usage{
 st_join_ext(x, y, col = NULL, .id = "name", join = NULL, ...)
 }

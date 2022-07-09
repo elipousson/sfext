@@ -2,7 +2,6 @@
 % Please edit documentation in R/utils-filename.R
 \name{str_misc}
 \alias{str_misc}
-\alias{str_trim_squish}
 \alias{str_fix}
 \alias{str_prefix}
 \alias{str_pad_digits}
@@ -12,8 +11,6 @@
 \alias{str_extract_filetype}
 \title{Use the stringr package to help make consistent file names}
 \usage{
-str_trim_squish(string)
-
 str_fix(
   prefix = NULL,
   string = NULL,
@@ -30,7 +27,8 @@ str_prefix(
   sep = "_",
   clean_names = TRUE,
   post = FALSE,
-  dttm_sep = "-"
+  date_fmt = "\%F",
+  time_fmt = "\%Y-\%m-\%d_\%I-\%M-\%S_\%p"
 )
 
 str_pad_digits(string, pad = "0", side = "left", width = NULL)
@@ -44,10 +42,10 @@ str_remove_filetype(string, filetype = NULL)
 str_extract_filetype(string)
 }
 \arguments{
-\item{string}{A single string that the attach prefix or postfix is added to.}
-
 \item{prefix}{Character string or character vector to add to string parameter
 as a prefix.}
+
+\item{string}{A single string that the attach prefix or postfix is added to.}
 
 \item{postfix}{Character string or character vector to add to string
 parameter as a postfix.}
@@ -65,9 +63,9 @@ to snake case with \code{\link[janitor:make_clean_names]{janitor::make_clean_nam
 \item{post}{If \code{TRUE}, use the prefix string as a postfix; defaults to
 \code{FALSE}.}
 
-\item{dttm_sep}{Date time separator. Only used by \link{str_prefix} if prefix is
-"date" or "time" and not accessible when using \link{str_fix} or
-\link{make_filename}.}
+\item{date_fmt, time_fmt}{Date or time format Only used by \link{str_prefix} if
+prefix is "date" or "time" and not currently accessible when using
+\link{str_fix} or \link{make_filename}.}
 
 \item{side}{Side on which padding character is added (left, right or both).}
 
@@ -87,6 +85,5 @@ Functions include:
 \item \link{str_extract_filetype}: Extract file type from string
 \item \link{str_pad_digits}: Pad a string with digits
 \item \link{str_extract_digits}: Extract digits from a string
-\item \link{str_trim_squish}: remove double-spaces, trailing and leading spaces
 }
 }

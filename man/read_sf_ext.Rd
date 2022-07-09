@@ -14,7 +14,7 @@
 \alias{read_sf_gmap}
 \alias{read_sf_download}
 \alias{read_sf_gsheet}
-\title{Read spatial data in a bounding box to a simple feature object}
+\title{Read spatial data in a bounding box to a simple feature object from multiple sources}
 \usage{
 read_sf_ext(..., bbox = NULL)
 

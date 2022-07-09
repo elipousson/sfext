@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_filter_ext.R
 \name{st_filter_ext}
 \alias{st_filter_ext}
-\title{Filter, crop, trim, or erase simple feature or}
+\title{Filter, crop, trim, or erase a simple feature object or list}
 \usage{
 st_filter_ext(
   x,
@@ -12,6 +12,7 @@ st_filter_ext(
   erase = FALSE,
   crs = NULL,
   .predicate = sf::st_intersects,
+  geom_type = NULL,
   null.ok = TRUE,
   list.ok = TRUE,
   ...
@@ -42,5 +43,5 @@ changes. Defaults to \code{TRUE}.}
   }}
 }
 \description{
-Filter, crop, trim, or erase simple feature or
+Filter, crop, trim, or erase a simple feature object or list
 }

@@ -4,8 +4,8 @@
 \alias{read_sf_exif}
 \alias{write_exif}
 \alias{write_exif_keywords}
-\title{Read location data from images to a simple feature object using EXIF or write
-EXIF metadata}
+\title{Read EXIF metadata to create a simple feature object or write
+EXIF metadata to image files}
 \usage{
 read_sf_exif(
   path = NULL,

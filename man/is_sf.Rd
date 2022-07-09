@@ -11,7 +11,7 @@
 \alias{is_same_crs}
 \title{What is the class or spatial attributes of this feature?}
 \usage{
-is_sf(x, ext = FALSE, null.ok = FALSE)
+is_sf(x, ext = FALSE, null.ok = FALSE, list.ok = FALSE)
 
 is_sfg(x, null.ok = FALSE)
 
@@ -34,6 +34,8 @@ is_same_crs(x, y)
 not; defaults to \code{FALSE}. (used by \link{is_sf})}
 
 \item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
+
+\item{list.ok}{If \code{TRUE}, \link{is_sf} will return TRUE if x is a list of sf objects.}
 
 \item{named}{If \code{TRUE}, check if sf list is named; defaults \code{FALSE}.}
 

@@ -2,20 +2,27 @@
 % Please edit documentation in R/get_data_dir.R
 \name{get_data_dir}
 \alias{get_data_dir}
-\alias{create_data_dir}
-\title{Check data directory and create if needed}
+\title{Check if data directory exists and create a new directory if needed}
 \usage{
-get_data_dir(path = NULL, package = "sfext")
-
-create_data_dir(path = NULL, create = TRUE)
+get_data_dir(
+  path = NULL,
+  cache = FALSE,
+  create = TRUE,
+  package = "sfext",
+  null.ok = TRUE
+)
 }
 \arguments{
 \item{path}{Path to directory to use as data directory.}
 
-\item{package}{Package name; defaults to "sfext"}
+\item{cache}{If \code{TRUE}, replace a NULL path with \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
+(using value of package as appname).}
 
-\item{create}{For \link{create_data_dir}, if \code{TRUE} and directory does not exist
-at the path, prompt user to create directory. Defaults to \code{TRUE}.}
+\item{create}{If \code{FALSE} and path does not exist, return path with a warning.
+If \code{TRUE} and interactive, ask user if directory should be created. If not
+interactive and create is \code{TRUE}, a new directory will be created.}
+
+\item{package}{Package name; defaults to "sfext"}
 }
 \description{
 A utility function that wraps \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}.

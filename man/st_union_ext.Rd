@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_union_ext.R
 \name{st_union_ext}
 \alias{st_union_ext}
-\title{Union simple feature objects}
+\title{Union simple feature objects and combine name column values}
 \usage{
 st_union_ext(
   x = NULL,
@@ -37,4 +37,10 @@ sf object and y is \code{NULL}. If y is provided, \link{st_union_ext} is identic
 \description{
 Wrapper for \link[sf:geos_combine]{sf::st_union} supporting the additional feature of a combined
 name column collapsed into a single vector with \link[cli:pluralize]{cli::pluralize}.
+}
+\examples{
+nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
+nc_union <- st_union_ext(nc[10:15,], name_col = "NAME")
+nc_union
+plot(nc_union)
 }

@@ -2,10 +2,12 @@
 % Please edit documentation in R/st_make_grid_ext.R
 \name{st_make_grid_ext}
 \alias{st_make_grid_ext}
-\title{Make a grid over a location bounding box}
+\title{Make a grid over a simple feature bounding box}
 \usage{
 st_make_grid_ext(
   x,
+  ...,
+  unit = NULL,
   crs = NULL,
   cols = NULL,
   rows = NULL,
@@ -15,15 +17,32 @@ st_make_grid_ext(
   cellsize = NULL,
   what = NULL,
   style = "rect",
-  .id = "id"
+  .id = "id",
+  filter = FALSE,
+  trim = FALSE
 )
 }
 \arguments{
-\item{x}{An object sf, bbox, sfc, raster, or sp object or a data frame that
-can be converted to an sf object or a list of sf, bbox, or sfc objects.
-st_bbox_asp also supports vectors in the same format as a bbox object.}
+\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object, Default: \code{NULL}. Required.}
 
-\item{crs}{Coordinate reference system of bounding box to return}
+\item{...}{
+  Arguments passed on to \code{\link[=st_bbox_ext]{st_bbox_ext}}
+  \describe{
+    \item{\code{dist}}{buffer distance in units. Optional.}
+    \item{\code{diag_ratio}}{ratio of diagonal distance of area's bounding box used as
+buffer distance. e.g. if the diagonal distance is 3000 meters and the
+"diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
+provided.}
+    \item{\code{unit}}{Units for buffer. Supported options include "meter", "foot",
+"kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
+instead of "kilometer") are also supported. Distance in units is converted
+to units matching GDAL units for x; defaults to "meter"}
+    \item{\code{asp}}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
+character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
+without modification.}
+  }}
+
+\item{crs}{object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.}
 
 \item{cols, rows}{Used to set n if either are not \code{NULL}; defaults to \code{NULL}.
 row and id are added as columns to the grid if they are provided.}
@@ -47,16 +66,51 @@ circular polygons.}
 \item{style}{Style of cell to return with options including "rect", "square",
 "hex", "flat_top_hex", "circle", "circle_offset"}
 
-\item{.id}{A name to use for the cell id column.}
+\item{.id}{A name to use for the cell id column. Defaults to "id".}
 
-\item{location}{A \code{sf}, \code{sfc}, or \code{bbox} object, Default: \code{NULL}. Required.}
+\item{trim}{If \code{TRUE}, x is trimmed to y with \code{\link[=st_trim]{st_trim()}}.}
 }
 \description{
 Create a grid with an id column and optionally a set number of columns and
 rows. This documentation is incomplete the function may change.
 }
 \examples{
+nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
 
+# Make a 2 by 2 grid across a location with a 1000 meter gutter between each cell
+plot(
+  st_make_grid_ext(
+    x = nc[24, ],
+    dist = 500,
+    unit = "meter",
+    cols = 2,
+    rows = 2,
+    gutter = 1000
+  )
+)
+
+# Make a 5 by 5 grid with a 8.5 by 11 aspect ratio filtered to x
+plot(
+  st_make_grid_ext(
+    x = nc[24, ],
+    asp = 8.5 / 11,
+    cols = 5,
+    rows = 5,
+    filter = TRUE
+  )
+)
+
+# Make a 4 by 5 grid of circles trimmed to x boundaries
+plot(
+  st_make_grid_ext(
+    x = nc[24, ],
+    cols = 4,
+    rows = 5,
+    style = "circle_offset",
+    trim = TRUE
+  ),
+  max.plot = 1
+)
 }
 \seealso{
 \link[sf:st_make_grid]{sf::st_make_grid}

@@ -41,7 +41,7 @@ provided units; defaults to NULL.}
 geometries, in which case negative dist values give buffers on the
 right-hand side, positive on the left.}
 
-\item{...}{additional parameters passed to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
+\item{...}{additional parameters passed to \link[sf:geos_unary]{sf::st_buffer}}
 }
 \description{
 Return an sf object with a buffer based on \code{dist} or a proportion of the
@@ -50,7 +50,7 @@ the coordinate reference system is transformed into EPSG:3857 and then
 transformed back into the original CRS after the buffer has been applied.
 }
 \details{
-st_edge is a variation on st_buffer_ext where dist or diag_ratio is used to
+\link{st_edge} is a variation on \link{st_buffer_ext} where dist or diag_ratio is used to
 define the width of the edge to return either outside the existing geometry
 (for positive dist values) or inside the existing geometry (for negative dist
 values).
