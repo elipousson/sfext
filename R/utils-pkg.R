@@ -17,7 +17,7 @@ ls_pkg_extdata <- function(pkg) {
 #'
 #' @noRd
 ls_pkg_cache <- function(pkg) {
-  list.files(get_data_dir(path = NULL, package = pkg))
+  list.files(get_data_dir(cache = TRUE, package = pkg))
 }
 
 #' Is this package installed?
@@ -27,11 +27,12 @@ ls_pkg_cache <- function(pkg) {
 #' @importFrom rlang check_installed
 #' @noRd
 is_pkg_installed <- function(pkg, repo = NULL) {
-  if (!requireNamespace(pkg, quietly = TRUE)) {
+  if (requireNamespace(pkg, quietly = TRUE)) {
+    invisible(return(TRUE))
+  }
     if (!is.null(repo)) {
       pkg <- repo
     }
 
     check_installed(pkg = pkg)
-  }
 }

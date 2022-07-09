@@ -144,7 +144,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
       # If data is in extdata folder
       filename %in% ls_pkg_extdata(package) ~ system.file("extdata", filename, package = package),
       # If data is in the cache directory
-      filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(package = package), filename)
+      filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(cache = TRUE, package = package), filename)
     )
 
   read_sf_path(path = path, bbox = bbox, ...)
@@ -187,11 +187,11 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 read_sf_query <- function(path,
                           dsn = NULL,
                           bbox = NULL,
-                          query = NA,
+                          query = NULL,
                           table = NULL,
                           name = NULL,
                           name_col = NULL,
-                          wkt_filter = character(0),
+                          wkt_filter = NULL,
                           zm_drop = FALSE,
                           ...) {
   if (!is_missing(path)) {
@@ -272,7 +272,7 @@ read_sf_excel <- function(path,
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
 
-  st_filter_ext(data, bbox, crop = FALSE)
+  st_filter_ext(data, bbox)
 }
 
 #' @name read_sf_csv
@@ -298,7 +298,7 @@ read_sf_csv <- function(path,
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, crs = NULL, from_crs = from_crs)
 
-  st_filter_ext(data, bbox, crop = FALSE)
+  st_filter_ext(data, bbox)
 }
 
 #' @name read_sf_url
@@ -474,7 +474,7 @@ read_sf_geojson <- function(url,
       geojsonsf::geojson_sf(geojson = url, ...)
     )
 
-  st_filter_ext(data, bbox, crop = FALSE)
+  st_filter_ext(data, bbox)
 }
 
 #' @name read_sf_gist
@@ -550,7 +550,7 @@ read_sf_gmap <- function(url,
     data <- sf::st_zm(data)
   }
 
-  st_filter_ext(data, bbox, crop = FALSE)
+  st_filter_ext(data, bbox)
 }
 
 #' Get map ID from url
@@ -671,7 +671,7 @@ read_sf_gsheet <- function(url,
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
 
-  st_filter_ext(data, bbox, crop = FALSE)
+  st_filter_ext(data, bbox)
 }
 
 #' Join data from a Google Sheet to a simple feature object

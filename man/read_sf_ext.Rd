@@ -26,11 +26,11 @@ read_sf_query(
   path,
   dsn = NULL,
   bbox = NULL,
-  query = NA,
+  query = NULL,
   table = NULL,
   name = NULL,
   name_col = NULL,
-  wkt_filter = character(0),
+  wkt_filter = NULL,
   zm_drop = FALSE,
   ...
 )
