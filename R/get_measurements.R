@@ -80,7 +80,7 @@ get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "le
 
   if (is_polygon(x)) {
     is_pkg_installed("lwgeom")
-    cli::cli_alert_info("For objects with POLYGON geometry, {.fun {'get_length'}} uses {.fun {'lwgeom::st_perimeter'}} to return the object perimeter.")
+    cli_inform("For objects with POLYGON geometry, {.fun get_length} uses {.fun lwgeom::st_perimeter} to return the object perimeter.")
     .id <- "perimeter"
 
     if (sf::st_is_longlat(x)) {
