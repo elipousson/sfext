@@ -207,7 +207,6 @@ get_grid_params <- function(bbox,
       "The row and columns values for the output simple feature grid are inconsistent when style is {style}.",
       condition = !(style %in% c("hex", "flat_top_hex"))
     )
-
   } else if (!is.null(n)) {
     n <-
       dplyr::case_when(

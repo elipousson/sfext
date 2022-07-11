@@ -30,9 +30,9 @@ is_pkg_installed <- function(pkg, repo = NULL) {
   if (requireNamespace(pkg, quietly = TRUE)) {
     invisible(return(TRUE))
   }
-    if (!is.null(repo)) {
-      pkg <- repo
-    }
+  if (!is.null(repo)) {
+    pkg <- repo
+  }
 
-    check_installed(pkg = pkg)
+  check_installed(pkg = pkg)
 }

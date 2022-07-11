@@ -90,4 +90,3 @@ is_df_paper <- function(x, ext = FALSE) {
 
   all(is_valid_paper)
 }
-
