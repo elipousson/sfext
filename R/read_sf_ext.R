@@ -87,6 +87,8 @@ read_sf_ext <- function(...) {
       "sf" = read_sf_query
     )
 
+  # FIXME: read_sf_ext has an issue with passing parameters that it shouldn't
+  # Adding a path = NULL parameter to read_sf_pkg may fix one of the issues temporarily but modify_fn_fmls needs an overhaul
   args <-
     modify_fn_fmls(
       params = params,
@@ -124,7 +126,7 @@ modify_fn_fmls <- function(params, fn, keep_missing = FALSE, keep.null = FALSE, 
 #' @rdname read_sf_ext
 #' @export
 #' @importFrom dplyr case_when
-read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
+read_sf_pkg <- function(data, path = NULL, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
   check_null(package)
 
   is_pkg_installed(package)
