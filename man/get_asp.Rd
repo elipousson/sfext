@@ -8,16 +8,45 @@ get_asp(
   asp = NULL,
   paper = NULL,
   orientation = NULL,
+  bbox = NULL,
   margin = NULL,
-  unit = NULL,
   block_asp = FALSE,
-  null.ok = TRUE
+  null.ok = TRUE,
+  ...
 )
 }
 \arguments{
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
+
+\item{paper}{Paper, Default: 'letter'.}
+
+\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
+'portrait'.}
+
+\item{bbox}{A bounding box to use to get orientation using \code{\link[=sf_bbox_asp]{sf_bbox_asp()}} with orientation = TRUE.}
+
+\item{margin}{A numeric vector or ggplot2 margin object.}
+
+\item{...}{
+  Arguments passed on to \code{\link[=get_paper]{get_paper}}
+  \describe{
+    \item{\code{standard}}{Size standard, "ANSI", "ISO", "British Imperial", "JIS",
+"USPS", "Facebook", "Instagram", or "Twitter".}
+    \item{\code{series}}{Size series (e.g. A), Default: \code{NULL}}
+    \item{\code{size}}{Size number (only used for "ISO" and "JIS" series). Standard,
+series, and size may all be required to return a single paper when using
+these parameters.}
+    \item{\code{width,height}}{Width and height in units, Default: \code{NULL}.}
+    \item{\code{units}}{Paper size units, either "in", "mm", or "px"; defaults to \code{NULL}
+(using "in" if width or height are provided).}
+    \item{\code{ncol,nrow}}{Number of expected columns and rows in paper; used to
+determine row_height and section_asp in paper data frame returned by
+get_paper if nrow or ncol is greater than 1; defaults to \code{NULL}.}
+    \item{\code{gutter}}{Gutter distance in units. Gutter is used as the spacing between
+nrow and columns (variable spacing is not currently supported); defaults to 0.}
+  }}
 }
 \value{
 A numeric aspect ratio.

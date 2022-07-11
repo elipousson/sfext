@@ -9,7 +9,7 @@
 \alias{str_add_filetype}
 \alias{str_remove_filetype}
 \alias{str_extract_filetype}
-\title{Use the stringr package to help make consistent file names}
+\title{Modify strings to help make consistent file names}
 \usage{
 str_fix(
   prefix = NULL,
@@ -27,8 +27,8 @@ str_prefix(
   sep = "_",
   clean_names = TRUE,
   post = FALSE,
-  date_fmt = "\%F",
-  time_fmt = "\%Y-\%m-\%d_\%I-\%M-\%S_\%p"
+  date.format = "\%F",
+  time.format = "\%Y-\%m-\%d_\%I-\%M-\%S_\%p"
 )
 
 str_pad_digits(string, pad = "0", side = "left", width = NULL)
@@ -63,7 +63,7 @@ to snake case with \code{\link[janitor:make_clean_names]{janitor::make_clean_nam
 \item{post}{If \code{TRUE}, use the prefix string as a postfix; defaults to
 \code{FALSE}.}
 
-\item{date_fmt, time_fmt}{Date or time format Only used by \link{str_prefix} if
+\item{date.format, time.format}{Date or time format Only used by \link{str_prefix} if
 prefix is "date" or "time" and not currently accessible when using
 \link{str_fix} or \link{make_filename}.}
 

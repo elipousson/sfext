@@ -8,6 +8,7 @@ to an sf object}
 address_to_sf(
   x,
   address = "address",
+  method = "osm",
   coords = c("lon", "lat"),
   remove_coords = FALSE,
   crs = NULL,
@@ -19,6 +20,29 @@ address_to_sf(
 
 \item{address}{Address column name, Default: 'address'}
 
+\item{method}{the geocoding service to be used. API keys are loaded from environmental variables. Run \code{usethis::edit_r_environ()} to open your .Renviron file and add an API key as an environmental variable. For example, add the line \code{GEOCODIO_API_KEY="YourAPIKeyHere"}.
+\itemize{
+\item \code{"osm"}: \href{https://nominatim.org}{Nominatim}.
+\item \code{"census"}: \href{https://geocoding.geo.census.gov/}{US Census}. Geographic coverage is limited to the United States.  Batch geocoding is supported.
+\item \code{"arcgis"}: \href{https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm}{ArcGIS}.
+\item \code{"geocodio"}: \href{https://www.geocod.io/}{Geocodio}. Geographic coverage is limited to the United States and Canada. An API key must be stored in the environmental variable "GEOCODIO_API_KEY". Batch geocoding is supported.
+\item \code{"iq"}: \href{https://locationiq.com/}{Location IQ}.  An API key must be stored in the environmental variable "LOCATIONIQ_API_KEY".
+\item \code{"google"}: \href{https://developers.google.com/maps/documentation/geocoding/overview}{Google}.  An API key must be stored in the environmental variable "GOOGLEGEOCODE_API_KEY".
+\item \code{"opencage"}: \href{https://opencagedata.com}{OpenCage}.  An API key must be stored in the environmental variable "OPENCAGE_KEY".
+\item \code{"mapbox"}: \href{https://docs.mapbox.com/api/search/}{Mapbox}.  An API key must be stored in the environmental variable "MAPBOX_API_KEY".
+\item \code{"here"}: \href{https://developer.here.com/products/geocoding-and-search}{HERE}.  An API key must be stored in the environmental variable "HERE_API_KEY". Batch geocoding is supported, but must be explicitly called with \code{mode = "batch"}.
+\item \code{"tomtom"}: \href{https://developer.tomtom.com/search-api/search-api-documentation/geocoding}{TomTom}.  An API key must be stored in the environmental variable "TOMTOM_API_KEY". Batch geocoding is supported.
+\item \code{"mapquest"}: \href{https://developer.mapquest.com/documentation/geocoding-api/}{MapQuest}.  An API key must be stored in the environmental variable "MAPQUEST_API_KEY". Batch geocoding is supported.
+\item \code{"bing"}: \href{https://docs.microsoft.com/en-us/bingmaps/rest-services/locations/}{Bing}.  An API key must be stored in the environmental variable "BINGMAPS_API_KEY". Batch geocoding is supported, but must be explicitly called with \code{mode = "batch"}.
+\item \code{"geoapify"}: \href{https://www.geoapify.com/geocoding-api}{Geoapify}.  An API key must be stored in the environmental variable "GEOAPIFY_KEY".
+\item \code{"cascade"} \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} use \link[tidygeocoder]{geocode_combine} or \link[tidygeocoder]{geo_combine} instead.
+The "cascade" method first uses one geocoding service and then uses
+a second geocoding service if the first service didn't return results.
+The services and order is specified by the cascade_order argument.
+Note that this is not compatible with \code{full_results = TRUE} as geocoding
+services have different columns that they return.
+}}
+
 \item{coords}{Coordinate columns for input dataframe or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 
@@ -29,14 +53,40 @@ after converting a data frame to simple feature object; defaults to
 \item{crs}{Cordinate reference system to return, Default: 4326 for \link{sf_to_df}
 and NULL for \link{df_to_sf}.}
 
-\item{...}{Additional parameters passed to \link[tidygeocoder:geo]{tidygeocoder::geo} or \link[tidygeocoder:geocode]{tidygeocoder::geocode}}
+\item{...}{
+  Arguments passed on to \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode}}
+  \describe{
+    \item{\code{.tbl}}{dataframe containing addresses}
+    \item{\code{street}}{street address column name}
+    \item{\code{city}}{city column name}
+    \item{\code{county}}{county column name}
+    \item{\code{state}}{state column name}
+    \item{\code{postalcode}}{postalcode column name (zip code if in the United States)}
+    \item{\code{country}}{country column name}
+    \item{\code{lat}}{latitude column name. Can be quoted or unquoted (ie. lat or 'lat').}
+    \item{\code{long}}{longitude column name. Can be quoted or unquoted (ie. long or 'long').}
+    \item{\code{return_input}}{if TRUE then the input dataset will be combined with the geocoder query results
+and returned. If FALSE only the geocoder results will be returned.}
+    \item{\code{limit}}{maximum number of results to return per input address. For many geocoding services
+the maximum value of the limit parameter is 100. Pass \code{limit = NULL} to use
+the default \code{limit} value of the selected geocoding service.
+For batch geocoding, limit must be set to 1 (default) if \code{return_addresses = TRUE}.
+To use \code{limit > 1} or \code{limit = NULL} set return_input to FALSE.
+Refer to \link[tidygeocoder]{api_parameter_reference} for more details.}
+    \item{\code{return_addresses}}{if TRUE return input addresses. Defaults to TRUE if \code{return_input} is FALSE
+and FALSE if \code{return_input} is TRUE. This argument is passed to the \code{geo()} function.}
+    \item{\code{unique_only}}{if TRUE then only unique results will be returned and
+return_input will be set to FALSE.}
+  }}
 }
 \value{
 A \code{sf} object with POINT geometry for all geocoded addresses with valid coordinates.
 }
 \description{
 Wraps \link[tidygeocoder:geo]{tidygeocoder::geo} and \link[tidygeocoder:geocode]{tidygeocoder::geocode} to convert a character
-string or a data frame with an address column.
+string or a data frame with an address column. Additional parameters passed
+to \link[tidygeocoder:geocode]{tidygeocoder::geocode} which passes ... parameters to
+\link[tidygeocoder:geo]{tidygeocoder::geo}.
 }
 \seealso{
 \code{\link[tidygeocoder:geo]{tidygeocoder::geo()}}, \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode()}}

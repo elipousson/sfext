@@ -9,11 +9,11 @@ st_make_grid_ext(
   ...,
   unit = NULL,
   crs = NULL,
-  cols = NULL,
-  rows = NULL,
+  ncol = NULL,
+  nrow = NULL,
+  n = NULL,
   gutter = 0,
   desc = FALSE,
-  n = NULL,
   cellsize = NULL,
   what = NULL,
   style = "rect",
@@ -45,8 +45,11 @@ to units matching GDAL units for x; defaults to "meter"}
 
 \item{crs}{Coordinate reference system of bounding box to return}
 
-\item{cols, rows}{Used to set n if either are not \code{NULL}; defaults to \code{NULL}.
+\item{ncol, nrow}{Used to set n if either are not \code{NULL}; defaults to \code{NULL}.
 row and id are added as columns to the grid if they are provided.}
+
+\item{n}{If n is NULL and square is \code{TRUE}, the grid is set automatically to
+be 10 cells wide, Default: \code{NULL}}
 
 \item{gutter}{Distance in units between each column cell; gutter effectively
 serves as a margin as the negative buffer is applied to all cells
@@ -54,9 +57,6 @@ serves as a margin as the negative buffer is applied to all cells
 
 \item{desc}{If TRUE, reverse standard order of cell id numbering; defaults
 \code{FALSE}}
-
-\item{n}{If n is NULL and square is \code{TRUE}, the grid is set automatically to
-be 10 cells wide, Default: \code{NULL}}
 
 \item{cellsize}{target cellsize}
 
@@ -86,8 +86,8 @@ plot(
     x = nc[24, ],
     dist = 500,
     unit = "meter",
-    cols = 2,
-    rows = 2,
+    ncol = 2,
+    nrow = 2,
     gutter = 1000
   )
 )
@@ -97,8 +97,8 @@ plot(
   st_make_grid_ext(
     x = nc[24, ],
     asp = 8.5 / 11,
-    cols = 5,
-    rows = 5,
+    ncol = 5,
+    nrow = 5,
     filter = TRUE
   )
 )
@@ -107,8 +107,8 @@ plot(
 plot(
   st_make_grid_ext(
     x = nc[24, ],
-    cols = 4,
-    rows = 5,
+    ncol = 4,
+    nrow = 5,
     style = "circle_offset",
     trim = TRUE
   ),

@@ -9,14 +9,13 @@
 \alias{read_sf_csv}
 \alias{read_sf_url}
 \alias{read_sf_esri}
-\alias{read_sf_geojson}
 \alias{read_sf_gist}
 \alias{read_sf_gmap}
 \alias{read_sf_download}
 \alias{read_sf_gsheet}
 \title{Read spatial data in a bounding box to a simple feature object from multiple sources}
 \usage{
-read_sf_ext(..., bbox = NULL)
+read_sf_ext(...)
 
 read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
 
@@ -71,8 +70,6 @@ read_sf_esri(
   ...
 )
 
-read_sf_geojson(url, path = NULL, geojson = NULL, bbox = NULL, ...)
-
 read_sf_gist(url, id = NULL, bbox = NULL, ...)
 
 read_sf_gmap(url, bbox = NULL, zm_drop = TRUE)
@@ -105,10 +102,10 @@ read_sf_gsheet(
 \arguments{
 \item{...}{Additional parameters passed to multiple functions; see details.}
 
+\item{data}{Name of a package dataset; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
+
 \item{bbox}{A bounding box object; defaults to \code{NULL}. If \code{"bbox"} is provided,
 only returns features intersecting the bounding box.}
-
-\item{data}{Name of a package dataset; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
 
 \item{package}{Package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
 
@@ -158,8 +155,6 @@ ArcGIS FeatureServer or MapServer to access with \code{\link[esri2sf:esri2sf]{es
 (the default) only show the column types if they are not explicitly supplied
 by the \code{col_types} argument.}
 
-\item{geojson}{string or vector of GeoJSON, or a URL or file pointing to a geojson file}
-
 \item{id}{The name of a column in which to store the file path. This is
 useful when reading multiple input files and there is data in the file
 paths, such as the data collection date. If \code{NULL} (the default) no extra
@@ -171,14 +166,28 @@ both required.}
 \item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
 date/time prefix; defaults to \code{NULL}.}
 
-\item{method}{Method to be used for downloading files.  Current
-    download methods are \code{"internal"}, \code{"wininet"} (Windows
-    only) \code{"libcurl"}, \code{"wget"} and \code{"curl"}, and there
-    is a value \code{"auto"}: see \sQuote{Details} and \sQuote{Note}.
-
-    The method can also be set through the option
-    \code{"download.file.method"}: see \code{\link{options}()}.
-  }
+\item{method}{the geocoding service to be used. API keys are loaded from environmental variables. Run \code{usethis::edit_r_environ()} to open your .Renviron file and add an API key as an environmental variable. For example, add the line \code{GEOCODIO_API_KEY="YourAPIKeyHere"}.
+\itemize{
+\item \code{"osm"}: \href{https://nominatim.org}{Nominatim}.
+\item \code{"census"}: \href{https://geocoding.geo.census.gov/}{US Census}. Geographic coverage is limited to the United States.  Batch geocoding is supported.
+\item \code{"arcgis"}: \href{https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm}{ArcGIS}.
+\item \code{"geocodio"}: \href{https://www.geocod.io/}{Geocodio}. Geographic coverage is limited to the United States and Canada. An API key must be stored in the environmental variable "GEOCODIO_API_KEY". Batch geocoding is supported.
+\item \code{"iq"}: \href{https://locationiq.com/}{Location IQ}.  An API key must be stored in the environmental variable "LOCATIONIQ_API_KEY".
+\item \code{"google"}: \href{https://developers.google.com/maps/documentation/geocoding/overview}{Google}.  An API key must be stored in the environmental variable "GOOGLEGEOCODE_API_KEY".
+\item \code{"opencage"}: \href{https://opencagedata.com}{OpenCage}.  An API key must be stored in the environmental variable "OPENCAGE_KEY".
+\item \code{"mapbox"}: \href{https://docs.mapbox.com/api/search/}{Mapbox}.  An API key must be stored in the environmental variable "MAPBOX_API_KEY".
+\item \code{"here"}: \href{https://developer.here.com/products/geocoding-and-search}{HERE}.  An API key must be stored in the environmental variable "HERE_API_KEY". Batch geocoding is supported, but must be explicitly called with \code{mode = "batch"}.
+\item \code{"tomtom"}: \href{https://developer.tomtom.com/search-api/search-api-documentation/geocoding}{TomTom}.  An API key must be stored in the environmental variable "TOMTOM_API_KEY". Batch geocoding is supported.
+\item \code{"mapquest"}: \href{https://developer.mapquest.com/documentation/geocoding-api/}{MapQuest}.  An API key must be stored in the environmental variable "MAPQUEST_API_KEY". Batch geocoding is supported.
+\item \code{"bing"}: \href{https://docs.microsoft.com/en-us/bingmaps/rest-services/locations/}{Bing}.  An API key must be stored in the environmental variable "BINGMAPS_API_KEY". Batch geocoding is supported, but must be explicitly called with \code{mode = "batch"}.
+\item \code{"geoapify"}: \href{https://www.geoapify.com/geocoding-api}{Geoapify}.  An API key must be stored in the environmental variable "GEOAPIFY_KEY".
+\item \code{"cascade"} \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} use \link[tidygeocoder]{geocode_combine} or \link[tidygeocoder]{geo_combine} instead.
+The "cascade" method first uses one geocoding service and then uses
+a second geocoding service if the first service didn't return results.
+The services and order is specified by the cascade_order argument.
+Note that this is not compatible with \code{full_results = TRUE} as geocoding
+services have different columns that they return.
+}}
 
 \item{unzip}{If \code{TRUE}, url must be a zip file that is downloaded, unzipped
 into a temporary directory (created with \code{\link[=tempdir]{tempdir()}}), and then read to a file using the specified
@@ -203,9 +212,7 @@ not provided to \link{read_sf_gsheet}.}
 An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support reading spatial data
 based on a file path, URL, or the data name and associated package.
 Optionally provide a bounding box to filter data (not supported for all data
-types). If a file path or url is provided for a GeoJSON file, the
-\link{read_sf_geojson} function (using the suggested
-\href{https://github.com/SymbolixAU/geojsonsf}{{geojsonsf}} package) is used.
+types).
 }
 \details{
 Reading data from a url:

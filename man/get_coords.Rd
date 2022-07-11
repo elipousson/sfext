@@ -34,6 +34,9 @@ or alternatively "wkt"; defaults to \code{NULL} ("centroid").}
 Default: \code{TRUE}.}
 
 \item{drop}{If \code{TRUE} and x is an sf object, drop the geometry Default: \code{TRUE}.}
+
+\item{call}{Passed as the call parameter for \link[rlang:arg_match]{rlang::arg_match} to improve error messages when function is used
+internally.}
 }
 \description{
 An extended version of \link[sf:st_coordinates]{sf::st_coordinates} that supports binding coordinates

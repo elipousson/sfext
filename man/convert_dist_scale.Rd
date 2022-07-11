@@ -12,12 +12,18 @@ convert_dist_scale(
   scale_unit = "in",
   actual_unit = NULL,
   scale_factor = NULL,
-  dpi = 120
+  dpi = 120,
+  ...
 )
 }
 \arguments{
 \item{dist}{distance to convert. If paper is provided, paper width and height
 are used as dist.}
+
+\item{paper}{Paper, Default: 'letter'.}
+
+\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
+'portrait'.}
 
 \item{scale}{Scale name}
 
@@ -31,6 +37,27 @@ e.g. if 1" = 1', the scale factor is 12. optional if scale if provided;
 defaults to \code{NULL}.}
 
 \item{dpi}{dots per square inch (used as conversion factor for "px" to "in")}
+
+\item{...}{
+  Arguments passed on to \code{\link[=get_paper]{get_paper}}
+  \describe{
+    \item{\code{standard}}{Size standard, "ANSI", "ISO", "British Imperial", "JIS",
+"USPS", "Facebook", "Instagram", or "Twitter".}
+    \item{\code{series}}{Size series (e.g. A), Default: \code{NULL}}
+    \item{\code{size}}{Size number (only used for "ISO" and "JIS" series). Standard,
+series, and size may all be required to return a single paper when using
+these parameters.}
+    \item{\code{width,height}}{Width and height in units, Default: \code{NULL}.}
+    \item{\code{units}}{Paper size units, either "in", "mm", or "px"; defaults to \code{NULL}
+(using "in" if width or height are provided).}
+    \item{\code{ncol,nrow}}{Number of expected columns and rows in paper; used to
+determine row_height and section_asp in paper data frame returned by
+get_paper if nrow or ncol is greater than 1; defaults to \code{NULL}.}
+    \item{\code{gutter}}{Gutter distance in units. Gutter is used as the spacing between
+nrow and columns (variable spacing is not currently supported); defaults to 0.}
+    \item{\code{margin}}{A numeric vector or ggplot2 margin object.}
+    \item{\code{bbox}}{A bounding box to use to get orientation using \code{\link[=sf_bbox_asp]{sf_bbox_asp()}} with orientation = TRUE.}
+  }}
 }
 \value{
 dist values converted from scale_unit to actual_unit based on

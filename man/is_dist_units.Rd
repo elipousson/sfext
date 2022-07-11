@@ -43,7 +43,8 @@ objects; "diagdist", "xdist", "ydist". defaults to \code{NULL}.}
 \item{diff}{If \code{TRUE}, return results from \link{is_diff_dist} or \link{is_diff_area};
 if \code{FALSE}, return logical indicator; defaults to \code{FALSE}}
 
-\item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match}.}
+\item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match} to
+improve error messages when function is used internally.}
 
 \item{...}{Additional parameters passed to all.equal}
 

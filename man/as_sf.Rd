@@ -48,6 +48,10 @@ provided.}
 \item{class}{A class to convert data to; defaults to NULL (which returns
 "sf")}
 
+\item{call}{Passed as the call parameter for \link[cli:cli_abort]{cli::cli_abort} or
+\link[rlang:arg_match]{rlang::arg_match} to improve error messages when function is used
+internally.}
+
 \item{data}{Data that can be converted to sf, sfc, bbox or a sf list object.}
 }
 \description{

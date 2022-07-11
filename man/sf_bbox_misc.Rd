@@ -64,8 +64,8 @@ defaults to \code{FALSE}.}
 corner, midpoint, or center of the bounding box ("xmin", "ymin", "xmax",
 "ymax", "xmid", "ymid")}
 
-\item{call}{passed to error_call parameter of \link{arg_match} to improve error
-messages where sf_misc functions are being used by other package functions.}
+\item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match} to
+improve error messages when function is used internally.}
 
 \item{from, to}{xy pairs (e.g. c("xmax", "ymax) defining points to measure
 distance from and to.}

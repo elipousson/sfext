@@ -31,6 +31,10 @@ as_polygons(..., to = "POLYGON")
 
 \item{to}{The geometry type to return, either POINT or MULTIPOINT or
 LINESTRING or MULTILINESTRING.}
+
+\item{call}{Passed as the call parameter for \link[cli:cli_abort]{cli::cli_abort} or
+\link[rlang:arg_match]{rlang::arg_match} to improve error messages when function is used
+internally.}
 }
 \description{
 Works with sf, sfc, and bbox objects using \link[sf:geos_unary]{sf::st_centroid}. Works with
