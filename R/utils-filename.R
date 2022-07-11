@@ -139,8 +139,8 @@ str_add_filetype <- function(string, filetype = NULL) {
   if (grepl(pattern = "\\.[a-zA-Z0-9]+$", x = string)) {
     return(string)
   }
-
-  paste0(string, ".", filetype)
+ # FIXME: Previously used paste0(string, ".", filetype)) - make sure the change doesn't cause any new issues
+  paste0(c(string, filetype), collapse = ".")
 }
 
 #' @name str_remove_filetype
