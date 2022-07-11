@@ -27,13 +27,11 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    tidyselect,
     units
 Suggests: 
     covr,
     esri2sf (>= 0.1.1),
     exiftoolr,
-    geojsonsf,
     geosphere,
     ggplot2,
     gistr,
@@ -45,6 +43,7 @@ Suggests:
     rappdirs,
     readr,
     readxl,
+    rmarkdown,
     testthat (>= 3.0.0),
     tidygeocoder
 Remotes: 
