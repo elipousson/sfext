@@ -54,7 +54,8 @@ is_diff_dist <- function(x, y, units = NULL) {
 #'   objects; "diagdist", "xdist", "ydist". defaults to `NULL`.
 #' @param diff If `TRUE`, return results from [is_diff_dist] or [is_diff_area];
 #'   if `FALSE`, return logical indicator; defaults to `FALSE`
-#' @param call Passed as the error_call parameter for [rlang::arg_match].
+#' @param call Passed as the error_call parameter for [rlang::arg_match] to
+#'   improve error messages when function is used internally.
 #' @param ... Additional parameters passed to all.equal
 #' @export
 #' @importFrom sf st_area

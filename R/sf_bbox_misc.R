@@ -30,8 +30,8 @@
 #' @param dir If "in", contract the `bbox` by x_nudge and y_nudge. If "out",
 #'   expand the bbox by x_nudge and y_nudge. If dir is not `NULL`; absolute
 #'   values are used for x_nudge and y_nudge. Defaults to `NULL`.
-#' @param call passed to error_call parameter of [arg_match] to improve error
-#'   messages where sf_misc functions are being used by other package functions.
+#' @param call Passed as the error_call parameter for [rlang::arg_match] to
+#'   improve error messages when function is used internally.
 #' @family dist
 #' @name sf_bbox_misc
 NULL
