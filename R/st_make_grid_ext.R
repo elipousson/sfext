@@ -6,7 +6,7 @@
 #' @param x A `sf`, `sfc`, or `bbox` object, Default: `NULL`. Required.
 #' @inheritParams st_bbox_ext
 #' @inheritDotParams st_bbox_ext -class -null.ok
-#' @param cols,rows Used to set n if either are not `NULL`; defaults to `NULL`.
+#' @param ncol,nrow Used to set n if either are not `NULL`; defaults to `NULL`.
 #'   row and id are added as columns to the grid if they are provided.
 #' @param gutter Distance in units between each column cell; gutter effectively
 #'   serves as a margin as the negative buffer is applied to all cells
@@ -34,11 +34,11 @@ st_make_grid_ext <- function(x,
                              ...,
                              unit = NULL,
                              crs = NULL,
-                             cols = NULL,
-                             rows = NULL,
+                             ncol = NULL,
+                             nrow = NULL,
+                             n = NULL,
                              gutter = 0,
                              desc = FALSE,
-                             n = NULL,
                              cellsize = NULL,
                              what = NULL,
                              style = "rect",
@@ -75,8 +75,8 @@ st_make_grid_ext <- function(x,
       unit = unit,
       n = n,
       what = what,
-      cols = cols,
-      rows = rows,
+      ncol = ncol,
+      nrow = nrow,
       style = style
     )
 
@@ -97,8 +97,8 @@ st_make_grid_ext <- function(x,
     grid <-
       dplyr::mutate(
         grid,
-        col = rep(sort(seq(params$cols), decreasing = desc), params$rows),
-        row = sort(rep(seq(params$rows), params$cols), decreasing = !desc)
+        col = rep(sort(seq(params$ncol), decreasing = desc), params$nrow),
+        row = sort(rep(seq(params$nrow), params$ncol), decreasing = !desc)
       )
 
     grid <- dplyr::arrange(grid, row, col)
@@ -117,7 +117,7 @@ st_make_grid_ext <- function(x,
     grid <-
       st_buffer_ext(
         grid,
-        dist = (sf_bbox_xdist(bbox) / params$cols) / 2
+        dist = (sf_bbox_xdist(bbox) / params$ncol) / 2
       )
   }
 
@@ -143,7 +143,7 @@ st_make_grid_ext <- function(x,
 
 #' Get parameters for make_location_grid
 #'
-#' @param base default value used for n if cols, rows, and cellsize are all
+#' @param base default value used for n if ncol, nrow, and cellsize are all
 #'   `NULL`.
 #' @noRd
 #' @importFrom rlang has_length
@@ -154,8 +154,8 @@ get_grid_params <- function(bbox,
                             unit = NULL,
                             n = NULL,
                             what = NULL,
-                            cols = NULL,
-                            rows = NULL,
+                            ncol = NULL,
+                            nrow = NULL,
                             base = 10,
                             style = NULL) {
   what <- match.arg(what, c("polygons", "corners", "centers"))
@@ -166,20 +166,20 @@ get_grid_params <- function(bbox,
       cellsize <- rep(cellsize, 2)
     }
 
-    if (!is.null(cols) && is_longer(cols * cellsize[1], sf_bbox_xdist(bbox))) {
+    if (!is.null(ncol) && is_longer(ncol * cellsize[1], sf_bbox_xdist(bbox))) {
       cli::cli_alert_danger("The cellsize will not fit within the width of the bounding box with the number of columns requested.")
     }
 
-    if (!is.null(rows) && is_longer(rows * cellsize[2], sf_bbox_ydist(bbox))) {
-      cli::cli_alert_danger("The specified cellsize will not fit within the height of the bounding box with the number of rows requested.")
+    if (!is.null(nrow) && is_longer(nrow * cellsize[2], sf_bbox_ydist(bbox))) {
+      cli::cli_alert_danger("The specified cellsize will not fit within the height of the bounding box with the number of nrow requested.")
     }
   }
 
   bbox_asp <- sf_bbox_asp(bbox)
 
-  if (is.null(n) && is.null(cols) && is.null(rows)) {
-    cols <- base
-    rows <- base
+  if (is.null(n) && is.null(ncol) && is.null(nrow)) {
+    ncol <- base
+    nrow <- base
   }
 
   if (is.null(n) && !is.null(cellsize)) {
@@ -190,21 +190,24 @@ get_grid_params <- function(bbox,
   if (is.null(n) && is.null(cellsize)) {
     n <-
       dplyr::case_when(
-        (!is.null(cols) && (style == "square")) ~ c(cols, cols / bbox_asp),
-        (!is.null(cols) && is.null(rows)) ~ c(cols, cols),
-        (!is.null(cols) && !is.null(rows)) ~ c(cols, rows)
+        (!is.null(ncol) && (style == "square")) ~ c(ncol, ncol / bbox_asp),
+        (!is.null(ncol) && is.null(nrow)) ~ c(ncol, ncol),
+        (!is.null(ncol) && !is.null(nrow)) ~ c(ncol, nrow)
       )
 
     n <-
       dplyr::case_when(
-        (is.null(cols) && !is.null(rows) && (style == "square")) ~ c(rows * bbox_asp, rows),
-        (is.null(cols) && !is.null(rows)) ~ c(rows, rows),
+        (is.null(ncol) && !is.null(nrow) && (style == "square")) ~ c(nrow * bbox_asp, nrow),
+        (is.null(ncol) && !is.null(nrow)) ~ c(nrow, nrow),
         TRUE ~ n
       )
 
-    if (style %in% c("hex", "flat_top_hex")) {
-      cli::cli_alert_info("rows and columns do not work consistently with hexagon grids.")
-    }
+    # FIXME: Check this and see what the issue actually is and if a warning is needed
+    cli_warn_ifnot(
+      "The row and columns values for the output simple feature grid are inconsistent when style is {style}.",
+      condition = !(style %in% c("hex", "flat_top_hex"))
+    )
+
   } else if (!is.null(n)) {
     n <-
       dplyr::case_when(
@@ -237,7 +240,7 @@ get_grid_params <- function(bbox,
   list(
     cellsize = cellsize,
     n = n,
-    cols = n[1], rows = n[2],
+    ncol = n[1], nrow = n[2],
     square = square,
     what = what,
     flat_topped = flat_topped

@@ -6,7 +6,7 @@ test_that("st_make_grid_ext works", {
   )
 
   expect_s3_class(
-    st_make_grid_ext(nc, cols = 4, rows = 1),
+    st_make_grid_ext(nc, ncol = 4, nrow = 1),
     "sf"
   )
 
