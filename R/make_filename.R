@@ -36,18 +36,16 @@ make_filename <- function(name = NULL,
                           create = TRUE) {
   cli_abort_ifnot(
     "{.arg name} or {.arg filename} must be provided.",
-    condition = is.character(name) || is.character(filename)
+    condition = is.character(name) | is.character(filename)
   )
 
-  path <- get_data_dir(path = path, cache = cache, create = create)
-
-  # If file name is provided, remove file type
+  # If filename is provided, remove file type (if filename includes the filetype)
   if (!is.null(filename)) {
     filetype <- filetype %||% str_extract_filetype(filename)
     filename <- str_remove_filetype(filename, filetype)
   }
 
-  # If file name is not provided, file name is based on label, name, pad and width
+  # If file name is not provided, filename is based on label, name, pad and width
   if (!is.null(name)) {
     cli_warn_ifnot(
       "The provided {.arg filename} can't be used if {.arg name} is also provided.",
@@ -74,11 +72,14 @@ make_filename <- function(name = NULL,
       pad = NULL
     )
 
+  # Append filetype
   filename <-
     str_add_filetype(
       filename,
       filetype
     )
+
+  path <- get_data_dir(path = path, cache = cache, create = create)
 
   if (is.null(path)) {
     return(filename)
