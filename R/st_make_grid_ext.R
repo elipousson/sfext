@@ -82,7 +82,7 @@ st_make_grid_ext <- function(x,
 
   grid <-
     sf::st_make_grid(
-      x = x,
+      x = as_sf(bbox),
       cellsize = params$cellsize,
       n = params$n,
       what = params$what,
