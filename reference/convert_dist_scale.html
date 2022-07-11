@@ -56,7 +56,8 @@
 <span>  scale_unit <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>  actual_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale_factor <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dpi <span class="op">=</span> <span class="fl">120</span></span>
+<span>  dpi <span class="op">=</span> <span class="fl">120</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -65,6 +66,15 @@
     <dl><dt>dist</dt>
 <dd><p>distance to convert. If paper is provided, paper width and height
 are used as dist.</p></dd>
+
+
+<dt>paper</dt>
+<dd><p>Paper, Default: 'letter'.</p></dd>
+
+
+<dt>orientation</dt>
+<dd><p>Orientation "portrait", "landscape", or "square", Default:
+'portrait'.</p></dd>
 
 
 <dt>scale</dt>
@@ -88,6 +98,45 @@ defaults to <code>NULL</code>.</p></dd>
 
 <dt>dpi</dt>
 <dd><p>dots per square inch (used as conversion factor for "px" to "in")</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Arguments passed on to <code><a href="get_paper.html">get_paper</a></code></p><dl><dt><code>standard</code></dt>
+<dd><p>Size standard, "ANSI", "ISO", "British Imperial", "JIS",
+"USPS", "Facebook", "Instagram", or "Twitter".</p></dd>
+
+    <dt><code>series</code></dt>
+<dd><p>Size series (e.g. A), Default: <code>NULL</code></p></dd>
+
+    <dt><code>size</code></dt>
+<dd><p>Size number (only used for "ISO" and "JIS" series). Standard,
+series, and size may all be required to return a single paper when using
+these parameters.</p></dd>
+
+    <dt><code>width,height</code></dt>
+<dd><p>Width and height in units, Default: <code>NULL</code>.</p></dd>
+
+    <dt><code>units</code></dt>
+<dd><p>Paper size units, either "in", "mm", or "px"; defaults to <code>NULL</code>
+(using "in" if width or height are provided).</p></dd>
+
+    <dt><code>ncol,nrow</code></dt>
+<dd><p>Number of expected columns and rows in paper; used to
+determine row_height and section_asp in paper data frame returned by
+get_paper if nrow or ncol is greater than 1; defaults to <code>NULL</code>.</p></dd>
+
+    <dt><code>gutter</code></dt>
+<dd><p>Gutter distance in units. Gutter is used as the spacing between
+nrow and columns (variable spacing is not currently supported); defaults to 0.</p></dd>
+
+    <dt><code>margin</code></dt>
+<dd><p>A numeric vector or ggplot2 margin object.</p></dd>
+
+    <dt><code>bbox</code></dt>
+<dd><p>A bounding box to use to get orientation using <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> with orientation = TRUE.</p></dd>
+
+  
+</dl></dd>
 
 </dl></div>
     <div class="section level2">

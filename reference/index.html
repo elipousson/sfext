@@ -53,7 +53,7 @@
 
       <dl><dt>
           
-          <code><a href="read_sf_ext.html">read_sf_ext()</a></code> <code><a href="read_sf_ext.html">read_sf_pkg()</a></code> <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_query()</a></code> <code><a href="read_sf_ext.html">read_sf_excel()</a></code> <code><a href="read_sf_ext.html">read_sf_csv()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_esri()</a></code> <code><a href="read_sf_ext.html">read_sf_geojson()</a></code> <code><a href="read_sf_ext.html">read_sf_gist()</a></code> <code><a href="read_sf_ext.html">read_sf_gmap()</a></code> <code><a href="read_sf_ext.html">read_sf_download()</a></code> <code><a href="read_sf_ext.html">read_sf_gsheet()</a></code> 
+          <code><a href="read_sf_ext.html">read_sf_ext()</a></code> <code><a href="read_sf_ext.html">read_sf_pkg()</a></code> <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_query()</a></code> <code><a href="read_sf_ext.html">read_sf_excel()</a></code> <code><a href="read_sf_ext.html">read_sf_csv()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_esri()</a></code> <code><a href="read_sf_ext.html">read_sf_gist()</a></code> <code><a href="read_sf_ext.html">read_sf_gmap()</a></code> <code><a href="read_sf_ext.html">read_sf_download()</a></code> <code><a href="read_sf_ext.html">read_sf_gsheet()</a></code> 
         </dt>
         <dd>Read spatial data in a bounding box to a simple feature object from multiple sources</dd>
       </dl><dl><dt>
@@ -81,7 +81,7 @@ EXIF metadata to image files</dd>
           
           <code><a href="str_misc.html">str_fix()</a></code> <code><a href="str_misc.html">str_prefix()</a></code> <code><a href="str_misc.html">str_pad_digits()</a></code> <code><a href="str_misc.html">str_extract_digits()</a></code> <code><a href="str_misc.html">str_add_filetype()</a></code> <code><a href="str_misc.html">str_remove_filetype()</a></code> <code><a href="str_misc.html">str_extract_filetype()</a></code> 
         </dt>
-        <dd>Use the stringr package to help make consistent file names</dd>
+        <dd>Modify strings to help make consistent file names</dd>
       </dl></div><div class="section level2">
       <h2 id="check-and-convert-sf-sfc-and-bbox-objects">Check and convert sf, sfc, and bbox objects<a class="anchor" aria-label="anchor" href="#check-and-convert-sf-sfc-and-bbox-objects"></a></h2>
       
@@ -228,7 +228,7 @@ to an sf object</dd>
         </dt>
         <dd>Get measurements for simple feature objects</dd>
       </dl></div><div class="section level2">
-      <h2 id="additional-helper-functions-for-sf-and-bbox-objects">Additional helper functions for sf and bbox objects<a class="anchor" aria-label="anchor" href="#additional-helper-functions-for-sf-and-bbox-objects"></a></h2>
+      <h2 id="additional-utility-functions-for-sf-and-bbox-objects">Additional utility functions for sf and bbox objects<a class="anchor" aria-label="anchor" href="#additional-utility-functions-for-sf-and-bbox-objects"></a></h2>
       
       
 
@@ -294,13 +294,39 @@ to an sf object</dd>
           <code><a href="get_scale.html">get_scale()</a></code> 
         </dt>
         <dd>Get standard scales and convert to scale distances</dd>
+      </dl></div><div class="section level2">
+      <h2 id="utility-functions-for-paper-and-image-sizes">Utility functions for paper and image sizes<a class="anchor" aria-label="anchor" href="#utility-functions-for-paper-and-image-sizes"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="get_paper.html">get_paper()</a></code> 
+        </dt>
+        <dd>Get standard paper and image sizes</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_social_image.html">get_social_image()</a></code> 
+        </dt>
+        <dd>Get social media image size to match platform and format</dd>
       </dl><dl><dt>
           
           <code><a href="get_asp.html">get_asp()</a></code> 
         </dt>
         <dd>Get aspect ratio from string or based on specific paper and margins</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_margin.html">get_margin()</a></code> 
+        </dt>
+        <dd>Get margins for a ggplot2 plot or map based on style or distance</dd>
       </dl></div><div class="section level2">
-      <h2 id="reference-data-for-units-and-scales">Reference data for units and scales<a class="anchor" aria-label="anchor" href="#reference-data-for-units-and-scales"></a></h2>
+      <h2 id="reference-data-for-units-scales-and-paper">Reference data for units, scales, and paper<a class="anchor" aria-label="anchor" href="#reference-data-for-units-scales-and-paper"></a></h2>
       
       
 
@@ -330,6 +356,11 @@ to an sf object</dd>
           <code><a href="standard_scales.html">standard_scales</a></code> 
         </dt>
         <dd>Standard map, architectural, and engineering scales</dd>
+      </dl><dl><dt>
+          
+          <code><a href="paper_sizes.html">paper_sizes</a></code> 
+        </dt>
+        <dd>Standard paper and image sizes</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

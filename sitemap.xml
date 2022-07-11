@@ -58,10 +58,19 @@
     <loc>https://elipousson.github.io/sfext/reference/get_data_dir.html</loc>
   </url>
   <url>
+    <loc>https://elipousson.github.io/sfext/reference/get_margin.html</loc>
+  </url>
+  <url>
     <loc>https://elipousson.github.io/sfext/reference/get_measurements.html</loc>
   </url>
   <url>
+    <loc>https://elipousson.github.io/sfext/reference/get_paper.html</loc>
+  </url>
+  <url>
     <loc>https://elipousson.github.io/sfext/reference/get_scale.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/sfext/reference/get_social_image.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/index.html</loc>
@@ -83,6 +92,9 @@
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/number_features.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/sfext/reference/paper_sizes.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/read_sf_exif.html</loc>

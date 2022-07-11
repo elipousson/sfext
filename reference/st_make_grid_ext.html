@@ -56,11 +56,11 @@ rows. This documentation is incomplete the function may change.</p>
 <span>  <span class="va">...</span>,</span>
 <span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  rows <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  n <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gutter <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  desc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  n <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cellsize <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  what <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  style <span class="op">=</span> <span class="st">"rect"</span>,</span>
@@ -106,9 +106,14 @@ to units matching GDAL units for x; defaults to "meter"</p></dd>
 <dd><p>Coordinate reference system of bounding box to return</p></dd>
 
 
-<dt>cols, rows</dt>
+<dt>ncol, nrow</dt>
 <dd><p>Used to set n if either are not <code>NULL</code>; defaults to <code>NULL</code>.
 row and id are added as columns to the grid if they are provided.</p></dd>
+
+
+<dt>n</dt>
+<dd><p>If n is NULL and square is <code>TRUE</code>, the grid is set automatically to
+be 10 cells wide, Default: <code>NULL</code></p></dd>
 
 
 <dt>gutter</dt>
@@ -120,11 +125,6 @@ serves as a margin as the negative buffer is applied to all cells
 <dt>desc</dt>
 <dd><p>If TRUE, reverse standard order of cell id numbering; defaults
 <code>FALSE</code></p></dd>
-
-
-<dt>n</dt>
-<dd><p>If n is NULL and square is <code>TRUE</code>, the grid is set automatically to
-be 10 cells wide, Default: <code>NULL</code></p></dd>
 
 
 <dt>cellsize</dt>
@@ -169,8 +169,8 @@ circular polygons.</p></dd>
 <span class="r-in"><span>    x <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="fl">24</span>, <span class="op">]</span>,</span></span>
 <span class="r-in"><span>    dist <span class="op">=</span> <span class="fl">500</span>,</span></span>
 <span class="r-in"><span>    unit <span class="op">=</span> <span class="st">"meter"</span>,</span></span>
-<span class="r-in"><span>    cols <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>    rows <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>    ncol <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>    nrow <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>    gutter <span class="op">=</span> <span class="fl">1000</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -181,8 +181,8 @@ circular polygons.</p></dd>
 <span class="r-in"><span>  <span class="fu">st_make_grid_ext</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    x <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="fl">24</span>, <span class="op">]</span>,</span></span>
 <span class="r-in"><span>    asp <span class="op">=</span> <span class="fl">8.5</span> <span class="op">/</span> <span class="fl">11</span>,</span></span>
-<span class="r-in"><span>    cols <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>    rows <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>    ncol <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>    nrow <span class="op">=</span> <span class="fl">5</span>,</span></span>
 <span class="r-in"><span>    filter <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -192,8 +192,8 @@ circular polygons.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu">st_make_grid_ext</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    x <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="fl">24</span>, <span class="op">]</span>,</span></span>
-<span class="r-in"><span>    cols <span class="op">=</span> <span class="fl">4</span>,</span></span>
-<span class="r-in"><span>    rows <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>    ncol <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>    nrow <span class="op">=</span> <span class="fl">5</span>,</span></span>
 <span class="r-in"><span>    style <span class="op">=</span> <span class="st">"circle_offset"</span>,</span></span>
 <span class="r-in"><span>    trim <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
