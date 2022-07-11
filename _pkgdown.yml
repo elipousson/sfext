@@ -39,7 +39,7 @@ reference:
   - '`get_coords`'
   - '`get_dist`'
   - '`get_length`'
-- title: Additional helper functions for sf and bbox objects
+- title: Additional utility functions for sf and bbox objects
   contents:
   - '`misc_sf`'
   - '`number_features`'
@@ -52,10 +52,16 @@ reference:
   - '`convert_dist_scale`'
   - starts_with("bind_units")
   - '`get_scale`'
+- title: Utility functions for paper and image sizes
+  contents:
+  - '`get_paper`'
+  - '`get_social_image`'
   - '`get_asp`'
-- title: Reference data for units and scales
+  - '`get_margin`'
+- title: Reference data for units, scales, and paper
   contents:
   - '`dist_units`'
   - '`dist_unit_options`'
   - '`area_unit_options`'
   - '`standard_scales`'
+  - '`paper_sizes`'
