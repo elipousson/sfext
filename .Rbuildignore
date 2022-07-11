@@ -10,3 +10,4 @@
 ^\.github$
 ^\.httr-oauth$
 ^codecov\.yml$
+^vignettes/articles$
