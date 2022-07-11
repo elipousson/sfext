@@ -65,3 +65,26 @@
 #'   \item{`series_status`}{Series status (select USGS map series are "abandoned")}
 #' }
 "standard_scales"
+
+#'  Standard paper and image sizes
+#'
+#' Reference table of standard paper, postcard, photo print, and social media image
+#' sizes, for [get_paper] and [get_social_image] functions. Derived from
+#' [visioguy/PaperSizes](https://github.com/visioguy/PaperSizes/) repo, [Adobe UK
+#' guide to photo
+#' sizes](https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html)
+#' and other sources.
+#'
+#' @format A data frame with 85 rows and 9 variables:
+#' \describe{
+#'   \item{`name`}{Name of paper}
+#'   \item{`series`}{Series}
+#'   \item{`standard`}{Standard}
+#'   \item{`size`}{Size in series}
+#'   \item{`units`}{Units ("in", "mm", or "px") for dimensions}
+#'   \item{`width`}{Width in units}
+#'   \item{`height`}{Height in units}
+#'   \item{`orientation`}{Portrait (width less than height), landscape, or square}
+#'   \item{`type`}{Type (paper, postcard, print, or social)}
+#' }
+"paper_sizes"
