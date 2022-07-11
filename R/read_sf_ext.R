@@ -60,7 +60,7 @@
 #' @family read_write
 #' @export
 #' @importFrom dplyr case_when
-read_sf_ext <- function(..., bbox = NULL) {
+read_sf_ext <- function(...) {
   params <- list2(...)
 
   type <-
