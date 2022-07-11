@@ -50,6 +50,10 @@ st_buffer_ext <- function(x,
 
   # If dist is NULL and diag_ratio is NULL return x (with bbox converted to sf if no buffer applied)
   if (is.null(dist) && is.null(diag_ratio)) {
+    if (is_bbox(x)) {
+      x <- as_sf(x)
+    }
+
     return(x)
   }
 

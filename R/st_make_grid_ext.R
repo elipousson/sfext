@@ -47,6 +47,10 @@ st_make_grid_ext <- function(x,
                              trim = FALSE) {
   check_sf(x, ext = TRUE)
 
+  if (!is_sf(x)) {
+    x <- as_sf(x)
+  }
+
   style <- arg_match(style, c("rect", "square", "hex", "flat_top_hex", "circle", "circle_offset"))
 
   lonlat_crs <- NULL
@@ -57,10 +61,6 @@ st_make_grid_ext <- function(x,
   }
 
   # Get adjusted bounding box using any adjustment variables provided
-  if (is_bbox(x)) {
-    x <- as_sfc(x)
-  }
-
   bbox <-
     st_bbox_ext(
       x = x,
