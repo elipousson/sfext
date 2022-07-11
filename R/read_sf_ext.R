@@ -3,9 +3,7 @@
 #' An extended version of [sf::read_sf()] that support reading spatial data
 #' based on a file path, URL, or the data name and associated package.
 #' Optionally provide a bounding box to filter data (not supported for all data
-#' types). If a file path or url is provided for a GeoJSON file, the
-#' [read_sf_geojson] function (using the suggested
-#' [{geojsonsf}](https://github.com/SymbolixAU/geojsonsf) package) is used.
+#' types).
 #'
 #' @details Reading data from a url:
 #'
@@ -163,13 +161,12 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 
   filetype <- str_extract_filetype(path)
 
-  if (filetype %in% c("csv", "xlsx", "xls", "geojson")) {
+  if (filetype %in% c("csv", "xlsx", "xls")) {
     data <-
       switch(filetype,
         "csv" = read_sf_csv(path = path, bbox = bbox, ...),
         "xlsx" = read_sf_excel(path = path, bbox = bbox, ...),
-        "xls" = read_sf_excel(path = path, bbox = bbox, ...),
-        "geojson" = read_sf_geojson(geojson = path, bbox = bbox, ...)
+        "xls" = read_sf_excel(path = path, bbox = bbox, ...)
       )
 
     return(data)
@@ -323,12 +320,11 @@ read_sf_url <- function(url,
   url_type <-
     dplyr::case_when(
       is_csv_path(url) ~ "csv",
-      !is.null(params$filename) ~ "download",
       is_esri_url(url) ~ "esri",
-      is_geojson_path(url) ~ "geojson",
       is_gist_url(url) ~ "gist",
       is_gmap_url(url) ~ "gmap",
       is_gsheet_url(url) ~ "gsheet",
+      !is.null(params$filename) ~ "download",
       TRUE ~ "other"
     )
 
@@ -350,10 +346,6 @@ read_sf_url <- function(url,
       where = params$where,
       name = params$name,
       name_col = params$name_col
-    ),
-    "geojson" = read_sf_geojson(
-      url = url,
-      bbox = bbox
     ),
     "gist" = read_sf_gist(
       url = url,
@@ -443,38 +435,6 @@ read_sf_esri <- function(url,
   }
 
   df_to_sf(data, from_crs = from_crs, coords = coords)
-}
-
-
-#' @name read_sf_geojson
-#' @rdname read_sf_ext
-#' @inheritParams geojsonsf::geojson_sf
-#' @export
-#' @importFrom rlang is_missing
-read_sf_geojson <- function(url,
-                            path = NULL,
-                            geojson = NULL,
-                            bbox = NULL,
-                            ...) {
-  is_pkg_installed("geojsonsf")
-
-  if (!is.null(path)) {
-    url <- path
-  } else if (!is.null(geojson)) {
-    url <- geojson
-  }
-
-  cli_abort_ifnot(
-    "A {.arg url}, {.arg path}, or {.arg geojson} parameter must be provided.",
-    condition = !is_missing(url)
-  )
-
-  data <-
-    suppressWarnings(
-      geojsonsf::geojson_sf(geojson = url, ...)
-    )
-
-  st_filter_ext(data, bbox)
 }
 
 #' @name read_sf_gist
