@@ -45,14 +45,14 @@ sf_to_df <- function(x,
     return(sf::st_drop_geometry(x))
   }
 
-    get_coords(
-      x,
-      geometry = geometry,
-      crs = crs,
-      coords = coords,
-      keep_all = keep_all,
-      drop = TRUE
-    )
+  get_coords(
+    x,
+    geometry = geometry,
+    crs = crs,
+    coords = coords,
+    keep_all = keep_all,
+    drop = TRUE
+  )
 }
 
 #' @rdname sf_to_df
@@ -103,7 +103,7 @@ df_to_sf <- function(x,
     switch(type,
       "geometry_df" = geometry_df_to_sf(x),
       "join_sf" = join_sf_to_df(x, y, by = by, ...),
-      "address_df" = address_to_sf(x, address = address, coords = coords, crs = crs, remove_coords = remove_coords),
+      "address_df" = address_to_sf(x, address = address, coords = coords, crs = crs, remove_coords = remove_coords, ...),
       "wkt_df" = wkt_df_to_sf(x, crs = from_crs),
       "coords_df" = coords_df_to_sf(x, coords = coords, crs = from_crs, into = into, sep = sep, rev = rev, remove_coords = remove_coords),
     )
@@ -238,31 +238,27 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
 #' Separate coordinates from a single combined column into two columns
 #' @noRd
 #' @importFrom tidyr separate
-#' @importFrom tidyselect all_of
-#' @importFrom dplyr mutate across
+#' @importFrom dplyr mutate across all_of
 separate_coords <- function(x, coords, into, sep) {
   into <- check_coords(x = NULL, coords = into)
 
   x <-
     tidyr::separate(
       x,
-      col = tidyselect::all_of(coords),
+      col = dplyr::all_of(coords),
       into = into,
       sep = sep
     )
 
   is_pkg_installed("readr")
 
-  x <-
-    dplyr::mutate(
-      x,
-      dplyr::across(
-        .cols = tidyselect::all_of(into),
-        ~ readr::parse_number(.x)
-      )
+  dplyr::mutate(
+    x,
+    dplyr::across(
+      .cols = dplyr::all_of(into),
+      ~ readr::parse_number(.x)
     )
-
-  x
+  )
 }
 
 #' Convert a data frame with a geometry list column to an sf object
@@ -304,7 +300,7 @@ format_coords <- function(x, coords = c("lon", "lat")) {
   num_na_coords <- sum(na_coords)
 
   if (num_na_coords > 0) {
-    cli::cli_alert_info("Removing {num_na_coords} rows with missing coordinates.")
+    cli_inform("Removing {.val num_na_coords} rows with missing coordinates.")
     # Exclude rows with missing coordinates
     x <- x[!na_coords, ]
   }
@@ -316,19 +312,21 @@ format_coords <- function(x, coords = c("lon", "lat")) {
 #' to an sf object
 #'
 #' Wraps [tidygeocoder::geo] and [tidygeocoder::geocode] to convert a character
-#' string or a data frame with an address column.
+#' string or a data frame with an address column. Additional parameters passed
+#' to [tidygeocoder::geocode] which passes ... parameters to
+#' [tidygeocoder::geo].
 #'
 #' @param x Data frame with an address column. Multiple address columns are not currently supported.
 #' @param address Address column name, Default: 'address'
+#' @inheritParams tidygeocoder::geo
 #' @inheritParams df_to_sf
-#' @param ... Additional parameters passed to [tidygeocoder::geo] or [tidygeocoder::geocode]
+#' @inheritDotParams tidygeocoder::geocode
 #' @return A `sf` object with POINT geometry for all geocoded addresses with valid coordinates.
 #' @seealso
 #'  [tidygeocoder::geo()], [tidygeocoder::geocode()]
 #' @rdname address_to_sf
 #' @export
-#' @importFrom rlang is_interactive
-address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), remove_coords = FALSE, crs = NULL, ...) {
+address_to_sf <- function(x, address = "address", method = "osm", coords = c("lon", "lat"), remove_coords = FALSE, crs = NULL, ...) {
   is_pkg_installed("tidygeocoder")
 
   if (is.character(x)) {
@@ -336,7 +334,10 @@ address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), remo
     x <- tibble::as_tibble_col(x, address)
   }
 
-  stopifnot(is.data.frame(x))
+  cli_abort_ifnot(
+    "{.arg x} must be a data frame or a character vector with full addresses.",
+    condition = is.data.frame(x)
+  )
 
   x <- has_same_name_col(x, col = "lon")
   x <- has_same_name_col(x, col = "lat")
@@ -352,26 +353,24 @@ address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), remo
       ...
     )
 
-  if (nrow(x) > 0) {
-    x <-
-      dplyr::rename(
-        x,
-        "{coords[[1]]}" := "lon",
-        "{coords[[2]]}" := "lat"
-      )
+  cli_abort_ifnot(
+    "No addresses from {.arg x} could be geocoded.",
+    condition = (nrow(x) > 0)
+  )
 
-    # Convert address df to sf
-    x <-
-      df_to_sf(
-        x,
-        coords = coords,
-        from_crs = 4326,
-        remove_coords = remove_coords,
-        crs = crs
-      )
-  } else {
-    # FIXME: Add warning or error here if geocoding does not work
-  }
+  x <-
+    dplyr::rename(
+      x,
+      "{coords[[1]]}" := "lon",
+      "{coords[[2]]}" := "lat"
+    )
 
-  x
+  # Convert address df to sf
+  df_to_sf(
+    x,
+    coords = coords,
+    from_crs = 4326,
+    remove_coords = remove_coords,
+    crs = crs
+  )
 }
