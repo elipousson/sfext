@@ -126,7 +126,7 @@ modify_fn_fmls <- function(params, fn, keep_missing = FALSE, keep.null = FALSE, 
 #' @rdname read_sf_ext
 #' @export
 #' @importFrom dplyr case_when
-read_sf_pkg <- function(data, path = NULL, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
+read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
   check_null(package)
 
   is_pkg_installed(package)

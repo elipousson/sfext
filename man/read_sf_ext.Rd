@@ -17,14 +17,7 @@
 \usage{
 read_sf_ext(...)
 
-read_sf_pkg(
-  data,
-  path = NULL,
-  bbox = NULL,
-  package = NULL,
-  filetype = "gpkg",
-  ...
-)
+read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
 
 read_sf_path(path, bbox = NULL, ...)
 
@@ -111,8 +104,6 @@ read_sf_gsheet(
 
 \item{data}{Name of a package dataset; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
 
-\item{path}{A file path.}
-
 \item{bbox}{A bounding box object; defaults to \code{NULL}. If \code{"bbox"} is provided,
 only returns features intersecting the bounding box.}
 
@@ -121,6 +112,8 @@ only returns features intersecting the bounding box.}
 \item{filetype}{File type supported by \code{\link[sf:st_read]{sf::read_sf()}}; Default: 'gpkg'; used
 by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data is in the package
 cache directory or extdata system files.}
+
+\item{path}{A file path.}
 
 \item{dsn}{data source name (interpretation varies by driver - for some
 drivers, \code{dsn} is a file name, but may also be a folder, or contain
