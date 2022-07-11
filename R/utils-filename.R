@@ -55,7 +55,7 @@ str_fix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", cle
 #' @rdname str_misc
 #' @param post If `TRUE`, use the prefix string as a postfix; defaults to
 #'   `FALSE`.
-#' @param date_fmt,time_fmt Date or time format Only used by [str_prefix] if
+#' @param date.format,time.format Date or time format Only used by [str_prefix] if
 #'   prefix is "date" or "time" and not currently accessible when using
 #'   [str_fix] or [make_filename].
 #' @export
@@ -65,8 +65,8 @@ str_prefix <- function(string = NULL,
                        sep = "_",
                        clean_names = TRUE,
                        post = FALSE,
-                       date_fmt = "%F",
-                       time_fmt = "%Y-%m-%d_%I-%M-%S_%p") {
+                       date.format = "%F",
+                       time.format = "%Y-%m-%d_%I-%M-%S_%p") {
   if (is.null(prefix)) {
     return(string)
   }
@@ -77,8 +77,8 @@ str_prefix <- function(string = NULL,
 
   if (prefix %in% c("date", "time")) {
     prefix <- switch(prefix,
-      "date" = format(Sys.Date(), date_fmt),
-      "time" = format(Sys.time(), time_fmt)
+      "date" = format(Sys.Date(), date.format),
+      "time" = format(Sys.time(), time.format)
     )
   }
 
@@ -107,7 +107,7 @@ str_pad_digits <- function(string, pad = "0", side = "left", width = NULL) {
 
   if (is.null(width)) {
     width <-
-      max(stringr::str_length(digit_string))
+      max(nchar(digit_string))
   }
 
   digit_string <-
@@ -130,7 +130,7 @@ str_pad_digits <- function(string, pad = "0", side = "left", width = NULL) {
 #' @export
 #' @importFrom stringr str_extract
 str_extract_digits <- function(string) {
-  stringr::str_extract(string, "[:digit:]+")
+  regmatches(string, regexpr("[0-9]+", string, perl = TRUE))
 }
 
 #' @name str_add_filetype
@@ -166,7 +166,7 @@ str_remove_filetype <- function(string, filetype = NULL) {
 #' @export
 #' @importFrom stringr str_extract
 str_extract_filetype <- function(string) {
-  tolower(stringr::str_extract(string, "(?<=\\.)[:alnum:]+$(?!\\.)"))
+  tolower(regmatches(string, regexpr("(?<=\\.)[a-zA-Z0-9]+$(?!\\.)", string, perl = TRUE)))
 }
 
 
