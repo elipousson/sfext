@@ -6,8 +6,8 @@ plot(
     x = nc[24, ],
     dist = 500,
     unit = "meter",
-    cols = 2,
-    rows = 2,
+    ncol = 2,
+    nrow = 2,
     gutter = 1000
   )
 )
@@ -17,8 +17,8 @@ plot(
   st_make_grid_ext(
     x = nc[24, ],
     asp = 8.5 / 11,
-    cols = 5,
-    rows = 5,
+    ncol = 5,
+    nrow = 5,
     filter = TRUE
   )
 )
@@ -27,8 +27,8 @@ plot(
 plot(
   st_make_grid_ext(
     x = nc[24, ],
-    cols = 4,
-    rows = 5,
+    ncol = 4,
+    nrow = 5,
     style = "circle_offset",
     trim = TRUE
   ),
