@@ -31,11 +31,11 @@ convert_dist_scale <- function(dist = NULL,
     scale <- get_scale(scale = scale)
   }
 
-  # if (!is.null(paper) && is.null(dist)) {
-  #  paper <- overedge::get_paper(paper = paper, orientation = orientation)
-  #  dist <- c(paper$width, paper$height)
-  #  scale_unit <- paper$units
-  # }
+  if (!is.null(paper) && is.null(dist)) {
+    paper <- get_paper(paper = paper, orientation = orientation)
+    dist <- c(paper$width, paper$height)
+    scale_unit <- paper$units
+  }
 
   dist <-
     switch(scale_unit,
