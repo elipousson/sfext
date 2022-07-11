@@ -5,7 +5,7 @@
     list = c(
       "dist_units",
       "dist_unit_options", "area_unit_options",
-      "standard_scales"
+      "standard_scales", "paper_sizes"
     ),
     package = pkg,
     envir = parent.env(environment())
@@ -13,8 +13,11 @@
 }
 
 utils::globalVariables(
-  c("filename", "image_description", "image_height", "image_width", "latitude", "latitude_ref",
-    "longitude", "longitude_ref", "name", "orientation", "source_file"
+  c(
+    "filename", "image_description", "image_height", "image_width", "latitude", "latitude_ref",
+    "longitude", "longitude_ref", "name", "orientation", "source_file",
+    "asp", "block_height", "block_width", "col_width", "gutter", "height",
+    "row_height", "width"
   )
 )
 
