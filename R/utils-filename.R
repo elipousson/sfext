@@ -1,4 +1,4 @@
-#' Use the stringr package to help make consistent file names
+#' Modify strings to help make consistent file names
 #'
 #' Prefix and postfix can include more than one value that are added in the same
 #' order provided. For [str_fix], the string must be a single character string.
@@ -96,7 +96,7 @@ str_prefix <- function(string = NULL,
 #' @name str_pad_digits
 #' @rdname str_misc
 #' @export
-#' @importFrom stringr str_length str_pad str_replace
+#' @importFrom stringr str_pad str_replace
 str_pad_digits <- function(string, pad = "0", side = "left", width = NULL) {
   if (is.null(pad)) {
     return(string)
@@ -126,9 +126,7 @@ str_pad_digits <- function(string, pad = "0", side = "left", width = NULL) {
 
 #' @name str_extract_digits
 #' @rdname str_misc
-#' @inheritParams stringr::str_extract
 #' @export
-#' @importFrom stringr str_extract
 str_extract_digits <- function(string) {
   regmatches(string, regexpr("[0-9]+", string, perl = TRUE))
 }
@@ -137,7 +135,6 @@ str_extract_digits <- function(string) {
 #' @rdname str_misc
 #' @param filetype File type string
 #' @export
-#' @importFrom stringr str_detect
 str_add_filetype <- function(string, filetype = NULL) {
   if (grepl(pattern = "\\.[a-zA-Z0-9]+$", x = string)) {
     return(string)
@@ -154,17 +151,12 @@ str_remove_filetype <- function(string, filetype = NULL) {
     filetype <- str_extract_filetype(string)
   }
 
-  sub(
-    pattern = paste0("\\.", filetype, "$"),
-    replacement = "",
-    x = string
-  )
+  sub(paste0("\\.", filetype, "$"), "", string)
 }
 
 #' @name str_extract_filetype
 #' @rdname str_misc
 #' @export
-#' @importFrom stringr str_extract
 str_extract_filetype <- function(string) {
   tolower(regmatches(string, regexpr("(?<=\\.)[a-zA-Z0-9]+$(?!\\.)", string, perl = TRUE)))
 }
