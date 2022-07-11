@@ -87,7 +87,7 @@ st_square <- function(x, scale = 1, rotate = 0, inscribed = FALSE) {
   check_sf(x, ext = TRUE)
 
   if (!is_sf(x)) {
-    x <- as_sfc(x)
+    x <- as_sf(x)
   }
 
   is_lonlat <- sf::st_is_longlat(x)
@@ -136,7 +136,7 @@ st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0) {
   check_sf(x, ext = TRUE)
 
   if (!is_sf(x)) {
-    x <- as_sfc(x)
+    x <- as_sf(x)
   }
 
   if (inscribed) {
