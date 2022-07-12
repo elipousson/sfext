@@ -198,19 +198,19 @@ read_sf_query <- function(dsn,
   }
 
   if (!is.null(name) && !is.null(name_col) && !is_geojson_path(dsn)) {
-    if (is_missing(table)) {
+    if (is.null(table)) {
       table <-
         stringr::str_extract(
           basename(dsn),
           "[:graph:]+(?=\\.)"
         )
-    } else {
-      table <-
-        arg_match(
-          table,
+    }
+
+    table <-
+      arg_match(
+        table,
         as.character(sf::st_layers(dsn = dsn)[["name"]])
       )
-    }
 
     query <- glue("SELECT * FROM \"{table}\" WHERE {name_col} IN ({glue_collapse(name, sep = ', ')})")
     query <- as.character(query)
