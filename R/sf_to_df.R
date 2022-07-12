@@ -45,13 +45,15 @@ sf_to_df <- function(x,
     return(sf::st_drop_geometry(x))
   }
 
-  get_coords(
-    x,
-    geometry = geometry,
-    crs = crs,
-    coords = coords,
-    keep_all = keep_all,
-    drop = TRUE
+  suppressWarnings(
+    get_coords(
+      x,
+      geometry = geometry,
+      crs = crs,
+      coords = coords,
+      keep_all = keep_all,
+      drop = TRUE
+    )
   )
 }
 
