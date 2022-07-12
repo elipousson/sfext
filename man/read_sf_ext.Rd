@@ -22,8 +22,8 @@ read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
 read_sf_path(path, bbox = NULL, ...)
 
 read_sf_query(
-  path,
-  dsn = NULL,
+  dsn,
+  path = NULL,
   bbox = NULL,
   query = NULL,
   table = NULL,
