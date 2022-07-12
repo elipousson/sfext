@@ -40,7 +40,6 @@ Suggests:
     knitr,
     lwgeom,
     naniar,
-    overedge,
     rappdirs,
     readr,
     readxl,
@@ -48,8 +47,7 @@ Suggests:
     testthat (>= 3.0.0),
     tidygeocoder
 Remotes: 
-    yonghah/esri2sf,
-    elipousson/overedge
+    yonghah/esri2sf
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
