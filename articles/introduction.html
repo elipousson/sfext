@@ -142,10 +142,10 @@
 <p><img src="introduction_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <p>The second, <code><a href="../reference/read_sf_ext.html">read_sf_url()</a></code>, that supports reading url that are already supported by <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a></code> but also supports ArcGIS Feature Layers (using the <a href="https://github.com/yonghah/esri2sf" class="external-link">{esri2sf}</a> package) and URLs for tabular data (including both CSV files and Google Sheets). Several functions also support queries based on a name and name_col value (generating a simple SQL query) based on the provided values.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample_esri_url</span> <span class="op">&lt;-</span> <span class="st">"https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Louisville/LOJIC_PublicSafety_Louisville/MapServer/1"</span></span>
-<span><span class="va">fire_stations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">sample_esri_url</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">sample_esri_url</span> <span class="op">&lt;-</span> <span class="st">"https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0"</span></span>
+<span><span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_esri</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">sample_esri_url</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">Layer Type: </span><span style="color: #BB00BB;">Feature Layer</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Geometry Type: </span><span style="color: #BB00BB;">esriGeometryPoint</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">Geometry Type: </span><span style="color: #BB00BB;">esriGeometryPolygon</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">Service Coordinate Reference System: </span><span style="color: #BB00BB;">4326</span></span></span>
 <span><span class="co">#&gt; Warning in getEsriFeatures(queryUrl, outFields, where, bbox, token, crs, : No</span></span>
 <span><span class="co">#&gt; records match the search criteria.</span></span>
@@ -154,22 +154,20 @@
 <span></span>
 <span><span class="co"># read_sf_esri and read_sf_query both support the name and name_col parameters</span></span>
 <span><span class="co"># These parameters also work with read_sf_pkg for cached and extdata files</span></span>
-<span><span class="va">engine_one</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">sample_esri_url</span>, name_col <span class="op">=</span> <span class="st">"NAME"</span>, name <span class="op">=</span> <span class="st">"ENGINE 1"</span><span class="op">)</span></span>
+<span><span class="va">nc_esri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">sample_esri_url</span>, name_col <span class="op">=</span> <span class="st">"STATE_NAME"</span>, name <span class="op">=</span> <span class="st">"North Carolina"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">Layer Type: </span><span style="color: #BB00BB;">Feature Layer</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Geometry Type: </span><span style="color: #BB00BB;">esriGeometryPoint</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">Geometry Type: </span><span style="color: #BB00BB;">esriGeometryPolygon</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">Service Coordinate Reference System: </span><span style="color: #BB00BB;">4326</span></span></span>
 <span><span class="co">#&gt; Warning: Package "pbapply" needed to use the progress argument. Please install</span></span>
 <span><span class="co">#&gt; it. Setting `progress` to FALSE.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fire_stations</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">engine_one</span>, color <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">states</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nc_esri</span>, fill <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>The read functions also support URLs for GitHub Gists (assuming the first file in the Gist is a spatial data file) or Google MyMaps.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gmap_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span>url <span class="op">=</span> <span class="st">"https://www.google.com/maps/d/u/0/viewer?mid=1CEssu_neU7lx_vAZs5qpufOBoUQ&amp;ll=-3.81666561775622e-14%2C0&amp;z=1"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in replace_with_na.data.frame(data, replace = list(Description = "")):</span></span>
-<span><span class="co">#&gt; Missing from data: Description</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">gmap_data</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -204,7 +202,7 @@
 <h2 id="converting-sf-objects">Converting sf objects<a class="anchor" aria-label="anchor" href="#converting-sf-objects"></a>
 </h2>
 <div class="section level3">
-<h3 id="checking-sf-objects">Checking sf objects<a class="anchor" aria-label="anchor" href="#checking-sf-objects"></a>
+<h3 id="checking-and-converting-sf-objects">Checking and converting sf objects<a class="anchor" aria-label="anchor" href="#checking-and-converting-sf-objects"></a>
 </h3>
 <p>There are several helper functions that are used extensively by the package itself. While these conversions are easy to do with existing {sf} functions, these alternatives follow a tidyverse style syntax and support a wider range of input values.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -242,7 +240,7 @@
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="converting-to-and-from-non-sf-data-frames">Converting to and from non-sf data frames<a class="anchor" aria-label="anchor" href="#converting-to-and-from-non-sf-data-frames"></a>
+<h3 id="converting-to-and-from-data-frames">Converting to and from data frames<a class="anchor" aria-label="anchor" href="#converting-to-and-from-data-frames"></a>
 </h3>
 <p>By default the conversion from sf to data frame object, uses the centroid of any polygon. It can also use a surface point from <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_point_on_surface</a></code></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -261,7 +259,7 @@
 <span></span>
 <span><span class="va">df_example_map</span></span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
-<p>Alternatively, <code>sf_to_df</code> can also use well known text as an output format:</p>
+<p>Alternatively, <code><a href="../reference/sf_to_df.html">sf_to_df()</a></code> can also use well known text as an output format:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_wkt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_to_df.html">sf_to_df</a></span><span class="op">(</span><span class="va">nc_in_bbox</span>, geometry <span class="op">=</span> <span class="st">"wkt"</span><span class="op">)</span></span>
 <span></span>
@@ -290,7 +288,7 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/address_to_sf.html">address_to_sf</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"350 Fifth Avenue, New York, NY 10118"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Passing 1 address to the Nominatim single address geocoder</span></span>
-<span><span class="co">#&gt; Query completed in: 1.6 seconds</span></span>
+<span><span class="co">#&gt; Query completed in: 1.5 seconds</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
 <span><span class="co">#&gt; Attribute-geometry relationship: 3 constant, 0 aggregate, 0 identity</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
@@ -306,7 +304,7 @@
 <div class="section level2">
 <h2 id="modifying-sf-objects">Modifying sf objects<a class="anchor" aria-label="anchor" href="#modifying-sf-objects"></a>
 </h2>
-<p>The next group of functions often provide similar functionality to standard {sf} functions but, again, allow a wider range of inputs and outputs or offer extra features. For example, <code>st_bbox_ext</code> also wraps <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer</a></code> and uses a helper function based on <code><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">units::set_units</a></code> to a buffer distance of any valid distance unit.</p>
+<p>The next group of functions often provide similar functionality to standard {sf} functions but, again, allow a wider range of inputs and outputs or offer extra features. For example, <code><a href="../reference/st_bbox_ext.html">st_bbox_ext()</a></code> also wraps <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer</a></code> and uses a helper function based on <code><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">units::set_units</a></code> to a buffer distance of any valid distance unit.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc_bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_bbox_ext.html">st_bbox_ext</a></span><span class="op">(</span><span class="va">nc</span>, class <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
 <span><span class="co"># Similar to sf::st_sf(sf::st_as_sfc(sf::st_bbox(nc)))</span></span>
@@ -321,11 +319,11 @@
 <p>Other notable functions in this category include:</p>
 <ul>
 <li>
-<code>st_transform_ext</code>: takes sf, sfc, or bbox objects as the crs parameter for <code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">sf::st_transform</a></code> and supports lists of sf objects (look for the list.ok = TRUE parameter to see which functions support lists)</li>
+<code><a href="../reference/st_transform_ext.html">st_transform_ext()</a></code>: takes sf, sfc, or bbox objects as the crs parameter for <code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">sf::st_transform()</a></code> and supports lists of sf objects (look for the list.ok = TRUE parameter to see which functions support lists)</li>
 <li>
-<code>st_union_ext</code>: unions geometry while also collapsing a name column into a single character string using the <code><a href="https://cli.r-lib.org/reference/pluralize.html" class="external-link">cli::pluralize</a></code> function</li>
+<code><a href="../reference/st_union_ext.html">st_union_ext()</a></code>: unions geometry while also collapsing a name column into a single character string using the <code><a href="https://cli.r-lib.org/reference/pluralize.html" class="external-link">cli::pluralize</a></code> function</li>
 <li>
-<code>st_erase</code>: checks the validity of inputs with <code><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">sf::st_is_valid</a></code> before and after using <code><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">sf::st_difference</a></code> or (if flip = TRUE) <code><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">sf::st_difference</a></code>
+<code><a href="../reference/st_erase.html">st_erase()</a></code>: checks the validity of inputs with <code><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">sf::st_is_valid</a></code> before and after using <code><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">sf::st_difference</a></code> or (if flip = TRUE) <code><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">sf::st_difference</a></code>
 </li>
 </ul>
 </div>
@@ -333,7 +331,7 @@
 <h2 id="getting-information-about-sf-sfc-and-bbox-objects">Getting information about sf, sfc, and bbox objects<a class="anchor" aria-label="anchor" href="#getting-information-about-sf-sfc-and-bbox-objects"></a>
 </h2>
 <p>There are also several functions that return information about the geometry of input objects. Typically, these functions bind the information as a new column to an existing sf input (and convert sfc input objects to sf results).</p>
-<p>The <code>get_lenth()</code> function wraps <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_length</a></code> and (for POLYGON geometries only) <code><a href="https://rdrr.io/pkg/lwgeom/man/perimeter.html" class="external-link">lwgeom::st_perimeter</a></code>:</p>
+<p>The <code><a href="../reference/get_measurements.html">get_length()</a></code> function wraps <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_length</a></code> and (for POLYGON geometries only) <code><a href="https://rdrr.io/pkg/lwgeom/man/perimeter.html" class="external-link">lwgeom::st_perimeter</a></code>:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_point.html">as_line</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="../reference/as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">2</span>,<span class="op">]</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span></span>
