@@ -211,8 +211,8 @@ read_sf_query <- function(dsn,
         table,
         as.character(sf::st_layers(dsn = dsn)[["name"]])
       )
-
-    query <- glue("SELECT * FROM \"{table}\" WHERE {name_col} IN ({glue_collapse(name, sep = ', ')})")
+    # FIXME: I tried getting this to work but it didn't: IN ({glue_collapse(name, sep = ', ')})
+    query <- glue("SELECT * FROM '{table}' WHERE {name_col} = 'name'")
     query <- as.character(query)
   }
 
