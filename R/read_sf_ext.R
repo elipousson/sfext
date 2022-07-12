@@ -183,8 +183,8 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 #' @export
 #' @importFrom stringr str_extract
 #' @importFrom sf read_sf st_zm
-read_sf_query <- function(path,
-                          dsn = NULL,
+read_sf_query <- function(dsn,
+                          path = NULL,
                           bbox = NULL,
                           query = NULL,
                           table = NULL,
@@ -193,21 +193,27 @@ read_sf_query <- function(path,
                           wkt_filter = NULL,
                           zm_drop = FALSE,
                           ...) {
-  if (!is_missing(path)) {
+  if (!is.null(path)) {
     dsn <- path
   }
 
-  if (!is.null(name) && !is.null(name_col)) {
-    if (is.null(table)) {
+  if (!is.null(name) && !is.null(name_col) && !is_geojson_path(dsn)) {
+    if (is_missing(table)) {
       table <-
         stringr::str_extract(
-          basename(path),
+          basename(dsn),
           "[:graph:]+(?=\\.)"
         )
+    } else {
+      table <-
+        arg_match(
+          table,
+        as.character(sf::st_layers(dsn = dsn)[["name"]])
+      )
     }
 
-    query <-
-      glue("select * from {table} where {name_col} = '{name}'")
+    query <- glue("SELECT * FROM \"{table}\" WHERE {name_col} IN ({glue_collapse(name, sep = ', ')})")
+    query <- as.character(query)
   }
 
   if (!is.null(bbox)) {
