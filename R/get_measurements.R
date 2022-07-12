@@ -92,6 +92,11 @@ get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "le
     x_len <- lwgeom::st_perimeter(x)
   }
 
+  cli_abort_ifnot(
+    "{.fn get_length} can't work with a {.val MULTIPOLYGON} input for {.arg x}.",
+    condition = !is_multipolygon(x)
+  )
+
   if (is_line(x) | is_multiline(x)) {
     x_len <- sf::st_length(x)
   }
