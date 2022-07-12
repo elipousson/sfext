@@ -67,18 +67,18 @@ nc_basemap +
 The second, `read_sf_url()`, that supports reading url that are already supported by `sf::read_sf` but also supports ArcGIS Feature Layers (using the [{esri2sf}](https://github.com/yonghah/esri2sf) package) and URLs for tabular data (including both CSV files and Google Sheets). Several functions also support queries based on a name and name_col value (generating a simple SQL query) based on the provided values.
 
 ```{r}
-sample_esri_url <- "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Louisville/LOJIC_PublicSafety_Louisville/MapServer/1"
-fire_stations <- read_sf_ext(url = sample_esri_url)
+sample_esri_url <- "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0"
+states <- read_sf_esri(url = sample_esri_url)
 # This is equivalent to read_sf_url(sample_esri_url)
 # Or esri2sf::esri2sf(url = sample_esri_url)
 
 # read_sf_esri and read_sf_query both support the name and name_col parameters
 # These parameters also work with read_sf_pkg for cached and extdata files
-engine_one <- read_sf_ext(url = sample_esri_url, name_col = "NAME", name = "ENGINE 1")
+nc_esri <- read_sf_ext(url = sample_esri_url, name_col = "STATE_NAME", name = "North Carolina")
 
 ggplot() +
-  geom_sf(data = fire_stations) +
-  geom_sf(data = engine_one, color = "red", size = 4)
+  geom_sf(data = states) +
+  geom_sf(data = nc_esri, fill = "red")
 ```
 
 The read functions also support URLs for GitHub Gists (assuming the first file in the Gist is a spatial data file) or Google MyMaps.
@@ -106,6 +106,7 @@ make_filename(
   filetype = "gpkg"
 )
 ```
+
 `write_sf_ext()` also supports the automatic creation of destination folders and the use of a package-specific cache folder created by `rappdirs::user_cache_dir()`.
 
 ```{r}
@@ -116,7 +117,7 @@ get_data_dir(cache = TRUE)
 
 ## Converting sf objects
 
-### Checking sf objects
+### Checking and converting sf objects
 
 There are several helper functions that are used extensively by the package itself. While these conversions are easy to do with existing {sf} functions, these alternatives follow a tidyverse style syntax and support a wider range of input values.
 
@@ -152,7 +153,7 @@ is_sfg(as_point(nc))
 is_sfc(as_points(c(-79.40065, 35.55937), crs = 4326))
 ```
 
-### Converting to and from non-sf data frames
+### Converting to and from data frames
 
 By default the conversion from sf to data frame object, uses the centroid of any polygon. It can also use a surface point from `sf::st_point_on_surface`
 
@@ -176,7 +177,7 @@ df_example_map <-
 df_example_map
 ```
 
-Alternatively, `sf_to_df` can also use well known text as an output format:
+Alternatively, `sf_to_df()` can also use well known text as an output format:
 
 ```{r}
 df_wkt <- sf_to_df(nc_in_bbox, geometry = "wkt")
@@ -194,7 +195,7 @@ address_to_sf(x = c("350 Fifth Avenue, New York, NY 10118"))
 
 ## Modifying sf objects
 
-The next group of functions often provide similar functionality to standard {sf} functions but, again, allow a wider range of inputs and outputs or offer extra features. For example, `st_bbox_ext` also wraps `sf::st_buffer` and uses a helper function based on `units::set_units` to a buffer distance of any valid distance unit.  
+The next group of functions often provide similar functionality to standard {sf} functions but, again, allow a wider range of inputs and outputs or offer extra features. For example, `st_bbox_ext()` also wraps `sf::st_buffer` and uses a helper function based on `units::set_units` to a buffer distance of any valid distance unit.  
 
 ```{r}
 nc_bbox <- st_bbox_ext(nc, class = "sf")
@@ -210,15 +211,15 @@ nc_basemap +
 
 Other notable functions in this category include:
 
-- `st_transform_ext`: takes sf, sfc, or bbox objects as the crs parameter for `sf::st_transform` and supports lists of sf objects (look for the list.ok = TRUE parameter to see which functions support lists)
-- `st_union_ext`: unions geometry while also collapsing a name column into a single character string using the `cli::pluralize` function
-- `st_erase`: checks the validity of inputs with `sf::st_is_valid` before and after using `sf::st_difference` or (if flip = TRUE) `sf::st_difference`
+- `st_transform_ext()`: takes sf, sfc, or bbox objects as the crs parameter for `sf::st_transform()` and supports lists of sf objects (look for the list.ok = TRUE parameter to see which functions support lists)
+- `st_union_ext()`: unions geometry while also collapsing a name column into a single character string using the `cli::pluralize` function
+- `st_erase()`: checks the validity of inputs with `sf::st_is_valid` before and after using `sf::st_difference` or (if flip = TRUE) `sf::st_difference`
 
 ## Getting information about sf, sfc, and bbox objects
 
 There are also several functions that return information about the geometry of input objects. Typically, these functions bind the information as a new column to an existing sf input (and convert sfc input objects to sf results).
 
-The `get_lenth()` function wraps `sf::st_length` and (for POLYGON geometries only) `lwgeom::st_perimeter`:
+The `get_length()` function wraps `sf::st_length` and (for POLYGON geometries only) `lwgeom::st_perimeter`:
 
 ```{r}
 example_line <- as_line(as_point(nc[1,]), as_point(nc[2,]), crs = 4326)
