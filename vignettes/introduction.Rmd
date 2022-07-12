@@ -1,0 +1,189 @@
+---
+title: "Introduction to sfext"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to sfext}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(sfext)
+library(dplyr)
+library(ggplot2)
+```
+
+The {sfext} package has several categories of functions:
+
+- Functions for reading and writing spatial data
+- Converting the class or geometry of objects 
+- Modifying sf, sfc, and bbox objects
+- Getting information about sf, sfc, and bbox objects
+- Working with units and scales
+
+## Reading and writing sf objects
+
+### Reading sf objects
+
+[read_sf_ext()](https://elipousson.github.io/sfext/reference/read_sf_ext.html) calls one of four other functions depending on the input parameters:
+
+- `read_sf_path()`
+- `read_sf_url()` 
+- `read_sf_pkg()` 
+- `read_sf_query()` 
+
+`read_sf_path()` is similar to `sf::read_sf` but has a few additional features. It checks the existence of a file before reading, supports the creation of wkt_filter parameters based on a bounding box, and supports conversion of tabular data to simple feature objects.
+
+```{r}
+nc <- read_sf_ext(path = system.file("shape/nc.shp", package = "sf"))
+# This is equivalent to read_sf_path(system.file("shape/nc.shp", package = "sf"))
+# Or sf::read_sf(dsn = system.file("shape/nc.shp", package = "sf"))
+
+glimpse(nc)
+```
+
+```{r}
+bbox <- as_bbox(nc[10,])
+
+nc_in_bbox <- read_sf_ext(path = system.file("shape/nc.shp", package = "sf"), bbox = bbox)
+
+ggplot() +
+  geom_sf(data = nc) +
+  geom_sf(data = nc_in_bbox, fill = "red")
+```
+
+The second, `read_sf_url`, that supports reading url that are already supported by `sf::read_sf` but also supports ArcGIS Feature Layers (using the [{esri2sf}](https://github.com/yonghah/esri2sf) package) and URLs for tabular data (including both CSV files and Google Sheets). Several functions also support queries based on a name and name_col value (generating a simple SQL query) based on the provided values.
+
+```{r}
+sample_esri_url <- "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Louisville/LOJIC_PublicSafety_Louisville/MapServer/1"
+fire_stations <- read_sf_ext(url = sample_esri_url)
+# This is equivalent to read_sf_url(sample_esri_url)
+# Or esri2sf::esri2sf(url = sample_esri_url)
+
+select_station <- read_sf_ext(url = sample_esri_url, name_col = "NAME", name = "ENGINE 1")
+
+ggplot() +
+  geom_sf(data = fire_stations) +
+  geom_sf(data = select_station, color = "red", size = 4)
+```
+
+The read functions also support URLs for GitHub Gists (assuming the first file in the Gist is a spatial data file) or Google MyMaps.
+
+```{r}
+gmap_data <- read_sf_ext(url = "https://www.google.com/maps/d/u/0/viewer?mid=1CEssu_neU7lx_vAZs5qpufOBoUQ&ll=-3.81666561775622e-14%2C0&z=1")
+
+ggplot() +
+  geom_sf(data = gmap_data[2,])
+```
+
+The third, `read_sf_pkg`, can load spatial data from any installed package including exported data, files in the extdata folder, or data in a package-specific cache folder. This is particularly useful when working with spatial data packages such as [{mapbaltimore}](https://elipousson.github.io/mapbaltimore/) or [{mapmaryland}](https://elipousson.github.io/mapmaryland/).
+
+The fourth, `read_sf_query`, is most similar to `sf::read_sf` but provides an optional spatial filter based on the bbox parameter and supports the creation of queries using a basic name and name_col parameter.
+
+### Writing sf objects
+
+[write_sf_ext](https://elipousson.github.io/sfext/reference/write_sf_ext.html) wraps [make_filename](https://elipousson.github.io/sfext/reference/make_filename.html) to support the creation of consistent file names using labels or date prefixes to organize exports.
+
+```{r}
+make_filename(
+  name = "Ashe County",
+  label = "NC",
+  prefix = "date",
+  filetype = "gpkg"
+)
+```
+
+`write_sf_ext` also supports the automatic creation of destination folders and the use of a package-specific cache folder created by [rappdirs::user_cache_dir()].
+
+```{r}
+get_data_dir(path = "example_path/to_folder", create = FALSE)
+
+get_data_dir(cache = TRUE)
+```
+
+## Converting sf objects
+
+### tidyverse style check and conversion functions
+
+There are several helper functions that are used extensively by the package itself. While these conversions are easy to do with existing {sf} functions, these alternatives follow a tidyverse style syntax and support a wider range of input values.
+
+```{r}
+is_sf(nc)
+
+is_sfc(nc$geometry)
+
+nc_bbox <- as_bbox(nc)
+
+is_bbox(nc_bbox)
+
+nc_counties_bbox_sfc <- as_sfc(as_bbox(nc[10:15,]))
+
+glimpse(nc_bbox)
+
+ggplot() +
+  geom_sf(data = nc) +
+  geom_sf(data = as_sf(nc_bbox), fill = NA) +
+  geom_sf(data = as_sf_class(nc_counties_bbox_sfc, class = "sf"), fill = "blue", alpha = 0.2)
+```
+
+### Converting to and from non-sf data frames
+
+By default the conversion from sf to data frame object, uses the centroid of any polygon.
+
+```{r}
+nc_in_bbox_df <- sf_to_df(nc_in_bbox)
+
+glimpse(nc_in_bbox_df)
+```
+
+This can be converted back to an sf object but the centroid geometry is used instead:
+
+```{r}
+nc_in_bbox_sf <- df_to_sf(nc_in_bbox_df)
+
+ggplot() +
+  geom_sf(data = nc_in_bbox) +
+  geom_sf(data = nc_in_bbox_sf, color = "red")
+```
+
+Alternatively, sf_to_df can use well known text as an output format:
+
+```{r}
+nc_in_bbox_wkt <- sf_to_df(nc_in_bbox, geometry = "wkt")
+
+glimpse(nc_in_bbox_wkt)
+
+ggplot() +
+  geom_sf(data = nc_in_bbox) +
+  geom_sf(data = df_to_sf(nc_in_bbox_wkt), color = "red")
+```
+
+The {tidygeocoder} package is also used to support conversion of address vectors or data frames.
+
+```{r}
+address_to_sf(x = c("350 Fifth Avenue, New York, NY 10118"))
+```
+
+## Modifying sf objects
+
+The next group of functions often provide similar functionality to standard {sf} functions but, again, allow a wider range of inputs and outputs or offer extra features.
+
+```{r}
+nc_bbox <- st_bbox_ext(nc, class = "sf")
+# Similar to sf::st_sf(sf::st_as_sfc(sf::st_bbox(nc)))
+
+nc_bbox_expanded <- st_bbox_ext(nc, dist = 50, unit = "mi", class = "sf")
+# Similar to sf::st_buffer(nc, dist = units::as_units(50, "mi"))
+
+ggplot() +
+  geom_sf(data = nc) +
+  geom_sf(data = nc_bbox, fill = NA) +
+  geom_sf(data = nc_bbox_expanded, fill = NA, color = "red")
+```

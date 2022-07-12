@@ -37,6 +37,7 @@ Suggests:
     gistr,
     googlesheets4,
     httr2,
+    knitr,
     lwgeom,
     naniar,
     overedge,
@@ -54,3 +55,4 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0.9000
+VignetteBuilder: knitr
