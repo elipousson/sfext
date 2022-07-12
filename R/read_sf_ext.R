@@ -502,11 +502,11 @@ read_sf_gmap <- function(url,
       }
     )
 
-  is_pkg_installed("naniar")
+  if (has_name(data, "Description")) {
+    is_pkg_installed("naniar")
 
-  data <-
-    naniar::replace_with_na(data, replace = list("Description" = ""))
-
+    data <- naniar::replace_with_na(data, replace = list("Description" = ""))
+  }
 
   if (zm_drop) {
     data <- sf::st_zm(data)
