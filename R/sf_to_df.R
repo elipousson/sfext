@@ -127,7 +127,6 @@ join_sf_to_df <- function(x, y, by = NULL, ...) {
 #' Convert a data frame with a geometry list column to an sf object
 #' @name coords_df_to_sf
 #' @noRd
-#' @importFrom rlang has_length
 #' @importFrom sf st_as_sf
 coords_df_to_sf <- function(x, coords = c("lon", "lat"), into = NULL, sep = ",", rev = FALSE, remove_coords = FALSE, crs = 4326) {
   if (has_length(coords, 1) && has_length(into, 2)) {
@@ -214,6 +213,7 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
 
   x_coords <-
     dplyr::case_when(
+      all(coords %in% x_names) ~ coords,
       all(has_name(x, coords)) ~ coords,
       has_name(x, "lon") ~ c("lon", "lat"),
       has_name(x, "long") ~ c("long", "lat"),
