@@ -131,8 +131,12 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
 
   is_pkg_installed(package)
 
+  if (!is.character(data)) {
+    cli_abort("{.arg data} must be a length 1 character vector with the name or filename of the package data.")
+  }
+
   # Read package data
-  if (data %in% ls_pkg_data(package)) {
+  if (is_pkg_data(data, package)) {
     return(use_eval_parse(data = data, package = package))
   }
 
@@ -142,9 +146,9 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
   path <-
     dplyr::case_when(
       # If data is in extdata folder
-      filename %in% ls_pkg_extdata(package) ~ system.file("extdata", filename, package = package),
+      is_pkg_extdata(filename, package) ~ system.file("extdata", filename, package = package),
       # If data is in the cache directory
-      filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(cache = TRUE, package = package), filename)
+      is_pkg_cachedata(filename, package) ~ file.path(get_data_dir(cache = TRUE, create = FALSE, package = package), filename)
     )
 
   read_sf_path(path = path, bbox = bbox, ...)
