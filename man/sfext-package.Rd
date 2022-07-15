@@ -6,6 +6,8 @@
 \alias{sfext-package}
 \title{sfext: Extra Functions for Simple Feature Data}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Extra functions with additional options for reading, writing, and transforming spatial data. Includes a variety of utility functions for working with tabular data with coordinates and distance and area units.
 }
 \seealso{
