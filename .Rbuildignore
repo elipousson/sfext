@@ -11,3 +11,4 @@
 ^\.httr-oauth$
 ^codecov\.yml$
 ^vignettes/articles$
+^codemeta\.json$
