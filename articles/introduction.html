@@ -193,7 +193,7 @@
 <span>  prefix <span class="op">=</span> <span class="st">"date"</span>,</span>
 <span>  filetype <span class="op">=</span> <span class="st">"gpkg"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2022-07-13_nc_ashe_county.gpkg"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2022-07-15_nc_ashe_county.gpkg"</span></span></code></pre></div>
 <p><code><a href="../reference/write_sf_ext.html">write_sf_ext()</a></code> also supports the automatic creation of destination folders and the use of a package-specific cache folder created by <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_data_dir.html">get_data_dir</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"example_path/to_folder"</span>, create <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -295,17 +295,17 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/address_to_sf.html">address_to_sf</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"350 Fifth Avenue, New York, NY 10118"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Passing 1 address to the Nominatim single address geocoder</span></span>
-<span><span class="co">#&gt; Query completed in: 1.4 seconds</span></span>
+<span><span class="co">#&gt; Query completed in: 1.5 seconds</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
 <span><span class="co">#&gt; Attribute-geometry relationship: 3 constant, 0 aggregate, 0 identity</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: -73.7106 ymin: 42.70965 xmax: -73.7106 ymax: 42.70965</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -72.366 ymin: 41.10334 xmax: -72.366 ymax: 41.10334</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
-<span><span class="co">#&gt;   address                                lat   lon            geometry</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 350 Fifth Avenue, New York, NY 10118  42.7 -<span style="color: #BB0000;">73.7</span> (-73.7106 42.70965)</span></span></code></pre></div>
+<span><span class="co">#&gt;   address                                lat   lon           geometry</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;POINT [°]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 350 Fifth Avenue, New York, NY 10118  41.1 -<span style="color: #BB0000;">72.4</span> (-72.366 41.10334)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
