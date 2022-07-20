@@ -65,7 +65,7 @@ ls_pkg_cachedata <- function(pkg, call = caller_env()) {
 
 #' @noRd
 is_pkg_cachedata <- function(x, pkg, call = caller_env()) {
-  ls <- ls_pkg_cache(pkg, call = call)
+  ls <- ls_pkg_cachedata(pkg, call = call)
 
   if (is.null(ls)) {
     return(FALSE)
