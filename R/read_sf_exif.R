@@ -147,15 +147,21 @@ read_sf_exif <- function(path = NULL,
       )
   }
 
-  data <- sort_features(data, sort = sort)
+  crs <- NULL
 
-  data <- df_to_sf(data, from_crs = 4326, crs = sf::st_crs(bbox))
+  if (!is.null(bbox)) {
+    crs <- sf::st_crs(bbox)
+  }
+
+  data <- df_to_sf(data, from_crs = 4326, crs = crs)
+
+  data <- sort_features(data, sort = sort)
 
   if (is.null(bbox)) {
     return(data)
   }
 
-  st_filter_ext(data, bbox, crop = TRUE)
+  st_filter_ext(data, bbox)
 }
 
 #' Get a single filetype from the path (using most frequent type if multiple are at the path)
