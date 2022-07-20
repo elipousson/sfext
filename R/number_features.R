@@ -129,7 +129,7 @@ sort_features <- function(x,
   minmax_opts <- c("xmin", "ymin", "xmax", "ymax")
 
   if (any(sort %in% c(latlon_opts, minmax_opts))) {
-    sort <- arg_match(sort, choices = c(latlon_opts, minmax_opts), multiple = TRUE)
+    sort <- arg_match(sort, c(latlon_opts, minmax_opts), multiple = TRUE)
 
     if ((sort %in% latlon_opts) && !all(has_name(x, sort))) {
       x <-
