@@ -209,18 +209,21 @@ get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
 #' @param orientation Image orientation, Default: `NULL`.
 #' @rdname get_social_image
 #' @export
-#' @importFrom glue glue
 get_social_image <- function(image = NULL, platform = NULL, format = NULL, orientation = NULL) {
-  social_image_sizes <- paper_sizes[paper_sizes$type == "social", ]$name
+  image_sizes <- paper_sizes[paper_sizes$type == "social", ]
 
-  if (!is.null(image)) {
-    image <- arg_match(image, social_image_sizes)
-  } else {
+  if (!is.null(platform)) {
     platform <- arg_match(platform, c("Instagram", "Twitter", "Facebook"))
-    format <- arg_match(format, c("post", "story", "cover"))
-    platform_image_sizes <- grep(glue("^{platform}.+{format}"), social_image_sizes, value = TRUE)
-    image <- arg_match(image, platform_image_sizes)
+    image_sizes <- image_sizes[images_sizes$platform %in% platform,]
   }
+
+  if (!is.null(format)) {
+    format <- arg_match(format, c("post", "story", "cover"))
+    image_sizes <- image_sizes[images_sizes$format %in% format,]
+  }
+
+  image <- image %||% image_sizes$name[1]
+  image <- arg_match(image, image_sizes$name)
 
   get_paper(
     paper = image,
