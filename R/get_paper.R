@@ -213,13 +213,13 @@ get_social_image <- function(image = NULL, platform = NULL, format = NULL, orien
   image_sizes <- paper_sizes[paper_sizes$type == "social", ]
 
   if (!is.null(platform)) {
-    platform <- arg_match(platform, c("Instagram", "Twitter", "Facebook"))
-    image_sizes <- image_sizes[images_sizes$platform %in% platform,]
+    platform <- arg_match(platform, unique(image_sizes$standard))
+    image_sizes <- image_sizes[image_sizes$standard %in% platform,]
   }
 
   if (!is.null(format)) {
-    format <- arg_match(format, c("post", "story", "cover"))
-    image_sizes <- image_sizes[images_sizes$format %in% format,]
+    format <- arg_match(format, unique(image_sizes$size))
+    image_sizes <- image_sizes[image_sizes$size %in% format,]
   }
 
   image <- image %||% image_sizes$name[1]
