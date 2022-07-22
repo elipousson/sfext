@@ -148,7 +148,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
       # If data is in extdata folder
       is_pkg_extdata(filename, package) ~ system.file("extdata", filename, package = package),
       # If data is in the cache directory
-      is_pkg_cachedata(filename, package) ~ file.path(get_data_dir(cache = TRUE, create = FALSE, package = package), filename)
+      is_pkg_cachedata(filename, package) ~ file.path(get_data_dir(cache = TRUE, create = FALSE, pkg = package), filename)
     )
 
   read_sf_path(path = path, bbox = bbox, ...)

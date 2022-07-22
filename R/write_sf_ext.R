@@ -47,6 +47,7 @@ write_sf_ext <- function(data,
                          filetype = NULL,
                          path = NULL,
                          cache = FALSE,
+                         pkg = "sfext",
                          overwrite = FALSE) {
   if (is_sf_list(data, named = TRUE)) {
     purrr::map(
@@ -105,7 +106,8 @@ write_sf_ext <- function(data,
       write_sf_cache(
         data = data,
         filename = filename,
-        overwrite = overwrite
+        overwrite = overwrite,
+        pkg = pkg
       )
     }
   }
@@ -113,6 +115,8 @@ write_sf_ext <- function(data,
 
 #' @rdname write_sf_ext
 #' @name write_sf_cache
+#' @param pkg The name of the package cache directory to use for
+#'   [write_sf_cache] or [write_sf_ext] if `cache = TRUE`.
 #' @export
 #' @importFrom sf write_sf
 write_sf_cache <- function(data,
@@ -123,6 +127,7 @@ write_sf_cache <- function(data,
                            filename = NULL,
                            filetype = NULL,
                            data_dir = NULL,
+                           pkg = "sfext",
                            overwrite = FALSE) {
 
   filename <-
@@ -136,7 +141,7 @@ write_sf_cache <- function(data,
       path = NULL
     )
 
-  data_dir <- get_data_dir(path = data_dir, cache = TRUE, null.ok = FALSE)
+  data_dir <- get_data_dir(path = data_dir, cache = TRUE, pkg = pkg, null.ok = FALSE)
 
   path <- file.path(data_dir, filename)
 

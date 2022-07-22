@@ -8,23 +8,29 @@ get_data_dir(
   path = NULL,
   cache = FALSE,
   create = TRUE,
-  package = "sfext",
+  pkg = "sfext",
   null.ok = TRUE
 )
 }
 \arguments{
-\item{path}{Path to directory to use as data directory.}
+\item{path}{Path to directory for use as data directory.}
 
-\item{cache}{If \code{TRUE}, and path is NULL set path to \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
-(using value of package as appname).}
+\item{cache}{If \code{TRUE}, and path is \code{NULL} set path to
+\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir} (using value of pkg as appname). If path is not
+\code{NULL}, the path is returned even if cache is \code{TRUE}.}
 
 \item{create}{If \code{FALSE} and path does not exist, return path with a warning.
 If \code{TRUE} and \link[rlang:is_interactive]{rlang::is_interactive} is \code{TRUE}, ask user if directory
 should be created. If the session not interactive and create is \code{TRUE}, a
 new directory will be created.}
 
-\item{package}{Package name; defaults to "sfext"}
+\item{pkg}{Package name; defaults to "sfext"}
+
+\item{null.ok}{If \code{TRUE}, path is \code{NULL}, cache is \code{FALSE}, return the \code{NULL}
+path value; defaults to \code{TRUE}.}
 }
 \description{
-A utility function that wraps \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}.
+Get the path for a package-specific cache directory with
+\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}, check for the existence of a data directory,
+optionally create a new directory at the provided path location.
 }

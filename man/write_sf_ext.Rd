@@ -17,6 +17,7 @@ write_sf_ext(
   filetype = NULL,
   path = NULL,
   cache = FALSE,
+  pkg = "sfext",
   overwrite = FALSE
 )
 
@@ -29,6 +30,7 @@ write_sf_cache(
   filename = NULL,
   filetype = NULL,
   data_dir = NULL,
+  pkg = "sfext",
   overwrite = FALSE
 )
 
@@ -87,6 +89,9 @@ date/time prefix; defaults to \code{NULL}.}
 
 \item{cache}{If \code{TRUE}, write \code{sf} object to file in cache directory;
 defaults to \code{FALSE}.}
+
+\item{pkg}{The name of the package cache directory to use for
+\link{write_sf_cache} or \link{write_sf_ext} if \code{cache = TRUE}.}
 
 \item{overwrite}{Logical. Default \code{FALSE}. If \code{TRUE}, overwrite any existing
 cached files that use the same file name.}

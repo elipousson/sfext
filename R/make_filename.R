@@ -48,7 +48,8 @@ make_filename <- function(name = NULL,
   # If file name is not provided, filename is based on label, name, pad and width
   if (!is.null(name)) {
     cli_warn_ifnot(
-      "The provided {.arg filename} can't be used if {.arg name} is also provided.",
+      "The provided {.arg filename} can't be used
+      if {.arg name} is also provided.",
       condition = is.null(filename)
     )
 
@@ -79,7 +80,13 @@ make_filename <- function(name = NULL,
       filetype
     )
 
-  path <- get_data_dir(path = path, cache = cache, create = create)
+  path <-
+    get_data_dir(
+      path = path,
+      cache = cache,
+      create = create,
+      null.ok = TRUE
+    )
 
   if (is.null(path)) {
     return(filename)
