@@ -4,6 +4,7 @@
 \alias{read_sf_ext}
 \alias{read_sf_pkg}
 \alias{read_sf_path}
+\alias{read_sf_rda}
 \alias{read_sf_query}
 \alias{read_sf_excel}
 \alias{read_sf_csv}
@@ -20,6 +21,8 @@ read_sf_ext(...)
 read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
 
 read_sf_path(path, bbox = NULL, ...)
+
+read_sf_rda(file, path = NULL, refhook = NULL, bbox = NULL, ...)
 
 read_sf_query(
   dsn,
@@ -57,7 +60,7 @@ read_sf_csv(
   ...
 )
 
-read_sf_url(url, bbox = NULL, coords = NULL, zm_drop = TRUE, ...)
+read_sf_url(url, bbox = NULL, coords = c("lon", "lat"), ...)
 
 read_sf_esri(
   url,
@@ -114,6 +117,10 @@ by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data 
 cache directory or extdata system files.}
 
 \item{path}{A file path.}
+
+\item{file}{The file path to read from/write to.}
+
+\item{refhook}{A function to handle reference objects.}
 
 \item{dsn}{data source name (interpretation varies by driver - for some
 drivers, \code{dsn} is a file name, but may also be a folder, or contain
@@ -221,12 +228,13 @@ Reading data from a url:
 \itemize{
 \item A MapServer or FeatureServer URL
 \item A URL for a GitHub gist with a single spatial data file (first file used if gist contains multiple)
-\item A URL for a spatial data file or a CSV file
+\item A URL for a spatial data file, CSV file, or Excel file
 \item A Google Sheets URL
 \item A public Google Maps URL
 }
+}
+\section{Reading data from a package}{
 
-Reading data from a package:
 
 \link{read_sf_pkg} looks for three types of package data:
 \itemize{
@@ -234,8 +242,14 @@ Reading data from a package:
 \item External data in the \code{extdata} system files folder.
 \item Cached data in the cache directory returned by \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
 }
+}
 
-Additional ... parameters:
+\section{Additional ... parameters}{
+
+
+\link{read_sf_ext} is a flexible function where ... are passed to one of the other
+read functions depending on the provided parameters. The parameters \emph{must} be
+named to use this function.
 
 \link{read_sf_pkg} and \link{read_sf_download} both pass additional parameters
 to \link{read_sf_path} which supports query, name_col, name, and table. name and
@@ -246,11 +260,8 @@ provided, a expected layer name is created based on the file path.
 MapServer url (passed to \link{read_sf_esri}) or sheet if the url is for a Google
 Sheet (passed to \link[googlesheets4:range_read]{googlesheets4::read_sheet}), or a query or wkt filter
 parameter if the url is some other type (passed to \link[sf:st_read]{sf::read_sf}).
-
-\link{read_sf_ext} is a flexible function that only has bbox as a named parameter
-and all other parameters in ... are passed to one of the other overedge
-read_sf functions.
 }
+
 \seealso{
 Other read_write: 
 \code{\link{make_filename}()},
