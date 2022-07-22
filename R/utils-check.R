@@ -110,7 +110,8 @@ check_starts_with <- function(x = NULL,
 
   starts_with <-
     grepl(paste0("^", string), x,
-          ignore.case = ignore.case, perl = perl)
+      ignore.case = ignore.case, perl = perl
+    )
 
   if (all(starts_with) | null.ok) {
     invisible(return(TRUE))
@@ -204,6 +205,7 @@ check_df_paper <- function(x, ext = FALSE) {
 
   cli_abort(
     c("A {.arg paper} data.frame must have columns named {.val {paper_names}}.",
-      "i" = "The provided {.arg paper} is missing {.val {missing_names}}.")
+      "i" = "The provided {.arg paper} is missing {.val {missing_names}}."
+    )
   )
 }

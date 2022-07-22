@@ -214,12 +214,12 @@ get_social_image <- function(image = NULL, platform = NULL, format = NULL, orien
 
   if (!is.null(platform)) {
     platform <- arg_match(platform, unique(image_sizes$standard))
-    image_sizes <- image_sizes[image_sizes$standard %in% platform,]
+    image_sizes <- image_sizes[image_sizes$standard %in% platform, ]
   }
 
   if (!is.null(format)) {
     format <- arg_match(format, unique(image_sizes$size))
-    image_sizes <- image_sizes[image_sizes$size %in% format,]
+    image_sizes <- image_sizes[image_sizes$size %in% format, ]
   }
 
   image <- image %||% image_sizes$name[1]
