@@ -11,11 +11,11 @@
 #'
 #'   - A MapServer or FeatureServer URL
 #'   - A URL for a GitHub gist with a single spatial data file (first file used if gist contains multiple)
-#'   - A URL for a spatial data file or a CSV file
+#'   - A URL for a spatial data file, CSV file, or Excel file
 #'   - A Google Sheets URL
 #'   - A public Google Maps URL
 #'
-#' @details Reading data from a package:
+#' @section Reading data from a package:
 #'
 #' [read_sf_pkg] looks for three types of package data:
 #'
@@ -23,7 +23,11 @@
 #'   - External data in the `extdata` system files folder.
 #'   - Cached data in the cache directory returned by [rappdirs::user_cache_dir]
 #'
-#' @details Additional ... parameters:
+#' @section Additional ... parameters:
+#'
+#' [read_sf_ext] is a flexible function where ... are passed to one of the other
+#' read functions depending on the provided parameters. The parameters *must* be
+#' named to use this function.
 #'
 #' [read_sf_pkg] and [read_sf_download] both pass additional parameters
 #' to [read_sf_path] which supports query, name_col, name, and table. name and
@@ -34,10 +38,6 @@
 #' MapServer url (passed to [read_sf_esri]) or sheet if the url is for a Google
 #' Sheet (passed to [googlesheets4::read_sheet]), or a query or wkt filter
 #' parameter if the url is some other type (passed to [sf::read_sf]).
-#'
-#' [read_sf_ext] is a flexible function that only has bbox as a named parameter
-#' and all other parameters in ... are passed to one of the other overedge
-#' read_sf functions.
 #'
 #' @param bbox A bounding box object; defaults to `NULL`. If `"bbox"` is provided,
 #'   only returns features intersecting the bounding box.
@@ -146,9 +146,16 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
   path <-
     dplyr::case_when(
       # If data is in extdata folder
-      is_pkg_extdata(filename, package) ~ system.file("extdata", filename, package = package),
+      is_pkg_extdata(filename, package) ~ system.file(
+        "extdata",
+        filename,
+        package = package
+      ),
       # If data is in the cache directory
-      is_pkg_cachedata(filename, package) ~ file.path(get_data_dir(cache = TRUE, create = FALSE, pkg = package), filename)
+      is_pkg_cachedata(filename, package) ~ file.path(
+        get_data_dir(cache = TRUE, create = FALSE, pkg = package),
+        filename
+      )
     )
 
   read_sf_path(path = path, bbox = bbox, ...)
@@ -158,27 +165,53 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
 #' @rdname read_sf_ext
 #' @export
 #' @importFrom sf read_sf
-#' @importFrom fs file_exists
 read_sf_path <- function(path, bbox = NULL, ...) {
   cli_abort_ifnot(
     "Can't find {.path {path}}.",
-    condition = fs::file_exists(path)
+    condition = file.exists(path)
   )
 
-  filetype <- str_extract_filetype(path)
+  type <-
+    dplyr::case_when(
+      is_csv_path(path) ~ "csv",
+      is_excel_path(path) ~ "excel",
+      is_rda_path(path) ~ "rda",
+      TRUE ~ "query"
+    )
 
-  if (filetype %in% c("csv", "xlsx", "xls")) {
-    data <-
-      switch(filetype,
-        "csv" = read_sf_csv(path = path, bbox = bbox, ...),
-        "xlsx" = read_sf_excel(path = path, bbox = bbox, ...),
-        "xls" = read_sf_excel(path = path, bbox = bbox, ...)
-      )
+  switch(type,
+    "csv" = read_sf_csv(path = path, bbox = bbox, ...),
+    "excel" = read_sf_excel(path = path, bbox = bbox, ...),
+    "rda" = read_sf_rda(path = path, bbox = bbox, ...),
+    "query" = read_sf_query(path = path, bbox = bbox, ...)
+  )
+}
+
+#' @name read_sf_rda
+#' @rdname read_sf_ext
+#' @inheritParams readr::read_rds
+#' @export
+read_sf_rda <- function(file,
+                        path = NULL,
+                        refhook = NULL,
+                        bbox = NULL,
+                        ...) {
+  is_pkg_installed("readr")
+
+  file <- file %||% path
+
+  data <- readr::read_rds(file, refhook = refhook)
+
+  if (!is_sf(data)) {
+    cli_warn(
+      "{.arg file} {.file {file}} is not a sf object
+      and can't be filtered by {.arg bbox}."
+    )
 
     return(data)
   }
 
-  read_sf_query(path = path, bbox = bbox, ...)
+  st_filter_ext(data, bbox)
 }
 
 #' @name read_sf_query
@@ -276,9 +309,14 @@ read_sf_excel <- function(path,
     return(data)
   }
 
-  data <- readxl::read_excel(path = path, sheet = sheet, ...)
+  data_df <- readxl::read_excel(path = path, sheet = sheet, ...)
 
-  data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
+  data <- df_to_sf(data_df, coords = coords, geo = geo, address = address, from_crs = from_crs)
+
+  if (!is_sf(data)) {
+    # FIXME: Add a warning for this possibility (may not actually work yet)
+    return(data_df)
+  }
 
   st_filter_ext(data, bbox)
 }
@@ -302,9 +340,14 @@ read_sf_csv <- function(path,
 
   is_pkg_installed("readr")
 
-  data <- readr::read_csv(file = path, show_col_types = show_col_types, ...)
+  data_df <- readr::read_csv(file = path, show_col_types = show_col_types, ...)
 
-  data <- df_to_sf(data, coords = coords, geo = geo, address = address, crs = NULL, from_crs = from_crs)
+  data <- df_to_sf(data_df, coords = coords, geo = geo, address = address, crs = NULL, from_crs = from_crs)
+
+  if (!is_sf(data)) {
+    # FIXME: Add a warning for this possibility (may not actually work yet)
+    return(data_df)
+  }
 
   st_filter_ext(data, bbox)
 }
@@ -318,8 +361,7 @@ read_sf_csv <- function(path,
 #' @importFrom dplyr case_when
 read_sf_url <- function(url,
                         bbox = NULL,
-                        coords = NULL,
-                        zm_drop = TRUE,
+                        coords = c("lon", "lat"),
                         ...) {
   params <- list2(...)
 
@@ -331,6 +373,7 @@ read_sf_url <- function(url,
   url_type <-
     dplyr::case_when(
       is_csv_path(url) ~ "csv",
+      is_excel_path(url) ~ "excel",
       is_esri_url(url) ~ "esri",
       is_gist_url(url) ~ "gist",
       is_gmap_url(url) ~ "gmap",
@@ -339,24 +382,50 @@ read_sf_url <- function(url,
       TRUE ~ "other"
     )
 
+  # FIXME: If the defaults for the underlying functions ever change, these would
+  # also need to be updated. Refactor to make sure that isn't an issue in the
+  # future. Additional default setting for non-repeated parameters occurs in
+  # function calls below
+  from_crs <- params$from_crs %||% 4326
+  zm_drop <- params$zm_drop %||% TRUE
+  geo <- params$geo %||% FALSE
+  address <- params$address %||% "address"
+
   switch(url_type,
     "csv" = read_sf_csv(
       url = url,
       bbox = bbox,
-      coords = coords
+      coords = coords,
+      from_crs = from_crs,
+      geo = geo,
+      address = address
+    ),
+    "excel" = read_sf_excel(
+      url = url,
+      bbox = bbox,
+      coords = coords,
+      from_crs = from_crs,
+      geo = geo,
+      address = address
     ),
     "download" = read_sf_download(
       url = url,
       filename = params$filename,
       bbox = bbox,
-      path = params$path
+      path = params$path,
+      filetype = params$filetype %||% "geojson",
+      prefix = params$prefix %||% "date",
+      method = params$method %||% "auto",
+      unzip = params$unzip %||% FALSE
     ),
     "esri" = read_sf_esri(
       url = url,
       location = bbox,
       where = params$where,
       name = params$name,
-      name_col = params$name_col
+      name_col = params$name_col,
+      coords = coords,
+      from_crs = from_crs
     ),
     "gist" = read_sf_gist(
       url = url,
@@ -371,7 +440,11 @@ read_sf_url <- function(url,
       url = url,
       bbox = bbox,
       coords = coords,
-      sheet = params$sheet
+      sheet = params$sheet,
+      coords = coords,
+      from_crs = from_crs,
+      geo = geo,
+      address = address
     ),
     "other" = read_sf_query(
       dsn = url,
