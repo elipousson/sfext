@@ -22,8 +22,8 @@
 #'   "data.csv". Objects that are not simple features are written to RDS with
 #'   [readr::write_rds()].
 #' @param data_dir cache data directory, defaults to
-#'   [rappdirs::user_cache_dir()] when data_dir is `NULL`. (only used
-#'   for write_sf_cache; default is used when `cache = TRUE` for write_sf_ext)
+#'   [rappdirs::user_cache_dir()] when data_dir is `NULL`. (only used for
+#'   [write_sf_cache]; default is used when `cache = TRUE` for [write_sf_ext])
 #' @param overwrite Logical. Default `FALSE`. If `TRUE`, overwrite any existing
 #'   cached files that use the same file name.
 #' @param filetype File type to write and cache, Default: `NULL` for
@@ -129,6 +129,13 @@ write_sf_cache <- function(data,
                            data_dir = NULL,
                            pkg = "sfext",
                            overwrite = FALSE) {
+  path <-
+    get_data_dir(
+      path = data_dir,
+      cache = TRUE,
+      pkg = pkg,
+      null.ok = FALSE
+    )
 
   filename <-
     make_filename(
@@ -141,15 +148,10 @@ write_sf_cache <- function(data,
       path = NULL
     )
 
-  data_dir <- get_data_dir(path = data_dir, cache = TRUE, pkg = pkg, null.ok = FALSE)
-
-  path <- file.path(data_dir, filename)
-
   write_sf_types(
     data = data,
     filename = filename,
     path = path,
-    filetype = filetype,
     overwrite = overwrite
   )
 }
@@ -359,7 +361,8 @@ check_file_overwrite <- function(filename = NULL,
 
     cli_abort_ifnot(
       c("{.file {filename}} can't be saved.",
-        "i" = "A file with the same name already exists and {.arg overwrite = FALSE}."
+        "i" = "A file with the same name already exists
+        and {.arg overwrite = FALSE}."
       ),
       condition = overwrite
     )

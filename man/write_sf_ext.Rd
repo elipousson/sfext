@@ -97,8 +97,8 @@ defaults to \code{FALSE}.}
 cached files that use the same file name.}
 
 \item{data_dir}{cache data directory, defaults to
-\code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}} when data_dir is \code{NULL}. (only used
-for write_sf_cache; default is used when \code{cache = TRUE} for write_sf_ext)}
+\code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}} when data_dir is \code{NULL}. (only used for
+\link{write_sf_cache}; default is used when \code{cache = TRUE} for \link{write_sf_ext})}
 
 \item{description}{(character) Brief description of gist (optional)}
 
