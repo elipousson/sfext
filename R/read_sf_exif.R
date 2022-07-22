@@ -164,17 +164,17 @@ read_sf_exif <- function(path = NULL,
   st_filter_ext(data, bbox)
 }
 
-#' Get a single filetype from the path (using most frequent type if multiple are at the path)
+#' Get a single filetype from the path (using most frequent type if multiple are
+#' at the path)
 #'
 #' @noRd
-#' @importFrom fs dir_ls
 #' @importFrom stringr str_extract
 get_path_filetype <- function(path, filetype = NULL) {
   if (!is.null(filetype)) {
     return(filetype)
   }
 
-  filetype <- unique(stringr::str_extract(fs::dir_ls(path), "(?<=\\.).+$"))
+  filetype <- unique(str_extract_filetype(list.files(path)))
 
   if (length(filetype) == 1) {
     return(filetype)
