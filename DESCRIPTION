@@ -18,7 +18,6 @@ Depends:
 Imports: 
     cli,
     dplyr,
-    fs,
     glue,
     janitor,
     purrr,
@@ -47,7 +46,7 @@ Suggests:
     testthat (>= 3.0.0),
     tidygeocoder
 Remotes: 
-    yonghah/esri2sf
+    elipousson/esri2sf
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8
