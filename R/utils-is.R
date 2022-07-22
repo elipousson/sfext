@@ -23,6 +23,21 @@ is_csv_path <- function(x) {
   grepl("\\.csv$", x)
 }
 
+#' Is this a Excel file path or url?
+#'
+#' @noRd
+is_excel_path <- function(x) {
+  grepl("\\.xls$|\\.xlsx$", x)
+}
+
+#' Is this a RDA file path or url?
+#'
+#' @noRd
+is_rda_path <- function(x) {
+  grepl("\\.rda$", x)
+}
+
+
 #' Is this a URL?
 #'
 #' @noRd
