@@ -12,24 +12,24 @@
 #' @param package Package name; defaults to "sfext"
 #' @export
 get_data_dir <- function(path = NULL, cache = FALSE, create = TRUE, package = "sfext", null.ok = TRUE) {
-  if (is.null(path) && cache) {
+  if (cache) {
     is_pkg_installed("rappdirs")
 
-    path <- rappdirs::user_cache_dir(package)
+    path <- path %||% rappdirs::user_cache_dir(package)
+  }
+
+  if (!is.null(path) && dir.exists(path)) {
+    return(path)
   }
 
   if (is.null(path) && null.ok) {
     return(path)
-  }
-
-  if (dir.exists(path)) {
-    return(path)
+  } else {
+    cli_abort("{.arg path} can't be {.val NULL} when {.code null.ok = FALSE}")
   }
 
   if (!create) {
-    cli_warn(
-      "The provided {.arg path} {.file {path}} does not exist."
-    )
+    cli_warn("The provided {.arg path} {.file {path}} does not exist.")
     return(path)
   }
 

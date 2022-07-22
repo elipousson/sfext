@@ -85,7 +85,7 @@ write_sf_ext <- function(data,
       path <- file.path(path, filename)
     }
 
-    if (!is.null(filetype) && ("geojson" %in% filetype)) {
+    if ("geojson" %in% filetype) {
       data <-
         st_transform_ext(
           data,
@@ -124,7 +124,6 @@ write_sf_cache <- function(data,
                            filetype = NULL,
                            data_dir = NULL,
                            overwrite = FALSE) {
-  data_dir <- get_data_dir(path = data_dir)
 
   filename <-
     make_filename(
@@ -136,6 +135,8 @@ write_sf_cache <- function(data,
       postfix = postfix,
       path = NULL
     )
+
+  data_dir <- get_data_dir(path = data_dir, cache = TRUE, null.ok = FALSE)
 
   path <- file.path(data_dir, filename)
 
