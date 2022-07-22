@@ -70,6 +70,7 @@ with <code><a href="make_filename.html">make_filename()</a></code> and features 
 <span>  filetype <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  pkg <span class="op">=</span> <span class="st">"sfext"</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -82,6 +83,7 @@ with <code><a href="make_filename.html">make_filename()</a></code> and features 
 <span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  filetype <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pkg <span class="op">=</span> <span class="st">"sfext"</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -159,6 +161,11 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 <dt>cache</dt>
 <dd><p>If <code>TRUE</code>, write <code>sf</code> object to file in cache directory;
 defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt>pkg</dt>
+<dd><p>The name of the package cache directory to use for
+write_sf_cache or write_sf_ext if <code>cache = TRUE</code>.</p></dd>
 
 
 <dt>overwrite</dt>
