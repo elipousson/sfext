@@ -36,16 +36,18 @@ get_margin <- function(margin = NULL,
                        footer = 0) {
   is_pkg_installed("ggplot2")
 
-  if (is.character(margin) || is.null(margin)) {
+  if (is.character(margin)) {
+    margin <- margin %||% "none"
     margin <-
-      match.arg(
+      arg_match(
         margin,
         c("none", "narrow", "standard", "extrawide", "wide")
       )
   }
 
+  unit <- unit %||% "in"
   unit <-
-    match.arg(
+    arg_match(
       unit,
       c(
         "in", "mm", "px", "cm", "npc", "picas",
@@ -61,7 +63,7 @@ get_margin <- function(margin = NULL,
         dist <- (paper$width - block_width) / 2
       }
     } else if (is.data.frame(paper)) {
-      is_df_paper(paper, ext = TRUE)
+      check_df_paper(paper, ext = TRUE)
 
       # FIXME: get_paper only passes to get_margin if margin is a character value
       # but the value of margin does not matter to set the dist if block_width is provided.

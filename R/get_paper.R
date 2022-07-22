@@ -54,7 +54,7 @@ get_paper <- function(paper = "letter",
                       ...) {
   type <-
     dplyr::case_when(
-      is.data.frame(paper) && is_df_paper(paper, ext = FALSE) ~ "paper",
+      is.data.frame(paper) && check_df_paper(paper, ext = FALSE) ~ "paper",
       is.character(paper) ~ "name",
       !is.null(standard) ~ "standard",
       !is.null(width) | !is.null(height) | !is.null(units) ~ "dims"

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils-check.R
 \name{check_sf}
 \alias{check_sf}
-\title{Check if x is an \code{sf} object}
+\title{Check if x is an sf object}
 \usage{
 check_sf(
   x,

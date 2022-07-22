@@ -67,26 +67,3 @@ is_gmap_url <- function(x) {
 is_unit <- function(x, null.ok = FALSE) {
   is_class(x, classes = "unit", null.ok)
 }
-
-
-#' Is the df object a paper data frame?
-#'
-#' @noRd
-is_df_paper <- function(x, ext = FALSE) {
-  # FIXME: Add check to make sure input is a data frame
-  names <- c("width", "height", "orientation", "units")
-
-  if (ext) {
-    names <- c(names, "asp", "ncol", "nrow")
-  }
-
-  is_valid_paper <- has_name(x, names)
-
-  # FIXME: This function should be renamed check_df_paper if it returns an error on bad inputs by default
-  cli_abort_ifnot(
-    "The data frame provided to {.arg paper} must include columns named {.val {names}}",
-    condition = all(is_valid_paper)
-  )
-
-  all(is_valid_paper)
-}

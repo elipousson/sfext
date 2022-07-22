@@ -1,4 +1,11 @@
-check_null <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, null.req = FALSE, ...) {
+#' Check if x is NULL
+#'
+#' @noRd
+check_null <- function(x = NULL,
+                       arg = caller_arg(x),
+                       null.ok = FALSE,
+                       null.req = FALSE,
+                       ...) {
   if (null.req) {
     null.ok <- null.req
   }
@@ -14,6 +21,9 @@ check_null <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, null.req 
   invisible(return(TRUE))
 }
 
+#' Check if x is a character vector
+#'
+#' @noRd
 check_character <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, ...) {
   check_null(x, arg, null.ok)
   null.ok <- is.null(x) && null.ok
@@ -30,7 +40,14 @@ check_character <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, ...)
   )
 }
 
-check_len <- function(x = NULL, len = 1, arg = caller_arg(x), null.ok = FALSE, ...) {
+#' Check if x is between a min and max length
+#'
+#' @noRd
+check_len <- function(x = NULL,
+                      len = 1,
+                      arg = caller_arg(x),
+                      null.ok = FALSE,
+                      ...) {
   check_null(x, arg, null.ok)
   null.ok <- is.null(x) && null.ok
 
@@ -52,10 +69,21 @@ check_len <- function(x = NULL, len = 1, arg = caller_arg(x), null.ok = FALSE, .
   )
 }
 
-check_grepl <- function(x = NULL, pattern = NULL, arg = caller_arg(x), null.ok = FALSE, ignore.case = FALSE, perl = FALSE, message = NULL, ...) {
+#' Check if x matches pattern with grepl
+#'
+#' @noRd
+check_grepl <- function(x = NULL,
+                        pattern = NULL,
+                        arg = caller_arg(x),
+                        null.ok = FALSE,
+                        ignore.case = FALSE,
+                        perl = FALSE,
+                        message = NULL,
+                        ...) {
   check_null(x, arg, null.ok)
   null.ok <- is.null(x) && null.ok
 
+  # FIXME: This will error if x is longer than 1
   if (grepl(pattern, x, ignore.case = ignore.case, perl = perl) | null.ok) {
     invisible(return(TRUE))
   }
@@ -66,11 +94,25 @@ check_grepl <- function(x = NULL, pattern = NULL, arg = caller_arg(x), null.ok =
   cli_abort(message = message)
 }
 
-check_starts_with <- function(x = NULL, string = NULL, arg = caller_arg(x), null.ok = FALSE, ignore.case = FALSE, perl = FALSE, message = NULL, ...) {
+#' Check if x starts with pattern
+#'
+#' @noRd
+check_starts_with <- function(x = NULL,
+                              string = NULL,
+                              arg = caller_arg(x),
+                              null.ok = FALSE,
+                              ignore.case = FALSE,
+                              perl = FALSE,
+                              message = NULL,
+                              ...) {
   check_character(x, arg, null.ok)
   null.ok <- is.null(x) && null.ok
 
-  if (all(grepl(paste0("^", string), x, ignore.case = ignore.case, perl = perl)) | null.ok) {
+  starts_with <-
+    grepl(paste0("^", string), x,
+          ignore.case = ignore.case, perl = perl)
+
+  if (all(starts_with) | null.ok) {
     invisible(return(TRUE))
   }
 
@@ -82,7 +124,9 @@ check_starts_with <- function(x = NULL, string = NULL, arg = caller_arg(x), null
   cli_abort(message = message, ...)
 }
 
-
+#' Check if x is logical
+#'
+#' @noRd
 check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NULL, call = caller_env(), ...) {
   check_null(x, arg, null.ok, FALSE, call)
   null.ok <- is.null(x) && null.ok
@@ -100,7 +144,7 @@ check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NU
   )
 }
 
-#' Check if x is an `sf` object
+#' Check if x is an sf object
 #'
 #' If x is an `sf` object invisibly return TRUE. If not, return an error with [cli::cli_abort]
 #'
@@ -109,10 +153,18 @@ check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NU
 #' @inheritParams cli::cli_abort
 #' @inheritDotParams cli::cli_abort
 #' @export
-check_sf <- function(x, arg = caller_arg(x), null.ok = FALSE, list.ok = FALSE, ext = FALSE, call = caller_env(), ...) {
+check_sf <- function(x,
+                     arg = caller_arg(x),
+                     null.ok = FALSE,
+                     list.ok = FALSE,
+                     ext = FALSE,
+                     call = caller_env(),
+                     ...) {
   check_null(x, arg, null.ok)
 
-  if (is_sf(x, ext, null.ok) | (list.ok && is_sf_list(x, named = FALSE, ext, null.ok))) {
+  list.ok <- list.ok && is_sf_list(x, named = FALSE, ext, null.ok)
+
+  if (is_sf(x, ext, null.ok) | list.ok) {
     invisible(return(TRUE))
   }
 
@@ -128,5 +180,30 @@ check_sf <- function(x, arg = caller_arg(x), null.ok = FALSE, list.ok = FALSE, e
     ),
     call = call,
     ...
+  )
+}
+
+#' Check if the data.frame object has the required paper columns
+#'
+#' @noRd
+check_df_paper <- function(x, ext = FALSE) {
+  # FIXME: Add check to make sure input is a data frame
+  paper_names <- c("width", "height", "orientation", "units")
+
+  if (ext) {
+    paper_names <- c(paper_names, "asp", "ncol", "nrow")
+  }
+
+  is_valid_paper <- has_name(x, paper_names)
+
+  if (all(is_valid_paper)) {
+    return(TRUE)
+  }
+
+  missing_names <- names[!is_valid_paper]
+
+  cli_abort(
+    c("A {.arg paper} data.frame must have columns named {.val {paper_names}}.",
+      "i" = "The provided {.arg paper} is missing {.val {missing_names}}.")
   )
 }
