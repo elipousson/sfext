@@ -7,6 +7,7 @@
 #'
 #' - [str_fix]: Add a label, prefix, and postfix to string
 #' - [str_prefix]: Add a prefix or a postfix to a string
+#' - [has_filetype]: Does a string have a filetype (optionally user-defined)?
 #' - [str_add_filetype]: Add file type to string
 #' - [str_remove_filetype]: Remove file type from string
 #' - [str_extract_filetype]: Extract file type from string
@@ -42,13 +43,12 @@ str_fix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", cle
     string <- janitor::make_clean_names(string)
   }
 
-  string <- str_prefix(string, prefix = prefix, sep = sep)
+  # Add prefix and postfix
+  string <- str_prefix(string, prefix, sep, clean_names)
+  string <- str_prefix(string, postfix, sep, clean_names, post = TRUE)
 
-  string <- str_prefix(string, prefix = postfix, sep = sep, post = TRUE)
-
-  string <- gsub("_{2}", "_", string)
-
-  return(string)
+  # Remove doublec underscores
+  gsub("_{2}", "_", string)
 }
 
 #' @name str_prefix
@@ -82,11 +82,68 @@ str_prefix <- function(string = NULL,
     )
   }
 
-  if (!post) {
-    return(paste(c(prefix, string), collapse = sep))
+  if (post) {
+    return(paste(c(string, prefix), collapse = sep))
   }
 
-  paste(c(string, prefix), collapse = sep)
+  paste(c(prefix, string), collapse = sep)
+}
+
+#' @name has_filetype
+#' @rdname str_misc
+#' @export
+has_filetype <- function(string, filetype = NULL) {
+  filetype <- filetype %||% "[a-zA-Z0-9]+"
+  grepl(pattern = glue("\\.{filetype}$(?!\\.)"), string, perl = TRUE)
+}
+
+#' @name str_add_filetype
+#' @rdname str_misc
+#' @param filetype File type string
+#' @export
+str_add_filetype <- function(string, filetype = NULL) {
+  if (!is.null(filetype) && has_filetype(string, filetype)) {
+    return(string)
+  } else if (has_filetype(string)) {
+    string <- str_remove_filetype(string)
+  }
+
+  # FIXME: Previously used paste0(string, ".", filetype)) -
+  # make sure the change doesn't cause any new issues
+  paste0(c(string, filetype), collapse = ".")
+}
+
+#' @name str_remove_filetype
+#' @rdname str_misc
+#' @export
+str_remove_filetype <- function(string, filetype = NULL) {
+  filetype <- filetype %||% str_extract_filetype(string)
+
+  sub(paste0("\\.", filetype, "$"), "", string)
+}
+
+#' @name str_extract_filetype
+#' @rdname str_misc
+#' @export
+str_extract_filetype <- function(string, filetype = NULL, tocase = tolower) {
+  filetype <- filetype %||% "[a-zA-Z0-9]+"
+  tolower(
+    regmatches(
+      string,
+      regexpr(glue("(?<=\\.){filetype}$(?!\\.)"), string, perl = TRUE)
+    )
+  )
+}
+
+#' @noRd
+str_add_filetype <- function(string, filetype = NULL) {
+  if (has_filetype(string, filetype)) {
+    return(string)
+  } else if (has_filetype(string)) {
+    string <- str_remove_filetype(string)
+  }
+
+  paste0(c(string, filetype), collapse = ".")
 }
 
 
@@ -102,12 +159,10 @@ str_pad_digits <- function(string, pad = "0", side = "left", width = NULL) {
     return(string)
   }
 
-  digit_string <-
-    str_extract_digits(string)
+  digit_string <- str_extract_digits(string)
 
   if (is.null(width)) {
-    width <-
-      max(nchar(digit_string))
+    width <- max(nchar(digit_string))
   }
 
   digit_string <-
@@ -131,49 +186,7 @@ str_extract_digits <- function(string) {
   regmatches(string, regexpr("[0-9]+", string, perl = TRUE))
 }
 
-#' @name str_add_filetype
-#' @rdname str_misc
-#' @param filetype File type string
-#' @export
-str_add_filetype <- function(string, filetype = NULL) {
-  if (grepl(pattern = "\\.[a-zA-Z0-9]+$", x = string)) {
-    return(string)
-  }
- # FIXME: Previously used paste0(string, ".", filetype)) - make sure the change doesn't cause any new issues
-  paste0(c(string, filetype), collapse = ".")
-}
-
-#' @name str_remove_filetype
-#' @rdname str_misc
-#' @export
-str_remove_filetype <- function(string, filetype = NULL) {
-  if (!is.null(filetype)) {
-    filetype <- str_extract_filetype(string)
-  }
-
-  sub(paste0("\\.", filetype, "$"), "", string)
-}
-
-#' @name str_extract_filetype
-#' @rdname str_misc
-#' @export
-str_extract_filetype <- function(string) {
-  tolower(regmatches(string, regexpr("(?<=\\.)[a-zA-Z0-9]+$(?!\\.)", string, perl = TRUE)))
-}
-
-
-#' @noRd
-str_add_filetype <- function(string, filetype = NULL) {
-  if (grepl(pattern = "\\.[a-zA-Z0-9]+$", x = string)) {
-    return(string)
-  }
-
-  paste0(string, ".", filetype)
-}
-
 #' Replace spaces with underscores
-#'
-#' Not exported by overedge
 #'
 #' @noRd
 underscore <- function(x) {

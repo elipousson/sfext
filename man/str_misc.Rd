@@ -4,11 +4,12 @@
 \alias{str_misc}
 \alias{str_fix}
 \alias{str_prefix}
-\alias{str_pad_digits}
-\alias{str_extract_digits}
+\alias{has_filetype}
 \alias{str_add_filetype}
 \alias{str_remove_filetype}
 \alias{str_extract_filetype}
+\alias{str_pad_digits}
+\alias{str_extract_digits}
 \title{Modify strings to help make consistent file names}
 \usage{
 str_fix(
@@ -31,15 +32,17 @@ str_prefix(
   time.format = "\%Y-\%m-\%d_\%I-\%M-\%S_\%p"
 )
 
-str_pad_digits(string, pad = "0", side = "left", width = NULL)
-
-str_extract_digits(string)
+has_filetype(string, filetype = NULL)
 
 str_add_filetype(string, filetype = NULL)
 
 str_remove_filetype(string, filetype = NULL)
 
-str_extract_filetype(string)
+str_extract_filetype(string, filetype = NULL, tocase = tolower)
+
+str_pad_digits(string, pad = "0", side = "left", width = NULL)
+
+str_extract_digits(string)
 }
 \arguments{
 \item{prefix}{Character string or character vector to add to string parameter
@@ -67,9 +70,9 @@ to snake case with \code{\link[janitor:make_clean_names]{janitor::make_clean_nam
 prefix is "date" or "time" and not currently accessible when using
 \link{str_fix} or \link{make_filename}.}
 
-\item{side}{Side on which padding character is added (left, right or both).}
-
 \item{filetype}{File type string}
+
+\item{side}{Side on which padding character is added (left, right or both).}
 }
 \description{
 Prefix and postfix can include more than one value that are added in the same
@@ -80,6 +83,7 @@ Functions include:
 \itemize{
 \item \link{str_fix}: Add a label, prefix, and postfix to string
 \item \link{str_prefix}: Add a prefix or a postfix to a string
+\item \link{has_filetype}: Does a string have a filetype (optionally user-defined)?
 \item \link{str_add_filetype}: Add file type to string
 \item \link{str_remove_filetype}: Remove file type from string
 \item \link{str_extract_filetype}: Extract file type from string

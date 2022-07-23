@@ -44,7 +44,8 @@ Suggests:
     readxl,
     rmarkdown,
     testthat (>= 3.0.0),
-    tidygeocoder
+    tidygeocoder,
+    writexl
 Remotes: 
     elipousson/esri2sf
 Config/testthat/edition: 3

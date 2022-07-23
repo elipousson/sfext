@@ -42,7 +42,7 @@ make_filename <- function(name = NULL,
   # If filename is provided, remove file type (if filename includes the filetype)
   if (!is.null(filename)) {
     filetype <- filetype %||% str_extract_filetype(filename)
-    filename <- str_remove_filetype(filename, filetype)
+    filename <- str_remove_filetype(filename)
   }
 
   # If file name is not provided, filename is based on label, name, pad and width

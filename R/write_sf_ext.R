@@ -2,36 +2,39 @@
 #'
 #' The write_sf_ext and write_sf_cache helper functions wrap the [sf::write_sf]
 #' function to provide some additional options including consistent file naming
-#' with [make_filename()] and features including:
+#' with [make_filename] and features including:
 #'
-#' - If the data is not an sf object, optionally save as an RDS file.
-#' - If filetype is "csv" or the filename ends in ".csv" the file is
-#' automatically converted to a dataframe using [df_to_sf()]; if file type is
-#' "gsheet" the file is converted and turned into a new Google Sheet document
-#' (if a Google account is authorized with the {googlesheets4} package using the
-#' [write_sf_gsheet()] function.).
-#' - If cache is `TRUE` use write_sf_cache to cache file after writing a copy to
+#' - If filetype is "csv", "xlsx", or "gsheet" the file is converted to a
+#' dataframe using [df_to_sf]
+#' - If the data is not an sf object and none of these filenames are provided,
+#' the user is prompted to save the file as an rda file with [readr::write_rds].
+#' - If cache is `TRUE` use [write_sf_cache] to cache file after writing a copy to
 #' the path provided.
 #' - If data is a named sf list, pass the name of each sf object in the list to
 #' the name parameter and keep all other parameters consistent to write a file
-#' for each object in the list.
+#' for each object in the list. No ... parameters are passed if data is an sf
+#' list.
 #'
-#' @param data `sf` object to write.
-#' @param filename File name to use. If filename is provided and the data is an
-#'   `sf` object make sure to include the file type, e.g. "data.gpkg" or
-#'   "data.csv". Objects that are not simple features are written to RDS with
-#'   [readr::write_rds()].
-#' @param data_dir cache data directory, defaults to
-#'   [rappdirs::user_cache_dir()] when data_dir is `NULL`. (only used for
-#'   [write_sf_cache]; default is used when `cache = TRUE` for [write_sf_ext])
+#' @param data A `sf` object, data frame, or other object to write.
+#' @param filename,filetype File name and/or write. Both are optional if path
+#'   includes filename and type, e.g. "~/Documents/data.geojson". Filetype can
+#'   be provided as part of the filename, e.g. "data.geojson". If a filename
+#'   includes a filetype and a separate filetype is also provided, the separate
+#'   filetype parameter is used. Supported filetypes includes "csv", "xlsx",
+#'   "gsheet" (writes a Google Sheet), "rda", or any filetype supported by the
+#'   available drivers (use [sf::st_drivers] to list drivers).
+#' @param data_dir cache data directory, defaults to [rappdirs::user_cache_dir]
+#'   when data_dir is `NULL`. (only used for [write_sf_cache]; default is used
+#'   when `cache = TRUE` for [write_sf_ext])
 #' @param overwrite Logical. Default `FALSE`. If `TRUE`, overwrite any existing
 #'   cached files that use the same file name.
-#' @param filetype File type to write and cache, Default: `NULL` for
-#'   `write_sf_ext()`
 #' @param cache If `TRUE`, write `sf` object to file in cache directory;
 #'   defaults to `FALSE`.
 #' @inheritParams make_filename
 #' @inheritParams write_sf_cache
+#' @param ... If data is an sf object and the filetype is "csv" or "xlsx", the
+#'   ... parameters are passed to [sf_to_df] or to [sf::write_sf] otherwise. If
+#'   filetype is "rda" ... parameters are passed to [readr::write_rds].
 #' @seealso
 #'  [sf::st_write()]
 #' @export
@@ -48,9 +51,10 @@ write_sf_ext <- function(data,
                          path = NULL,
                          cache = FALSE,
                          pkg = "sfext",
-                         overwrite = FALSE) {
+                         overwrite = FALSE,
+                         ...) {
   if (is_sf_list(data, named = TRUE)) {
-    purrr::map(
+    purrr::walk(
       data,
       ~ write_sf_ext(
         data = .x,
@@ -64,53 +68,42 @@ write_sf_ext <- function(data,
         overwrite = overwrite
       )
     )
-  } else {
 
-    # If data is sf object, write or cache it
-    filename <-
-      make_filename(
-        name = name,
-        label = label,
-        filetype = filetype,
-        filename = filename,
-        path = NULL,
-        prefix = prefix,
-        postfix = postfix
-      )
+    invisible(return(NULL))
+  }
 
-    filetype <- filetype %||% str_extract_filetype(filename)
-
-    if (is.null(path)) {
-      path <- filename
-    } else {
-      path <- file.path(path, filename)
-    }
-
-    if ("geojson" %in% filetype) {
-      data <-
-        st_transform_ext(
-          data,
-          crs = 4326
-        )
-    }
-
-    write_sf_types(
-      data = data,
-      filename = filename,
+  # If data is sf object, write or cache it
+  filename <-
+    make_filename(
+      name = name,
+      label = label,
       filetype = filetype,
-      path = path,
-      overwrite = overwrite
+      filename = filename,
+      path = NULL,
+      prefix = prefix,
+      postfix = postfix
     )
 
-    if (cache) {
-      write_sf_cache(
-        data = data,
-        filename = filename,
-        overwrite = overwrite,
-        pkg = pkg
-      )
-    }
+  write_sf_types(
+    data = data,
+    filename = filename,
+    filetype = filetype,
+    path = path,
+    overwrite = overwrite,
+    ...
+  )
+
+  if (!cache) {
+    invisible(return(NULL))
   }
+
+  write_sf_cache(
+    data = data,
+    filename = filename,
+    overwrite = overwrite,
+    pkg = pkg,
+    ...
+  )
 }
 
 #' @rdname write_sf_ext
@@ -128,7 +121,8 @@ write_sf_cache <- function(data,
                            filetype = NULL,
                            data_dir = NULL,
                            pkg = "sfext",
-                           overwrite = FALSE) {
+                           overwrite = FALSE,
+                           ...) {
   path <-
     get_data_dir(
       path = data_dir,
@@ -152,7 +146,8 @@ write_sf_cache <- function(data,
     data = data,
     filename = filename,
     path = path,
-    overwrite = overwrite
+    overwrite = overwrite,
+    ...
   )
 }
 
@@ -188,22 +183,13 @@ write_sf_gist <- function(data,
 
   path <- tempdir()
 
-  if ("geojson" %in% filetype) {
-    data <-
-      st_transform_ext(
-        data,
-        crs = 4326
-      )
-  }
 
-  suppressMessages(
-    write_sf_types(
-      data = data,
-      filename = filename,
-      filetype = filetype,
-      path = path,
-      overwrite = TRUE
-    )
+  write_sf_types(
+    data = data,
+    filename = filename,
+    filetype = filetype,
+    path = path,
+    overwrite = TRUE
   )
 
   gistr::gist_auth(app = token)
@@ -263,13 +249,9 @@ write_sf_gsheet <- function(data,
       path = NULL
     )
 
-  # FIXME: Using the path as the name may cause issues
-  ss <-
-    googlesheets4::gs4_create(
-      name = filename
-    )
+  ss <- googlesheets4::gs4_create(name = filename)
 
-  data <- sf_to_df(data, ...)
+  data <- suppressMessages(sf_to_df(data, ...))
 
   googlesheets4::write_sheet(
     data = data,
@@ -288,58 +270,109 @@ write_sf_gsheet <- function(data,
 #'
 #' @noRd
 #' @importFrom sf write_sf
-#' @importFrom stringr str_detect
-#' @importFrom cli cli_alert_success
+#' @importFrom stringr str_remove
 write_sf_types <- function(data,
                            filename = NULL,
                            path = NULL,
                            filetype = NULL,
-                           overwrite = TRUE) {
-  check_file_overwrite(filename = filename, path = path, overwrite = overwrite)
+                           overwrite = TRUE,
+                           append = FALSE,
+                           ...) {
+  # Get working directory if path is NULL
+  path <- path %||% getwd()
 
-  is_pkg_installed("readr")
+  # Set filename from path if ends with a filetype
+  if (has_filetype(path)) {
+    if (!is.null(filename)) {
+      cli_abort("A {.arg filename} *or* {.arg path} with a filename must be
+      provided. Both can't be provided.")
+    }
+
+    filename <- basename(path)
+  }
+
+  # Get filetype from filename if filetype is NULL
+  filetype <- filetype %||% str_extract_filetype(filename)
+  # Add filetype to filename if it doesn't have a filename at the end
+  filename <- str_add_filetype(filename, filetype)
+
+  # Remove filename from path
+  # FIXME: assumes that the user has not provided both a filename
+  # and a path ending in a filename - add a check to confirm
+  folder_path <- stringr::str_remove(path, glue("{filename}$"))
+  # Put path and filename back together
+  path <- file.path(folder_path, filename)
+
+  # Check if overwrite is needed and possible
+  check_file_overwrite(
+    filename = filename,
+    path = folder_path,
+    overwrite = overwrite
+  )
 
   if (is_sf(data)) {
-    cli_inform(c("v" = "Writing {.file {path}}"))
+    type <-
+      dplyr::case_when(
+        is_csv_path(filename) ~ "sf_csv",
+        is_excel_path(filename) ~ "sf_excel",
+        any(filetype %in% "gsheet") ~ "sf_gsheet",
+        !any(filetype %in% c("rda", "rds", "rdata")) ~ "sf_spatial",
+        TRUE ~ "rda"
+      )
 
-    if (grepl(".csv$", path) |
-      (!is.null(filetype) && (filetype == "csv"))) {
-      readr::write_csv(
-        x = sf_to_df(data),
-        file = path
-      )
-    } else if (!is.null(filetype)) {
-      if (filetype == "gsheet") {
-        write_sf_gsheet(data = data, filename = filename)
-      } else if (!stringr::str_detect(path, paste0(filename, "$"))) {
-        sf::write_sf(
-          obj = data,
-          dsn = file.path(path, filename)
-        )
-      }
-    } else {
-      sf::write_sf(
-        obj = data,
-        dsn = path
-      )
+    if ("geojson" %in% filetype) {
+      data <- st_transform_ext(data, 4326)
     }
-  } else if (
-    cli_yeah(
-      "This data is not a simple feature object.
-      Do you want to save the file as an RDS file?"
-    )
-  ) {
+  } else {
+    type <-
+      dplyr::case_when(
+        is_csv_path(filename) && is.data.frame(data) ~ "df_csv",
+        is_excel_path(filename) && is.data.frame(data) ~ "df_excel",
+        TRUE ~ "rda"
+      )
 
-    # Remove file extension from path
-    path <- str_remove_filetype(path, filetype)
+    if (type == "rda") {
+      ask <-
+        is_interactive() &&
+          cli_yeah(
+            c("{.arg data} is not a simple feature object.",
+              ">" = "Do you want to save {.arg data} as a RDA file?"
+            )
+          )
 
-    cli_inform(c("v" = "Writing {.file {path}}"))
+      if (!ask) {
+        invisible(return(NULL))
+      }
 
-    readr::write_rds(
-      x = data,
-      file = path
-    )
+      path <- str_remove_filetype(path, filetype)
+      path <- str_add_filetype(path, "rda")
+    }
   }
+
+  # Check if readr is installed
+  if (type %in% c("sf_csv", "df_csv", "rda")) {
+    is_pkg_installed("readr")
+  } else if (type %in% c("sf_excel", "df_excel")) {
+    is_pkg_installed("writexl")
+    path <- str_add_filetype(path, "xlsx")
+  }
+
+  # Drop geometry for sf to csv export
+  if (type %in% c("sf_csv", "sf_excel")) {
+    data <- suppressMessages(sf_to_df(data, ...))
+  }
+
+  cli_inform(c("v" = "Writing {.file {path}}"))
+
+  switch(type,
+    "sf_csv" = readr::write_csv(x = data, file = path),
+    "sf_excel" = writexl::write_xlsx(data, path = path),
+    "sf_gsheet" = write_sf_gsheet(data = data, filename = filename, ...),
+    "sf_spatial" = sf::write_sf(obj = data, dsn = path, ...),
+    "df_csv" = readr::write_csv(x = data, file = path),
+    "df_excel" = writexl::write_xlsx(data, path = path),
+    "rda" = readr::write_rds(x = data, file = path, ...)
+  )
 }
 
 #' Check before overwriting file
@@ -349,20 +382,28 @@ write_sf_types <- function(data,
 check_file_overwrite <- function(filename = NULL,
                                  path = NULL,
                                  overwrite = TRUE) {
-  if (!is.null(filename) && (filename %in% list.files(path))) {
-    if (!overwrite) {
+  filename <- filename %||% basename(path)
+
+  if (!has_filetype(filename)) {
+    abort()
+  }
+
+  if (filename %in% list.files(path)) {
+    if (!overwrite && is_interactive()) {
       overwrite <-
         cli_yeah(
-          c("A file with the same name exists in {.file {path}}",
+          c(
+            "i" = "A file with the same name exists in {.file {path}}",
             ">" = "Do you want to overwrite {.val {filename}}?"
           )
         )
     }
 
     cli_abort_ifnot(
-      c("{.file {filename}} can't be saved.",
-        "i" = "A file with the same name already exists
-        and {.arg overwrite = FALSE}."
+      c(
+        "!" = "{.file {filename}} can't be saved.",
+        "i" = "A file with the same name already exists and
+        {.arg overwrite = FALSE}."
       ),
       condition = overwrite
     )
@@ -376,5 +417,7 @@ check_file_overwrite <- function(filename = NULL,
     } else {
       file.remove(path)
     }
+
+    invisible(return(NULL))
   }
 }
