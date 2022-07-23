@@ -60,7 +60,7 @@
       "identifier": "esri2sf",
       "name": "esri2sf",
       "version": ">= 0.1.1",
-      "sameAs": "https://github.com/yonghah/esri2sf"
+      "sameAs": "https://github.com/elipousson/esri2sf"
     },
     {
       "@type": "SoftwareApplication",
@@ -242,6 +242,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=tidygeocoder"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "writexl",
+      "name": "writexl",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=writexl"
     }
   ],
   "softwareRequirements": {
@@ -277,18 +289,6 @@
     },
     "4": {
       "@type": "SoftwareApplication",
-      "identifier": "fs",
-      "name": "fs",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=fs"
-    },
-    "5": {
-      "@type": "SoftwareApplication",
       "identifier": "glue",
       "name": "glue",
       "provider": {
@@ -299,7 +299,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=glue"
     },
-    "6": {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "janitor",
       "name": "janitor",
@@ -311,7 +311,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=janitor"
     },
-    "7": {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "purrr",
       "name": "purrr",
@@ -323,7 +323,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=purrr"
     },
-    "8": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
       "name": "rlang",
@@ -335,7 +335,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
-    "9": {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "sf",
       "name": "sf",
@@ -347,7 +347,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sf"
     },
-    "10": {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "stringr",
       "name": "stringr",
@@ -359,7 +359,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=stringr"
     },
-    "11": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -371,7 +371,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "12": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "tidyr",
       "name": "tidyr",
@@ -383,7 +383,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tidyr"
     },
-    "13": {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "units",
       "name": "units",
@@ -397,5 +397,9 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "386.639KB"
+  "fileSize": "659.773KB",
+  "readme": "https://github.com/elipousson/sfext/blob/main/README.md",
+  "contIntegration": "https://app.codecov.io/gh/elipousson/sfext?branch=main",
+  "developmentStatus": ["https://lifecycle.r-lib.org/articles/stages.html#experimental", "https://www.repostatus.org/#active"],
+  "keywords": ["r", "rspatial", "sf", "r-package", "rstats"]
 }
