@@ -23,17 +23,16 @@ get_data_dir <- function(path = NULL,
                          null.ok = TRUE) {
   if (cache) {
     is_pkg_installed("rappdirs")
-
     path <- path %||% rappdirs::user_cache_dir(pkg)
   }
 
   if (!is.null(path) && dir.exists(path)) {
     return(path)
-  }
-
-  if (is.null(path) && null.ok) {
-    return(path)
   } else if (is.null(path)) {
+    if (null.ok) {
+      invisible(return(path))
+    }
+
     cli_abort("{.arg path} can't be {.val NULL} when {.code null.ok = FALSE}")
   }
 
