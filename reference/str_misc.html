@@ -77,15 +77,17 @@ order provided. For str_fix, the string must be a single character string.</p>
 <span>  time.format <span class="op">=</span> <span class="st">"%Y-%m-%d_%I-%M-%S_%p"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">str_pad_digits</span><span class="op">(</span><span class="va">string</span>, pad <span class="op">=</span> <span class="st">"0"</span>, side <span class="op">=</span> <span class="st">"left"</span>, width <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">str_extract_digits</span><span class="op">(</span><span class="va">string</span><span class="op">)</span></span>
+<span><span class="fu">has_filetype</span><span class="op">(</span><span class="va">string</span>, filetype <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">str_add_filetype</span><span class="op">(</span><span class="va">string</span>, filetype <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">str_remove_filetype</span><span class="op">(</span><span class="va">string</span>, filetype <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">str_extract_filetype</span><span class="op">(</span><span class="va">string</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">str_extract_filetype</span><span class="op">(</span><span class="va">string</span>, filetype <span class="op">=</span> <span class="cn">NULL</span>, tocase <span class="op">=</span> <span class="va">tolower</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">str_pad_digits</span><span class="op">(</span><span class="va">string</span>, pad <span class="op">=</span> <span class="st">"0"</span>, side <span class="op">=</span> <span class="st">"left"</span>, width <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">str_extract_digits</span><span class="op">(</span><span class="va">string</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -133,18 +135,19 @@ prefix is "date" or "time" and not currently accessible when using
 str_fix or <a href="make_filename.html">make_filename</a>.</p></dd>
 
 
-<dt>side</dt>
-<dd><p>Side on which padding character is added (left, right or both).</p></dd>
-
-
 <dt>filetype</dt>
 <dd><p>File type string</p></dd>
+
+
+<dt>side</dt>
+<dd><p>Side on which padding character is added (left, right or both).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Functions include:</p><ul><li><p>str_fix: Add a label, prefix, and postfix to string</p></li>
 <li><p>str_prefix: Add a prefix or a postfix to a string</p></li>
+<li><p>has_filetype: Does a string have a filetype (optionally user-defined)?</p></li>
 <li><p>str_add_filetype: Add file type to string</p></li>
 <li><p>str_remove_filetype: Remove file type from string</p></li>
 <li><p>str_extract_filetype: Extract file type from string</p></li>

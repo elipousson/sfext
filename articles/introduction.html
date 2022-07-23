@@ -151,22 +151,30 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_esri_url</span> <span class="op">&lt;-</span> <span class="st">"https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0"</span></span>
 <span><span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_esri</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">sample_esri_url</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Layer Type: </span><span style="color: #BB00BB;">Feature Layer</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Geometry Type: </span><span style="color: #BB00BB;">esriGeometryPolygon</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Service Coordinate Reference System: </span><span style="color: #BB00BB;">4326</span></span></span>
-<span><span class="co">#&gt; Warning in getEsriFeatures(queryUrl, outFields, where, bbox, token, crs, : No</span></span>
-<span><span class="co">#&gt; records match the search criteria.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"states"</span> from</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB; font-style: italic;">&lt;https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0&gt;</span></span></span>
+<span><span class="co">#&gt; Layer type: <span style="color: #0000BB;">"Feature Layer"</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Geometry type: <span style="color: #0000BB;">"esriGeometryPolygon"</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Service Coordinate Reference System: <span style="color: #0000BB;">"EPSG:4326"</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Output Coordinate Reference System: <span style="color: #0000BB;">"EPSG:4326"</span></span></span>
 <span><span class="co"># This is equivalent to read_sf_url(sample_esri_url)</span></span>
 <span><span class="co"># Or esri2sf::esri2sf(url = sample_esri_url)</span></span>
 <span></span>
 <span><span class="co"># read_sf_esri and read_sf_query both support the name and name_col parameters</span></span>
 <span><span class="co"># These parameters also work with read_sf_pkg for cached and extdata files</span></span>
 <span><span class="va">nc_esri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">sample_esri_url</span>, name_col <span class="op">=</span> <span class="st">"STATE_NAME"</span>, name <span class="op">=</span> <span class="st">"North Carolina"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Layer Type: </span><span style="color: #BB00BB;">Feature Layer</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Geometry Type: </span><span style="color: #BB00BB;">esriGeometryPolygon</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Service Coordinate Reference System: </span><span style="color: #BB00BB;">4326</span></span></span>
-<span><span class="co">#&gt; Warning: Package "pbapply" needed to use the progress argument. Please install</span></span>
-<span><span class="co">#&gt; it. Setting `progress` to FALSE.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"states"</span> from</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB; font-style: italic;">&lt;https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0&gt;</span></span></span>
+<span><span class="co">#&gt; Layer type: <span style="color: #0000BB;">"Feature Layer"</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Geometry type: <span style="color: #0000BB;">"esriGeometryPolygon"</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Service Coordinate Reference System: <span style="color: #0000BB;">"EPSG:4326"</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Output Coordinate Reference System: <span style="color: #0000BB;">"EPSG:4326"</span></span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">states</span><span class="op">)</span> <span class="op">+</span></span>
@@ -193,7 +201,7 @@
 <span>  prefix <span class="op">=</span> <span class="st">"date"</span>,</span>
 <span>  filetype <span class="op">=</span> <span class="st">"gpkg"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2022-07-22_nc_ashe_county.gpkg"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2022-07-23_nc_ashe_county.gpkg"</span></span></code></pre></div>
 <p><code><a href="../reference/write_sf_ext.html">write_sf_ext()</a></code> also supports the automatic creation of destination folders and the use of a package-specific cache folder created by <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_data_dir.html">get_data_dir</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"example_path/to_folder"</span>, create <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -295,7 +303,7 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/address_to_sf.html">address_to_sf</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"350 Fifth Avenue, New York, NY 10118"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Passing 1 address to the Nominatim single address geocoder</span></span>
-<span><span class="co">#&gt; Query completed in: 1.6 seconds</span></span>
+<span><span class="co">#&gt; Query completed in: 1.9 seconds</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
 <span><span class="co">#&gt; Attribute-geometry relationship: 3 constant, 0 aggregate, 0 identity</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>

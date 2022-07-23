@@ -69,6 +69,8 @@ types).</p>
 <span></span>
 <span><span class="fu">read_sf_path</span><span class="op">(</span><span class="va">path</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">read_sf_rda</span><span class="op">(</span><span class="va">file</span>, path <span class="op">=</span> <span class="cn">NULL</span>, refhook <span class="op">=</span> <span class="cn">NULL</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">read_sf_query</span><span class="op">(</span></span>
 <span>  <span class="va">dsn</span>,</span>
 <span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -105,7 +107,7 @@ types).</p>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">read_sf_url</span><span class="op">(</span><span class="va">url</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, coords <span class="op">=</span> <span class="cn">NULL</span>, zm_drop <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">read_sf_url</span><span class="op">(</span><span class="va">url</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">read_sf_esri</span><span class="op">(</span></span>
 <span>  <span class="va">url</span>,</span>
@@ -175,6 +177,14 @@ cache directory or extdata system files.</p></dd>
 
 <dt>path</dt>
 <dd><p>A file path.</p></dd>
+
+
+<dt>file</dt>
+<dd><p>The file path to read from/write to.</p></dd>
+
+
+<dt>refhook</dt>
+<dd><p>A function to handle reference objects.</p></dd>
 
 
 <dt>dsn</dt>
@@ -307,14 +317,27 @@ not provided to read_sf_gsheet.</p></dd>
     <p>Reading data from a url:</p>
 <p>read_sf_url supports multiple types of urls:</p><ul><li><p>A MapServer or FeatureServer URL</p></li>
 <li><p>A URL for a GitHub gist with a single spatial data file (first file used if gist contains multiple)</p></li>
-<li><p>A URL for a spatial data file or a CSV file</p></li>
+<li><p>A URL for a spatial data file, CSV file, or Excel file</p></li>
 <li><p>A Google Sheets URL</p></li>
 <li><p>A public Google Maps URL</p></li>
-</ul><p>Reading data from a package:</p>
+</ul></div>
+    <div class="section level2">
+    <h2 id="reading-data-from-a-package">Reading data from a package<a class="anchor" aria-label="anchor" href="#reading-data-from-a-package"></a></h2>
+    
+
+
 <p>read_sf_pkg looks for three types of package data:</p><ul><li><p>Data loaded with the package</p></li>
 <li><p>External data in the <code>extdata</code> system files folder.</p></li>
 <li><p>Cached data in the cache directory returned by <a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir</a></p></li>
-</ul><p>Additional ... parameters:</p>
+</ul></div>
+    <div class="section level2">
+    <h2 id="additional-parameters">Additional ... parameters<a class="anchor" aria-label="anchor" href="#additional-parameters"></a></h2>
+    
+
+
+<p>read_sf_ext is a flexible function where ... are passed to one of the other
+read functions depending on the provided parameters. The parameters <em>must</em> be
+named to use this function.</p>
 <p>read_sf_pkg and read_sf_download both pass additional parameters
 to read_sf_path which supports query, name_col, name, and table. name and
 name_col are ignored if a query parameter is provided. If table is not
@@ -323,9 +346,6 @@ provided, a expected layer name is created based on the file path.</p>
 MapServer url (passed to read_sf_esri) or sheet if the url is for a Google
 Sheet (passed to <a href="https://googlesheets4.tidyverse.org/reference/range_read.html" class="external-link">googlesheets4::read_sheet</a>), or a query or wkt filter
 parameter if the url is some other type (passed to <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a>).</p>
-<p>read_sf_ext is a flexible function that only has bbox as a named parameter
-and all other parameters in ... are passed to one of the other overedge
-read_sf functions.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
