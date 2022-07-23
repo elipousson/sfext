@@ -174,11 +174,14 @@ get_path_filetype <- function(path, filetype = NULL) {
     return(filetype)
   }
 
-  filetype <- unique(str_extract_filetype(list.files(path)))
+  filetype <- str_extract_filetype(list.files(path))
 
-  if (length(filetype) == 1) {
-    return(filetype)
+  if (length(unique(filetype)) == 1) {
+    return(unique(filetype))
   }
+
+  # https://stackoverflow.com/questions/17374651/find-the-n-most-common-values-in-a-vector
+  filetype <- names(sort(table(filetype), decreasing = TRUE)[1])
 
   cli_warn(
     c("The path {.file {path}} includes multiple filetypes.",
@@ -186,16 +189,14 @@ get_path_filetype <- function(path, filetype = NULL) {
     )
   )
 
-  # https://stackoverflow.com/questions/17374651/find-the-n-most-common-values-in-a-vector
-  names(sort(table(filetype), decreasing = TRUE)[1])
+  filetype
 }
 
 #' Get list of files at a path (using a single file type at a time)
 #' @noRd
-#' @importFrom fs dir_ls
 get_path_file_list <- function(path, filetype = NULL) {
   filetype <- get_path_filetype(path, filetype)
-  fs::dir_ls(path = path, glob = paste0("*.", filetype))
+  list.files(path = path, pattern = glue("\\.{filetype}$"))
 }
 
 #' @name write_exif
