@@ -103,7 +103,7 @@ st_filter_ext <- function(x,
       "filter" = x
     )
 
-  x <- filter_geom_type(x)
+  x <- filter_geom_type(x, geom_type)
 
   transform_sf(x, crs = crs)
 }
@@ -111,7 +111,7 @@ st_filter_ext <- function(x,
 #' Filter by geometry type
 #'
 #' @noRd
-filter_geom_type <- function(x, null.ok = TRUE) {
+filter_geom_type <- function(x, geom_type = NULL, null.ok = TRUE) {
   check_sf(x, ext = TRUE)
 
   if (is.null(geom_type) && null.ok) {
