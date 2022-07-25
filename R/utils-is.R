@@ -30,13 +30,26 @@ is_excel_path <- function(x) {
   grepl("\\.xls$|\\.xlsx$", x)
 }
 
+#' Is this a RDS, RDA, or RData file path or url?
+#'
+#' @noRd
+is_rdata_path <- function(x) {
+  is_rda_path(x) | is_rds_path(x) | grepl("\\.RData$", x, ignore.case = TRUE)
+}
+
+#' Is this a RDS file path or url?
+#'
+#' @noRd
+is_rds_path <- function(x) {
+  grepl("\\.rds$", x, ignore.case = TRUE)
+}
+
 #' Is this a RDA file path or url?
 #'
 #' @noRd
 is_rda_path <- function(x) {
-  grepl("\\.rda$", x)
+  grepl("\\.rda$", x, ignore.case = TRUE)
 }
-
 
 #' Is this a URL?
 #'

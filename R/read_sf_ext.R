@@ -1,17 +1,18 @@
 #' Read spatial data in a bounding box to a simple feature object from multiple sources
 #'
 #' An extended version of [sf::read_sf()] that support reading spatial data
-#' based on a file path, URL, or the data name and associated package.
-#' Optionally provide a bounding box to filter data (not supported for all data
-#' types).
+#' based on a file path, URL, or the data name and associated package. A RDS, RDA, or RData file
+#' Optionally provide a bounding box to filter data (data is filtered before download or reading into memory where possible).
 #'
 #' @details Reading data from a url:
 #'
 #' [read_sf_url] supports multiple types of urls:
 #'
 #'   - A MapServer or FeatureServer URL
-#'   - A URL for a GitHub gist with a single spatial data file (first file used if gist contains multiple)
-#'   - A URL for a spatial data file, CSV file, or Excel file
+#'   - A URL for a GitHub gist with a single spatial data file (first file used
+#'   if gist contains multiple)
+#'   - A URL for a spatial data file, CSV file, Excel file, or RDS file (RDA and
+#'   RData files supported by read_sf_path)
 #'   - A Google Sheets URL
 #'   - A public Google Maps URL
 #'
@@ -137,6 +138,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
 
   # Read package data
   if (is_pkg_data(data, package)) {
+    # FIXME: Check equivalency to readr::read_builtin
     return(use_eval_parse(data = data, package = package))
   }
 
@@ -175,32 +177,42 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     dplyr::case_when(
       is_csv_path(path) ~ "csv",
       is_excel_path(path) ~ "excel",
-      is_rda_path(path) ~ "rda",
+      is_rdata_path(path) ~ "rdata",
       TRUE ~ "query"
     )
 
   switch(type,
     "csv" = read_sf_csv(path = path, bbox = bbox, ...),
     "excel" = read_sf_excel(path = path, bbox = bbox, ...),
-    "rda" = read_sf_rda(path = path, bbox = bbox, ...),
+    "rdata" = read_sf_rdata(path = path, bbox = bbox, ...),
     "query" = read_sf_query(path = path, bbox = bbox, ...)
   )
 }
 
-#' @name read_sf_rda
+#' @name read_sf_rdata
 #' @rdname read_sf_ext
 #' @inheritParams readr::read_rds
 #' @export
-read_sf_rda <- function(file,
-                        path = NULL,
-                        refhook = NULL,
-                        bbox = NULL,
-                        ...) {
-  is_pkg_installed("readr")
-
+read_sf_rdata <- function(path,
+                          file = NULL,
+                          refhook = NULL,
+                          bbox = NULL,
+                          ...) {
   file <- file %||% path
 
-  data <- readr::read_rds(file, refhook = refhook)
+  type <-
+    dplyr::case_when(
+      is_rds_path(file) ~ "rds",
+      is_rdata_path(file) ~ "rdata"
+    )
+
+  if (type == "rds") {
+    is_pkg_installed("readr")
+    data <- readr::read_rds(file, refhook = refhook)
+  } else {
+    file_name <- load(file)
+    data <- get(file_name)
+  }
 
   if (!is_sf(data)) {
     cli_warn(
@@ -220,8 +232,8 @@ read_sf_rda <- function(file,
 #' @export
 #' @importFrom stringr str_extract
 #' @importFrom sf read_sf st_zm
-read_sf_query <- function(dsn,
-                          path = NULL,
+read_sf_query <- function(path,
+                          dsn = NULL,
                           bbox = NULL,
                           query = NULL,
                           table = NULL,
@@ -230,9 +242,7 @@ read_sf_query <- function(dsn,
                           wkt_filter = NULL,
                           zm_drop = FALSE,
                           ...) {
-  if (!is.null(path)) {
-    dsn <- path
-  }
+  dsn <- dsn %||% path
 
   if (!is.null(name) && !is.null(name_col) && !is_geojson_path(dsn)) {
     if (is.null(table)) {
@@ -249,7 +259,11 @@ read_sf_query <- function(dsn,
         as.character(sf::st_layers(dsn = dsn)[["name"]])
       )
 
-    query <- glue("select * from {table} where {name_col} IN ({glue_collapse(paste0(\"'\", name, \"'\"), sep = ', ')})")
+    query <-
+      glue(
+        "select * from {table} where {name_col} IN
+    ({glue_collapse(paste0(\"'\", name, \"'\"), sep = ', ')})"
+      )
   }
 
   if (!is.null(bbox)) {
@@ -378,6 +392,7 @@ read_sf_url <- function(url,
       is_gist_url(url) ~ "gist",
       is_gmap_url(url) ~ "gmap",
       is_gsheet_url(url) ~ "gsheet",
+      is_rds_path(url) ~ "rds",
       !is.null(params$filename) ~ "download",
       TRUE ~ "other"
     )
@@ -446,6 +461,11 @@ read_sf_url <- function(url,
       geo = geo,
       address = address
     ),
+    "rds" = read_sf_rdata(
+      file = url,
+      bbox = bbox,
+      refhook = params$refhook
+    ),
     "other" = read_sf_query(
       dsn = url,
       bbox = bbox,
@@ -470,28 +490,20 @@ read_sf_esri <- function(url,
                          coords = c("lon", "lat"),
                          from_crs = 4326,
                          ...) {
-  is_pkg_installed(pkg = "esri2sf", repo = "yonghah/esri2sf")
+  is_pkg_installed(pkg = "esri2sf", repo = "elipousson/esri2sf")
 
   meta <- esri2sf::esrimeta(url)
 
-  if (!is.null(where)) {
-    where <- paste0("(", where, ")")
+  is_esrisf <-
+    !any(c(is.null(meta$geometryType), (meta$geometryType == "")))
+
+  if (is_esrisf) {
+    coords <- NULL
   }
 
-  if (!is.null(name) && !is.null(name_col)) {
-    where <- c(where, glue("({name_col} = '{name}')"))
-  }
+  where <- make_where_query(where, name, name_col, bbox, coords)
 
-  if (!is.null(bbox) && !is.null(coords) && (meta$type == "Table")) {
-    where <-
-      c(where, sf_bbox_to_lonlat_query(bbox = bbox, coords = coords))
-  }
-
-  if (!is.null(where)) {
-    where <- paste(where[!is.na(where)], collapse = " AND ")
-  }
-
-  if (meta$type != "Table") {
+  if (is_esrisf) {
     # Get FeatureServer with geometry
     return(
       esri2sf::esri2sf(
@@ -514,11 +526,35 @@ read_sf_esri <- function(url,
       ...
     )
 
-  if (is.null(coords)) {
-    return(data)
+  df_to_sf(data, from_crs = from_crs, coords = coords)
+}
+
+#' Helper to make query for read_sf_esri
+#'
+#' @noRd
+make_where_query <- function(where = NULL,
+                             name = NULL,
+                             name_col = NULL,
+                             bbox = NULL,
+                             coords = c("lon", "lat")) {
+  if (!is.null(where)) {
+    where <- paste0("(", where, ")")
   }
 
-  df_to_sf(data, from_crs = from_crs, coords = coords)
+  if (!is.null(name) && !is.null(name_col)) {
+    where <- c(where, glue("({name_col} = '{name}')"))
+  }
+
+  if (!is.null(bbox) && !is.null(coords)) {
+    where <-
+      c(where, sf_bbox_to_lonlat_query(bbox = bbox, coords = coords))
+  }
+
+  if (is.null(where)) {
+    return(where)
+  }
+
+  paste(where[!is.na(where)], collapse = " AND ")
 }
 
 #' @name read_sf_gist
@@ -626,9 +662,9 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
 
 #' @name read_sf_download
 #' @rdname read_sf_ext
-#' @param unzip If `TRUE`, url must be a zip file that is downloaded, unzipped
-#'   into a temporary directory (created with [tempdir()]), and then read to a file using the specified
-#'   file type.
+#' @param unzip If `TRUE`, url must be a zip file that is downloaded to a cache
+#'   folder, unzipped into a temporary directory (created with [tempdir()]), and
+#'   then read to a file using the specified file type.
 #' @inheritParams utils::download.file
 #' @inheritParams get_data_dir
 #' @inheritParams make_filename
@@ -645,7 +681,7 @@ read_sf_download <-
            method = "auto",
            unzip = FALSE,
            ...) {
-    path <- get_data_dir(path = path)
+    path <- get_data_dir(path = path, cache = TRUE)
 
     destfile <-
       make_filename(
@@ -702,14 +738,14 @@ read_sf_gsheet <- function(url,
   # Convert Google Sheet with coordinates to sf
   is_pkg_installed("googlesheets4")
 
-  if (is.null(ss)) {
-    if (!is_missing(url)) {
-      ss <- url
-    } else if (ask) {
-      ss <-
-        googlesheets4::gs4_find(cli_ask("What is the name of the Google Sheet to return?"))
-    }
+  if (ask) {
+    ss <-
+      googlesheets4::gs4_find(
+        cli_ask("What is the name of the Google Sheet to return?")
+      )
   }
+
+  ss <- ss %||% url
 
   data <- googlesheets4::read_sheet(ss = ss, sheet = sheet, ...)
 

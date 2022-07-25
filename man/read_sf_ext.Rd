@@ -4,7 +4,7 @@
 \alias{read_sf_ext}
 \alias{read_sf_pkg}
 \alias{read_sf_path}
-\alias{read_sf_rda}
+\alias{read_sf_rdata}
 \alias{read_sf_query}
 \alias{read_sf_excel}
 \alias{read_sf_csv}
@@ -22,11 +22,11 @@ read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
 
 read_sf_path(path, bbox = NULL, ...)
 
-read_sf_rda(file, path = NULL, refhook = NULL, bbox = NULL, ...)
+read_sf_rdata(path, file = NULL, refhook = NULL, bbox = NULL, ...)
 
 read_sf_query(
-  dsn,
-  path = NULL,
+  path,
+  dsn = NULL,
   bbox = NULL,
   query = NULL,
   table = NULL,
@@ -196,9 +196,9 @@ Note that this is not compatible with \code{full_results = TRUE} as geocoding
 services have different columns that they return.
 }}
 
-\item{unzip}{If \code{TRUE}, url must be a zip file that is downloaded, unzipped
-into a temporary directory (created with \code{\link[=tempdir]{tempdir()}}), and then read to a file using the specified
-file type.}
+\item{unzip}{If \code{TRUE}, url must be a zip file that is downloaded to a cache
+folder, unzipped into a temporary directory (created with \code{\link[=tempdir]{tempdir()}}), and
+then read to a file using the specified file type.}
 
 \item{ss}{Something that identifies a Google Sheet:
 \itemize{
@@ -217,9 +217,8 @@ not provided to \link{read_sf_gsheet}.}
 }
 \description{
 An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support reading spatial data
-based on a file path, URL, or the data name and associated package.
-Optionally provide a bounding box to filter data (not supported for all data
-types).
+based on a file path, URL, or the data name and associated package. A RDS, RDA, or RData file
+Optionally provide a bounding box to filter data (data is filtered before download or reading into memory where possible).
 }
 \details{
 Reading data from a url:
