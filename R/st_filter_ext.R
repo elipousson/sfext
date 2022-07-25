@@ -103,15 +103,26 @@ st_filter_ext <- function(x,
       "filter" = x
     )
 
-  if (!is.null(geom_type)) {
-    geom_type <- is_geom_type(x, type = geom_type, by_geometry = TRUE)
-
-    if (is_sf(x)) {
-      x <- x[geom_type, ]
-    } else {
-      x <- x[geom_type]
-    }
-  }
+  x <- filter_geom_type(x)
 
   transform_sf(x, crs = crs)
+}
+
+#' Filter by geometry type
+#'
+#' @noRd
+filter_geom_type <- function(x, null.ok = TRUE) {
+  check_sf(x, ext = TRUE)
+
+  if (is.null(geom_type) && null.ok) {
+    return(x)
+  }
+
+  geom_type <- is_geom_type(x, type = geom_type, by_geometry = TRUE)
+
+  if (is_sf(x)) {
+    return(x[geom_type, ])
+  }
+
+  x[geom_type]
 }
