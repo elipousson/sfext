@@ -54,6 +54,7 @@
 #'   the same crs as the `from_crs` parameter.
 #' @param geo If `TRUE`, use [address_to_sf] to geocode address column; defaults
 #'   to `FALSE`.
+#' @inheritParams utils::download.file
 #' @inheritParams address_to_sf
 #' @inheritParams df_to_sf
 #' @param ... Additional parameters passed to multiple functions; see details.
@@ -665,7 +666,6 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
 #' @param unzip If `TRUE`, url must be a zip file that is downloaded to a cache
 #'   folder, unzipped into a temporary directory (created with [tempdir()]), and
 #'   then read to a file using the specified file type.
-#' @inheritParams utils::download.file
 #' @inheritParams get_data_dir
 #' @inheritParams make_filename
 #' @export

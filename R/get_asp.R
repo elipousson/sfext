@@ -4,6 +4,10 @@
 #' @param asp Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 #'   character (e.g. "1:3"). If numeric, [get_asp()] returns the same value
 #'   without modification.
+#' @param block_asp If `TRUE`, and margin is not `NULL`, return the aspect ratio
+#'   of the text or content block inside the page margins.
+#' @param null.ok If `TRUE` and asp and paper are both `NULL`, return `NULL`
+#'   without an error.
 #' @return A numeric aspect ratio.
 #' @rdname get_asp
 #' @inheritParams get_paper
@@ -35,7 +39,7 @@ get_asp <- function(asp = NULL,
   )
 
   cli_warn_ifnot(
-    "{.arg margin} and {.arg unit} are ignored if {.arg block_asp} is FALSE.",
+    "{.arg margin} is ignored if {.arg block_asp} is {.val FALSE}.",
     condition = !block_asp && is.null(margin)
   )
 

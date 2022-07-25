@@ -41,6 +41,10 @@ provided units; defaults to NULL.}
 geometries, in which case negative dist values give buffers on the
 right-hand side, positive on the left.}
 
+\item{list.ok}{If \code{TRUE}, allow sf list objects as an input and use
+\link[purrr:map]{purrr::map} to apply the provided parameters to each object within the
+list to return as a new sf list object.}
+
 \item{...}{additional parameters passed to \link[sf:geos_unary]{sf::st_buffer}}
 }
 \description{

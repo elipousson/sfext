@@ -150,7 +150,10 @@ check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NU
 #' If x is an `sf` object invisibly return TRUE. If not, return an error with [cli::cli_abort]
 #'
 #' @inheritParams is_sf
-#' @param list.ok If TRUE, return TRUE if x is an sf list or, if ext is TRUE, a list of sf, sfc, or bbox objects. Defaults to FALSE.
+#' @param list.ok If `TRUE`, return `TRUE` if x is an sf list or, if ext is also
+#'   `TRUE`, a list of sf, sfc, or bbox objects. Defaults to `FALSE`.
+#' @param arg Used internally to create better error messages; defaults to
+#'   [rlang::caller_arg].
 #' @inheritParams cli::cli_abort
 #' @inheritDotParams cli::cli_abort
 #' @export

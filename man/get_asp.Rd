@@ -29,6 +29,12 @@ without modification.}
 
 \item{margin}{A numeric vector or ggplot2 margin object.}
 
+\item{block_asp}{If \code{TRUE}, and margin is not \code{NULL}, return the aspect ratio
+of the text or content block inside the page margins.}
+
+\item{null.ok}{If \code{TRUE} and asp and paper are both \code{NULL}, return \code{NULL}
+without an error.}
+
 \item{...}{
   Arguments passed on to \code{\link[=get_paper]{get_paper}}
   \describe{

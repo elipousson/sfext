@@ -173,28 +173,14 @@ both required.}
 \item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
 date/time prefix; defaults to \code{NULL}.}
 
-\item{method}{the geocoding service to be used. API keys are loaded from environmental variables. Run \code{usethis::edit_r_environ()} to open your .Renviron file and add an API key as an environmental variable. For example, add the line \code{GEOCODIO_API_KEY="YourAPIKeyHere"}.
-\itemize{
-\item \code{"osm"}: \href{https://nominatim.org}{Nominatim}.
-\item \code{"census"}: \href{https://geocoding.geo.census.gov/}{US Census}. Geographic coverage is limited to the United States.  Batch geocoding is supported.
-\item \code{"arcgis"}: \href{https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm}{ArcGIS}.
-\item \code{"geocodio"}: \href{https://www.geocod.io/}{Geocodio}. Geographic coverage is limited to the United States and Canada. An API key must be stored in the environmental variable "GEOCODIO_API_KEY". Batch geocoding is supported.
-\item \code{"iq"}: \href{https://locationiq.com/}{Location IQ}.  An API key must be stored in the environmental variable "LOCATIONIQ_API_KEY".
-\item \code{"google"}: \href{https://developers.google.com/maps/documentation/geocoding/overview}{Google}.  An API key must be stored in the environmental variable "GOOGLEGEOCODE_API_KEY".
-\item \code{"opencage"}: \href{https://opencagedata.com}{OpenCage}.  An API key must be stored in the environmental variable "OPENCAGE_KEY".
-\item \code{"mapbox"}: \href{https://docs.mapbox.com/api/search/}{Mapbox}.  An API key must be stored in the environmental variable "MAPBOX_API_KEY".
-\item \code{"here"}: \href{https://developer.here.com/products/geocoding-and-search}{HERE}.  An API key must be stored in the environmental variable "HERE_API_KEY". Batch geocoding is supported, but must be explicitly called with \code{mode = "batch"}.
-\item \code{"tomtom"}: \href{https://developer.tomtom.com/search-api/search-api-documentation/geocoding}{TomTom}.  An API key must be stored in the environmental variable "TOMTOM_API_KEY". Batch geocoding is supported.
-\item \code{"mapquest"}: \href{https://developer.mapquest.com/documentation/geocoding-api/}{MapQuest}.  An API key must be stored in the environmental variable "MAPQUEST_API_KEY". Batch geocoding is supported.
-\item \code{"bing"}: \href{https://docs.microsoft.com/en-us/bingmaps/rest-services/locations/}{Bing}.  An API key must be stored in the environmental variable "BINGMAPS_API_KEY". Batch geocoding is supported, but must be explicitly called with \code{mode = "batch"}.
-\item \code{"geoapify"}: \href{https://www.geoapify.com/geocoding-api}{Geoapify}.  An API key must be stored in the environmental variable "GEOAPIFY_KEY".
-\item \code{"cascade"} \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} use \link[tidygeocoder]{geocode_combine} or \link[tidygeocoder]{geo_combine} instead.
-The "cascade" method first uses one geocoding service and then uses
-a second geocoding service if the first service didn't return results.
-The services and order is specified by the cascade_order argument.
-Note that this is not compatible with \code{full_results = TRUE} as geocoding
-services have different columns that they return.
-}}
+\item{method}{Method to be used for downloading files.  Current
+    download methods are \code{"internal"}, \code{"wininet"} (Windows
+    only) \code{"libcurl"}, \code{"wget"} and \code{"curl"}, and there
+    is a value \code{"auto"}: see \sQuote{Details} and \sQuote{Note}.
+
+    The method can also be set through the option
+    \code{"download.file.method"}: see \code{\link{options}()}.
+  }
 
 \item{unzip}{If \code{TRUE}, url must be a zip file that is downloaded to a cache
 folder, unzipped into a temporary directory (created with \code{\link[=tempdir]{tempdir()}}), and
@@ -226,8 +212,10 @@ Reading data from a url:
 \link{read_sf_url} supports multiple types of urls:
 \itemize{
 \item A MapServer or FeatureServer URL
-\item A URL for a GitHub gist with a single spatial data file (first file used if gist contains multiple)
-\item A URL for a spatial data file, CSV file, or Excel file
+\item A URL for a GitHub gist with a single spatial data file (first file used
+if gist contains multiple)
+\item A URL for a spatial data file, CSV file, Excel file, or RDS file (RDA and
+RData files supported by read_sf_path)
 \item A Google Sheets URL
 \item A public Google Maps URL
 }

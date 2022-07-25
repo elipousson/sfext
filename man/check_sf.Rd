@@ -17,9 +17,13 @@ check_sf(
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}
 
+\item{arg}{Used internally to create better error messages; defaults to
+\link[rlang:caller_arg]{rlang::caller_arg}.}
+
 \item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
 
-\item{list.ok}{If TRUE, return TRUE if x is an sf list or, if ext is TRUE, a list of sf, sfc, or bbox objects. Defaults to FALSE.}
+\item{list.ok}{If \code{TRUE}, return \code{TRUE} if x is an sf list or, if ext is also
+\code{TRUE}, a list of sf, sfc, or bbox objects. Defaults to \code{FALSE}.}
 
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
 not; defaults to \code{FALSE}. (used by \link{is_sf})}

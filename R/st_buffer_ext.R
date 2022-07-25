@@ -26,6 +26,9 @@
 #' @param single_side If `TRUE`, single-sided buffers are returned for linear
 #'   geometries, in which case negative dist values give buffers on the
 #'   right-hand side, positive on the left.
+#' @param list.ok If `TRUE`, allow sf list objects as an input and use
+#'   [purrr::map] to apply the provided parameters to each object within the
+#'   list to return as a new sf list object.
 #' @param ... additional parameters passed to [sf::st_buffer]
 #' @export
 #' @importFrom purrr map
@@ -48,7 +51,8 @@ st_buffer_ext <- function(x,
     )
   }
 
-  # If dist is NULL and diag_ratio is NULL return x (with bbox converted to sf if no buffer applied)
+  # If dist is NULL and diag_ratio is NULL return x (with bbox converted to sf
+  # if no buffer applied)
   if (is.null(dist) && is.null(diag_ratio)) {
     if (is_bbox(x)) {
       x <- as_sf(x)
@@ -83,15 +87,19 @@ st_buffer_ext <- function(x,
 
   dist <- convert_dist_units(dist = dist, from = unit, to = units_gdal)
 
-  dist <- limit_dist(dist = dist, dist_limits = dist_limits, unit = unit, crs = crs)
+  dist <- limit_dist(
+    dist = dist,
+    dist_limits = dist_limits,
+    unit = unit,
+    crs = crs)
 
   x <- sf::st_buffer(x = x, dist = dist, singleSide = single_side, ...)
 
-  if (is_lonlat) {
-    x <- sf::st_transform(x, lonlat_crs)
+  if (!is_lonlat) {
+    return(x)
   }
 
-  x
+  sf::st_transform(x, lonlat_crs)
 }
 
 #' Return distance based on diagonal ratio if dist is NULL
@@ -114,7 +122,12 @@ diag_ratio_to_dist <- function(x = NULL, dist = NULL, diag_ratio = NULL) {
 #' @noRd
 #' @importFrom dplyr between
 #' @importFrom cli cli_alert_info
-limit_dist <- function(dist = NULL, dist_limits = NULL, unit = NULL, crs = NULL, between.ok = FALSE, call = caller_env()) {
+limit_dist <- function(dist = NULL,
+                       dist_limits = NULL,
+                       unit = NULL,
+                       crs = NULL,
+                       between.ok = FALSE,
+                       call = caller_env()) {
   if (is.null(dist_limits)) {
     return(dist)
   }
@@ -137,7 +150,8 @@ limit_dist <- function(dist = NULL, dist_limits = NULL, unit = NULL, crs = NULL,
     )
 
   cli_abort_ifnot(
-    "{.arg dist_limits} must be length 2 or greater and a {.code units} class object.",
+    "{.arg dist_limits} must be length 2 or greater
+    and a {.code units} class object.",
     condition = (length(dist_limits) >= 2) && is_units(dist_limits),
     call = call
   )
