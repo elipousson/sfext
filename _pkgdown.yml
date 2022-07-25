@@ -44,7 +44,6 @@ reference:
   - '`misc_sf`'
   - '`number_features`'
   - '`count_features`'
-  - '`make_markers`'
   - starts_with("sf_bbox")
 - title: Utility functions for units and scales
   contents:
