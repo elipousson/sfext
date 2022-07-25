@@ -83,14 +83,10 @@ st_filter_ext <- function(x,
     y <- sf::st_bbox(y)
   }
 
-  if (is_bbox(y)) {
-    y <- as_sfc(y)
-  }
-
   x <-
     sf::st_filter(
       x,
-      y,
+      as_sfc(y),
       ...,
       .predicate = .predicate
     )
@@ -111,18 +107,18 @@ st_filter_ext <- function(x,
 #' Filter by geometry type
 #'
 #' @noRd
-filter_geom_type <- function(x, geom_type = NULL, null.ok = TRUE) {
+filter_geom_type <- function(x, type = NULL, null.ok = TRUE) {
   check_sf(x, ext = TRUE)
 
-  if (is.null(geom_type) && null.ok) {
+  if (is.null(type) && null.ok) {
     return(x)
   }
 
-  geom_type <- is_geom_type(x, type = geom_type, by_geometry = TRUE)
+  type <- is_geom_type(x, type = type, by_geometry = TRUE)
 
   if (is_sf(x)) {
-    return(x[geom_type, ])
+    return(x[type, ])
   }
 
-  x[geom_type]
+  x[type]
 }
