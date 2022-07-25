@@ -296,7 +296,6 @@ write_exif <- function(path = NULL,
 #'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON objects
 #'   or [sf::st_nearest_feature] if key_list contains other types.
 #' @export
-#' @importFrom fs dir_ls
 #' @importFrom purrr map_dfr walk2
 #' @importFrom sf st_drop_geometry st_join
 #' @importFrom dplyr select all_of group_by summarize
@@ -313,8 +312,7 @@ write_exif_keywords <- function(path,
   file_list <- get_path_file_list(path, filetype)
   key_list <- as_sf_list(key_list, nm = NULL, crs = data)
 
-  join <-
-    set_join_by_geom_type(key_list, join = join)
+  join <- set_join_by_geom_type(key_list, join = join)
 
   data <-
     purrr::map_dfr(
