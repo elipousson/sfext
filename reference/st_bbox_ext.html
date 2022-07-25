@@ -118,6 +118,12 @@ to units matching GDAL units for x; defaults to "meter"</p></dd>
 <dt>null.ok</dt>
 <dd><p>If <code>TRUE</code> and x is <code>NULL</code>, return <code>NULL</code>.</p></dd>
 
+
+<dt>list.ok</dt>
+<dd><p>If <code>TRUE</code>, allow sf list objects as an input and use
+<a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map</a> to apply the provided parameters to each object within the
+list to return as a new sf list object.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

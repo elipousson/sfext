@@ -92,6 +92,11 @@ buffer distance. e.g. if the diagonal distance is 3000 meters and the
 "diag_ratio = 0.1"  a 300 meter will be used. Ignored when <code>dist</code> is
 provided.</p></dd>
 
+    <dt><code>list.ok</code></dt>
+<dd><p>If <code>TRUE</code>, allow sf list objects as an input and use
+<a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map</a> to apply the provided parameters to each object within the
+list to return as a new sf list object.</p></dd>
+
     <dt><code>asp</code></dt>
 <dd><p>Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, <code><a href="get_asp.html">get_asp()</a></code> returns the same value

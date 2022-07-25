@@ -266,26 +266,12 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 
 
 <dt>method</dt>
-<dd><p>the geocoding service to be used. API keys are loaded from environmental variables. Run <code>usethis::edit_r_environ()</code> to open your .Renviron file and add an API key as an environmental variable. For example, add the line <code>GEOCODIO_API_KEY="YourAPIKeyHere"</code>.</p><ul><li><p><code>"osm"</code>: <a href="https://nominatim.org" class="external-link">Nominatim</a>.</p></li>
-<li><p><code>"census"</code>: <a href="https://geocoding.geo.census.gov/" class="external-link">US Census</a>. Geographic coverage is limited to the United States.  Batch geocoding is supported.</p></li>
-<li><p><code>"arcgis"</code>: <a href="https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm" class="external-link">ArcGIS</a>.</p></li>
-<li><p><code>"geocodio"</code>: <a href="https://www.geocod.io/" class="external-link">Geocodio</a>. Geographic coverage is limited to the United States and Canada. An API key must be stored in the environmental variable "GEOCODIO_API_KEY". Batch geocoding is supported.</p></li>
-<li><p><code>"iq"</code>: <a href="https://locationiq.com/" class="external-link">Location IQ</a>.  An API key must be stored in the environmental variable "LOCATIONIQ_API_KEY".</p></li>
-<li><p><code>"google"</code>: <a href="https://developers.google.com/maps/documentation/geocoding/overview" class="external-link">Google</a>.  An API key must be stored in the environmental variable "GOOGLEGEOCODE_API_KEY".</p></li>
-<li><p><code>"opencage"</code>: <a href="https://opencagedata.com" class="external-link">OpenCage</a>.  An API key must be stored in the environmental variable "OPENCAGE_KEY".</p></li>
-<li><p><code>"mapbox"</code>: <a href="https://docs.mapbox.com/api/search/" class="external-link">Mapbox</a>.  An API key must be stored in the environmental variable "MAPBOX_API_KEY".</p></li>
-<li><p><code>"here"</code>: <a href="https://developer.here.com/products/geocoding-and-search" class="external-link">HERE</a>.  An API key must be stored in the environmental variable "HERE_API_KEY". Batch geocoding is supported, but must be explicitly called with <code>mode = "batch"</code>.</p></li>
-<li><p><code>"tomtom"</code>: <a href="https://developer.tomtom.com/search-api/search-api-documentation/geocoding" class="external-link">TomTom</a>.  An API key must be stored in the environmental variable "TOMTOM_API_KEY". Batch geocoding is supported.</p></li>
-<li><p><code>"mapquest"</code>: <a href="https://developer.mapquest.com/documentation/geocoding-api/" class="external-link">MapQuest</a>.  An API key must be stored in the environmental variable "MAPQUEST_API_KEY". Batch geocoding is supported.</p></li>
-<li><p><code>"bing"</code>: <a href="https://docs.microsoft.com/en-us/bingmaps/rest-services/locations/" class="external-link">Bing</a>.  An API key must be stored in the environmental variable "BINGMAPS_API_KEY". Batch geocoding is supported, but must be explicitly called with <code>mode = "batch"</code>.</p></li>
-<li><p><code>"geoapify"</code>: <a href="https://www.geoapify.com/geocoding-api" class="external-link">Geoapify</a>.  An API key must be stored in the environmental variable "GEOAPIFY_KEY".</p></li>
-<li><p><code>"cascade"</code> <a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> use <a href="https://jessecambon.github.io/tidygeocoder/reference/geocode_combine.html" class="external-link">geocode_combine</a> or <a href="https://jessecambon.github.io/tidygeocoder/reference/geo_combine.html" class="external-link">geo_combine</a> instead.
-The "cascade" method first uses one geocoding service and then uses
-a second geocoding service if the first service didn't return results.
-The services and order is specified by the cascade_order argument.
-Note that this is not compatible with <code>full_results = TRUE</code> as geocoding
-services have different columns that they return.</p></li>
-</ul></dd>
+<dd><p>Method to be used for downloading files.  Current
+    download methods are <code>"internal"</code>, <code>"wininet"</code> (Windows
+    only) <code>"libcurl"</code>, <code>"wget"</code> and <code>"curl"</code>, and there
+    is a value <code>"auto"</code>: see ‘Details’ and ‘Note’.</p>
+<p>The method can also be set through the option
+    <code>"download.file.method"</code>: see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a>()</code>.</p></dd>
 
 
 <dt>unzip</dt>
@@ -313,8 +299,10 @@ not provided to read_sf_gsheet.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Reading data from a url:</p>
 <p>read_sf_url supports multiple types of urls:</p><ul><li><p>A MapServer or FeatureServer URL</p></li>
-<li><p>A URL for a GitHub gist with a single spatial data file (first file used if gist contains multiple)</p></li>
-<li><p>A URL for a spatial data file, CSV file, or Excel file</p></li>
+<li><p>A URL for a GitHub gist with a single spatial data file (first file used
+if gist contains multiple)</p></li>
+<li><p>A URL for a spatial data file, CSV file, Excel file, or RDS file (RDA and
+RData files supported by read_sf_path)</p></li>
 <li><p>A Google Sheets URL</p></li>
 <li><p>A public Google Maps URL</p></li>
 </ul></div>

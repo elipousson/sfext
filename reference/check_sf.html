@@ -71,12 +71,18 @@
 <dd><p>An <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object.</p></dd>
 
 
+<dt>arg</dt>
+<dd><p>Used internally to create better error messages; defaults to
+<a href="https://rlang.r-lib.org/reference/caller_arg.html" class="external-link">rlang::caller_arg</a>.</p></dd>
+
+
 <dt>null.ok</dt>
 <dd><p>If <code>TRUE</code> and x is <code>NULL</code>, return <code>TRUE</code>; defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt>list.ok</dt>
-<dd><p>If TRUE, return TRUE if x is an sf list or, if ext is TRUE, a list of sf, sfc, or bbox objects. Defaults to FALSE.</p></dd>
+<dd><p>If <code>TRUE</code>, return <code>TRUE</code> if x is an sf list or, if ext is also
+<code>TRUE</code>, a list of sf, sfc, or bbox objects. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt>ext</dt>
