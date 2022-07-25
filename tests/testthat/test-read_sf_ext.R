@@ -8,6 +8,26 @@ test_that("read_sf_ext works", {
 
   expect_s3_class(
     read_sf_ext(
+      url = "https://opendata.baltimorecity.gov/egis/rest/services/Hosted/311_Customer_Service_Requests_2020_csv/FeatureServer/0",
+      name = "Abell",
+      name_col = "neighborhood",
+      coords = c("longitude", "latitude")
+    ),
+    "sf"
+  )
+
+  expect_s3_class(
+    read_sf_ext(
+      url = "https://opendata.baltimorecity.gov/egis/rest/services/Hosted/311_Customer_Service_Requests_2020_csv/FeatureServer/0",
+      name = "Abell",
+      name_col = "neighborhood",
+      coords = NULL
+    ),
+    "data.frame"
+  )
+
+  expect_s3_class(
+    read_sf_ext(
       path = system.file("shape/nc.shp", package = "sf")
     ),
     "sf"
