@@ -7,6 +7,8 @@
 #' @param y Length 1 named `sf` list (name of y is used as count if count is
 #'   `NULL`) or a `sf` object if nm is not `NULL`. y must include a column name
 #'   matching the value of .id. If y is `NULL`, count is required. Default: `NULL`
+#' @param nm Vector of names to use with [as_sf_list] to convert y to an sf list
+#'   (if y is not already an sf list). Defaults to "data".
 #' @inheritParams st_join_ext
 #' @inheritParams df_to_sf
 #' @param count Name of column to count. If `NULL`, count is set to `names(y)`
@@ -46,9 +48,7 @@ count_features <- function(x = NULL,
 
     x <- st_join_ext(x, y, join = join, .id = .id, ...)
 
-    if (is.null(count)) {
-      count <- names(y)
-    }
+    count <- count %||% names(y)
 
     # Convert y back into a sf object
     y <- as_sf(y)
@@ -70,7 +70,7 @@ count_features <- function(x = NULL,
 
   geometry <- arg_match(geometry, c("y", "x", "drop"))
 
-  if (!is_sf(y) | (geometry == "x")) {
+  if (!is_sf(y) || (geometry == "x")) {
     return(x)
   }
 

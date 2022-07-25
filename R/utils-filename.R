@@ -124,6 +124,8 @@ str_remove_filetype <- function(string, filetype = NULL) {
 
 #' @name str_extract_filetype
 #' @rdname str_misc
+#' @param tocase Function to use with [str_extract_filetype] for case conversion
+#'   of returned filetype. Defaults to [tolower()].
 #' @export
 str_extract_filetype <- function(string, filetype = NULL, tocase = tolower) {
   filetype <- filetype %||% "[a-zA-Z0-9]+"

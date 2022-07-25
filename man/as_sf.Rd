@@ -32,6 +32,11 @@ object to return.}
 \item{sf_col}{A column name to use for the geometry column created by
 \link{as_sf}; defaults to "geometry".}
 
+\item{ext}{If \code{TRUE}, \link{as_sf} will convert a data frame or character vector
+of addresses to an sf object using \link{df_to_sf} or \link{address_to_sf}. If
+\code{FALSE}, only spatial objects (bbox, sfg, sfc, sf list, raster, or sp
+objects) can be converted. Defaults to \code{TRUE}.}
+
 \item{...}{Additional parameters passed to \link{as_sf}, \link{as_sfc}, \link{as_bbox}, or
 \link{as_sf_list}}
 
@@ -47,6 +52,9 @@ provided.}
 
 \item{class}{A class to convert data to; defaults to NULL (which returns
 "sf")}
+
+\item{null.ok}{For \link{as_sf_class}, if class is \code{NULL} and null.ok is \code{TRUE},
+return x without any class conversion or checks. Defaults to \code{TRUE}.}
 
 \item{call}{Passed as the call parameter for \link[cli:cli_abort]{cli::cli_abort} or
 \link[rlang:arg_match]{rlang::arg_match} to improve error messages when function is used

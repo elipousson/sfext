@@ -10,6 +10,10 @@
 #'   [as_sf_list()] only supports sf objects or a data frames with a sf list
 #'   column named "data" (typically created by using [dplyr::group_nest()] on an
 #'   sf object.
+#' @param ext If `TRUE`, [as_sf] will convert a data frame or character vector
+#'   of addresses to an sf object using [df_to_sf] or [address_to_sf]. If
+#'   `FALSE`, only spatial objects (bbox, sfg, sfc, sf list, raster, or sp
+#'   objects) can be converted. Defaults to `TRUE`.
 #' @param sf_col A column name to use for the geometry column created by
 #'   [as_sf]; defaults to "geometry".
 #' @param crs Coordinate reference system for `sf`, `bbox`, `sfc` or `sf` list
@@ -198,6 +202,8 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
 #' @param data Data that can be converted to sf, sfc, bbox or a sf list object.
 #' @param class A class to convert data to; defaults to NULL (which returns
 #'   "sf")
+#' @param null.ok For [as_sf_class], if class is `NULL` and null.ok is `TRUE`,
+#'   return x without any class conversion or checks. Defaults to `TRUE`.
 #' @param ... Additional parameters passed to [as_sf], [as_sfc], [as_bbox], or
 #'   [as_sf_list]
 #' @name as_sf_class

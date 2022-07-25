@@ -72,6 +72,9 @@ prefix is "date" or "time" and not currently accessible when using
 
 \item{filetype}{File type string}
 
+\item{tocase}{Function to use with \link{str_extract_filetype} for case conversion
+of returned filetype. Defaults to \code{\link[=tolower]{tolower()}}.}
+
 \item{side}{Side on which padding character is added (left, right or both).}
 }
 \description{

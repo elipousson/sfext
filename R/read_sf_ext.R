@@ -230,6 +230,16 @@ read_sf_rdata <- function(path,
 #' @name read_sf_query
 #' @rdname read_sf_ext
 #' @inheritParams sf::read_sf
+#' @param name,name_col Name value and name column to use in generated a query
+#'   for sources read with [read_sf_query] or [read_sf_esri]. This same
+#'   convention is used by [getdata::get_location] which wraps
+#'   sfext::read_sf_ext allowing the use of these parameters with any
+#'   [read_sf_ext] function. This option for filtering may be added to more
+#'   read_sf_ext functions in the future.
+#' @param table table can usually be inferred from basename of the data source.
+#'   table is used to generate a custom query if both name and name_col are
+#'   provided. Use `sf::st_layers(dsn = dsn)[["name"]]` to see a list of
+#'   available table names.
 #' @export
 #' @importFrom stringr str_extract
 #' @importFrom sf read_sf st_zm
@@ -482,6 +492,7 @@ read_sf_url <- function(url,
 
 #' @name read_sf_esri
 #' @rdname read_sf_ext
+#' @inheritParams esri2sf::esri2sf
 #' @export
 read_sf_esri <- function(url,
                          bbox = NULL,

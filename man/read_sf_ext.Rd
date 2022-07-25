@@ -130,9 +130,17 @@ also be an open database connection.}
 
 \item{query}{SQL query to select records; see details}
 
-\item{name}{Name to make file name converted to snake case with
-\code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}, e.g. "Residential zoning map" becomes
-"residential_zoning_map"}
+\item{table}{table can usually be inferred from basename of the data source.
+table is used to generate a custom query if both name and name_col are
+provided. Use \code{sf::st_layers(dsn = dsn)[["name"]]} to see a list of
+available table names.}
+
+\item{name, name_col}{Name value and name column to use in generated a query
+for sources read with \link{read_sf_query} or \link{read_sf_esri}. This same
+convention is used by \link[getdata:get_location]{getdata::get_location} which wraps
+sfext::read_sf_ext allowing the use of these parameters with any
+\link{read_sf_ext} function. This option for filtering may be added to more
+read_sf_ext functions in the future.}
 
 \item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
 
@@ -161,6 +169,9 @@ ArcGIS FeatureServer or MapServer to access with \code{\link[esri2sf:esri2sf]{es
 \code{TRUE} always show the column types, even if they are supplied. If \code{NULL}
 (the default) only show the column types if they are not explicitly supplied
 by the \code{col_types} argument.}
+
+\item{where}{string for where condition. Default is \code{NULL} (equivalent to
+\code{1=1}) to return all rows.}
 
 \item{id}{The name of a column in which to store the file path. This is
 useful when reading multiple input files and there is data in the file

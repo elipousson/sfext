@@ -25,6 +25,9 @@ count_features(
 \code{NULL}) or a \code{sf} object if nm is not \code{NULL}. y must include a column name
 matching the value of .id. If y is \code{NULL}, count is required. Default: \code{NULL}}
 
+\item{nm}{Vector of names to use with \link{as_sf_list} to convert y to an sf list
+(if y is not already an sf list). Defaults to "data".}
+
 \item{join}{geometry predicate function; defaults to \code{NULL}, set to
 \link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON
 objects or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}
