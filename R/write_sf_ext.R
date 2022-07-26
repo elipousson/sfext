@@ -353,7 +353,7 @@ write_sf_types <- function(data,
   if (type %in% c("sf_csv", "df_csv", "rda")) {
     is_pkg_installed("readr")
   } else if (type %in% c("sf_excel", "df_excel")) {
-    is_pkg_installed("writexl")
+    is_pkg_installed("openxlsx")
     path <- str_add_filetype(path, "xlsx")
   }
 
@@ -366,11 +366,11 @@ write_sf_types <- function(data,
 
   switch(type,
     "sf_csv" = readr::write_csv(x = data, file = path),
-    "sf_excel" = writexl::write_xlsx(data, path = path),
+    "sf_excel" = openxlsx::write.xlsx(data, fiile = path),
     "sf_gsheet" = write_sf_gsheet(data = data, filename = filename, ...),
     "sf_spatial" = sf::write_sf(obj = data, dsn = path, ...),
     "df_csv" = readr::write_csv(x = data, file = path),
-    "df_excel" = writexl::write_xlsx(data, path = path),
+    "df_excel" = openxlsx::write.xlsx(data, fiile = path),
     "rda" = readr::write_rds(x = data, file = path, ...)
   )
 }

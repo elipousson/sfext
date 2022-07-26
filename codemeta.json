@@ -172,6 +172,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "openxlsx",
+      "name": "openxlsx",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=openxlsx"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "rappdirs",
       "name": "rappdirs",
       "provider": {
@@ -242,18 +254,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=tidygeocoder"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "writexl",
-      "name": "writexl",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=writexl"
     }
   ],
   "softwareRequirements": {
@@ -397,7 +397,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "659.773KB",
+  "fileSize": "437.682KB",
   "readme": "https://github.com/elipousson/sfext/blob/main/README.md",
   "contIntegration": "https://app.codecov.io/gh/elipousson/sfext?branch=main",
   "developmentStatus": ["https://lifecycle.r-lib.org/articles/stages.html#experimental", "https://www.repostatus.org/#active"],
