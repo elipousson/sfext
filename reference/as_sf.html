@@ -92,6 +92,13 @@ object to return.</p></dd>
 as_sf; defaults to "geometry".</p></dd>
 
 
+<dt>ext</dt>
+<dd><p>If <code>TRUE</code>, as_sf will convert a data frame or character vector
+of addresses to an sf object using <a href="sf_to_df.html">df_to_sf</a> or <a href="address_to_sf.html">address_to_sf</a>. If
+<code>FALSE</code>, only spatial objects (bbox, sfg, sfc, sf list, raster, or sp
+objects) can be converted. Defaults to <code>TRUE</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional parameters passed to as_sf, as_sfc, as_bbox, or
 as_sf_list</p></dd>
@@ -116,6 +123,11 @@ provided.</p></dd>
 <dt>class</dt>
 <dd><p>A class to convert data to; defaults to NULL (which returns
 "sf")</p></dd>
+
+
+<dt>null.ok</dt>
+<dd><p>For as_sf_class, if class is <code>NULL</code> and null.ok is <code>TRUE</code>,
+return x without any class conversion or checks. Defaults to <code>TRUE</code>.</p></dd>
 
 
 <dt>call</dt>

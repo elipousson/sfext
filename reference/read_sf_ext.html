@@ -196,10 +196,20 @@ also be an open database connection.</p></dd>
 <dd><p>SQL query to select records; see details</p></dd>
 
 
-<dt>name</dt>
-<dd><p>Name to make file name converted to snake case with
-<code><a href="https://rdrr.io/pkg/janitor/man/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code>, e.g. "Residential zoning map" becomes
-"residential_zoning_map"</p></dd>
+<dt>table</dt>
+<dd><p>table can usually be inferred from basename of the data source.
+table is used to generate a custom query if both name and name_col are
+provided. Use <code>sf::st_layers(dsn = dsn)[["name"]]</code> to see a list of
+available table names.</p></dd>
+
+
+<dt>name, name_col</dt>
+<dd><p>Name value and name column to use in generated a query
+for sources read with read_sf_query or read_sf_esri. This same
+convention is used by getdata::get_location which wraps
+sfext::read_sf_ext allowing the use of these parameters with any
+read_sf_ext function. This option for filtering may be added to more
+read_sf_ext functions in the future.</p></dd>
 
 
 <dt>wkt_filter</dt>
@@ -246,6 +256,11 @@ ArcGIS FeatureServer or MapServer to access with <code><a href="https://rdrr.io/
 <code>TRUE</code> always show the column types, even if they are supplied. If <code>NULL</code>
 (the default) only show the column types if they are not explicitly supplied
 by the <code>col_types</code> argument.</p></dd>
+
+
+<dt>where</dt>
+<dd><p>string for where condition. Default is <code>NULL</code> (equivalent to
+<code>1=1</code>) to return all rows.</p></dd>
 
 
 <dt>id</dt>

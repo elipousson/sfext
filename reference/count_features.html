@@ -84,6 +84,11 @@ spatial relationship with y.</p>
 matching the value of .id. If y is <code>NULL</code>, count is required. Default: <code>NULL</code></p></dd>
 
 
+<dt>nm</dt>
+<dd><p>Vector of names to use with <a href="as_sf.html">as_sf_list</a> to convert y to an sf list
+(if y is not already an sf list). Defaults to "data".</p></dd>
+
+
 <dt>join</dt>
 <dd><p>geometry predicate function; defaults to <code>NULL</code>, set to
 <a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">sf::st_intersects</a> if key_list contains only POLYGON or MULTIPOLYGON
