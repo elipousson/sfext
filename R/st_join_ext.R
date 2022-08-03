@@ -91,8 +91,8 @@ st_join_ext <- function(x,
 #' @name set_join_by_geom_type
 #' @inheritParams is_geom_type
 #' @param join geometry predicate function; defaults to `NULL`, set to
-#'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON
-#'   objects or [sf::st_nearest_feature] if key_list contains other types.
+#'   [sf::st_intersects] if x contains only POLYGON or MULTIPOLYGON
+#'   objects or [sf::st_nearest_feature] if x contains other types.
 #' @importFrom sf st_intersects st_nearest_feature
 #' @noRd
 set_join_by_geom_type <- function(x, join = NULL) {
@@ -100,7 +100,21 @@ set_join_by_geom_type <- function(x, join = NULL) {
     return(join)
   }
 
-  if (all(sapply(x, is_polygon) | sapply(x, is_multipolygon))) {
+  if (is_sf(x)) {
+    x_is_poly <-
+      all(
+        is_multipolygon(x, by_geometry = TRUE) |
+          is_polygon(x, by_geometry = TRUE)
+        )
+  } else if (is_sf_list(x)) {
+    x_is_poly <-
+      all(
+        sapply(x, is_polygon, by_geometry = TRUE) |
+          sapply(x, is_multipolygon, by_geometry = TRUE)
+        )
+  }
+
+  if (x_is_poly) {
     return(sf::st_intersects)
   }
 
