@@ -1,7 +1,7 @@
 test_that("read_sf_ext works", {
   expect_s3_class(
     read_sf_ext(
-      url = "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Louisville/LOJIC_PublicSafety_Louisville/MapServer/1"
+      url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/NapervilleShelters/FeatureServer/0"
     ),
     "sf"
   )
@@ -46,7 +46,6 @@ test_that("read_sf_ext works", {
     ),
     "sf"
   )
-
 
   expect_s3_class(
     read_sf_ext(
