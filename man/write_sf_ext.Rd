@@ -33,6 +33,7 @@ write_sf_cache(
   data_dir = NULL,
   pkg = "sfext",
   overwrite = FALSE,
+  create = TRUE,
   ...
 )
 
@@ -105,6 +106,11 @@ filetype is "rda" ... parameters are passed to \link[readr:read_rds]{readr::writ
 \item{data_dir}{cache data directory, defaults to \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
 when data_dir is \code{NULL}. (only used for \link{write_sf_cache}; default is used
 when \code{cache = TRUE} for \link{write_sf_ext})}
+
+\item{create}{If \code{FALSE} and path does not exist, return path with a warning.
+If \code{TRUE} and \link[rlang:is_interactive]{rlang::is_interactive} is \code{TRUE}, ask user if directory
+should be created. If the session not interactive and create is \code{TRUE}, a
+new directory will be created.}
 
 \item{description}{(character) Brief description of gist (optional)}
 

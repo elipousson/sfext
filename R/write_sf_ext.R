@@ -122,15 +122,8 @@ write_sf_cache <- function(data,
                            data_dir = NULL,
                            pkg = "sfext",
                            overwrite = FALSE,
+                           create = TRUE,
                            ...) {
-  path <-
-    get_data_dir(
-      path = data_dir,
-      cache = TRUE,
-      pkg = pkg,
-      null.ok = FALSE
-    )
-
   filename <-
     make_filename(
       name = name,
@@ -140,6 +133,15 @@ write_sf_cache <- function(data,
       prefix = prefix,
       postfix = postfix,
       path = NULL
+    )
+
+  path <-
+    get_data_dir(
+      path = data_dir,
+      cache = TRUE,
+      create = create,
+      pkg = pkg,
+      null.ok = FALSE
     )
 
   write_sf_types(
@@ -181,14 +183,11 @@ write_sf_gist <- function(data,
       path = NULL
     )
 
-  path <- tempdir()
-
-
   write_sf_types(
     data = data,
     filename = filename,
     filetype = filetype,
-    path = path,
+    path = tempdir(),
     overwrite = TRUE
   )
 
@@ -234,8 +233,7 @@ write_sf_gsheet <- function(data,
   is_pkg_installed("googlesheets4")
 
   if (!is.null(filename)) {
-    filename <-
-      str_remove_filetype(filename, filetype = "gsheet")
+    filename <- str_remove_filetype(filename, filetype = "gsheet")
   }
 
   filename <-
@@ -279,7 +277,10 @@ write_sf_types <- function(data,
                            append = FALSE,
                            ...) {
   # Get working directory if path is NULL
-  path <- path %||% getwd()
+  if (is.null(path)) {
+    path <- getwd()
+    cli_inform("Setting path to current working directory: {.file {path}}")
+  }
 
   # Set filename from path if ends with a filetype
   if (has_filetype(path)) {
@@ -300,8 +301,6 @@ write_sf_types <- function(data,
   # FIXME: assumes that the user has not provided both a filename
   # and a path ending in a filename - add a check to confirm
   folder_path <- stringr::str_remove(path, glue("{filename}$"))
-  # Put path and filename back together
-  path <- file.path(folder_path, filename)
 
   # Check if overwrite is needed and possible
   check_file_overwrite(
@@ -309,6 +308,9 @@ write_sf_types <- function(data,
     path = folder_path,
     overwrite = overwrite
   )
+
+  # Put path and filename back together
+  path <- file.path(folder_path, filename)
 
   if (is_sf(data)) {
     type <-
