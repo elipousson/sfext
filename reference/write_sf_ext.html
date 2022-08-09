@@ -86,6 +86,7 @@ with <a href="make_filename.html">make_filename</a> and features including:</p>
 <span>  data_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pkg <span class="op">=</span> <span class="st">"sfext"</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  create <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -183,6 +184,13 @@ filetype is "rda" ... parameters are passed to <a href="https://readr.tidyverse.
 <dd><p>cache data directory, defaults to <a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir</a>
 when data_dir is <code>NULL</code>. (only used for write_sf_cache; default is used
 when <code>cache = TRUE</code> for write_sf_ext)</p></dd>
+
+
+<dt>create</dt>
+<dd><p>If <code>FALSE</code> and path does not exist, return path with a warning.
+If <code>TRUE</code> and <a href="https://rlang.r-lib.org/reference/is_interactive.html" class="external-link">rlang::is_interactive</a> is <code>TRUE</code>, ask user if directory
+should be created. If the session not interactive and create is <code>TRUE</code>, a
+new directory will be created.</p></dd>
 
 
 <dt>description</dt>
