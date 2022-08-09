@@ -33,6 +33,7 @@ make_filename <- function(name = NULL,
                           pad = NULL,
                           width = NULL,
                           cache = FALSE,
+                          pkg = "sfext",
                           create = TRUE) {
   cli_abort_ifnot(
     "{.arg name} or {.arg filename} must be provided.",
@@ -85,6 +86,7 @@ make_filename <- function(name = NULL,
       path = path,
       cache = cache,
       create = create,
+      pkg = pkg,
       null.ok = TRUE
     )
 

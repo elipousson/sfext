@@ -15,6 +15,7 @@ make_filename(
   pad = NULL,
   width = NULL,
   cache = FALSE,
+  pkg = "sfext",
   create = TRUE
 )
 }
@@ -46,6 +47,8 @@ date/time prefix; defaults to \code{NULL}.}
 
 \item{cache}{If \code{TRUE}, path is set to the package cache directory using
 \code{\link[=get_data_dir]{get_data_dir()}}; defaults to \code{FALSE}.}
+
+\item{pkg}{Package name; defaults to "sfext"}
 
 \item{create}{If \code{FALSE} and path does not exist, return path with a warning.
 If \code{TRUE} and \link[rlang:is_interactive]{rlang::is_interactive} is \code{TRUE}, ask user if directory
