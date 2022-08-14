@@ -80,7 +80,7 @@ transformed back into the original CRS after the buffer has been applied.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>sf or bbox object.</p></dd>
+<dd><p>A <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object or a list of <code>sf</code> objects.</p></dd>
 
 
 <dt>dist</dt>
@@ -104,7 +104,7 @@ to units matching GDAL units for x; defaults to "meter"</p></dd>
 <dt>dist_limits</dt>
 <dd><p>Numeric vector of any length (minimum and maximum values
 used as lower and upper limits on distance buffer). Units must match the
-provided units; defaults to NULL.</p></dd>
+provided units; defaults to <code>NULL</code>.</p></dd>
 
 
 <dt>single_side</dt>
@@ -115,17 +115,17 @@ right-hand side, positive on the left.</p></dd>
 
 <dt>list.ok</dt>
 <dd><p>If <code>TRUE</code>, allow sf list objects as an input and use
-<a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map</a> to apply the provided parameters to each object within the
+<code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code> to apply the provided parameters to each object within the
 list to return as a new sf list object.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>additional parameters passed to <a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer</a></p></dd>
+<dd><p>additional parameters passed to <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>st_edge is a variation on st_buffer_ext where dist or diag_ratio is used to
+    <p><code>st_edge()</code> is a variation on <code>st_buffer_ext()</code> where dist or diag_ratio is used to
 define the width of the edge to return either outside the existing geometry
 (for positive dist values) or inside the existing geometry (for negative dist
 values).</p>

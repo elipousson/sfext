@@ -73,7 +73,7 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x, y</dt>
 <dd><p>A <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object. x may also be a <code>sf</code> list
-objects. If x is an <code>sf</code> list, additional parameters in ... will be ignored.</p></dd>
+objects. If x is an <code>sf</code> list, additional parameters in <code>...</code> will be ignored.</p></dd>
 
 
 <dt>crop</dt>
@@ -98,18 +98,19 @@ objects. If x is an <code>sf</code> list, additional parameters in ... will be i
 
 
 <dt>geom_type</dt>
-<dd><p>Character string passed to type argument of <a href="is_geom_type.html">is_geom_type</a>
+<dd><p>Character string passed to type argument of <code><a href="is_geom_type.html">is_geom_type()</a></code>
 to filter features to only those matching the specified geometry type.</p></dd>
 
 
 <dt>null.ok</dt>
-<dd><p>If y is <code>NULL</code> and null.ok is <code>TRUE</code>, x is returned without
+<dd><p>If <code>y = NULL</code> and <code>null.ok = TRUE</code>, x is returned without
 changes. Defaults to <code>TRUE</code>.</p></dd>
 
 
 <dt>list.ok</dt>
-<dd><p>If <code>TRUE</code>, x can be a list of sf, sfc, or bbox objects. If
-<code>FALSE</code>, only sf, sfc, or bbox objects are supported. Defaults to <code>TRUE</code>.</p></dd>
+<dd><p>If <code>TRUE</code>, x can be a list of <code>sf</code>, <code>sfc</code>, or <code>bbox</code> objects.
+If <code>FALSE</code>, only <code>sf</code>, <code>sfc</code>, or <code>bbox</code> objects are supported. Defaults to
+<code>TRUE</code>.</p></dd>
 
 
 <dt>...</dt>

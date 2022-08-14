@@ -100,8 +100,8 @@ single column or two separated columns.</p></dd>
 
 
 <dt>crs</dt>
-<dd><p>Cordinate reference system to return, Default: 4326 for sf_to_df
-and NULL for df_to_sf.</p></dd>
+<dd><p>Cordinate reference system to return, Default: 4326 for
+<code>sf_to_df()</code> and NULL for <code>df_to_sf()</code>.</p></dd>
 
 
 <dt>coords</dt>
@@ -120,50 +120,50 @@ coords, Default: <code>TRUE</code>.</p></dd>
 
 
 <dt>from_crs</dt>
-<dd><p>For df_to_sf, coordinate reference system used by
+<dd><p>For <code>df_to_sf()</code>, coordinate reference system used by
 coordinates or well known text in data frame.</p></dd>
 
 
 <dt>into</dt>
 <dd><p>If coords is a single column name with both longitude and
 latitude, <code>into</code> is used as the names of the new columns that coords is
-separated into. Passed to <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">tidyr::separate</a>.</p></dd>
+separated into. Passed to <code><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">tidyr::separate()</a></code>.</p></dd>
 
 
 <dt>sep</dt>
 <dd><p>If coords is a single column name with both longitude and
 latitude, <code>sep</code> is used as the separator between coordinate values. Passed
-to <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">tidyr::separate</a>.</p></dd>
+to <code><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">tidyr::separate()</a></code>.</p></dd>
 
 
 <dt>rev</dt>
-<dd><p>If <code>TRUE</code>, reverse c("lat", "lon") coords to c("lon", "lat").
+<dd><p>If <code>TRUE</code>, reverse <code>c("lat", "lon")</code> coords to <code>c("lon", "lat")</code>.
 check_coords only.</p></dd>
 
 
 <dt>remove_coords</dt>
-<dd><p>For df_to_sf, if <code>TRUE</code>, remove the coordinate columns
+<dd><p>For <code>df_to_sf()</code>, if <code>TRUE</code>, remove the coordinate columns
 after converting a data frame to simple feature object; defaults to
 <code>FALSE</code>.</p></dd>
 
 
 <dt>geo</dt>
-<dd><p>If <code>TRUE</code>, use <a href="address_to_sf.html">address_to_sf</a> to geocode address column; defaults
+<dd><p>If <code>TRUE</code>, use <code><a href="address_to_sf.html">address_to_sf()</a></code> to geocode address column; defaults
 to <code>FALSE</code>.</p></dd>
 
 
 <dt>address</dt>
-<dd><p>Address column name passed to <a href="https://jessecambon.github.io/tidygeocoder/reference/geocode.html" class="external-link">tidygeocoder::geocode</a> or
+<dd><p>Address column name passed to <code><a href="https://jessecambon.github.io/tidygeocoder/reference/geocode.html" class="external-link">tidygeocoder::geocode()</a></code> or
 <a href="https://jessecambon.github.io/tidygeocoder/reference/geo.html" class="external-link">tidygeocoder::geo</a></p></dd>
 
 
 <dt>y</dt>
-<dd><p>A sf object passed as y argument to <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join</a>.</p></dd>
+<dd><p>A sf object passed as y argument to <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code>.</p></dd>
 
 
 <dt>by</dt>
 <dd><p>A character vector of variables to join by passed to
-<a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join</a>.</p></dd>
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code>.</p></dd>
 
 
 <dt>...</dt>
@@ -171,11 +171,12 @@ to <code>FALSE</code>.</p></dd>
 
 
 <dt>default</dt>
-<dd><p>c("lon", "lat").</p></dd>
+<dd><p>Default coordinate values; defaults to <code>c("lon", "lat")</code>.</p></dd>
 
 
 <dt>value</dt>
-<dd><p>If TRUE, return the value of the coordinate column names. Used by has_coords.</p></dd>
+<dd><p>If <code>TRUE</code>, return the value of the coordinate column names. Used
+by <code>has_coords()</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
