@@ -1,27 +1,34 @@
 #' Union simple feature objects and combine name column values
 #'
-#' Wrapper for [sf::st_union] supporting the additional feature of a combined
-#' name column collapsed into a single vector with [cli::pluralize].
+#' Wrapper for [sf::st_union()] supporting the additional feature of a combined
+#' name column collapsed into a single vector with [cli::pluralize()].
 #'
-#' @param x A sf, sfc, or bbox object, Default: `NULL`
-#' @param y A sf or sfc object, Default: `NULL`
+#' @param x A `sf`, `sfc`, or `bbox` object, Default: `NULL`
+#' @param y A `sf` or `sfc` object, Default: `NULL`
 #' @param name_col Column name to collapse into new name_col value, Default:
 #'   'name'
 #' @param sf_col Geometry column name to use if x is an sf object, Default:
 #'   'geometry'
-#' @param ext If `FALSE`, st_union_ext functions the same as [sf::st_union],
+#' @param label Length 1 character vector used if name_col is `NULL`.
+#' @param ext If `FALSE`, st_union_ext functions the same as [sf::st_union()],
 #'   Default: `TRUE`
-#' @param ... Additional parameters passed to [sf::st_union]
+#' @param ... Additional parameters passed to [sf::st_union()]
 #' @return A sfc object if y is `NULL` and ext is `FALSE`. A tibble sf if x is a
-#'   sf object and y is `NULL`. If y is provided, [st_union_ext] is identical to
-#'   [sf::st_union]
+#'   sf object and y is `NULL`. If y is provided, [st_union_ext()] is identical to
+#'   [sf::st_union()]
 #' @rdname st_union_ext
 #' @example examples/st_union_ext.R
 #' @export
 #' @importFrom sf st_union st_geometry
 #' @importFrom cli pluralize
 #' @importFrom dplyr tibble mutate all_of
-st_union_ext <- function(x = NULL, y = NULL, name_col = "name", sf_col = "geometry", ext = TRUE, ...) {
+st_union_ext <- function(x = NULL,
+                         y = NULL,
+                         name_col = "name",
+                         sf_col = "geometry",
+                         label = NULL,
+                         ext = TRUE,
+                         ...) {
   check_sf(x, ext = TRUE)
 
   if (is_bbox(x)) {
@@ -43,20 +50,36 @@ st_union_ext <- function(x = NULL, y = NULL, name_col = "name", sf_col = "geomet
     return(x)
   }
 
-  if (!has_name(x, name_col)) {
-    cli_warn(
-      c("{.arg name_col} {.val {name_col}} can't be found in {.arg x}",
-        "i" = "Setting {.arg name_col} to the first column of {.arg x}: {.val {names(x)[[1]]}}"
+  if (!is.null(name_col)) {
+    if (!has_name(x, name_col)) {
+      cli_warn(
+        c("{.arg name_col} {.val {name_col}} can't be found in {.arg x}",
+          "i" = "Setting {.arg name_col} to the first column of {.arg x}:
+          {.val {names(x)[[1]]}}"
+        )
+      )
+
+      name_col <- names(x)[[1]]
+    }
+
+    as_sf(
+      dplyr::tibble(
+        "{name_col}" := as.character(cli::pluralize("{x[[name_col]]}")),
+        "{sf_col}" := sfc
       )
     )
-
-    name_col <- names(x)[[1]]
-  }
-
-  as_sf(
-    dplyr::tibble(
-      "{name_col}" := as.character(cli::pluralize("{x[[name_col]]}")),
-      "{sf_col}" := sfc
+  } else if (!is.null(label)) {
+    as_sf(
+      dplyr::tibble(
+        "label" = label,
+        "{sf_col}" := sfc
+      )
     )
-  )
+  } else {
+    as_sf(
+      dplyr::tibble(
+        "{sf_col}" := sfc
+      )
+    )
+  }
 }

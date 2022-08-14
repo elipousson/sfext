@@ -9,14 +9,15 @@ st_union_ext(
   y = NULL,
   name_col = "name",
   sf_col = "geometry",
+  label = NULL,
   ext = TRUE,
   ...
 )
 }
 \arguments{
-\item{x}{A sf, sfc, or bbox object, Default: \code{NULL}}
+\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object, Default: \code{NULL}}
 
-\item{y}{A sf or sfc object, Default: \code{NULL}}
+\item{y}{A \code{sf} or \code{sfc} object, Default: \code{NULL}}
 
 \item{name_col}{Column name to collapse into new name_col value, Default:
 'name'}
@@ -24,19 +25,21 @@ st_union_ext(
 \item{sf_col}{Geometry column name to use if x is an sf object, Default:
 'geometry'}
 
-\item{ext}{If \code{FALSE}, st_union_ext functions the same as \link[sf:geos_combine]{sf::st_union},
+\item{label}{Length 1 character vector used if name_col is \code{NULL}.}
+
+\item{ext}{If \code{FALSE}, st_union_ext functions the same as \code{\link[sf:geos_combine]{sf::st_union()}},
 Default: \code{TRUE}}
 
-\item{...}{Additional parameters passed to \link[sf:geos_combine]{sf::st_union}}
+\item{...}{Additional parameters passed to \code{\link[sf:geos_combine]{sf::st_union()}}}
 }
 \value{
 A sfc object if y is \code{NULL} and ext is \code{FALSE}. A tibble sf if x is a
-sf object and y is \code{NULL}. If y is provided, \link{st_union_ext} is identical to
-\link[sf:geos_combine]{sf::st_union}
+sf object and y is \code{NULL}. If y is provided, \code{\link[=st_union_ext]{st_union_ext()}} is identical to
+\code{\link[sf:geos_combine]{sf::st_union()}}
 }
 \description{
-Wrapper for \link[sf:geos_combine]{sf::st_union} supporting the additional feature of a combined
-name column collapsed into a single vector with \link[cli:pluralize]{cli::pluralize}.
+Wrapper for \code{\link[sf:geos_combine]{sf::st_union()}} supporting the additional feature of a combined
+name column collapsed into a single vector with \code{\link[cli:pluralize]{cli::pluralize()}}.
 }
 \examples{
 nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
