@@ -5,12 +5,12 @@
 #' the coordinate reference system is transformed into EPSG:3857 and then
 #' transformed back into the original CRS after the buffer has been applied.
 #'
-#' [st_edge] is a variation on [st_buffer_ext] where dist or diag_ratio is used to
+#' [st_edge()] is a variation on [st_buffer_ext()] where dist or diag_ratio is used to
 #' define the width of the edge to return either outside the existing geometry
 #' (for positive dist values) or inside the existing geometry (for negative dist
 #' values).
 #'
-#' @param x sf or bbox object.
+#' @param x A `sf`, `sfc`, or `bbox` object or a list of `sf` objects.
 #' @param dist buffer distance in units. Optional.
 #' @param diag_ratio ratio of diagonal distance of area's bounding box used as
 #'   buffer distance. e.g. if the diagonal distance is 3000 meters and the
@@ -22,14 +22,14 @@
 #'   to units matching GDAL units for x; defaults to "meter"
 #' @param dist_limits Numeric vector of any length (minimum and maximum values
 #'   used as lower and upper limits on distance buffer). Units must match the
-#'   provided units; defaults to NULL.
+#'   provided units; defaults to `NULL`.
 #' @param single_side If `TRUE`, single-sided buffers are returned for linear
 #'   geometries, in which case negative dist values give buffers on the
 #'   right-hand side, positive on the left.
 #' @param list.ok If `TRUE`, allow sf list objects as an input and use
-#'   [purrr::map] to apply the provided parameters to each object within the
+#'   [purrr::map()] to apply the provided parameters to each object within the
 #'   list to return as a new sf list object.
-#' @param ... additional parameters passed to [sf::st_buffer]
+#' @param ... additional parameters passed to [sf::st_buffer()]
 #' @export
 #' @importFrom purrr map
 #' @importFrom sf st_is_longlat st_crs st_transform st_bbox st_buffer

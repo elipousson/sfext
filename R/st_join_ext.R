@@ -1,18 +1,18 @@
 #' Complete a spatial join using a simple feature objects or an object and list
 #'
-#' Wrapper for [sf::st_join] that works with sf lists.
+#' Wrapper for [sf::st_join()] that works with sf lists.
 #'
-#' @param x A sf, sfc, or bbox object.
-#' @param y An sf object with a column named "name" or a list of sf
+#' @param x A `sf`, `sfc`, or `bbox` object.
+#' @param y An `sf` object with a column named "name" or a list of sf
 #'   objects where all items in the list have a "name" column.
 #' @param join geometry predicate function; defaults to `NULL`, set to
-#'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON
-#'   objects or [sf::st_nearest_feature] if key_list contains other types.
+#'   [sf::st_intersects()] if y contains only POLYGON or MULTIPOLYGON
+#'   objects or [sf::st_nearest_feature()] if y contains other types.
 #' @param col Column name used to convert y into a `sf` list if it is not
 #'   already.
 #' @param .id Column name with the values that should be added as a column to
 #'   the input `sf` object.
-#' @param ... Additional parameters passed to [sf::st_join]
+#' @param ... Additional parameters passed to [sf::st_join()]
 #' @export
 #' @importFrom dplyr rename select
 #' @importFrom sf st_join
@@ -91,8 +91,8 @@ st_join_ext <- function(x,
 #' @name set_join_by_geom_type
 #' @inheritParams is_geom_type
 #' @param join geometry predicate function; defaults to `NULL`, set to
-#'   [sf::st_intersects] if x contains only POLYGON or MULTIPOLYGON
-#'   objects or [sf::st_nearest_feature] if x contains other types.
+#'   [sf::st_intersects()] if x contains only POLYGON or MULTIPOLYGON
+#'   objects or [sf::st_nearest_feature()] if x contains other types.
 #' @importFrom sf st_intersects st_nearest_feature
 #' @noRd
 set_join_by_geom_type <- function(x, join = NULL) {

@@ -33,8 +33,8 @@ check_character <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, ...)
   }
 
   cli_abort(
-    c("{.arg {arg}} must be a character vector.",
-      "i" = "You've supplied a {class(x)} object."
+    c("{.arg {arg}} must be {.cls character}.",
+      "i" = "{.arg {arg}}has class {.cls {class(x)}}."
     ),
     ...
   )
@@ -62,9 +62,7 @@ check_len <- function(x = NULL,
   }
 
   cli_abort(
-    c("{.arg {arg}} must {len}.",
-      "i" = "You've supplied a length {length(x)} object."
-    ),
+    "{.arg {arg}} must {len}, not length {length(x)}.",
     ...
   )
 }
@@ -128,7 +126,12 @@ check_starts_with <- function(x = NULL,
 #' Check if x is logical
 #'
 #' @noRd
-check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NULL, call = caller_env(), ...) {
+check_logical <- function(x = NULL,
+                          null.ok = FALSE,
+                          n = NULL,
+                          arg = caller_arg(x),
+                          call = caller_env(),
+                          ...) {
   check_null(x, arg, null.ok, FALSE, call)
   null.ok <- is.null(x) && null.ok
 
@@ -137,8 +140,8 @@ check_logical <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, n = NU
   }
 
   cli_abort(
-    c("{.arg {arg}} must be a character vector.",
-      "i" = "You've supplied a {class(x)} object."
+    c("{.arg {arg}} must be {.cls logical}.",
+      "i" = "{.arg {arg}} has class {.cls {class(x)}}."
     ),
     call = call,
     ...
@@ -179,8 +182,8 @@ check_sf <- function(x,
   }
 
   cli_abort(
-    c("{.arg {arg}} must be a {.code sf} object.",
-      "i" = "You've supplied a {class(x)} object."
+    c("{.arg {arg}} must be {.cls {sf}}.",
+      "i" = "{.arg {arg}} is {.cls {class(x)}}."
     ),
     call = call,
     ...

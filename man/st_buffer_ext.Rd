@@ -19,7 +19,7 @@ st_buffer_ext(
 st_edge(x, dist = NULL, diag_ratio = NULL, unit = "meter", ...)
 }
 \arguments{
-\item{x}{sf or bbox object.}
+\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object or a list of \code{sf} objects.}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -35,17 +35,17 @@ to units matching GDAL units for x; defaults to "meter"}
 
 \item{dist_limits}{Numeric vector of any length (minimum and maximum values
 used as lower and upper limits on distance buffer). Units must match the
-provided units; defaults to NULL.}
+provided units; defaults to \code{NULL}.}
 
 \item{single_side}{If \code{TRUE}, single-sided buffers are returned for linear
 geometries, in which case negative dist values give buffers on the
 right-hand side, positive on the left.}
 
 \item{list.ok}{If \code{TRUE}, allow sf list objects as an input and use
-\link[purrr:map]{purrr::map} to apply the provided parameters to each object within the
+\code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the
 list to return as a new sf list object.}
 
-\item{...}{additional parameters passed to \link[sf:geos_unary]{sf::st_buffer}}
+\item{...}{additional parameters passed to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
 }
 \description{
 Return an sf object with a buffer based on \code{dist} or a proportion of the
@@ -54,7 +54,7 @@ the coordinate reference system is transformed into EPSG:3857 and then
 transformed back into the original CRS after the buffer has been applied.
 }
 \details{
-\link{st_edge} is a variation on \link{st_buffer_ext} where dist or diag_ratio is used to
+\code{\link[=st_edge]{st_edge()}} is a variation on \code{\link[=st_buffer_ext]{st_buffer_ext()}} where dist or diag_ratio is used to
 define the width of the edge to return either outside the existing geometry
 (for positive dist values) or inside the existing geometry (for negative dist
 values).

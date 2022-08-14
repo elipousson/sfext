@@ -11,23 +11,23 @@
 #'
 #' @param x A `sf` or `sfc` object or a data frame with lat/lon coordinates in a
 #'   single column or two separated columns.
-#' @param crs Cordinate reference system to return, Default: 4326 for [sf_to_df]
-#'   and NULL for [df_to_sf].
+#' @param crs Cordinate reference system to return, Default: 4326 for
+#'   [sf_to_df()] and NULL for [df_to_sf()].
 #' @param geometry Type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'.
 #' @param coords Coordinate columns for input dataframe or output sf object (if
 #'   geometry is 'centroid' or 'point') Default: c("lon", "lat").
-#' @param remove_coords For [df_to_sf], if `TRUE`, remove the coordinate columns
+#' @param remove_coords For [df_to_sf()], if `TRUE`, remove the coordinate columns
 #'   after converting a data frame to simple feature object; defaults to
 #'   `FALSE`.
 #' @param keep_all If `FALSE`, drop all columns other than those named in
 #'   coords, Default: `TRUE`.
 #' @param into If coords is a single column name with both longitude and
 #'   latitude, `into` is used as the names of the new columns that coords is
-#'   separated into. Passed to [tidyr::separate].
+#'   separated into. Passed to [tidyr::separate()].
 #' @param sep If coords is a single column name with both longitude and
 #'   latitude, `sep` is used as the separator between coordinate values. Passed
-#'   to [tidyr::separate].
+#'   to [tidyr::separate()].
 #' @return [sf_to_df()] returns a data frame with geometry dropped or converted
 #'   to wkt or coordinates for the centroid or point on surface; [df_to_sf()]
 #'   returns a simple feature object with POINT geometry.
@@ -59,15 +59,15 @@ sf_to_df <- function(x,
 
 #' @rdname sf_to_df
 #' @name df_to_sf
-#' @param from_crs For [df_to_sf], coordinate reference system used by
+#' @param from_crs For [df_to_sf()], coordinate reference system used by
 #'   coordinates or well known text in data frame.
-#' @param geo If `TRUE`, use [address_to_sf] to geocode address column; defaults
+#' @param geo If `TRUE`, use [address_to_sf()] to geocode address column; defaults
 #'   to `FALSE`.
-#' @param address Address column name passed to [tidygeocoder::geocode] or
+#' @param address Address column name passed to [tidygeocoder::geocode()] or
 #'   [tidygeocoder::geo]
-#' @param y A sf object passed as y argument to [dplyr::left_join].
+#' @param y A sf object passed as y argument to [dplyr::left_join()].
 #' @param by A character vector of variables to join by passed to
-#'   [dplyr::left_join].
+#'   [dplyr::left_join()].
 #' @seealso
 #'  [ggspatial::df_spatial()]
 #'  [sf::st_as_sf()]
@@ -151,8 +151,8 @@ coords_df_to_sf <- function(x, coords = c("lon", "lat"), into = NULL, sep = ",",
 
 #' @rdname sf_to_df
 #' @name check_coords
-#' @param default c("lon", "lat").
-#' @param rev If `TRUE`, reverse c("lat", "lon") coords to c("lon", "lat").
+#' @param default Default coordinate values; defaults to `c("lon", "lat")`.
+#' @param rev If `TRUE`, reverse `c("lat", "lon")` coords to `c("lon", "lat")`.
 #'   [check_coords] only.
 #' @export
 #' @importFrom janitor make_clean_names
@@ -196,7 +196,8 @@ check_coords <- function(x = NULL, coords = NULL, default = c("lon", "lat"), rev
 
 #' @rdname sf_to_df
 #' @name has_coords
-#' @param value If TRUE, return the value of the coordinate column names. Used by [has_coords].
+#' @param value If `TRUE`, return the value of the coordinate column names. Used
+#'   by [has_coords()].
 #' @export
 #' @importFrom janitor clean_names
 #' @importFrom dplyr case_when
@@ -313,10 +314,10 @@ format_coords <- function(x, coords = c("lon", "lat")) {
 #' Use tidygeocoder to convert an address or data frame with an address column
 #' to an sf object
 #'
-#' Wraps [tidygeocoder::geo] and [tidygeocoder::geocode] to convert a character
-#' string or a data frame with an address column. Additional parameters passed
-#' to [tidygeocoder::geocode] which passes ... parameters to
-#' [tidygeocoder::geo].
+#' Wraps [tidygeocoder::geo()] and [tidygeocoder::geocode()] to convert a
+#' character string or a data frame with an address column. Additional
+#' parameters passed to [tidygeocoder::geocode()] which passes `...` parameters to
+#' [tidygeocoder::geo()].
 #'
 #' @param x Data frame with an address column. Multiple address columns are not currently supported.
 #' @param address Address column name, Default: 'address'

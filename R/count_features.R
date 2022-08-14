@@ -1,13 +1,13 @@
 #' Count simple features based on relationship with a second simple feature object
 #'
-#' Use [st_join_ext] and [dplyr::count] to count features in x based on their
+#' Use [st_join_ext()] and [dplyr::count()] to count features in x based on their
 #' spatial relationship with y.
 #'
 #' @param x Data frame or `sf` object, Default: `NULL`
 #' @param y Length 1 named `sf` list (name of y is used as count if count is
 #'   `NULL`) or a `sf` object if nm is not `NULL`. y must include a column name
 #'   matching the value of .id. If y is `NULL`, count is required. Default: `NULL`
-#' @param nm Vector of names to use with [as_sf_list] to convert y to an sf list
+#' @param nm Vector of names to use with [as_sf_list()] to convert y to an sf list
 #'   (if y is not already an sf list). Defaults to "data".
 #' @inheritParams st_join_ext
 #' @inheritParams df_to_sf
@@ -16,7 +16,7 @@
 #' @inheritParams dplyr::count
 #' @param geometry If "y", replace x geometry with y geometry joining based on
 #'   by. If by is `NULL`, by is set to the same value as count.
-#' @param ... Additional parameters passed to [st_join_ext]
+#' @param ... Additional parameters passed to [st_join_ext()]
 #' @export
 #' @importFrom sf st_drop_geometry
 #' @importFrom dplyr count rename

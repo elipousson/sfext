@@ -1,4 +1,3 @@
-
 #' Make file name and path with optional label, prefix, or postfix
 #'
 #' A helper function to create consistent file names for plots created with data

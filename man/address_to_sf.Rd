@@ -46,12 +46,12 @@ services have different columns that they return.
 \item{coords}{Coordinate columns for input dataframe or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 
-\item{remove_coords}{For \link{df_to_sf}, if \code{TRUE}, remove the coordinate columns
+\item{remove_coords}{For \code{\link[=df_to_sf]{df_to_sf()}}, if \code{TRUE}, remove the coordinate columns
 after converting a data frame to simple feature object; defaults to
 \code{FALSE}.}
 
-\item{crs}{Cordinate reference system to return, Default: 4326 for \link{sf_to_df}
-and NULL for \link{df_to_sf}.}
+\item{crs}{Cordinate reference system to return, Default: 4326 for
+\code{\link[=sf_to_df]{sf_to_df()}} and NULL for \code{\link[=df_to_sf]{df_to_sf()}}.}
 
 \item{...}{
   Arguments passed on to \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode}}
@@ -83,10 +83,10 @@ return_input will be set to FALSE.}
 A \code{sf} object with POINT geometry for all geocoded addresses with valid coordinates.
 }
 \description{
-Wraps \link[tidygeocoder:geo]{tidygeocoder::geo} and \link[tidygeocoder:geocode]{tidygeocoder::geocode} to convert a character
-string or a data frame with an address column. Additional parameters passed
-to \link[tidygeocoder:geocode]{tidygeocoder::geocode} which passes ... parameters to
-\link[tidygeocoder:geo]{tidygeocoder::geo}.
+Wraps \code{\link[tidygeocoder:geo]{tidygeocoder::geo()}} and \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode()}} to convert a
+character string or a data frame with an address column. Additional
+parameters passed to \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode()}} which passes \code{...} parameters to
+\code{\link[tidygeocoder:geo]{tidygeocoder::geo()}}.
 }
 \seealso{
 \code{\link[tidygeocoder:geo]{tidygeocoder::geo()}}, \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode()}}

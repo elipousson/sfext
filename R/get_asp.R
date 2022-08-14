@@ -1,4 +1,3 @@
-
 #' Get aspect ratio from string or based on specific paper and margins
 #'
 #' @param asp Aspect ratio of width to height as a numeric value (e.g. 0.33) or

@@ -86,7 +86,7 @@ be provided as part of the filename, e.g. "data.geojson". If a filename
 includes a filetype and a separate filetype is also provided, the separate
 filetype parameter is used. Supported filetypes includes "csv", "xlsx",
 "gsheet" (writes a Google Sheet), "rda", or any filetype supported by the
-available drivers (use \link[sf:st_drivers]{sf::st_drivers} to list drivers).}
+available drivers (use \code{\link[sf:st_drivers]{sf::st_drivers()}} to list drivers).}
 
 \item{path}{Path to file or data directory.}
 
@@ -100,12 +100,12 @@ defaults to \code{FALSE}.}
 cached files that use the same file name.}
 
 \item{...}{If data is an sf object and the filetype is "csv" or "xlsx", the
-... parameters are passed to \link{sf_to_df} or to \link[sf:st_write]{sf::write_sf} otherwise. If
-filetype is "rda" ... parameters are passed to \link[readr:read_rds]{readr::write_rds}.}
+... parameters are passed to \code{\link[=sf_to_df]{sf_to_df()}} or to \code{\link[sf:st_write]{sf::write_sf()}} otherwise. If
+filetype is "rda" ... parameters are passed to \code{\link[readr:read_rds]{readr::write_rds()}}.}
 
-\item{data_dir}{cache data directory, defaults to \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
-when data_dir is \code{NULL}. (only used for \link{write_sf_cache}; default is used
-when \code{cache = TRUE} for \link{write_sf_ext})}
+\item{data_dir}{cache data directory, defaults to \code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}
+when data_dir is \code{NULL}. (only used for \code{\link[=write_sf_cache]{write_sf_cache()}}; default is used
+when \code{cache = TRUE} for \code{\link[=write_sf_ext]{write_sf_ext()}})}
 
 \item{create}{If \code{FALSE} and path does not exist, return path with a warning.
 If \code{TRUE} and \link[rlang:is_interactive]{rlang::is_interactive} is \code{TRUE}, ask user if directory
@@ -133,17 +133,17 @@ the column name provided to key. Defaults to \code{FALSE}.}
 provided data.}
 }
 \description{
-The write_sf_ext and write_sf_cache helper functions wrap the \link[sf:st_write]{sf::write_sf}
+The write_sf_ext and write_sf_cache helper functions wrap the \code{\link[sf:st_write]{sf::write_sf()}}
 function to provide some additional options including consistent file naming
-with \link{make_filename} and features including:
+with \code{\link[=make_filename]{make_filename()}} and features including:
 }
 \details{
 \itemize{
 \item If filetype is "csv", "xlsx", or "gsheet" the file is converted to a
-dataframe using \link{df_to_sf}
-\item If the data is not an sf object and none of these filenames are provided,
-the user is prompted to save the file as an rda file with \link[readr:read_rds]{readr::write_rds}.
-\item If cache is \code{TRUE} use \link{write_sf_cache} to cache file after writing a copy to
+dataframe using \code{\link[=df_to_sf]{df_to_sf()}}
+\item If the data is not an \code{sf} object and none of these filenames are provided,
+the user is prompted to save the file as an rda file with \code{\link[readr:read_rds]{readr::write_rds()}}.
+\item If cache is \code{TRUE} use \code{\link[=write_sf_cache]{write_sf_cache()}} to cache file after writing a copy to
 the path provided.
 \item If data is a named sf list, pass the name of each sf object in the list to
 the name parameter and keep all other parameters consistent to write a file

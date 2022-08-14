@@ -1,19 +1,20 @@
 #' Filter, crop, trim, or erase a simple feature object or list
 #'
 #' @param x,y A `sf`, `sfc`, or `bbox` object. x may also be a `sf` list
-#'   objects. If x is an `sf` list, additional parameters in ... will be ignored.
+#'   objects. If x is an `sf` list, additional parameters in `...` will be ignored.
 #' @param crop  If `TRUE`, x is cropped to y using [sf::st_crop()].
 #' @param trim  If `TRUE`, x is trimmed to y with [st_trim()].
 #' @param erase If `TRUE`, x is erased by y with [st_erase()].
 #' @param crs Coordinate reference system to return.
 #' @param .predicate geometry predicate function with the same profile as
 #'   [sf::st_intersects()]; see details for [sf::st_filter()] for more options.
-#' @param geom_type Character string passed to type argument of [is_geom_type]
+#' @param geom_type Character string passed to type argument of [is_geom_type()]
 #'   to filter features to only those matching the specified geometry type.
-#' @param null.ok If y is `NULL` and null.ok is `TRUE`, x is returned without
+#' @param null.ok If `y = NULL` and `null.ok = TRUE`, x is returned without
 #'   changes. Defaults to `TRUE`.
-#' @param list.ok If `TRUE`, x can be a list of sf, sfc, or bbox objects. If
-#'   `FALSE`, only sf, sfc, or bbox objects are supported. Defaults to `TRUE`.
+#' @param list.ok If `TRUE`, x can be a list of `sf`, `sfc`, or `bbox` objects.
+#'   If `FALSE`, only `sf`, `sfc`, or `bbox` objects are supported. Defaults to
+#'   `TRUE`.
 #' @inheritDotParams sf::st_filter -x -y
 #' @name st_filter_ext
 #' @export

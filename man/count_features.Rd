@@ -25,18 +25,18 @@ count_features(
 \code{NULL}) or a \code{sf} object if nm is not \code{NULL}. y must include a column name
 matching the value of .id. If y is \code{NULL}, count is required. Default: \code{NULL}}
 
-\item{nm}{Vector of names to use with \link{as_sf_list} to convert y to an sf list
+\item{nm}{Vector of names to use with \code{\link[=as_sf_list]{as_sf_list()}} to convert y to an sf list
 (if y is not already an sf list). Defaults to "data".}
 
 \item{join}{geometry predicate function; defaults to \code{NULL}, set to
-\link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON
-objects or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}
+\code{\link[sf:geos_binary_pred]{sf::st_intersects()}} if y contains only POLYGON or MULTIPOLYGON
+objects or \code{\link[sf:st_nearest_feature]{sf::st_nearest_feature()}} if y contains other types.}
 
 \item{.id}{Column name with the values that should be added as a column to
 the input \code{sf} object.}
 
 \item{by}{A character vector of variables to join by passed to
-\link[dplyr:mutate-joins]{dplyr::left_join}.}
+\code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.}
 
 \item{count}{Name of column to count. If \code{NULL}, count is set to \code{names(y)}
 (assuming y is a length 1 named \code{sf} list).}
@@ -51,9 +51,9 @@ it will error, and require you to specify the name.}
 \item{geometry}{If "y", replace x geometry with y geometry joining based on
 by. If by is \code{NULL}, by is set to the same value as count.}
 
-\item{...}{Additional parameters passed to \link{st_join_ext}}
+\item{...}{Additional parameters passed to \code{\link[=st_join_ext]{st_join_ext()}}}
 }
 \description{
-Use \link{st_join_ext} and \link[dplyr:count]{dplyr::count} to count features in x based on their
+Use \code{\link[=st_join_ext]{st_join_ext()}} and \code{\link[dplyr:count]{dplyr::count()}} to count features in x based on their
 spatial relationship with y.
 }

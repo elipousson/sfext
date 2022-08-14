@@ -20,7 +20,7 @@ st_filter_ext(
 }
 \arguments{
 \item{x, y}{A \code{sf}, \code{sfc}, or \code{bbox} object. x may also be a \code{sf} list
-objects. If x is an \code{sf} list, additional parameters in ... will be ignored.}
+objects. If x is an \code{sf} list, additional parameters in \code{...} will be ignored.}
 
 \item{crop}{If \code{TRUE}, x is cropped to y using \code{\link[sf:st_crop]{sf::st_crop()}}.}
 
@@ -33,14 +33,15 @@ objects. If x is an \code{sf} list, additional parameters in ... will be ignored
 \item{.predicate}{geometry predicate function with the same profile as
 \code{\link[sf:geos_binary_pred]{sf::st_intersects()}}; see details for \code{\link[sf:st_join]{sf::st_filter()}} for more options.}
 
-\item{geom_type}{Character string passed to type argument of \link{is_geom_type}
+\item{geom_type}{Character string passed to type argument of \code{\link[=is_geom_type]{is_geom_type()}}
 to filter features to only those matching the specified geometry type.}
 
-\item{null.ok}{If y is \code{NULL} and null.ok is \code{TRUE}, x is returned without
+\item{null.ok}{If \code{y = NULL} and \code{null.ok = TRUE}, x is returned without
 changes. Defaults to \code{TRUE}.}
 
-\item{list.ok}{If \code{TRUE}, x can be a list of sf, sfc, or bbox objects. If
-\code{FALSE}, only sf, sfc, or bbox objects are supported. Defaults to \code{TRUE}.}
+\item{list.ok}{If \code{TRUE}, x can be a list of \code{sf}, \code{sfc}, or \code{bbox} objects.
+If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supported. Defaults to
+\code{TRUE}.}
 
 \item{...}{
   Arguments passed on to \code{\link[sf:st_join]{sf::st_filter}}

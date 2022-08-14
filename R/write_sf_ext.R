@@ -1,14 +1,14 @@
 #' Write or cache a simple feature object to a file
 #'
-#' The write_sf_ext and write_sf_cache helper functions wrap the [sf::write_sf]
+#' The write_sf_ext and write_sf_cache helper functions wrap the [sf::write_sf()]
 #' function to provide some additional options including consistent file naming
-#' with [make_filename] and features including:
+#' with [make_filename()] and features including:
 #'
 #' - If filetype is "csv", "xlsx", or "gsheet" the file is converted to a
-#' dataframe using [df_to_sf]
-#' - If the data is not an sf object and none of these filenames are provided,
-#' the user is prompted to save the file as an rda file with [readr::write_rds].
-#' - If cache is `TRUE` use [write_sf_cache] to cache file after writing a copy to
+#' dataframe using [df_to_sf()]
+#' - If the data is not an `sf` object and none of these filenames are provided,
+#' the user is prompted to save the file as an rda file with [readr::write_rds()].
+#' - If cache is `TRUE` use [write_sf_cache()] to cache file after writing a copy to
 #' the path provided.
 #' - If data is a named sf list, pass the name of each sf object in the list to
 #' the name parameter and keep all other parameters consistent to write a file
@@ -22,10 +22,10 @@
 #'   includes a filetype and a separate filetype is also provided, the separate
 #'   filetype parameter is used. Supported filetypes includes "csv", "xlsx",
 #'   "gsheet" (writes a Google Sheet), "rda", or any filetype supported by the
-#'   available drivers (use [sf::st_drivers] to list drivers).
-#' @param data_dir cache data directory, defaults to [rappdirs::user_cache_dir]
-#'   when data_dir is `NULL`. (only used for [write_sf_cache]; default is used
-#'   when `cache = TRUE` for [write_sf_ext])
+#'   available drivers (use [sf::st_drivers()] to list drivers).
+#' @param data_dir cache data directory, defaults to [rappdirs::user_cache_dir()]
+#'   when data_dir is `NULL`. (only used for [write_sf_cache()]; default is used
+#'   when `cache = TRUE` for [write_sf_ext()])
 #' @param overwrite Logical. Default `FALSE`. If `TRUE`, overwrite any existing
 #'   cached files that use the same file name.
 #' @param cache If `TRUE`, write `sf` object to file in cache directory;
@@ -33,8 +33,8 @@
 #' @inheritParams make_filename
 #' @inheritParams write_sf_cache
 #' @param ... If data is an sf object and the filetype is "csv" or "xlsx", the
-#'   ... parameters are passed to [sf_to_df] or to [sf::write_sf] otherwise. If
-#'   filetype is "rda" ... parameters are passed to [readr::write_rds].
+#'   ... parameters are passed to [sf_to_df()] or to [sf::write_sf()] otherwise. If
+#'   filetype is "rda" ... parameters are passed to [readr::write_rds()].
 #' @seealso
 #'  [sf::st_write()]
 #' @export

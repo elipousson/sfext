@@ -48,7 +48,7 @@ to units matching GDAL units for x; defaults to "meter"}
 \item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{NULL}.}
 
 \item{list.ok}{If \code{TRUE}, allow sf list objects as an input and use
-\link[purrr:map]{purrr::map} to apply the provided parameters to each object within the
+\code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the
 list to return as a new sf list object.}
 }
 \value{

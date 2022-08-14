@@ -7,9 +7,9 @@
 st_join_ext(x, y, col = NULL, .id = "name", join = NULL, ...)
 }
 \arguments{
-\item{x}{A sf, sfc, or bbox object.}
+\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object.}
 
-\item{y}{An sf object with a column named "name" or a list of sf
+\item{y}{An \code{sf} object with a column named "name" or a list of sf
 objects where all items in the list have a "name" column.}
 
 \item{col}{Column name used to convert y into a \code{sf} list if it is not
@@ -19,11 +19,11 @@ already.}
 the input \code{sf} object.}
 
 \item{join}{geometry predicate function; defaults to \code{NULL}, set to
-\link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON
-objects or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}
+\code{\link[sf:geos_binary_pred]{sf::st_intersects()}} if y contains only POLYGON or MULTIPOLYGON
+objects or \code{\link[sf:st_nearest_feature]{sf::st_nearest_feature()}} if y contains other types.}
 
-\item{...}{Additional parameters passed to \link[sf:st_join]{sf::st_join}}
+\item{...}{Additional parameters passed to \code{\link[sf:st_join]{sf::st_join()}}}
 }
 \description{
-Wrapper for \link[sf:st_join]{sf::st_join} that works with sf lists.
+Wrapper for \code{\link[sf:st_join]{sf::st_join()}} that works with sf lists.
 }

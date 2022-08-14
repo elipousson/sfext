@@ -39,8 +39,8 @@ has_coords(x, coords = NULL, value = TRUE)
 \item{x}{A \code{sf} or \code{sfc} object or a data frame with lat/lon coordinates in a
 single column or two separated columns.}
 
-\item{crs}{Cordinate reference system to return, Default: 4326 for \link{sf_to_df}
-and NULL for \link{df_to_sf}.}
+\item{crs}{Cordinate reference system to return, Default: 4326 for
+\code{\link[=sf_to_df]{sf_to_df()}} and NULL for \code{\link[=df_to_sf]{df_to_sf()}}.}
 
 \item{coords}{Coordinate columns for input dataframe or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").}
@@ -51,40 +51,41 @@ geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 \item{keep_all}{If \code{FALSE}, drop all columns other than those named in
 coords, Default: \code{TRUE}.}
 
-\item{from_crs}{For \link{df_to_sf}, coordinate reference system used by
+\item{from_crs}{For \code{\link[=df_to_sf]{df_to_sf()}}, coordinate reference system used by
 coordinates or well known text in data frame.}
 
 \item{into}{If coords is a single column name with both longitude and
 latitude, \code{into} is used as the names of the new columns that coords is
-separated into. Passed to \link[tidyr:separate]{tidyr::separate}.}
+separated into. Passed to \code{\link[tidyr:separate]{tidyr::separate()}}.}
 
 \item{sep}{If coords is a single column name with both longitude and
 latitude, \code{sep} is used as the separator between coordinate values. Passed
-to \link[tidyr:separate]{tidyr::separate}.}
+to \code{\link[tidyr:separate]{tidyr::separate()}}.}
 
-\item{rev}{If \code{TRUE}, reverse c("lat", "lon") coords to c("lon", "lat").
+\item{rev}{If \code{TRUE}, reverse \code{c("lat", "lon")} coords to \code{c("lon", "lat")}.
 \link{check_coords} only.}
 
-\item{remove_coords}{For \link{df_to_sf}, if \code{TRUE}, remove the coordinate columns
+\item{remove_coords}{For \code{\link[=df_to_sf]{df_to_sf()}}, if \code{TRUE}, remove the coordinate columns
 after converting a data frame to simple feature object; defaults to
 \code{FALSE}.}
 
-\item{geo}{If \code{TRUE}, use \link{address_to_sf} to geocode address column; defaults
+\item{geo}{If \code{TRUE}, use \code{\link[=address_to_sf]{address_to_sf()}} to geocode address column; defaults
 to \code{FALSE}.}
 
-\item{address}{Address column name passed to \link[tidygeocoder:geocode]{tidygeocoder::geocode} or
+\item{address}{Address column name passed to \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode()}} or
 \link[tidygeocoder:geo]{tidygeocoder::geo}}
 
-\item{y}{A sf object passed as y argument to \link[dplyr:mutate-joins]{dplyr::left_join}.}
+\item{y}{A sf object passed as y argument to \code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.}
 
 \item{by}{A character vector of variables to join by passed to
-\link[dplyr:mutate-joins]{dplyr::left_join}.}
+\code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.}
 
 \item{...}{Other parameters passed onto methods.}
 
-\item{default}{c("lon", "lat").}
+\item{default}{Default coordinate values; defaults to \code{c("lon", "lat")}.}
 
-\item{value}{If TRUE, return the value of the coordinate column names. Used by \link{has_coords}.}
+\item{value}{If \code{TRUE}, return the value of the coordinate column names. Used
+by \code{\link[=has_coords]{has_coords()}}.}
 }
 \value{
 \code{\link[=sf_to_df]{sf_to_df()}} returns a data frame with geometry dropped or converted
