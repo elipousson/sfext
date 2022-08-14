@@ -18,23 +18,23 @@ st_square(x, scale = 1, rotate = 0, inscribed = FALSE)
 
 st_inscribed_square(x, scale = 1, rotate = 0)
 
-st_circle(x, scale = 1, inscribed = FALSE, dTolerance = 0)
+st_circle(x, scale = 1, inscribed = FALSE, dTolerance = 0, union = TRUE, ...)
 
 st_circumscribed_circle(x, scale = 1)
 }
 \arguments{
-\item{x}{A sf, sfc, or bbox object}
+\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object}
 
 \item{scale}{numeric; scale factor, Default: 1}
 
 \item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
 
-\item{ext}{If \code{TRUE}, st_center returns a list with the centroid as a sfc
-object, as an sf object (with lon and lat values), the original geometry
-(x), and the original crs. objects; defaults TRUE. If \code{FALSE}, return an sf
+\item{ext}{If \code{TRUE}, st_center returns a list with the centroid as a \code{sfc}
+object, as an \code{sf} object (with lon and lat values), the original geometry
+(x), and the original crs. objects; defaults TRUE. If \code{FALSE}, return an \code{sf}
 object.}
 
-\item{...}{Additional parameters passed to \code{sf::st_centroid()} by st_center}
+\item{...}{Additional parameters passed to \code{\link[sf:geos_unary]{sf::st_centroid()}}}
 
 \item{inscribed}{If \code{TRUE}, make circle or square inscribed within x, if
 \code{FALSE}, make it circumscribed.}
@@ -47,8 +47,6 @@ meters.}
 }
 \description{
 Support both \code{bbox} and \code{sf} objects as inputs.
-}
-\details{
 \itemize{
 \item Scale or rotate a simple feature or bounding box object using affine
 transformations
@@ -57,7 +55,7 @@ transformations
 \item Get a circumscribed circle or inscribed circle in a \code{sf} object
 }
 
-st_inscribed_square wraps \code{sf::st_inscribed_circle()} but limits the circle
+st_inscribed_square wraps \code{\link[sf:geos_unary]{sf::st_inscribed_circle()}} but limits the circle
 to 1 segment per quadrant (\code{nQuadSegs = 1}) and then rotates the resulting
 geometry 45 degrees to provide a (mostly) inscribed square. A different
 rotation value can be provided to change the orientation of the shape, e.g.

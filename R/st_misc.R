@@ -1,5 +1,6 @@
 #' Modify the geometry of a simple feature or bounding box object
 #'
+#' @description
 #' Support both `bbox` and `sf` objects as inputs.
 #'
 #'  - Scale or rotate a simple feature or bounding box object using affine
@@ -8,14 +9,15 @@
 #'  - Get a circumscribed square or approximate inscribed square in a `sf` object
 #'  - Get a circumscribed circle or inscribed circle in a `sf` object
 #'
-#' st_inscribed_square wraps `sf::st_inscribed_circle()` but limits the circle
+#' st_inscribed_square wraps [sf::st_inscribed_circle()] but limits the circle
 #' to 1 segment per quadrant (`nQuadSegs = 1`) and then rotates the resulting
 #' geometry 45 degrees to provide a (mostly) inscribed square. A different
 #' rotation value can be provided to change the orientation of the shape, e.g.
 #' `rotate = -45` to return a diamond shape. [st_square()] wraps [st_bbox_ext()] with
 #' `asp = 1`.
+#'
 #' @example examples/st_misc.R
-#' @param x A sf, sfc, or bbox object
+#' @param x A `sf`, `sfc`, or `bbox` object
 #' @param scale numeric; scale factor, Default: 1
 #' @param rotate numeric; degrees to rotate (-360 to 360), Default: 0
 #' @param inscribed If `TRUE`, make circle or square inscribed within x, if
@@ -31,6 +33,10 @@ NULL
 #' @export
 #' @importFrom sf st_geometry st_crs
 st_scale_rotate <- function(x, scale = 1, rotate = 0) {
+  if ((scale == 1) && (rotate == 0)) {
+    return(x)
+  }
+
   x <- as_sf(x)
   crs <- sf::st_crs(x)
 
@@ -51,11 +57,11 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
 
 #' @rdname st_misc
 #' @name st_center
-#' @param ext If `TRUE`, st_center returns a list with the centroid as a sfc
-#'   object, as an sf object (with lon and lat values), the original geometry
-#'   (x), and the original crs. objects; defaults TRUE. If `FALSE`, return an sf
+#' @param ext If `TRUE`, st_center returns a list with the centroid as a `sfc`
+#'   object, as an `sf` object (with lon and lat values), the original geometry
+#'   (x), and the original crs. objects; defaults TRUE. If `FALSE`, return an `sf`
 #'   object.
-#' @param ... Additional parameters passed to `sf::st_centroid()` by st_center
+#' @param ... Additional parameters passed to [sf::st_centroid()]
 #' @export
 #' @importFrom sf st_crs st_geometry st_centroid st_sf
 st_center <- function(x,
@@ -132,30 +138,49 @@ st_inscribed_square <- function(x, scale = 1, rotate = 0) {
 #' @inheritParams sf::st_inscribed_circle
 #' @export
 #' @importFrom sf st_inscribed_circle
-st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0) {
+st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0, union = TRUE, ...) {
   check_sf(x, ext = TRUE)
 
   if (!is_sf(x)) {
     x <- as_sf(x)
   }
 
+  is_lonlat <- sf::st_is_longlat(x)
+
+  if (union) {
+    x <- sf::st_union(x)
+  }
+
+  if (is_lonlat) {
+    crs <- sf::st_crs(x)
+    x <- sf::st_transform(x, crs = 3857)
+  }
+
   if (inscribed) {
-    circle <-
+    x <-
       sf::st_inscribed_circle(
-        x = sf::st_union(x),
+        x,
         dTolerance = dTolerance
       )
 
-    return(st_scale_rotate(circle, scale = scale))
+    x <- st_scale_rotate(x, scale = scale)
+  } else {
+    radius <- sf_bbox_diagdist(as_bbox(x)) / 2
+    x <- suppressWarnings(sf::st_centroid(x))
+
+    x <-
+      st_buffer_ext(
+        x = x,
+        dist = radius * scale,
+        unit = NULL
+      )
   }
 
-  radius <- sf_bbox_diagdist(as_bbox(x)) / 2
-  center <- st_center(x, ext = FALSE)
+  if (is_lonlat) {
+    x <- sf::st_transform(x, crs = crs)
+  }
 
-  st_buffer_ext(
-    x = as_sf(center),
-    dist = radius * scale
-  )
+  x
 }
 
 #' @rdname st_misc
