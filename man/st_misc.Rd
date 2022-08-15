@@ -14,13 +14,13 @@ st_scale_rotate(x, scale = 1, rotate = 0)
 
 st_center(x, ext = TRUE, ...)
 
-st_square(x, scale = 1, rotate = 0, inscribed = FALSE)
+st_square(x, scale = 1, rotate = 0, inscribed = FALSE, by_feature = FALSE)
 
-st_inscribed_square(x, scale = 1, rotate = 0)
+st_inscribed_square(x, scale = 1, rotate = 0, by_feature = FALSE)
 
-st_circle(x, scale = 1, inscribed = FALSE, dTolerance = 0, union = TRUE, ...)
+st_circle(x, scale = 1, inscribed = FALSE, dTolerance = 0, by_feature = FALSE)
 
-st_circumscribed_circle(x, scale = 1)
+st_circumscribed_circle(x, scale = 1, dTolerance = 0, by_feature = FALSE)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object}

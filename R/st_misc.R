@@ -43,12 +43,12 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
   # rotate function (see here: https://r-spatial.github.io/sf/articles/sf3.html#affine-transformations
   rot <- function(a) matrix(c(cos(a), sin(a), -sin(a), cos(a)), 2, 2)
 
-  geometry <- as_sfc(x)
-  centroid <- suppressWarnings(sf::st_centroid(geometry))
-  geometry <- (geometry - centroid) * rot(pi / (360 / (rotate * 2)))
-  geometry <- geometry * scale + centroid
+  geom <- as_sfc(x)
+  centroid <- suppressWarnings(sf::st_centroid(geom))
+  geom <- (geom - centroid) * rot(pi / (360 / (rotate * 2)))
+  geom <- geom * scale + centroid
 
-  sf::st_geometry(x) <- geometry
+  sf::st_geometry(x) <- geom
   sf::st_crs(x) <- crs
 
   x
@@ -89,7 +89,7 @@ st_center <- function(x,
 #' @export
 #' @importFrom sf st_is_longlat st_inscribed_circle st_geometry st_dimension st_set_geometry
 #' @importFrom purrr discard
-st_square <- function(x, scale = 1, rotate = 0, inscribed = FALSE) {
+st_square <- function(x, scale = 1, rotate = 0, inscribed = FALSE, by_feature = FALSE) {
   check_sf(x, ext = TRUE)
 
   if (!is_sf(x)) {
@@ -99,38 +99,51 @@ st_square <- function(x, scale = 1, rotate = 0, inscribed = FALSE) {
   is_lonlat <- sf::st_is_longlat(x)
 
   if (is_lonlat) {
-    crs <- sf::st_crs(x)
+    lonlat_crs <- sf::st_crs(x)
     x <- sf::st_transform(x, crs = 3857)
   }
 
+  crs <- sf::st_crs(x)
+
+  if (!by_feature) {
+    x <- st_union_ext(x, name_col = NULL)
+  }
+
   if (inscribed) {
-    geom <- sf::st_inscribed_circle(as_sfc(x), nQuadSegs = 1)
+    geom <- sf::st_inscribed_circle(as_sfc(x, crs = crs), nQuadSegs = 1)
     geom <- purrr::discard(geom, ~ is.na(sf::st_dimension(.x)))
-    x <- sf::st_set_geometry(x, geom)
     rotate <- rotate + 45
   } else {
-    x <-
-      st_bbox_ext(
-        x = x,
-        asp = 1,
-        class = "sf"
+    geom <-
+      purrr::map_dfr(
+        sf::st_geometry(x),
+        ~ st_bbox_ext(
+          x = .x,
+          asp = 1,
+          class = "sf",
+          crs = crs
+        )
       )
+
+    geom <- sf::st_as_sfc(geom)
   }
+
+  x <- sf::st_set_geometry(x, geom)
 
   square <- st_scale_rotate(x, rotate = rotate, scale = scale)
 
   if (is_lonlat) {
-    square <- sf::st_transform(square, crs = crs)
+    square <- sf::st_transform(square, crs = lonlat_crs)
   }
 
-  return(square)
+  square
 }
 
 #' @rdname st_misc
 #' @name st_inscribed_square
 #' @export
-st_inscribed_square <- function(x, scale = 1, rotate = 0) {
-  st_square(x = x, scale = scale, rotate = rotate, inscribed = TRUE)
+st_inscribed_square <- function(x, scale = 1, rotate = 0, by_feature = FALSE) {
+  st_square(x = x, scale = scale, rotate = rotate, inscribed = TRUE, by_feature = by_feature)
 }
 
 #' @rdname st_misc
@@ -138,46 +151,70 @@ st_inscribed_square <- function(x, scale = 1, rotate = 0) {
 #' @inheritParams sf::st_inscribed_circle
 #' @export
 #' @importFrom sf st_inscribed_circle
-st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0, union = TRUE, ...) {
+st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0, by_feature = FALSE) {
   check_sf(x, ext = TRUE)
 
   if (!is_sf(x)) {
     x <- as_sf(x)
   }
 
+  crs <- sf::st_crs(x)
   is_lonlat <- sf::st_is_longlat(x)
 
-  if (union) {
-    x <- sf::st_union(x)
-  }
-
   if (is_lonlat) {
-    crs <- sf::st_crs(x)
+    lonlat_crs <- sf::st_crs(x)
     x <- sf::st_transform(x, crs = 3857)
   }
 
+  geom <- as_sfc(x)
+
+  if (!by_feature) {
+    geom <- sf::st_union(x)
+    if (is_multipolygon(geom)) {
+      sf::st_cast(geom, to = "POLYGON")
+    }
+  }
+
   if (inscribed) {
-    x <-
-      sf::st_inscribed_circle(
-        x,
-        dTolerance = dTolerance
-      )
-
-    x <- st_scale_rotate(x, scale = scale)
+    geom <- sf::st_inscribed_circle(geom, dTolerance = dTolerance)
+    geom <- purrr::discard(geom, ~ is.na(sf::st_dimension(.x)))
   } else {
-    radius <- sf_bbox_diagdist(as_bbox(x)) / 2
-    x <- suppressWarnings(sf::st_centroid(x))
+    if (by_feature) {
+      radius <- purrr::map_dbl(geom, ~ sf_bbox_diagdist(as_bbox(.x)) / 2)
+      geom <-
+        sf::st_as_sfc(
+          purrr::map2(
+            sf::st_centroid(geom),
+            radius,
+            ~ sf::st_buffer(
+              x = .x,
+              dist = .y * scale,
+              unit = NULL
+            )
+          ),
+          crs = crs
+        )
+    } else {
+      radius <- sf_bbox_diagdist(as_bbox(geom), drop = TRUE) / 2
 
-    x <-
-      st_buffer_ext(
-        x = x,
-        dist = radius * scale,
-        unit = NULL
-      )
+      geom <-
+        sf::st_buffer(
+          x = sf::st_centroid(geom),
+          dist = radius * scale,
+          units = get_dist_units(crs)
+        )
+    }
+  }
+
+  if (!by_feature) {
+    x <- st_union_ext(x, name_col = NULL)
+    sf::st_geometry(x) <- geom
+  } else {
+    x <- as_sf(geom)
   }
 
   if (is_lonlat) {
-    x <- sf::st_transform(x, crs = crs)
+    x <- sf::st_transform(x, crs = lonlat_crs)
   }
 
   x
@@ -186,6 +223,6 @@ st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0, union = T
 #' @rdname st_misc
 #' @name st_circumscribed_circle
 #' @export
-st_circumscribed_circle <- function(x, scale = 1) {
-  st_circle(x = x, scale = scale, inscribed = FALSE)
+st_circumscribed_circle <- function(x, scale = 1, dTolerance = 0, by_feature = FALSE) {
+  st_circle(x = x, scale = scale, inscribed = FALSE, dTolerance = dTolerance, by_feature = by_feature)
 }
