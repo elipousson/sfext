@@ -6,7 +6,7 @@ is_class <- function(x, classes = NULL, null.ok = FALSE) {
     return(TRUE)
   }
 
-  any(classes %in% class(x))
+  inherits(x, classes)
 }
 
 #' Is this a GeoJSON file path or url?
