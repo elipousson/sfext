@@ -332,23 +332,25 @@ write_sf_types <- function(data,
         is_excel_path(filename) && is.data.frame(data) ~ "df_excel",
         TRUE ~ "rda"
       )
+  }
 
-    if (type == "rda") {
+  if (type == "rda") {
+    if (!(filetype %in% c("rda", "rds", "RData"))) {
       ask <-
         is_interactive() &&
-          cli_yeah(
-            c("{.arg data} is not a simple feature object.",
-              ">" = "Do you want to save {.arg data} as a RDA file?"
-            )
+        cli_yeah(
+          c("{.arg data} is not a simple feature object.",
+            ">" = "Do you want to save {.arg data} as a RDA file?"
           )
+        )
 
       if (!ask) {
         invisible(return(NULL))
       }
-
-      path <- str_remove_filetype(path, filetype)
-      path <- str_add_filetype(path, "rda")
     }
+
+    path <- str_remove_filetype(path, filetype)
+    path <- str_add_filetype(path, "rda")
   }
 
   # Check if readr is installed
