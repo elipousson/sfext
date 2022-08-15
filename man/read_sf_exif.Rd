@@ -13,6 +13,7 @@ read_sf_exif(
   bbox = NULL,
   sort = "lon",
   tags = NULL,
+  geometry = TRUE,
   ...
 )
 
@@ -31,7 +32,7 @@ write_exif_keywords(
   path,
   filetype = NULL,
   key_list,
-  key_col = "name",
+  .id = "name",
   keywords = NULL,
   join = NULL,
   overwrite = TRUE
@@ -52,6 +53,9 @@ returned data will match the crs of the bbox.}
 
 \item{tags}{Optional list of EXIF tags to read from files. Must include GPS
 tags to create an sf object.}
+
+\item{geometry}{If \code{TRUE} (defualt), return a simple feature object. If
+\code{FALSE}, return a data.frame.}
 
 \item{...}{Additional EXIF tags to pass to \link[exiftoolr:exif_read]{exiftoolr::exif_read}}
 
@@ -74,7 +78,7 @@ provided fields; defaults to TRUE}
 
 \item{key_list}{List of sf objects with features with keywords, e.g. boundaries}
 
-\item{key_col}{Column name in key_list with the values to use for keywords.}
+\item{.id}{Column name in key_list with the values to use for keywords.}
 
 \item{join}{geometry predicate function; defaults to \code{NULL}, set to
 \link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON objects

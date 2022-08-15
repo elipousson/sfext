@@ -14,6 +14,8 @@
 #'   (default), "lat", or "filename"
 #' @param tags Optional list of EXIF tags to read from files. Must include GPS
 #'   tags to create an sf object.
+#' @param geometry If `TRUE` (defualt), return a simple feature object. If
+#'   `FALSE`, return a data.frame.
 #' @param ... Additional EXIF tags to pass to [exiftoolr::exif_read]
 #' @family read_write
 #' @example examples/read_sf_exif.R
@@ -29,6 +31,7 @@ read_sf_exif <- function(path = NULL,
                          bbox = NULL,
                          sort = "lon",
                          tags = NULL,
+                         geometry = TRUE,
                          ...) {
   is_pkg_installed("exiftoolr")
 
@@ -63,8 +66,13 @@ read_sf_exif <- function(path = NULL,
         "*GPS*",
         ...
       )
-  } else if (!any(grepl("GPS", tags))) {
-    cli_warn("The tags must include GPS values to create a simple feature object based on the file EXIF data.")
+  } else if (!all(c("GPSLatitude", "GPSLongitude") %in% tags)) {
+    cli_warn(
+      c("{.arg tags} must be include {.val {c('GPSLatitude', 'GPSLongitude')}}
+        to create a {.cls sf} object from EXIF metadata.",
+        "i" = "Provided {.arg tags} are {.val {tags}}."
+      )
+    )
   }
 
   file_list <- get_path_file_list(path, filetype)
@@ -88,42 +96,30 @@ read_sf_exif <- function(path = NULL,
       ~ sub("^gps_", "", .x)
     )
 
-  if (has_name(data, "image_description")) {
-    data <-
-      dplyr::rename(
-        data,
-        description = image_description
-      )
-  }
+  xwalk <-
+    list(
+      "description" = "image_description",
+      "lon" = "longitude",
+      "lat" = "latitude",
+      "lon_ref" = "longitude_ref",
+      "lat_ref" = "latitude_ref",
+      "path" = "source_file",
+      "img_width" = "image_width",
+      "img_height" = "image_height",
+      "exif_orientation" = "orientation"
+    )
 
-  if (all(has_name(data, c("latitude", "longitude")))) {
-    data <-
-      dplyr::rename(
-        data,
-        lon = longitude,
-        lat = latitude
-      )
-  }
+  xwalk <- xwalk[rlang::has_name(data, xwalk)]
 
-  if (all(has_name(data, c("longitude_ref", "latitude_ref", "img_direction", "img_direction_ref", "source_file")))) {
-    data <-
-      dplyr::rename(
-        data,
-        lon_ref = longitude_ref,
-        lat_ref = latitude_ref,
-        path = source_file
-      )
-  }
+  data <-
+    # Rename variables
+    dplyr::rename_with(
+      data,
+      ~ names(xwalk)[which(xwalk == .x)],
+      .cols = as.character(xwalk)
+    )
 
-  if (all(has_name(data, c("orientation", "image_width", "image_height")))) {
-    data <-
-      dplyr::rename(
-        data,
-        img_width = image_width,
-        img_height = image_height,
-        exif_orientation = orientation
-      )
-
+  if (all(rlang::has_name(data, c("exif_orientation", "img_width", "img_width")))) {
     data <-
       dplyr::mutate(
         data,
@@ -147,19 +143,13 @@ read_sf_exif <- function(path = NULL,
       )
   }
 
-  crs <- NULL
-
-  if (!is.null(bbox)) {
-    crs <- sf::st_crs(bbox)
-  }
-
-  data <- df_to_sf(data, from_crs = 4326, crs = crs)
-
-  data <- sort_features(data, sort = sort)
-
-  if (is.null(bbox)) {
+  if (!geometry) {
     return(data)
   }
+
+  data <- df_to_sf(data, from_crs = 4326, crs = bbox)
+
+  data <- sort_features(data, sort = sort)
 
   st_filter_ext(data, bbox)
 }
@@ -196,9 +186,11 @@ get_path_filetype <- function(path, filetype = NULL) {
 #' @noRd
 get_path_file_list <- function(path, filetype = NULL, full.names = TRUE) {
   filetype <- get_path_filetype(path, filetype)
-  list.files(path = path,
-             pattern = glue("\\.{filetype}$"),
-             full.names = full.names)
+  list.files(
+    path = path,
+    pattern = glue("\\.{filetype}$"),
+    full.names = full.names
+  )
 }
 
 #' @name write_exif
@@ -293,7 +285,7 @@ write_exif <- function(path = NULL,
 #' @name write_exif_keywords
 #' @rdname read_sf_exif
 #' @param key_list List of sf objects with features with keywords, e.g. boundaries
-#' @param key_col Column name in key_list with the values to use for keywords.
+#' @param .id Column name in key_list with the values to use for keywords.
 #' @param join geometry predicate function; defaults to `NULL`, set to
 #'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON objects
 #'   or [sf::st_nearest_feature] if key_list contains other types.
@@ -304,12 +296,12 @@ write_exif <- function(path = NULL,
 write_exif_keywords <- function(path,
                                 filetype = NULL,
                                 key_list,
-                                key_col = "name",
+                                .id = "name",
                                 keywords = NULL,
                                 join = NULL,
                                 overwrite = TRUE) {
   data <- read_sf_exif(path = path, filetype = filetype)
-  data <- has_same_name_col(data, col = key_col)
+  data <- has_same_name_col(data, col = .id)
 
   file_list <- get_path_file_list(path, filetype)
   key_list <- as_sf_list(key_list, nm = NULL, crs = data)
@@ -322,7 +314,7 @@ write_exif_keywords <- function(path,
       ~ sf::st_drop_geometry(
         sf::st_join(
           data,
-          dplyr::select(.x, dplyr::all_of(key_col)),
+          dplyr::select(.x, dplyr::all_of(.id)),
           join = join
         )
       ),
@@ -338,7 +330,7 @@ write_exif_keywords <- function(path,
   data <-
     dplyr::summarize(
       data,
-      keywords = list(unique(keywords, .data[[key_col]]))
+      keywords = list(unique(keywords, .data[[.id]]))
     )
 
   purrr::walk2(
