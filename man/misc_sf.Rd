@@ -5,6 +5,7 @@
 \alias{transform_sf}
 \alias{relocate_sf_col}
 \alias{rename_sf_col}
+\alias{get_sf_col}
 \title{Additional utility functions for sf objects}
 \usage{
 transform_sf(x, crs = NULL, null.ok = TRUE, ...)
@@ -12,16 +13,18 @@ transform_sf(x, crs = NULL, null.ok = TRUE, ...)
 relocate_sf_col(x, .after = dplyr::everything())
 
 rename_sf_col(x, sf_col = "geometry")
+
+get_sf_col(x = NULL)
 }
 \arguments{
-\item{x}{A \code{sf} object.}
+\item{x}{A \code{sf} or \code{sfc} object.}
 
-\item{crs}{A coordinate reference system or an sf, sfc, or bbox object
-returns a crs from \link[sf:st_crs]{sf::st_crs}.}
+\item{crs}{A coordinate reference system identifier (numeric or character) or
+a \code{sf}, \code{sfc}, \code{bbox}, or \code{crs} class object supported by \code{\link[sf:st_crs]{sf::st_crs()}}.}
 
 \item{null.ok}{If \code{TRUE} and x is \code{NULL}, return x.}
 
-\item{...}{Additional parameters passed to \link[sf:st_transform]{sf::st_transform}}
+\item{...}{Additional parameters passed to \code{\link[sf:st_transform]{sf::st_transform()}}}
 
 \item{.after}{The location to place sf column after; defaults to
 \link[dplyr:reexports]{dplyr::everything}.}
