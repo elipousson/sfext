@@ -194,9 +194,11 @@ get_path_filetype <- function(path, filetype = NULL) {
 
 #' Get list of files at a path (using a single file type at a time)
 #' @noRd
-get_path_file_list <- function(path, filetype = NULL) {
+get_path_file_list <- function(path, filetype = NULL, full.names = TRUE) {
   filetype <- get_path_filetype(path, filetype)
-  list.files(path = path, pattern = glue("\\.{filetype}$"))
+  list.files(path = path,
+             pattern = glue("\\.{filetype}$"),
+             full.names = full.names)
 }
 
 #' @name write_exif
