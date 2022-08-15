@@ -160,6 +160,7 @@ check_logical <- function(x = NULL,
 #' @inheritParams cli::cli_abort
 #' @inheritDotParams cli::cli_abort
 #' @export
+#' @importFrom rlang check_required
 check_sf <- function(x,
                      arg = caller_arg(x),
                      null.ok = FALSE,
@@ -167,6 +168,7 @@ check_sf <- function(x,
                      ext = FALSE,
                      call = caller_env(),
                      ...) {
+  rlang::check_required(x, arg = arg, call = call)
   check_null(x, arg, null.ok)
 
   list.ok <- list.ok && is_sf_list(x, named = FALSE, ext, null.ok)
@@ -178,7 +180,7 @@ check_sf <- function(x,
   sf <- "sf"
 
   if (ext) {
-    sf <- c(sf, "sfc", "sfg", "bbox")
+    sf <- c(sf, "sfc", "bbox")
   }
 
   cli_abort(
@@ -193,7 +195,12 @@ check_sf <- function(x,
 #' Check if the data.frame object has the required paper columns
 #'
 #' @noRd
-check_df_paper <- function(x, ext = FALSE) {
+check_df_paper <- function(x,
+                           ext = FALSE,
+                           arg = caller_arg(x),
+                           call = caller_env()) {
+  rlang::check_required(x, arg = arg, call = call)
+
   # FIXME: Add check to make sure input is a data frame
   paper_names <- c("width", "height", "orientation", "units")
 
