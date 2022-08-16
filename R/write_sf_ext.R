@@ -338,11 +338,11 @@ write_sf_types <- function(data,
     if (!(filetype %in% c("rda", "rds", "RData"))) {
       ask <-
         is_interactive() &&
-        cli_yeah(
-          c("{.arg data} is not a simple feature object.",
-            ">" = "Do you want to save {.arg data} as a RDA file?"
+          cli_yeah(
+            c("{.arg data} is not a simple feature object.",
+              ">" = "Do you want to save {.arg data} as a RDA file?"
+            )
           )
-        )
 
       if (!ask) {
         invisible(return(NULL))

@@ -91,7 +91,8 @@ st_buffer_ext <- function(x,
     dist = dist,
     dist_limits = dist_limits,
     unit = unit,
-    crs = crs)
+    crs = crs
+  )
 
   x <- sf::st_buffer(x = x, dist = dist, singleSide = single_side, ...)
 

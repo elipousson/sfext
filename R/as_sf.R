@@ -93,11 +93,12 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
     switch(x_is,
       "sf_pt" = sf::st_bbox(st_buffer_ext(x, dist = 0.00000001), ...),
       "sf_or_sfc" = sf::st_bbox(x, ...),
-      "num_bbox" = sf::st_bbox(c(
-        xmin = x[1], ymin = x[2],
-        xmax = x[3], ymax = x[4]
-      ),
-      crs = crs, ...
+      "num_bbox" = sf::st_bbox(
+        c(
+          xmin = x[1], ymin = x[2],
+          xmax = x[3], ymax = x[4]
+        ),
+        crs = crs, ...
       ),
       "other" = sf::st_bbox(as_sf(x, ext = ext), ...)
     )

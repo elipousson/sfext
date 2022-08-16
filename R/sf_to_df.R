@@ -157,7 +157,6 @@ coords_df_to_sf <- function(x, coords = c("lon", "lat"), into = NULL, sep = ",",
 #' @export
 #' @importFrom janitor make_clean_names
 check_coords <- function(x = NULL, coords = NULL, default = c("lon", "lat"), rev = FALSE) {
-
   # If x is a data frame
   if (!is.null(x) && is.data.frame(x)) {
     if (!has_coords(x, coords = coords, value = FALSE)) {

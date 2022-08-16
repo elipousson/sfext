@@ -50,12 +50,12 @@ Combine data with st_union_ext:
 
 ``` r
 random_id <- sample(nrow(nc), size = 8)
-nc_union <- st_union_ext(nc[random_id,], name_col = "NAME")
+nc_union <- st_union_ext(nc[random_id, ], name_col = "NAME")
 
 ggplot() +
   geom_sf(data = nc_union, aes(fill = NAME), alpha = 0.2) +
-  geom_sf_label(data = nc[random_id,], aes(label = NAME), size = 2) +
-  theme(legend.position="bottom")
+  geom_sf_label(data = nc[random_id, ], aes(label = NAME), size = 2) +
+  theme(legend.position = "bottom")
 #> Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not
 #> give correct results for longitude/latitude data
 ```

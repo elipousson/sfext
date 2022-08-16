@@ -52,12 +52,12 @@ Combine data with st_union_ext:
 
 ```{r}
 random_id <- sample(nrow(nc), size = 8)
-nc_union <- st_union_ext(nc[random_id,], name_col = "NAME")
+nc_union <- st_union_ext(nc[random_id, ], name_col = "NAME")
 
 ggplot() +
   geom_sf(data = nc_union, aes(fill = NAME), alpha = 0.2) +
-  geom_sf_label(data = nc[random_id,], aes(label = NAME), size = 2) +
-  theme(legend.position="bottom")
+  geom_sf_label(data = nc[random_id, ], aes(label = NAME), size = 2) +
+  theme(legend.position = "bottom")
 ```
 Make grids set rows, columns, and aspect ratios using st_make_grid_ext:   
 

@@ -28,7 +28,6 @@ st_clip <- function(x,
                     dist = NULL,
                     diag_ratio = NULL,
                     unit = "meter") {
-
   # If bbox, convert to sf
   x <- as_sf(x)
 

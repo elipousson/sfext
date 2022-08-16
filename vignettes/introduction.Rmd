@@ -222,7 +222,7 @@ There are also several functions that return information about the geometry of i
 The `get_length()` function wraps `sf::st_length` and (for POLYGON geometries only) `lwgeom::st_perimeter`:
 
 ```{r}
-example_line <- as_line(as_point(nc[1,]), as_point(nc[2,]), crs = 4326)
+example_line <- as_line(as_point(nc[1, ]), as_point(nc[2, ]), crs = 4326)
 
 glimpse(get_length(example_line))
 ```
@@ -230,7 +230,7 @@ glimpse(get_length(example_line))
 The `get_area()` function wraps `sf::st_area`:
 
 ```{r}
-glimpse(get_area(nc[1:3,], unit = "mi^2"))
+glimpse(get_area(nc[1:3, ], unit = "mi^2"))
 ```
 
 `get_dist()` supports a more varied range of options including using the "to" parameter to define a corner or center of the input sf object bounding box.
