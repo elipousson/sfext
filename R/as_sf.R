@@ -198,6 +198,30 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
   st_transform_ext(x, crs = crs)
 }
 
+#' Make a sf list by grid position
+#'
+#' Create a grid with [st_make_grid_ext()] and
+#'
+#' @name make_sf_grid_list
+#' @inheritParams st_make_grid_ext
+#' @inheritParams as_sf_list
+#' @export
+make_sf_grid_list <- function(x, style = "rect", ncol = 2, nrow = 2, .id = "grid_id", crs = NULL, ...) {
+  grid <- st_make_grid_ext(x, style = style, ncol = ncol, nrow = nrow, .id = .id, ...)
+
+  x <- st_join_ext(x, grid, largest = TRUE)
+
+  x <-
+    relocate_sf_col(
+      dplyr::mutate(
+        x,
+        "{.id}_col_row" := as.character(glue("col_{col}_row_{row}"))
+      )
+    )
+
+  as_sf_list(x, col = paste0(.id, "_col_row"), crs = crs)
+}
+
 #' Convert data to a different class
 #'
 #' @param data Data that can be converted to sf, sfc, bbox or a sf list object.
