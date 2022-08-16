@@ -8,6 +8,7 @@
 \alias{st_inscribed_square}
 \alias{st_circle}
 \alias{st_circumscribed_circle}
+\alias{st_donut}
 \title{Modify the geometry of a simple feature or bounding box object}
 \usage{
 st_scale_rotate(x, scale = 1, rotate = 0)
@@ -18,9 +19,19 @@ st_square(x, scale = 1, rotate = 0, inscribed = FALSE, by_feature = FALSE)
 
 st_inscribed_square(x, scale = 1, rotate = 0, by_feature = FALSE)
 
-st_circle(x, scale = 1, inscribed = FALSE, dTolerance = 0, by_feature = FALSE)
+st_circle(
+  x,
+  scale = 1,
+  inscribed = TRUE,
+  dTolerance = 0.01,
+  by_feature = FALSE,
+  use_hull = FALSE,
+  use_lwgeom = FALSE
+)
 
 st_circumscribed_circle(x, scale = 1, dTolerance = 0, by_feature = FALSE)
+
+st_donut(x, width = 0.4, scale = 1, by_feature = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object}
@@ -44,15 +55,24 @@ feature geometry. If you run \code{st_simplify}, the input data is
 specified with long-lat coordinates and \code{sf_use_s2()} returns
 \code{TRUE}, then the value of \code{dTolerance} must be specified in
 meters.}
+
+\item{use_hull}{For \code{\link[=st_circle]{st_circle()}}, if \code{TRUE} use the geometry from
+\code{\link[sf:geos_unary]{sf::st_convex_hull()}} (to address issues with MULTIPOLYGON objects).}
+
+\item{use_lwgeom}{If \code{TRUE}, \code{by_feature = TRUE} and \code{inscribed = FALSE}, use
+\code{\link[lwgeom:bounding_circle]{lwgeom::st_minimum_bounding_circle()}}.}
+
+\item{width}{Donut width as proportion of outer size.}
 }
 \description{
-Support both \code{bbox} and \code{sf} objects as inputs.
+Support \code{sf}, \code{sfc}, and \code{bbox} and objects as inputs.
 \itemize{
 \item Scale or rotate a simple feature or bounding box object using affine
 transformations
 \item Get the center point for a \code{sf} object
 \item Get a circumscribed square or approximate inscribed square in a \code{sf} object
 \item Get a circumscribed circle or inscribed circle in a \code{sf} object
+\item Get a donut for a \code{sf} object
 }
 
 st_inscribed_square wraps \code{\link[sf:geos_unary]{sf::st_inscribed_circle()}} but limits the circle

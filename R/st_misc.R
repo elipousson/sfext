@@ -1,13 +1,21 @@
+#' Helper to discard geometry with no dimensions
+#'
+#' @noRd
+discard_na_geom <- function(x) {
+  purrr::discard(x, ~ is.na(sf::st_dimension(.x)))
+}
+
 #' Modify the geometry of a simple feature or bounding box object
 #'
 #' @description
-#' Support both `bbox` and `sf` objects as inputs.
+#' Support `sf`, `sfc`, and `bbox` and objects as inputs.
 #'
 #'  - Scale or rotate a simple feature or bounding box object using affine
 #'  transformations
 #'  - Get the center point for a `sf` object
 #'  - Get a circumscribed square or approximate inscribed square in a `sf` object
 #'  - Get a circumscribed circle or inscribed circle in a `sf` object
+#'  - Get a donut for a `sf` object
 #'
 #' st_inscribed_square wraps [sf::st_inscribed_circle()] but limits the circle
 #' to 1 segment per quadrant (`nQuadSegs = 1`) and then rotates the resulting
@@ -49,9 +57,7 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
   geom <- geom * scale + centroid
 
   sf::st_geometry(x) <- geom
-  sf::st_crs(x) <- crs
-
-  x
+  sf::st_set_crs(x, crs)
 }
 
 
@@ -149,13 +155,42 @@ st_inscribed_square <- function(x, scale = 1, rotate = 0, by_feature = FALSE) {
 #' @rdname st_misc
 #' @name st_circle
 #' @inheritParams sf::st_inscribed_circle
+#' @param use_hull For [st_circle()], if `TRUE` use the geometry from
+#'   [sf::st_convex_hull()] (to address issues with MULTIPOLYGON objects).
+#' @param use_lwgeom If `TRUE`, `by_feature = TRUE` and `inscribed = FALSE`, use
+#'   [lwgeom::st_minimum_bounding_circle()].
 #' @export
 #' @importFrom sf st_inscribed_circle
-st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0, by_feature = FALSE) {
-  check_sf(x, ext = TRUE)
-
+st_circle <- function(x, scale = 1, inscribed = TRUE, dTolerance = 0.01, by_feature = FALSE, use_hull = FALSE, use_lwgeom = FALSE) {
   if (!is_sf(x)) {
     x <- as_sf(x)
+  }
+
+  if (by_feature) {
+    if (use_lwgeom && !inscribed) {
+      is_pkg_installed("lwgeom")
+      return(lwgeom::st_minimum_bounding_circle(x))
+    }
+
+    x$st_circle_id <- seq(nrow(x))
+    x <- as_sf_list(x, col = "st_circle_id")
+
+    x <-
+      purrr::map(
+        x,
+        ~ st_circle(
+          x = .x,
+          scale = scale,
+          inscribed = inscribed,
+          dTolerance = dTolerance,
+          by_feature = FALSE
+        )
+      )
+
+    x <- as_sf(x)
+    x$st_circle_id <- NULL
+
+    return(x)
   }
 
   crs <- sf::st_crs(x)
@@ -166,52 +201,33 @@ st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0, by_featur
     x <- sf::st_transform(x, crs = 3857)
   }
 
-  geom <- as_sfc(x)
+  geom <- sf::st_union(sf::st_combine(x))
 
-  if (!by_feature) {
-    geom <- sf::st_union(x)
+  if (use_hull) {
     if (is_multipolygon(geom)) {
-      sf::st_cast(geom, to = "POLYGON")
+      geom <- sf::st_cast(geom, to = "MULTIPOINT")
     }
+    geom <- sf::st_convex_hull(geom)
   }
 
   if (inscribed) {
     geom <- sf::st_inscribed_circle(geom, dTolerance = dTolerance)
-    geom <- purrr::discard(geom, ~ is.na(sf::st_dimension(.x)))
+    geom <- discard_na_geom(geom)
   } else {
-    if (by_feature) {
-      radius <- purrr::map_dbl(geom, ~ sf_bbox_diagdist(as_bbox(.x)) / 2)
-      geom <-
-        sf::st_as_sfc(
-          purrr::map2(
-            sf::st_centroid(geom),
-            radius,
-            ~ sf::st_buffer(
-              x = .x,
-              dist = .y * scale,
-              unit = NULL
-            )
-          ),
-          crs = crs
-        )
-    } else {
-      radius <- sf_bbox_diagdist(as_bbox(geom), drop = TRUE) / 2
-
-      geom <-
-        sf::st_buffer(
-          x = sf::st_centroid(geom),
-          dist = radius * scale,
-          units = get_dist_units(crs)
-        )
-    }
+    radius <- sf_bbox_diagdist(as_bbox(geom), drop = TRUE) / 2
+    geom <-
+      sf::st_buffer(
+        x = sf::st_centroid(geom),
+        dist = radius * scale,
+        units = get_dist_units(x)
+      )
   }
 
-  if (!by_feature) {
+  if (nrow(x) != length(geom)) {
     x <- st_union_ext(x, name_col = NULL)
-    sf::st_geometry(x) <- geom
-  } else {
-    x <- as_sf(geom)
   }
+
+  sf::st_geometry(x) <- geom
 
   if (is_lonlat) {
     x <- sf::st_transform(x, crs = lonlat_crs)
@@ -225,4 +241,29 @@ st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0, by_featur
 #' @export
 st_circumscribed_circle <- function(x, scale = 1, dTolerance = 0, by_feature = FALSE) {
   st_circle(x = x, scale = scale, inscribed = FALSE, dTolerance = dTolerance, by_feature = by_feature)
+}
+
+#' @rdname st_misc
+#' @name st_donut
+#' @param width Donut width as proportion of outer size.
+#' @export
+#' @importFrom sf st_inscribed_circle
+st_donut <- function(x, width = 0.4, scale = 1, by_feature = FALSE, ...) {
+  crs <- sf::st_crs(x)
+
+  outer <- st_circle(x, scale = scale, by_feature = by_feature, ...)
+  inner <- st_circle(x, scale = (scale * width), by_feature = by_feature, ...)
+
+  if (!by_feature) {
+    return(st_erase(outer, inner, union = FALSE))
+  }
+
+  donut <-
+    purrr::map2_dfr(
+      sf::st_geometry(outer),
+      sf::st_geometry(inner),
+      ~ as_sf(st_erase(as_sfc(.x, crs = crs), as_sfc(.y, crs = crs)))
+    )
+
+  sf::st_set_geometry(outer, as_sfc(donut))
 }
