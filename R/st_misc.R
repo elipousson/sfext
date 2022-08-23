@@ -15,7 +15,7 @@ discard_na_geom <- function(x) {
 #'  - Get the center point for a `sf` object
 #'  - Get a circumscribed square or approximate inscribed square in a `sf` object
 #'  - Get a circumscribed circle or inscribed circle in a `sf` object
-#'  - Get a donut for a `sf` object
+#'  - Get a donut for a `sf` object (may return unexpected results if inscribed = TRUE)
 #'
 #' st_inscribed_square wraps [sf::st_inscribed_circle()] but limits the circle
 #' to 1 segment per quadrant (`nQuadSegs = 1`) and then rotates the resulting
@@ -28,8 +28,10 @@ discard_na_geom <- function(x) {
 #' @param x A `sf`, `sfc`, or `bbox` object
 #' @param scale numeric; scale factor, Default: 1
 #' @param rotate numeric; degrees to rotate (-360 to 360), Default: 0
-#' @param inscribed If `TRUE`, make circle or square inscribed within x, if
-#'   `FALSE`, make it circumscribed.
+#' @param inscribed If `TRUE`, make circle, square, or donut inscribed within x, if
+#'   `FALSE`, make it circumscribed. Use
+#' @param ... Additional parameters passed to [sf::st_centroid()] by
+#'   [st_center()] or [st_circle()] by [st_donut()].
 #' @seealso
 #'  - [sf::geos_unary]
 #' @name st_misc
@@ -56,10 +58,9 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
   geom <- (geom - centroid) * rot(pi / (360 / (rotate * 2)))
   geom <- geom * scale + centroid
 
-  sf::st_geometry(x) <- geom
+  x <- sf::st_set_geometry(x, geom)
   sf::st_set_crs(x, crs)
 }
-
 
 #' @rdname st_misc
 #' @name st_center
@@ -67,10 +68,10 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
 #'   object, as an `sf` object (with lon and lat values), the original geometry
 #'   (x), and the original crs. objects; defaults TRUE. If `FALSE`, return an `sf`
 #'   object.
-#' @param ... Additional parameters passed to [sf::st_centroid()]
 #' @export
 #' @importFrom sf st_crs st_geometry st_centroid st_sf
 st_center <- function(x,
+                      class = "list",
                       ext = TRUE,
                       ...) {
   x <- as_sf(x)
@@ -78,16 +79,23 @@ st_center <- function(x,
   centroid <- suppressWarnings(sf::st_centroid(geometry, ...))
 
   if (!ext) {
-    return(centroid)
+    class <- "sfc"
   }
 
-  list(
-    "sfc" = centroid, # sfc based on centroid
-    "sf" = get_coords(as_sf(centroid), drop = FALSE), # sf based on centroid (won't include original cols)
-    "geometry" = geometry, # original geometry (sfc)
-    "x" = x, # original object
-    "crs" = sf::st_crs(x) # original crs
-  )
+  types <-
+    list(
+      "sfc" = centroid, # sfc based on centroid
+      "sf" = get_coords(as_sf(centroid), drop = FALSE), # sf based on centroid (won't include original cols)
+      "geometry" = geometry, # original geometry (sfc)
+      "x" = x, # original object
+      "crs" = sf::st_crs(x) # original crs
+    )
+
+  if (class == "list") {
+    return(types)
+  }
+
+  types[[class]]
 }
 
 #' @rdname st_misc
@@ -194,6 +202,7 @@ st_circle <- function(x, scale = 1, inscribed = TRUE, dTolerance = 0.01, by_feat
   }
 
   crs <- sf::st_crs(x)
+  units <- crs$units_gdal
   is_lonlat <- sf::st_is_longlat(x)
 
   if (is_lonlat) {
@@ -213,18 +222,24 @@ st_circle <- function(x, scale = 1, inscribed = TRUE, dTolerance = 0.01, by_feat
   if (inscribed) {
     geom <- sf::st_inscribed_circle(geom, dTolerance = dTolerance)
     geom <- discard_na_geom(geom)
+    radius <- sf_bbox_xdist(as_bbox(geom), drop = TRUE) / 2
+    dist <- (radius * scale) - radius
   } else {
-    radius <- sf_bbox_diagdist(as_bbox(geom), drop = TRUE) / 2
-    geom <-
-      sf::st_buffer(
-        x = sf::st_centroid(geom),
-        dist = radius * scale,
-        units = get_dist_units(x)
-      )
+    radius <- sf_bbox_xdist(as_bbox(geom), drop = TRUE) / 2
+    dist <- radius * scale
+    geom <- sf::st_centroid(geom)
   }
+
+  geom <-
+    sf::st_buffer(
+      x = geom,
+      dist = dist,
+      units = crs$units_gdal
+    )
 
   if (nrow(x) != length(geom)) {
     x <- st_union_ext(x, name_col = NULL)
+    geom <- sf::st_union(geom)
   }
 
   sf::st_geometry(x) <- geom
@@ -248,22 +263,44 @@ st_circumscribed_circle <- function(x, scale = 1, dTolerance = 0, by_feature = F
 #' @param width Donut width as proportion of outer size.
 #' @export
 #' @importFrom sf st_inscribed_circle
-st_donut <- function(x, width = 0.4, scale = 1, by_feature = FALSE, ...) {
+st_donut <- function(x, width = 0.4, scale = 1, inscribed = FALSE, by_feature = TRUE, ...) {
   crs <- sf::st_crs(x)
+  is_x_sfc <- is_sfc(x)
 
-  outer <- st_circle(x, scale = scale, by_feature = by_feature, ...)
-  inner <- st_circle(x, scale = (scale * width), by_feature = by_feature, ...)
+  if (by_feature) {
+    if (is_x_sfc) {
+      x <- as_sf(x)
+    }
 
-  if (!by_feature) {
-    return(st_erase(outer, inner, union = FALSE))
+    x$st_donut_id <- seq_len(nrow(x))
+
+    x_list <- as_sf_list(x, col = "st_donut_id")
+
+    x_list <-
+      purrr::map(
+        x_list,
+        ~ st_erase(
+          st_circle(.x, scale = scale, inscribed = inscribed, by_feature = FALSE),
+          st_circle(.x, scale = (scale - width), inscribed = inscribed, by_feature = FALSE)
+        )
+      )
+
+    geom <- as_sfc(as_sf(x_list), crs)
+
+    if (is_x_sfc) {
+      return(geom)
+    }
+
+    return(sf::st_set_geometry(x, geom))
   }
 
-  donut <-
-    purrr::map2_dfr(
-      sf::st_geometry(outer),
-      sf::st_geometry(inner),
-      ~ as_sf(st_erase(as_sfc(.x, crs = crs), as_sfc(.y, crs = crs)))
+
+  x <-
+    st_erase(
+      x = st_circle(x, scale = scale, inscribed = inscribed, by_feature = by_feature, ...),
+      y = st_circle(x, scale = (scale - width), inscribed = inscribed, by_feature = by_feature, ...),
+      union = TRUE
     )
 
-  sf::st_set_geometry(outer, as_sfc(donut))
+  sf::st_set_crs(x, crs)
 }

@@ -13,7 +13,7 @@
 \usage{
 st_scale_rotate(x, scale = 1, rotate = 0)
 
-st_center(x, ext = TRUE, ...)
+st_center(x, class = "list", ext = TRUE, ...)
 
 st_square(x, scale = 1, rotate = 0, inscribed = FALSE, by_feature = FALSE)
 
@@ -31,7 +31,7 @@ st_circle(
 
 st_circumscribed_circle(x, scale = 1, dTolerance = 0, by_feature = FALSE)
 
-st_donut(x, width = 0.4, scale = 1, by_feature = FALSE, ...)
+st_donut(x, width = 0.4, scale = 1, inscribed = FALSE, by_feature = TRUE, ...)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object}
@@ -45,10 +45,11 @@ object, as an \code{sf} object (with lon and lat values), the original geometry
 (x), and the original crs. objects; defaults TRUE. If \code{FALSE}, return an \code{sf}
 object.}
 
-\item{...}{Additional parameters passed to \code{\link[sf:geos_unary]{sf::st_centroid()}}}
+\item{...}{Additional parameters passed to \code{\link[sf:geos_unary]{sf::st_centroid()}} by
+\code{\link[=st_center]{st_center()}} or \code{\link[=st_circle]{st_circle()}} by \code{\link[=st_donut]{st_donut()}}.}
 
-\item{inscribed}{If \code{TRUE}, make circle or square inscribed within x, if
-\code{FALSE}, make it circumscribed.}
+\item{inscribed}{If \code{TRUE}, make circle, square, or donut inscribed within x, if
+\code{FALSE}, make it circumscribed. Use}
 
 \item{dTolerance}{numeric; tolerance parameter, specified for all or for each
 feature geometry. If you run \code{st_simplify}, the input data is
@@ -72,7 +73,7 @@ transformations
 \item Get the center point for a \code{sf} object
 \item Get a circumscribed square or approximate inscribed square in a \code{sf} object
 \item Get a circumscribed circle or inscribed circle in a \code{sf} object
-\item Get a donut for a \code{sf} object
+\item Get a donut for a \code{sf} object (not fully working)
 }
 
 st_inscribed_square wraps \code{\link[sf:geos_unary]{sf::st_inscribed_circle()}} but limits the circle
@@ -86,13 +87,16 @@ rotation value can be provided to change the orientation of the shape, e.g.
 nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
 nc <- st_transform_ext(nc, crs = 3857)
 
-plot(st_scale_rotate(nc), max.plot = 1)
+plot(nc, max.plot = 1)
+plot(st_scale_rotate(nc, scale = 0.75, rotate = 15), max.plot = 1)
 
-plot(st_scale_rotate(nc, scale = 0.6, rotate = 15), max.plot = 1)
+plot(st_square(nc[1:10,], by_feature = TRUE), max.plot = 1)
 
-plot(st_square(nc[5,]))
+plot(st_circumscribed_circle(nc, by_feature = FALSE), max.plot = 1)
+plot(st_circle(nc, by_feature = FALSE), max.plot = 1, add = TRUE)
 
-plot(st_square(nc[5,], scale = 0.6, rotate = 45), col = "blue", add = TRUE)
+plot(st_donut(nc[1:10,], by_feature = TRUE), max.plot = 1)
+
 }
 \seealso{
 \itemize{
