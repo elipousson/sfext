@@ -6,10 +6,10 @@
 \usage{
 st_nudge(
   x,
+  to = NULL,
   nudge_y = 0,
   nudge_x = 0,
   unit = NULL,
-  to = NULL,
   scale = 1,
   rotate = 0,
   crs = NULL
@@ -18,13 +18,15 @@ st_nudge(
 \arguments{
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object}
 
-\item{nudge_y, nudge_x}{Distance to nudge geometry in unit. If unit is NULL,
+\item{to}{sf object to use as new center for x or length 2 numeric vector
+with the nudge_y and nudge_x distance (in that order).}
+
+\item{nudge_y, nudge_x}{Distance to nudge geometry in unit. If unit is \code{NULL},
 distance is assumed to be in the same units as the coordinate reference
 system of the input object.}
 
-\item{unit}{Units for nudge_y and nudge_x distance.}
-
-\item{to}{sf object to use as new center for x}
+\item{unit}{Units for nudge_y and nudge_x distance (also used if to is
+numeric).}
 
 \item{scale}{numeric; scale factor, Default: 1}
 
@@ -32,5 +34,5 @@ system of the input object.}
 }
 \description{
 Nudge, move, or shift a bbox, sfc, or sf object to the center of another
-feature or by a set distance.
+feature and/or by a set distance.
 }
