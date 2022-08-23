@@ -1,4 +1,5 @@
 test_that("read_sf_ext works", {
+  skip_on_ci()
   expect_s3_class(
     read_sf_ext(
       url = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/NapervilleShelters/FeatureServer/0"
