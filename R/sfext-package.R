@@ -1,4 +1,5 @@
 #' @import rlang
+#' @importFrom rlang .data .env caller_env has_length
 #' @importFrom cli cli_abort cli_warn cli_inform
 #' @importFrom glue glue glue_collapse
 #' @keywords internal

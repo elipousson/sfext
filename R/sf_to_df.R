@@ -86,6 +86,7 @@ df_to_sf <- function(x,
                      address = "address",
                      y = NULL,
                      by = NULL,
+                     call = caller_env(),
                      ...) {
   cli_abort_ifnot(
     "{.arg x} can't be an sf object.",
@@ -107,7 +108,7 @@ df_to_sf <- function(x,
       "join_sf" = join_sf_to_df(x, y, by = by, ...),
       "address_df" = address_to_sf(x, address = address, coords = coords, crs = crs, remove_coords = remove_coords, ...),
       "wkt_df" = wkt_df_to_sf(x, crs = from_crs),
-      "coords_df" = coords_df_to_sf(x, coords = coords, crs = from_crs, into = into, sep = sep, rev = rev, remove_coords = remove_coords),
+      "coords_df" = coords_df_to_sf(x, coords = coords, crs = from_crs, into = into, sep = sep, rev = rev, remove_coords = remove_coords, call = call),
     )
 
   st_transform_ext(x = x, crs = crs, class = "sf")
@@ -128,7 +129,13 @@ join_sf_to_df <- function(x, y, by = NULL, ...) {
 #' @name coords_df_to_sf
 #' @noRd
 #' @importFrom sf st_as_sf
-coords_df_to_sf <- function(x, coords = c("lon", "lat"), into = NULL, sep = ",", rev = FALSE, remove_coords = FALSE, crs = 4326) {
+coords_df_to_sf <- function(x,
+                            coords = c("lon", "lat"),
+                            into = NULL, sep = ",",
+                            rev = FALSE,
+                            remove_coords = FALSE,
+                            crs = 4326,
+                            call = caller_env()) {
   if (has_length(coords, 1) && has_length(into, 2)) {
     x <- separate_coords(x = x, coords = coords, into = into, sep = sep)
     coords <- into
@@ -136,7 +143,7 @@ coords_df_to_sf <- function(x, coords = c("lon", "lat"), into = NULL, sep = ",",
     coords <- check_coords(x = x, coords = coords, rev = rev)
   }
 
-  x <- format_coords(x, coords = coords)
+  x <- format_coords(x, coords = coords, call = call)
 
   sf::st_as_sf(
     x,
@@ -283,7 +290,7 @@ wkt_df_to_sf <- function(x, crs = NULL) {
 #'
 #' @noRd
 #' @importFrom cli cli_alert_info
-format_coords <- function(x, coords = c("lon", "lat")) {
+format_coords <- function(x, coords = c("lon", "lat"), call = caller_env()) {
   lon <- coords[[1]]
   lat <- coords[[2]]
 
@@ -291,23 +298,28 @@ format_coords <- function(x, coords = c("lon", "lat")) {
     is.data.frame(x)
   )
 
-  # Check that lat/lon are numeric
-  if (any(!is.numeric(x[[lon]])) | any(!is.numeric(x[[lat]]))) {
-    x[[lon]] <- as.numeric(x[[lon]])
-    x[[lat]] <- as.numeric(x[[lat]])
+  x[[lon]] <- as.numeric(x[[lon]])
+  x[[lat]] <- as.numeric(x[[lat]])
+
+  missing_coords <- (is.na(x$lon) | is.na(x$lat))
+  n_missing_coords <- sum(missing_coords)
+
+  if (n_missing_coords == nrow(x)) {
+    cli_abort(
+      "{.arg x} must have one or more coordinate pairs in column{?s} {.val {coords}}.",
+      call = call
+    )
   }
 
-  # Check for missing coordinates
-  na_coords <- is.na(x[[lon]] | x[[lat]])
-  num_na_coords <- sum(na_coords)
-
-  if (num_na_coords > 0) {
-    cli_inform("Removing {.val num_na_coords} rows with missing coordinates.")
+  if (n_missing_coords > 0) {
     # Exclude rows with missing coordinates
-    x <- x[!na_coords, ]
+    cli_inform(
+      "Removing {.val {n_missing_coords}} rows{?s} with missing coordinates.",
+      call = call
+    )
   }
 
-  x
+  x[!missing_coords, ]
 }
 
 #' Use tidygeocoder to convert an address or data frame with an address column
