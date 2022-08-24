@@ -118,6 +118,7 @@ get_bearing(nc_line)
 }
 \seealso{
 Other dist: 
+\code{\link{compare_dist}()},
 \code{\link{convert_dist_scale}()},
 \code{\link{convert_dist_units}()},
 \code{\link{is_dist_units}()},

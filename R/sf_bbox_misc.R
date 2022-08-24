@@ -71,6 +71,10 @@ sf_bbox_point <- function(bbox, point = NULL, call = caller_env()) {
       multiple = TRUE, error_call = call
     )
 
+  stopifnot(
+    length(point) == 2
+  )
+
   if (any(c("xmid", "ymid") %in% point)) {
     bbox <-
       c(
@@ -82,10 +86,6 @@ sf_bbox_point <- function(bbox, point = NULL, call = caller_env()) {
       )
   }
 
-  stopifnot(
-    length(point) == 2
-  )
-
   sf::st_point(c(bbox[[point[1]]], bbox[[point[2]]]))
 }
 
@@ -95,26 +95,20 @@ sf_bbox_point <- function(bbox, point = NULL, call = caller_env()) {
 #' @export
 #' @importFrom sf st_distance st_point st_crs
 #' @importFrom units drop_units as_units
-sf_bbox_dist <- function(bbox, from, to, units = NULL, drop = TRUE, call = caller_env()) {
+sf_bbox_dist <- function(bbox, from, to, units = NULL, drop = TRUE, by_element = TRUE, call = caller_env(), ...) {
   check_required(from)
   check_required(to)
 
   dist <-
     sf::st_distance(
-      sf_bbox_point(bbox, from),
-      sf_bbox_point(bbox, to)
+      x = sf_bbox_point(bbox, from),
+      y = sf_bbox_point(bbox, to),
+      by_element = by_element,
+      ...
     )
 
-  if (is_units(dist)) {
-    dist <- units::drop_units(dist)
-  }
-
-  if (drop) {
-    return(dist)
-  }
-
-  units_gdal <-
-    sf::st_crs(bbox)$units_gdal
+  units_gdal <- sf::st_crs(bbox)$units_gdal
+  units <- units %||% units_gdal
 
   units <-
     arg_match(
@@ -122,18 +116,24 @@ sf_bbox_dist <- function(bbox, from, to, units = NULL, drop = TRUE, call = calle
       c(units_gdal, dist_unit_options)
     )
 
-  convert_dist_units(
-    dist = dist,
-    from = units_gdal,
-    to = units
-  )
+  dist <-
+    convert_dist_units(
+      dist = dist,
+      from = units_gdal,
+      to = units
+    )
+
+  if (is_units(dist) && drop) {
+    return(units::drop_units(dist))
+  }
+
+  dist
 }
 
 #' @name sf_bbox_xdist
 #' @rdname sf_bbox_misc
 #' @export
 sf_bbox_xdist <- function(bbox, units = NULL, drop = TRUE) {
-  # abs(bbox["xmax"] - bbox["xmin"]) # Get width
   sf_bbox_dist(
     bbox = bbox,
     from = c("xmin", "ymin"),
@@ -147,7 +147,6 @@ sf_bbox_xdist <- function(bbox, units = NULL, drop = TRUE) {
 #' @rdname sf_bbox_misc
 #' @export
 sf_bbox_ydist <- function(bbox, units = NULL, drop = TRUE) {
-  # abs(bbox["ymax"] - bbox["ymin"]) # Get height
   sf_bbox_dist(
     bbox = bbox,
     from = c("xmin", "ymin"),

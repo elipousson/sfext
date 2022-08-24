@@ -4,8 +4,8 @@
 #' @param from Existing unit for dist, Default: `NULL`. If dist is a units
 #'   object, the numerator is used as "from"
 #' @param to Unit to convert distance to, Default: 'meter'
-#' @param drop If `TRUE`, return numeric. If `FALSE`, return class object.
-#' @param digits Number of digits to include in result; defaults to NULL.
+#' @param drop If `TRUE`, return numeric. If `FALSE`, return class units object.
+#' @param digits Number of digits to include in result; defaults to `NULL`.
 #' @return Object created by [units::set_units()]
 #' @rdname convert_dist_units
 #' @family dist
@@ -21,16 +21,22 @@ convert_dist_units <- function(dist,
     condition = (is.numeric(dist) || is_units(dist))
   )
 
-  if (is_units(dist) && !is.null(from)) {
-    # cli_warn(
-    #  "Replacing {.arg from} of {.val {from}} with the units of {.arg dist} ({.val {get_dist_units(dist)}})."
-    # )
+  if (is_units(dist)) {
+    dist_from <- get_dist_units(dist)
 
-    from <- get_dist_units(dist)
+    cli_warn_ifnot(
+      c("{.arg dist} is class {.cls units} and has different units than
+        {.arg from} ({.val {from}}).",
+        "*" = "Replacing {.arg from} with {.val {dist_from}}."
+      ),
+      condition = is.null(from) | (dist_from == from)
+    )
+
+    from <- dist_from
     dist <- units::drop_units(dist)
   }
 
-  if (!is_units(dist) && !is.null(from)) {
+  if (!is.null(from)) {
     dist <- set_dist_units(dist, value = from)
   }
 
@@ -50,10 +56,15 @@ convert_dist_units <- function(dist,
 
 #' Set distance units
 #'
+#' @param null.ok If `FALSE`, error value; If `TRUE`, and value is `NULL` return
+#'   x without setting units.
 #' @noRd
-#' @param null.ok If FALSE, error value; If TRUE, and value is NULL return x without setting units.
 #' @importFrom units set_units
-set_dist_units <- function(x = NULL, value = NULL, mode = "standard", null.ok = TRUE, call = caller_env()) {
+set_dist_units <- function(x = NULL,
+                           value = NULL,
+                           mode = "standard",
+                           null.ok = TRUE,
+                           call = caller_env()) {
   if (is.null(value) && null.ok) {
     return(x)
   }

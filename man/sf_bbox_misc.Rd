@@ -22,7 +22,16 @@ sf_bbox_asp(bbox, orientation = FALSE)
 
 sf_bbox_point(bbox, point = NULL, call = caller_env())
 
-sf_bbox_dist(bbox, from, to, units = NULL, drop = TRUE, call = caller_env())
+sf_bbox_dist(
+  bbox,
+  from,
+  to,
+  units = NULL,
+  drop = TRUE,
+  by_element = TRUE,
+  call = caller_env(),
+  ...
+)
 
 sf_bbox_xdist(bbox, units = NULL, drop = TRUE)
 
@@ -119,6 +128,7 @@ sf_bbox_dist. All other functions only take a bbox parameter.
 }
 
 Other dist: 
+\code{\link{compare_dist}()},
 \code{\link{convert_dist_scale}()},
 \code{\link{convert_dist_units}()},
 \code{\link{get_measurements}},

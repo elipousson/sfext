@@ -78,6 +78,7 @@ objects or a character string from \link{dist_unit_options})
 }
 \seealso{
 Other dist: 
+\code{\link{compare_dist}()},
 \code{\link{convert_dist_scale}()},
 \code{\link{convert_dist_units}()},
 \code{\link{get_measurements}},

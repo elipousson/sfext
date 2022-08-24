@@ -70,6 +70,7 @@ Convert distance from scale to actual units based on named \code{standard_scales
 }
 \seealso{
 Other dist: 
+\code{\link{compare_dist}()},
 \code{\link{convert_dist_units}()},
 \code{\link{get_measurements}},
 \code{\link{is_dist_units}()},

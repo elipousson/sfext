@@ -20,9 +20,9 @@ object, the numerator is used as "from"}
 
 \item{to}{Unit to convert distance to, Default: 'meter'}
 
-\item{drop}{If \code{TRUE}, return numeric. If \code{FALSE}, return class object.}
+\item{drop}{If \code{TRUE}, return numeric. If \code{FALSE}, return class units object.}
 
-\item{digits}{Number of digits to include in result; defaults to NULL.}
+\item{digits}{Number of digits to include in result; defaults to \code{NULL}.}
 }
 \value{
 Object created by \code{\link[units:units]{units::set_units()}}
@@ -32,6 +32,7 @@ Convert distance (and area) values between different units
 }
 \seealso{
 Other dist: 
+\code{\link{compare_dist}()},
 \code{\link{convert_dist_scale}()},
 \code{\link{get_measurements}},
 \code{\link{is_dist_units}()},
