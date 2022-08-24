@@ -163,34 +163,39 @@ coords_df_to_sf <- function(x,
 #'   [check_coords] only.
 #' @export
 #' @importFrom janitor make_clean_names
-check_coords <- function(x = NULL, coords = NULL, default = c("lon", "lat"), rev = FALSE) {
+check_coords <- function(x = NULL,
+                         coords = NULL,
+                         default = c("lon", "lat"),
+                         rev = FALSE,
+                         call = caller_env) {
   # If x is a data frame
   if (!is.null(x) && is.data.frame(x)) {
-    if (!has_coords(x, coords = coords, value = FALSE)) {
-      if (!is.null(coords)) {
-        cli_warn(
-          "The provided coordinates do not appear to match the data and no standard coordinate column names could be found.
-        Replacing coordinates with default values."
-        )
+    x_has_coords <-
+      has_coords(x, coords = coords, value = FALSE)
 
-        coords <- default
-      }
-    } else {
-      replace_coords <- has_coords(x, coords = coords, value = TRUE)
+    if (x_has_coords) {
+      coords <- has_coords(x, coords = coords, value = TRUE)
+    } else if (!is.null(coords)) {
+      cli_warn(
+        c("The provided {.arg coords} ({.val {coords}}) can't be found in {.arg x}.",
+        "Replacing {.arg coords} with {.arg default} ({.val {default}})."),
+        call = call
+      )
 
-      if (!setequal(coords, replace_coords)) {
-        coords <- replace_coords
-      }
+      coords <- NULL
     }
   }
 
-  # If X is NUll or not a dataframe check_coords just validates coord pairs or sets a default value
+  # If X is NUll or not a dataframe check_coords just validates coord pairs or
+  # sets a default value
   coords <- coords %||% default
 
   cli_abort_ifnot(
     # FIXME: What about the coord_col value where coordinates are split in two?
-    "{.arg coords} must be length 2 and a character or numeric vector.",
-    condition =  length(coords) == 2 && (is.character(coords) || is.numeric(coords))
+    "{.arg coords} must be a length 2 {.cls character} or {.cls numeric} vector.",
+    condition =  length(coords) == 2 &&
+      (is.character(coords) || is.numeric(coords)),
+    call = call
   )
 
   if (rev && grepl("LAT|lat|Y|y", coords[1])) {
@@ -289,7 +294,7 @@ wkt_df_to_sf <- function(x, crs = NULL) {
 #' Format coordinates as numeric values and remove missing coordinates from data frame
 #'
 #' @noRd
-#' @importFrom cli cli_alert_info
+#' @importFrom cli cli_inform
 format_coords <- function(x, coords = c("lon", "lat"), call = caller_env()) {
   lon <- coords[[1]]
   lat <- coords[[2]]
@@ -301,7 +306,7 @@ format_coords <- function(x, coords = c("lon", "lat"), call = caller_env()) {
   x[[lon]] <- as.numeric(x[[lon]])
   x[[lat]] <- as.numeric(x[[lat]])
 
-  missing_coords <- (is.na(x$lon) | is.na(x$lat))
+  missing_coords <- (is.na(x[[lon]]) | is.na(x[[lat]]))
   n_missing_coords <- sum(missing_coords)
 
   if (n_missing_coords == nrow(x)) {

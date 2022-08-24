@@ -32,7 +32,13 @@ df_to_sf(
   ...
 )
 
-check_coords(x = NULL, coords = NULL, default = c("lon", "lat"), rev = FALSE)
+check_coords(
+  x = NULL,
+  coords = NULL,
+  default = c("lon", "lat"),
+  rev = FALSE,
+  call = caller_env
+)
 
 has_coords(x, coords = NULL, value = TRUE)
 }
