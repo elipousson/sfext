@@ -73,7 +73,7 @@ transformations
 \item Get the center point for a \code{sf} object
 \item Get a circumscribed square or approximate inscribed square in a \code{sf} object
 \item Get a circumscribed circle or inscribed circle in a \code{sf} object
-\item Get a donut for a \code{sf} object (not fully working)
+\item Get a donut for a \code{sf} object (may return unexpected results if inscribed = TRUE)
 }
 
 st_inscribed_square wraps \code{\link[sf:geos_unary]{sf::st_inscribed_circle()}} but limits the circle
