@@ -48,7 +48,6 @@ st_nudge <- function(x,
     x_center <- st_center(sf::st_union(x), "sfc")
 
     geom <- sf::st_set_crs(geom + (to - x_center), crs)
-
   } else if (is.numeric(to) && (length(to) == 2)) {
     nudge_y <- to[[1]]
     nudge_x <- to[[2]]

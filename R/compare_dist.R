@@ -74,7 +74,7 @@ compare_dist <- function(dist,
 
   how <- arg_match(how, c("ratio", "fit", "longer", "shorter", "same"))
 
-  switch (how,
+  switch(how,
     "ratio" = dist / dist_to_compare,
     "fit" = round(dist / dist_to_compare, 0),
     "longer" = dist > dist_to_compare,
@@ -82,4 +82,3 @@ compare_dist <- function(dist,
     "same" = all.equal(dist_to_compare, dist, tolerance = tolerance)
   )
 }
-

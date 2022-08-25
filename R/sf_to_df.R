@@ -177,8 +177,10 @@ check_coords <- function(x = NULL,
       coords <- has_coords(x, coords = coords, value = TRUE)
     } else if (!is.null(coords)) {
       cli_warn(
-        c("The provided {.arg coords} ({.val {coords}}) can't be found in {.arg x}.",
-        "Replacing {.arg coords} with {.arg default} ({.val {default}})."),
+        c(
+          "The provided {.arg coords} ({.val {coords}}) can't be found in {.arg x}.",
+          "Replacing {.arg coords} with {.arg default} ({.val {default}})."
+        ),
         call = call
       )
 
@@ -193,7 +195,7 @@ check_coords <- function(x = NULL,
   cli_abort_ifnot(
     # FIXME: What about the coord_col value where coordinates are split in two?
     "{.arg coords} must be a length 2 {.cls character} or {.cls numeric} vector.",
-    condition =  length(coords) == 2 &&
+    condition = length(coords) == 2 &&
       (is.character(coords) || is.numeric(coords)),
     call = call
   )
