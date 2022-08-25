@@ -5,7 +5,7 @@ transformations
 Get the center point for a sf object
 Get a circumscribed square or approximate inscribed square in a sf object
 Get a circumscribed circle or inscribed circle in a sf object
-Get a donut for a sf object (not fully working)
+Get a donut for a sf object (may return unexpected results if inscribed = TRUE)
 
 
 st_inscribed_square wraps sf::st_inscribed_circle() but limits the circle
@@ -19,7 +19,7 @@ transformations
 Get the center point for a sf object
 Get a circumscribed square or approximate inscribed square in a sf object
 Get a circumscribed circle or inscribed circle in a sf object
-Get a donut for a sf object (not fully working)
+Get a donut for a sf object (may return unexpected results if inscribed = TRUE)
 
 
 st_inscribed_square wraps sf::st_inscribed_circle() but limits the circle
@@ -82,7 +82,7 @@ transformations</p></li>
 <li><p>Get the center point for a <code>sf</code> object</p></li>
 <li><p>Get a circumscribed square or approximate inscribed square in a <code>sf</code> object</p></li>
 <li><p>Get a circumscribed circle or inscribed circle in a <code>sf</code> object</p></li>
-<li><p>Get a donut for a <code>sf</code> object (not fully working)</p></li>
+<li><p>Get a donut for a <code>sf</code> object (may return unexpected results if inscribed = TRUE)</p></li>
 </ul><p>st_inscribed_square wraps <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_inscribed_circle()</a></code> but limits the circle
 to 1 segment per quadrant (<code>nQuadSegs = 1</code>) and then rotates the resulting
 geometry 45 degrees to provide a (mostly) inscribed square. A different
