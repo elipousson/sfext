@@ -2,22 +2,23 @@
 % Please edit documentation in R/compare_dist.R
 \name{compare_dist}
 \alias{compare_dist}
-\title{Does this distance fit within the bounding box of x or another distance?}
+\title{Compare a distance to the dimension of a bounding box or another distance
+value}
 \usage{
 compare_dist(
+  dist,
   x,
-  dist = NULL,
   units = NULL,
   to = "xdist",
-  check = TRUE,
-  round = TRUE,
+  how = "ratio",
+  tolerance = 1.5e-08,
   ...
 )
 }
 \arguments{
-\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object or a numeric vector.}
-
 \item{dist}{Distance to check as a units class or numeric vector}
+
+\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object or a numeric vector.}
 
 \item{units}{Units to compare. If dist or x are numeric they are assumed to
 be in the provided units or the units of the coordinate reference system
@@ -31,21 +32,23 @@ an sf or sfc object, to and any additional ... parameters are passed to
 \code{\link[sf:geos_measures]{sf::st_distance()}} using x as the first argument and to as the second. If
 x is a numeric vector the value of to is ignored.}
 
-\item{check, round}{If check is \code{TRUE} (default), return a logical vector
-indicating if the value dist can fit within the distance specified by x and
-to. If check is \code{FALSE} and round is \code{TRUE}, return the number of times,
-dist fits in the specified distance or 0 if dist is greater than the
-specified distance. If check is \code{FALSE} and round is \code{FALSE}, return the
-comparison distance divided by the input distance.}
+\item{what}{If "ratio", dist divided by the comparison distance. If what is
+"fit", return the number of times dist fits in the comparison distance
+without remainder. If "longer", "shorter", "same", return a logical vector.}
 }
 \value{
 A logical or numeric vector.
 }
 \description{
-Check if a distance fits within the bounding box of a sf, sfc, or bbox
-object, a distance returned by \code{\link[sf:geos_measures]{sf::st_distance()}} passing x as the first
-parameter, or a units class or numeric value. Set \code{drop = FALSE} to return
-the number of times dist fits within the specified distance.
+Compare dist to a distance based on x. If to is "xdist" (default), "ydist",
+"diagdist", or any length 2 character vector supported by \code{\link[=sf_bbox_dist]{sf_bbox_dist()}}
+dist is compared to the resulting distance. If to is an sf or sfc object, the
+comparison distance is the results from \code{\link[sf:geos_measures]{sf::st_distance()}} with x as the
+first parameter and to as the second. x can also be a numeric value with or
+without a units class. Use the "how" argument to determine the type of
+comparison: "ratio" (dist divided by comparison distance) "fit" (how many
+lengths of dist can fit wholly within the comparison distance) "longer",
+"shorter", "same" (uses tolerance parameter).
 }
 \seealso{
 Other dist: 
