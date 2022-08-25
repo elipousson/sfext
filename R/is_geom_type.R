@@ -124,6 +124,10 @@ is_multipolygon <- function(x, by_geometry = FALSE) {
 #' @rdname is_geom_type
 #' @export
 st_is_ext <- function(x, type = NULL, by_geometry = FALSE) {
+  if (!is_sf(x) && !is_sfc(x) && !is_sfg(x)) {
+    return(FALSE)
+  }
+
   if (by_geometry) {
     return(sf::st_is(x, type))
   }
