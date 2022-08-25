@@ -2,10 +2,25 @@
 % Please edit documentation in R/number_features.R
 \name{number_features}
 \alias{number_features}
+\alias{number_sf}
 \alias{sort_features}
+\alias{sort_sf}
 \title{Sort and number features by coordinates or distance}
 \usage{
 number_features(
+  x,
+  col = NULL,
+  sort = "dist_xmin_ymax",
+  to = NULL,
+  desc = FALSE,
+  crs = NULL,
+  num_style = "arabic",
+  num_start = 1,
+  suffix = NULL,
+  .id = "number"
+)
+
+number_sf(
   x,
   col = NULL,
   sort = "dist_xmin_ymax",
@@ -26,9 +41,18 @@ sort_features(
   desc = FALSE,
   crs = NULL
 )
+
+sort_sf(
+  x,
+  col = NULL,
+  sort = c("lon", "lat"),
+  to = NULL,
+  desc = FALSE,
+  crs = NULL
+)
 }
 \arguments{
-\item{x}{A sf or sfc object.}
+\item{x}{A \code{sf} or \code{sfc} object.}
 
 \item{col}{Group column name, Default: \code{NULL}}
 
@@ -44,7 +68,7 @@ if "sort" any of the following: "lon", "lat", "longitude", "latitude",
 "xmin", "ymin", "xmax", "ymax"}
 
 \item{num_style}{Style of enumeration, either "arabic", "alph", "Alph",
-"roman", "Roman"}
+"roman", "Roman".}
 
 \item{num_start}{Starting number; defaults to 1.}
 
@@ -61,8 +85,6 @@ A \code{sf} object with a number column ordered by sort values.
 \description{
 Used with \code{\link[maplayer:layer_markers]{maplayer::layer_numbers()}}. Supports multiple types of sorting including
 sorting:
-}
-\details{
 \itemize{
 \item by centroid coordinates ("lon", "lat") appended with \code{\link[=get_coords]{get_coords()}}
 \item by one or more bounding box min or max values ("xmin", "ymin", "xmax",

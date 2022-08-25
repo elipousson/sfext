@@ -1,5 +1,6 @@
 #' Sort and number features by coordinates or distance
 #'
+#' @description
 #' Used with [maplayer::layer_numbers()]. Supports multiple types of sorting including
 #' sorting:
 #'
@@ -20,9 +21,9 @@
 #' [number_features] also supports a range of different numbering styles
 #' designed to match the standard enumeration options available in LaTeX.
 #'
-#' @param x A sf or sfc object.
+#' @param x A `sf` or `sfc` object.
 #' @param num_style Style of enumeration, either "arabic", "alph", "Alph",
-#'   "roman", "Roman"
+#'   "roman", "Roman".
 #' @param num_start Starting number; defaults to 1.
 #' @param suffix Character to appended to "number" column. (e.g. "." for "1." or
 #'   ":" for "1:"). Can also be a character vector with the same length as the
@@ -87,6 +88,11 @@ number_features <- function(x,
 
   x
 }
+
+#' @name number_sf
+#' @rdname number_features
+#' @export
+number_sf <- number_features
 
 #' Adapted from https://stackoverflow.com/a/44274075
 #'
@@ -201,3 +207,9 @@ sort_features <- function(x,
 
   dplyr::arrange(x, dplyr::across(dplyr::all_of(sort)), .by_group = by_group)
 }
+
+#' @name sort_sf
+#' @rdname number_features
+#' @export
+sort_sf <- sort_features
+
