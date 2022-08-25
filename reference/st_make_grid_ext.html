@@ -114,7 +114,8 @@ to units matching GDAL units for x; defaults to "meter"</p></dd>
 
 
 <dt>crs</dt>
-<dd><p>Coordinate reference system of bounding box to return</p></dd>
+<dd><p>Coordinate reference system of bounding box to return; defaults to
+<code>NULL</code> which maintains the crs of the input object.</p></dd>
 
 
 <dt>ncol, nrow</dt>
@@ -158,7 +159,8 @@ circular polygons.</p></dd>
 
 
 <dt>filter</dt>
-<dd><p>If <code>TRUE</code> (or if trim is <code>TRUE</code>) filter grid geometry by x using <a href="st_filter_ext.html">st_filter_ext</a></p></dd>
+<dd><p>If <code>TRUE</code> (or if trim is <code>TRUE</code>) filter grid geometry by x
+using <a href="st_filter_ext.html">st_filter_ext</a></p></dd>
 
 
 <dt>trim</dt>

@@ -66,7 +66,8 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>A <code>sf</code> or <code>sfc</code> object.</p></dd>
+<dd><p>A <code>sf</code> or <code>sfc</code> object. If x has a missing crs, the crs is set to
+the provided value.</p></dd>
 
 
 <dt>crs</dt>
@@ -75,7 +76,7 @@ a <code>sf</code>, <code>sfc</code>, <code>bbox</code>, or <code>crs</code> clas
 
 
 <dt>null.ok</dt>
-<dd><p>If <code>TRUE</code> and x is <code>NULL</code>, return x.</p></dd>
+<dd><p>If <code>TRUE</code> and crs is <code>NULL</code>, return x.</p></dd>
 
 
 <dt>...</dt>
