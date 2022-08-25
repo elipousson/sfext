@@ -5,10 +5,11 @@ NULL
 
 #' @name transform_sf
 #' @rdname misc_sf
-#' @param x A `sf` or `sfc` object.
+#' @param x A `sf` or `sfc` object. If x has a missing crs, the crs is set to
+#'   the provided value.
 #' @param crs A coordinate reference system identifier (numeric or character) or
 #'   a `sf`, `sfc`, `bbox`, or `crs` class object supported by [sf::st_crs()].
-#' @param null.ok If `TRUE` and x is `NULL`, return x.
+#' @param null.ok If `TRUE` and crs is `NULL`, return x.
 #' @param ... Additional parameters passed to [sf::st_transform()]
 #' @export
 #' @importFrom sf st_crs st_transform
@@ -21,13 +22,12 @@ transform_sf <- function(x, crs = NULL, null.ok = TRUE, ...) {
     x <- as_sfc(x)
   }
 
-  if (is.na(sf::st_crs(x))) {
-    sf::st_crs(x) <- crs
-    return(x)
+  if (is_sf(crs, ext = TRUE)) {
+    crs <- sf::st_crs(crs)
   }
 
-  if (is_sf(crs, ext = TRUE)) {
-    crs <- sf::st_crs(x = crs)
+  if (is.na(sf::st_crs(x))) {
+    return(sf::st_set_crs(x, crs))
   }
 
   sf::st_transform(x, crs, ...)

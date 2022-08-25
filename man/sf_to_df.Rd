@@ -47,9 +47,9 @@ has_coords(x, coords = NULL, value = TRUE)
 single column or two separated columns.}
 
 \item{crs}{Cordinate reference system to return, Default: 4326 for
-\code{\link[=sf_to_df]{sf_to_df()}} and NULL for \code{\link[=df_to_sf]{df_to_sf()}}.}
+\code{\link[=sf_to_df]{sf_to_df()}} and \code{NULL} for \code{\link[=df_to_sf]{df_to_sf()}}.}
 
-\item{coords}{Coordinate columns for input dataframe or output sf object (if
+\item{coords}{Coordinate columns for input data.frame or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 
 \item{geometry}{Type of geometry to include in data frame. options include

@@ -8,6 +8,7 @@
 \alias{is_multiline}
 \alias{is_polygon}
 \alias{is_multipolygon}
+\alias{st_is_ext}
 \title{What geometry type is this feature?}
 \usage{
 is_geom_type(x, type = NULL, by_geometry = FALSE, ext = TRUE)
@@ -23,23 +24,35 @@ is_multiline(x, by_geometry = FALSE)
 is_polygon(x, by_geometry = FALSE)
 
 is_multipolygon(x, by_geometry = FALSE)
+
+st_is_ext(x, type = NULL, by_geometry = FALSE)
 }
 \arguments{
-\item{x}{A \code{sf} or \code{sfc} object passed to \link[sf:st_geometry_type]{sf::st_geometry_type}}
+\item{x}{A \code{sf} or \code{sfc} object passed to \code{\link[sf:st_geometry_type]{sf::st_geometry_type()}}}
 
 \item{type}{If "POINT", check if geometry type is POINT. Same for all
 available geometry types; not case sensitive; Default: \code{NULL}}
 
-\item{by_geometry}{Passed to \link[sf:st_geometry_type]{sf::st_geometry_type}; defaults to \code{FALSE}}
+\item{by_geometry}{Passed to \code{\link[sf:st_geometry_type]{sf::st_geometry_type()}}; defaults to \code{FALSE}}
 
-\item{ext}{For st_geom_type, if ext \code{TRUE} and check is \code{NULL}, return a list
+\item{ext}{For \code{\link[=is_geom_type]{is_geom_type()}}, if ext \code{TRUE} and check is \code{NULL}, return a list
 with checks for POINTS, POLYGONS, LINESTRING, and the returned types.}
 }
 \value{
-If ext is FALSE and type is NULL, returns vector with geometry types
-identical to \link[sf:st_geometry_type]{sf::st_geometry_type}. If ext is \code{TRUE}, returns a list and,
-if type is not \code{NULL}, returns a logical vector.
+\itemize{
+\item If ext is \code{FALSE} and type is \code{NULL}, returns vector with geometry types
+identical to \code{\link[sf:st_geometry_type]{sf::st_geometry_type()}}.
+\item If ext is \code{TRUE}, returns a list and, if type is not \code{NULL}, returns a
+logical vector.
+}
 }
 \description{
-A flexible wrapper for \link[sf:st_geometry_type]{sf::st_geometry_type} and \link[sf:st_is]{sf::st_is}.
+\code{\link[=is_geom_type]{is_geom_type()}} extends \code{\link[sf:st_geometry_type]{sf::st_geometry_type()}} to return a list with the
+standard output ("TYPES") and additional list values with logical vectors
+from \code{\link[sf:st_is]{sf::st_is()}} for "POINTS" (passing "POINT" and "MULTIPOINT" as type),
+"POLYGONS" (passing "POLYGON", "MULTIPOLYGON"), "LINESTRINGS" ("LINESTRING"
+and "MULTILINESTRING"), "GEOMETRYCOLLECTION" and "OTHER".
+
+\code{\link[=st_is_ext]{st_is_ext()}} adds a by_geometry argument that passes the results of
+\code{\link[sf:st_is]{sf::st_is()}} to \code{\link[=all]{all()}} if by_geometry is \code{FALSE}.
 }

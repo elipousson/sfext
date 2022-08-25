@@ -17,12 +17,13 @@ rename_sf_col(x, sf_col = "geometry")
 get_sf_col(x = NULL)
 }
 \arguments{
-\item{x}{A \code{sf} or \code{sfc} object.}
+\item{x}{A \code{sf} or \code{sfc} object. If x has a missing crs, the crs is set to
+the provided value.}
 
 \item{crs}{A coordinate reference system identifier (numeric or character) or
 a \code{sf}, \code{sfc}, \code{bbox}, or \code{crs} class object supported by \code{\link[sf:st_crs]{sf::st_crs()}}.}
 
-\item{null.ok}{If \code{TRUE} and x is \code{NULL}, return x.}
+\item{null.ok}{If \code{TRUE} and crs is \code{NULL}, return x.}
 
 \item{...}{Additional parameters passed to \code{\link[sf:st_transform]{sf::st_transform()}}}
 

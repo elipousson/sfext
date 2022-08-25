@@ -46,7 +46,8 @@ without modification.}
 instead of "kilometer") are also supported. Distance in units is converted
 to units matching GDAL units for x; defaults to "meter"}
 
-\item{crs}{Coordinate reference system of bounding box to return}
+\item{crs}{Coordinate reference system of bounding box to return; defaults to
+\code{NULL} which maintains the crs of the input object.}
 
 \item{ncol, nrow}{Used to set n if either are not \code{NULL}; defaults to \code{NULL}.
 row and id are added as columns to the grid if they are provided.}
@@ -72,7 +73,8 @@ circular polygons.}
 
 \item{.id}{A name to use for the cell id column. Defaults to "id".}
 
-\item{filter}{If \code{TRUE} (or if trim is \code{TRUE}) filter grid geometry by x using \link{st_filter_ext}}
+\item{filter}{If \code{TRUE} (or if trim is \code{TRUE}) filter grid geometry by x
+using \link{st_filter_ext}}
 
 \item{trim}{If \code{TRUE}, x is trimmed to y with \code{\link[=st_trim]{st_trim()}}.}
 }

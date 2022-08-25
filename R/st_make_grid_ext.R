@@ -22,7 +22,8 @@
 #'   "hex", "flat_top_hex", "circle", "circle_offset"
 #' @param .id A name to use for the cell id column. Defaults to "id".
 #' @inheritParams sf::st_make_grid
-#' @param filter If `TRUE` (or if trim is `TRUE`) filter grid geometry by x using [st_filter_ext]
+#' @param filter If `TRUE` (or if trim is `TRUE`) filter grid geometry by x
+#'   using [st_filter_ext]
 #' @inheritParams st_filter_ext
 #' @example examples/st_make_grid_ext.R
 #' @seealso [sf::st_make_grid]

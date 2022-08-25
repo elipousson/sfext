@@ -33,6 +33,6 @@ numeric).}
 \item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
 }
 \description{
-Nudge, move, or shift a bbox, sfc, or sf object to the center of another
-feature and/or by a set distance.
+Nudge, move, or shift a \code{sf}, \code{sfc}, or \code{bbox} object to the center of
+another feature and/or by a set distance.
 }

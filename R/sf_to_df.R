@@ -12,10 +12,10 @@
 #' @param x A `sf` or `sfc` object or a data frame with lat/lon coordinates in a
 #'   single column or two separated columns.
 #' @param crs Cordinate reference system to return, Default: 4326 for
-#'   [sf_to_df()] and NULL for [df_to_sf()].
+#'   [sf_to_df()] and `NULL` for [df_to_sf()].
 #' @param geometry Type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'.
-#' @param coords Coordinate columns for input dataframe or output sf object (if
+#' @param coords Coordinate columns for input data.frame or output sf object (if
 #'   geometry is 'centroid' or 'point') Default: c("lon", "lat").
 #' @param remove_coords For [df_to_sf()], if `TRUE`, remove the coordinate columns
 #'   after converting a data frame to simple feature object; defaults to

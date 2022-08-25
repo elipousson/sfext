@@ -25,12 +25,12 @@ are used as dist.}
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
 'portrait'.}
 
-\item{scale}{Scale name}
+\item{scale}{Scale name from \code{standard_scales[["scale"]]}.}
 
 \item{scale_unit}{"mm" (converted to cm by dividing by 10), "cm", "px"
 (converted to inches by dividing by dpi), or "in".}
 
-\item{actual_unit}{any unit supported by convert_dist_units}
+\item{actual_unit}{any unit supported by \code{\link[=convert_dist_units]{convert_dist_units()}}}
 
 \item{scale_factor}{factor for converting from scale_unit to actual_unit,
 e.g. if 1" = 1', the scale factor is 12. optional if scale if provided;
@@ -60,13 +60,17 @@ nrow and columns (variable spacing is not currently supported); defaults to 0.}
   }}
 }
 \value{
-dist values converted from scale_unit to actual_unit based on
-scale_factor or information from standard_scales object. If paper is
-provided, return a data frame with converted distances as actual_width and
-actual_height
+\itemize{
+\item If paper is not provided, return a vector of dist values converted from
+scale_unit to actual_unit based on scale_factor or information from
+\link{standard_scales} data.
+\item If paper is provided, return a data.frame with converted distances appends
+as columns named actual_width and actual_height.
+}
 }
 \description{
-Convert distance from scale to actual units based on named \code{standard_scales}
+This function converts scale distances to actual units based on named
+\link{standard_scales}.
 }
 \seealso{
 Other dist: 

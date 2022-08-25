@@ -20,7 +20,8 @@ st_filter_ext(
 }
 \arguments{
 \item{x, y}{A \code{sf}, \code{sfc}, or \code{bbox} object. x may also be a \code{sf} list
-objects. If x is an \code{sf} list, additional parameters in \code{...} will be ignored.}
+objects. If x is an \code{sf} list, additional parameters in \code{...} will be
+ignored.}
 
 \item{crop}{If \code{TRUE}, x is cropped to y using \code{\link[sf:st_crop]{sf::st_crop()}}.}
 
@@ -50,5 +51,7 @@ If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supporte
   }}
 }
 \description{
-Filter, crop, trim, or erase a simple feature object or list
+Extend \code{\link[sf:st_join]{sf::st_filter()}} to filter a sf list or a \code{sf}, \code{sfc}, or \code{bbox} with
+options to crop, trim or erase the geometry of the input object based on a
+predicate function.
 }

@@ -1,7 +1,7 @@
 #' Transform or convert coordinates of a simple feature or bounding box object
 #'
-#' Take a `sf`, `sfc`, or `bbox` object and transform to coordinate reference
-#' system to match the object provided to `crs`.
+#' This function takes a `sf`, `sfc`, or `bbox` object and transform to
+#' coordinate reference system to match the object provided to crs.
 #'
 #' @param x An `sf`, `sfc`, or `bbox` object, a list of sf objects.
 #' @param crs A character or numeric reference to a coordinate reference system
@@ -11,13 +11,14 @@
 #'   the returned object remains a list but may be converted to `bbox` if class
 #'   = "sf".
 #' @param rotate If rotate is greater or less than 0, [st_transform_ext] calls
-#'   [st_omerc] and returns an object with the oblique mercator projection
+#'   [st_omerc] and returns an object with the Oblique Mercator projection
 #'   passing the value of rotate to the gamma parameter of the projection.
 #'   rotate must be between -45 and 45 degrees.
 #' @param null.ok If `TRUE` and x is `NULL` return x without an error. Defaults
 #'   to `FALSE`.
-#' @param list.ok If `TRUE`, x can be a list of sf, sfc, or bbox objects. If
-#'   `FALSE`, only sf, sfc, or bbox objects are supported. Defaults to `TRUE`.
+#' @param list.ok If `TRUE`, x can be a list of `sf`, `sfc`, or `bbox` objects.
+#'   If `FALSE`, only `sf`, `sfc`, or `bbox` objects are supported. Defaults to
+#'   `TRUE`.
 #' @return An `sf`, `sfc`, or `bbox` object transformed to a new coordinate
 #'   reference system.
 #' @seealso [sf::st_transform()],[sf::st_crs()]
@@ -72,7 +73,8 @@ st_omerc <- function(x, rotate = 0) {
   )
 
   cli_warn_ifnot(
-    "{.fn st_omerc} may return an error when {.arg rotate} is greater than or less than 45 degrees.",
+    "{.fn st_omerc} may return an error when {.arg rotate} is
+    greater than or less than 45 degrees.",
     condition = dplyr::between(rotate, -45, 45)
   )
 
@@ -81,7 +83,8 @@ st_omerc <- function(x, rotate = 0) {
 
   crs <-
     glue(
-      "+proj=omerc +lat_0={coords$lat} +lonc={coords$lon} +datum=WGS84 +units=m +no_defs +gamma={rotate}"
+      "+proj=omerc +lat_0={coords$lat} +lonc={coords$lon}
+      +datum=WGS84 +units=m +no_defs +gamma={rotate}"
     )
 
   sf::st_transform(x = x, crs = crs)

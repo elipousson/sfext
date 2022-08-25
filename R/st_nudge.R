@@ -1,7 +1,7 @@
 #' Nudge a simple feature to the center of another feature and/or a set distance
 #'
-#' Nudge, move, or shift a bbox, sfc, or sf object to the center of another
-#' feature and/or by a set distance.
+#' Nudge, move, or shift a `sf`, `sfc`, or `bbox` object to the center of
+#' another feature and/or by a set distance.
 #'
 #' @param to sf object to use as new center for x or length 2 numeric vector
 #'   with the nudge_y and nudge_x distance (in that order).

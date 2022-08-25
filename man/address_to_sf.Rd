@@ -43,7 +43,7 @@ Note that this is not compatible with \code{full_results = TRUE} as geocoding
 services have different columns that they return.
 }}
 
-\item{coords}{Coordinate columns for input dataframe or output sf object (if
+\item{coords}{Coordinate columns for input data.frame or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 
 \item{remove_coords}{For \code{\link[=df_to_sf]{df_to_sf()}}, if \code{TRUE}, remove the coordinate columns
@@ -51,7 +51,7 @@ after converting a data frame to simple feature object; defaults to
 \code{FALSE}.}
 
 \item{crs}{Cordinate reference system to return, Default: 4326 for
-\code{\link[=sf_to_df]{sf_to_df()}} and NULL for \code{\link[=df_to_sf]{df_to_sf()}}.}
+\code{\link[=sf_to_df]{sf_to_df()}} and \code{NULL} for \code{\link[=df_to_sf]{df_to_sf()}}.}
 
 \item{...}{
   Arguments passed on to \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode}}

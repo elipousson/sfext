@@ -25,7 +25,8 @@ row and id are added as columns to the grid if they are provided.}
 
 \item{.id}{A name to use for the cell id column. Defaults to "id".}
 
-\item{crs}{Coordinate reference system of bounding box to return}
+\item{crs}{Coordinate reference system of bounding box to return; defaults to
+\code{NULL} which maintains the crs of the input object.}
 
 \item{...}{Additional parameters passed to \link{as_sf}, \link{as_sfc}, \link{as_bbox}, or
 \link{as_sf_list}}

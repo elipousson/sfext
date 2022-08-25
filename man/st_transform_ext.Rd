@@ -29,23 +29,24 @@ the returned object remains a list but may be converted to \code{bbox} if class
 = "sf".}
 
 \item{rotate}{If rotate is greater or less than 0, \link{st_transform_ext} calls
-\link{st_omerc} and returns an object with the oblique mercator projection
+\link{st_omerc} and returns an object with the Oblique Mercator projection
 passing the value of rotate to the gamma parameter of the projection.
 rotate must be between -45 and 45 degrees.}
 
 \item{null.ok}{If \code{TRUE} and x is \code{NULL} return x without an error. Defaults
 to \code{FALSE}.}
 
-\item{list.ok}{If \code{TRUE}, x can be a list of sf, sfc, or bbox objects. If
-\code{FALSE}, only sf, sfc, or bbox objects are supported. Defaults to \code{TRUE}.}
+\item{list.ok}{If \code{TRUE}, x can be a list of \code{sf}, \code{sfc}, or \code{bbox} objects.
+If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supported. Defaults to
+\code{TRUE}.}
 }
 \value{
 An \code{sf}, \code{sfc}, or \code{bbox} object transformed to a new coordinate
 reference system.
 }
 \description{
-Take a \code{sf}, \code{sfc}, or \code{bbox} object and transform to coordinate reference
-system to match the object provided to \code{crs}.
+This function takes a \code{sf}, \code{sfc}, or \code{bbox} object and transform to
+coordinate reference system to match the object provided to crs.
 }
 \seealso{
 \code{\link[sf:st_transform]{sf::st_transform()}},\code{\link[sf:st_crs]{sf::st_crs()}}

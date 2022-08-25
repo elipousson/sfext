@@ -1,24 +1,27 @@
 
 #' Convert distance from scale to actual units
 #'
-#' Convert distance from scale to actual units based on named `standard_scales`
+#' This function converts scale distances to actual units based on named
+#' [standard_scales].
 #'
 #' @param dist distance to convert. If paper is provided, paper width and height
 #'   are used as dist.
 #' @inheritParams get_scale
 #' @param scale_unit "mm" (converted to cm by dividing by 10), "cm", "px"
 #'   (converted to inches by dividing by dpi), or "in".
-#' @param actual_unit any unit supported by convert_dist_units
+#' @param actual_unit any unit supported by [convert_dist_units()]
 #' @param scale_factor factor for converting from scale_unit to actual_unit,
 #'   e.g. if 1" = 1', the scale factor is 12. optional if scale if provided;
 #'   defaults to `NULL`.
 #' @param dpi dots per square inch (used as conversion factor for "px" to "in")
 #' @inheritParams get_paper
 #' @inheritDotParams get_paper
-#' @return dist values converted from scale_unit to actual_unit based on
-#'   scale_factor or information from standard_scales object. If paper is
-#'   provided, return a data frame with converted distances as actual_width and
-#'   actual_height
+#' @returns
+#' - If paper is not provided, return a vector of dist values converted from
+#' scale_unit to actual_unit based on scale_factor or information from
+#' [standard_scales] data.
+#' - If paper is provided, return a data.frame with converted distances appends
+#' as columns named actual_width and actual_height.
 #' @family dist
 #' @export
 convert_dist_scale <- function(dist = NULL,

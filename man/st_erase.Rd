@@ -5,23 +5,26 @@
 \alias{st_trim}
 \title{Erase an area of a simple feature object}
 \usage{
-st_erase(x, y, flip = FALSE, union = TRUE)
+st_erase(x, y, flip = FALSE, union = TRUE, ...)
 
-st_trim(x, y, union = TRUE)
+st_trim(x, y, union = TRUE, ...)
 }
 \arguments{
-\item{x}{A sf, sfc, or bbox object to erase or trim.}
+\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object to erase or trim.}
 
-\item{y}{A sf, sfc, or bbox object to use to erase or trim.}
+\item{y}{A \code{sf}, \code{sfc}, or \code{bbox} object to use to erase or trim.}
 
 \item{flip}{If \code{TRUE}, use st_intersection; if \code{FALSE} use st_difference,
 Default: \code{FALSE}}
 
 \item{union}{If \code{TRUE}, use \link[sf:geos_combine]{sf::st_combine} and \link[sf:geos_combine]{sf::st_union} on y before
-applying difference/intersection, Default: \code{FALSE}}
+applying difference/intersection; defaults to \code{FALSE}.}
+
+\item{...}{arguments passed on to \link[s2]{s2_options}}
 }
 \description{
-An extended version of \link[sf:geos_binary_ops]{sf::st_difference} that uses the flip parameter to
-optionally call \link[sf:geos_binary_ops]{sf::st_intersection} and combines and unions the second
-object by default. \link{st_trim} is \link{st_erase} with \code{flip = TRUE}.
+This function extends \code{\link[sf:geos_binary_ops]{sf::st_difference()}} by unioning the second parameter
+by default, checking validity of inputs, and optionally (when \code{flip = TRUE})
+using \code{\link[sf:geos_binary_ops]{sf::st_intersection()}} instead of \link[sf:geos_binary_ops]{sf::st_difference}. \code{\link[=st_trim]{st_trim()}} is
+equivalent to \code{\link[=st_erase]{st_erase()}} with flip set to \code{TRUE}.
 }

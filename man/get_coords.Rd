@@ -20,31 +20,34 @@ get_coords(
 get_minmax(x, crs = NULL, keep_all = TRUE, drop = TRUE)
 }
 \arguments{
-\item{x}{\code{sf}, \code{bbox}, or \code{sfc} object.}
+\item{x}{A \code{sf}, \code{bbox}, or \code{sfc} object.}
 
-\item{coords}{Column names to use for coordinates in results, Default: \code{NULL};
-which is set to c("lon", "lat") by \link{check_coords}.}
+\item{coords}{Column names to use for coordinates in results, Default:
+\code{NULL}; which is set to c("lon", "lat") by \code{\link[=check_coords]{check_coords()}}.}
 
 \item{geometry}{geometry to use for coordinates "centroid", "surface point",
 or alternatively "wkt"; defaults to \code{NULL} ("centroid").}
 
-\item{crs}{Coordinate reference system to use for coordinates; defaults to \code{NULL}.}
+\item{crs}{Coordinate reference system to use for coordinates; defaults to
+\code{NULL}.}
 
-\item{keep_all}{If \code{TRUE}, bind the coordinates columns to the provided object x,
-Default: \code{TRUE}.}
+\item{keep_all}{If \code{TRUE}, bind the coordinates columns to the provided
+object x; defaults to \code{TRUE}.}
 
-\item{drop}{If \code{TRUE} and x is an sf object, drop the geometry Default: \code{TRUE}.}
+\item{drop}{If \code{TRUE} and x is an sf object, drop the geometry Default:
+\code{TRUE}.}
 
-\item{call}{Passed as the call parameter for \link[rlang:arg_match]{rlang::arg_match} to improve error messages when function is used
-internally.}
+\item{call}{Passed as the call parameter for \code{\link[rlang:arg_match]{rlang::arg_match()}} to improve
+error messages when function is used internally.}
 }
 \description{
-An extended version of \link[sf:st_coordinates]{sf::st_coordinates} that supports binding coordinates
-to the object, optionally dropping the geometry, and returning wkt or a point
-on surface (geometry = "surface point") instead of the centroid.
+An extended version of \code{\link[sf:st_coordinates]{sf::st_coordinates()}} that supports binding
+coordinates to the object, optionally dropping the geometry, and returning
+wkt or a point on surface (geometry = "surface point") instead of the
+centroid.
 }
 \details{
-\link{get_minmax} get a bounding box for each feature (or group of features)
+\code{\link[=get_minmax]{get_minmax()}} get a bounding box for each feature (or group of features)
 appends the xmin, ymin, xmax, and ymax values for each feature to the simple
 feature object.
 }

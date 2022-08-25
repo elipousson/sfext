@@ -1,7 +1,12 @@
 #' Filter, crop, trim, or erase a simple feature object or list
 #'
+#' Extend [sf::st_filter()] to filter a sf list or a `sf`, `sfc`, or `bbox` with
+#' options to crop, trim or erase the geometry of the input object based on a
+#' predicate function.
+#'
 #' @param x,y A `sf`, `sfc`, or `bbox` object. x may also be a `sf` list
-#'   objects. If x is an `sf` list, additional parameters in `...` will be ignored.
+#'   objects. If x is an `sf` list, additional parameters in `...` will be
+#'   ignored.
 #' @param crop  If `TRUE`, x is cropped to y using [sf::st_crop()].
 #' @param trim  If `TRUE`, x is trimmed to y with [st_trim()].
 #' @param erase If `TRUE`, x is erased by y with [st_erase()].
@@ -55,7 +60,7 @@ st_filter_ext <- function(x,
   }
 
   cli_abort_ifnot(
-    "{.arg x} and {.arg y} must be either sf, sfc or bbox objects.",
+    "Both {.arg x} and {.arg y} must be either sf, sfc or bbox objects.",
     condition = is_sf(x, ext = TRUE) && is_sf(y, ext = TRUE)
   )
 

@@ -1,31 +1,40 @@
 #' Get coordinates for a simple feature or bounding box object
 #'
-#' An extended version of [sf::st_coordinates] that supports binding coordinates
-#' to the object, optionally dropping the geometry, and returning wkt or a point
-#' on surface (geometry = "surface point") instead of the centroid.
+#' An extended version of [sf::st_coordinates()] that supports binding
+#' coordinates to the object, optionally dropping the geometry, and returning
+#' wkt or a point on surface (geometry = "surface point") instead of the
+#' centroid.
 #'
-#' [get_minmax] get a bounding box for each feature (or group of features)
+#' [get_minmax()] get a bounding box for each feature (or group of features)
 #' appends the xmin, ymin, xmax, and ymax values for each feature to the simple
 #' feature object.
 #'
-#' @param x `sf`, `bbox`, or `sfc` object.
-#' @param coords Column names to use for coordinates in results, Default: `NULL`;
-#'   which is set to c("lon", "lat") by [check_coords].
+#' @param x A `sf`, `bbox`, or `sfc` object.
+#' @param coords Column names to use for coordinates in results, Default:
+#'   `NULL`; which is set to c("lon", "lat") by [check_coords()].
 #' @param geometry geometry to use for coordinates "centroid", "surface point",
 #'   or alternatively "wkt"; defaults to `NULL` ("centroid").
-#' @param keep_all If `TRUE`, bind the coordinates columns to the provided object x,
-#'   Default: `TRUE`.
-#' @param crs Coordinate reference system to use for coordinates; defaults to `NULL`.
-#' @param drop If `TRUE` and x is an sf object, drop the geometry Default: `TRUE`.
-#' @param call Passed as the call parameter for [rlang::arg_match] to improve error messages when function is used
-#'   internally.
+#' @param keep_all If `TRUE`, bind the coordinates columns to the provided
+#'   object x; defaults to `TRUE`.
+#' @param crs Coordinate reference system to use for coordinates; defaults to
+#'   `NULL`.
+#' @param drop If `TRUE` and x is an sf object, drop the geometry Default:
+#'   `TRUE`.
+#' @param call Passed as the call parameter for [rlang::arg_match()] to improve
+#'   error messages when function is used internally.
 #' @rdname get_coords
 #' @aliases st_coords
 #' @export
 #' @importFrom sf st_as_text st_point_on_surface st_coordinates
 #'   st_drop_geometry st_zm
 #' @importFrom dplyr select bind_cols
-get_coords <- function(x, coords = NULL, geometry = "centroid", crs = NULL, keep_all = TRUE, drop = TRUE, call = caller_env()) {
+get_coords <- function(x,
+                       coords = NULL,
+                       geometry = "centroid",
+                       crs = NULL,
+                       keep_all = TRUE,
+                       drop = TRUE,
+                       call = caller_env()) {
   geometry <-
     arg_match(
       geometry,

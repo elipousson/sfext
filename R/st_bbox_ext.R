@@ -1,22 +1,24 @@
-#' Get a bounding box buffered to match an aspect ratio
+#' Get a bounding box buffered a set distance or to match an aspect ratio
 #'
-#' Takes an area as an sf object or a bounding box and returns a bounding box
-#' that matches the provided aspect ratio and contains the area or bounding box
-#' provided.
+#' This function takes a `sf` object and returns a bounding box buffered by a
+#' specified distance or diagonal ratio (a proportion of the diagonal distance
+#' across the bounding box) and to match the provided aspect ratio.
 #'
 #' Common aspect ratios include "1:1" (1), "4:6" (0.666), "8.5:11", "16:9"
 #' (1.777). The asp parameter supports both numeric values and character
 #' strings with ratios matching the format of "width:height".
 #'
-#' @param x An object sf, bbox, sfc, raster, or sp object or a data frame that
-#'   can be converted to an sf object or a list of sf, bbox, or sfc objects.
-#'   st_bbox_asp also supports vectors in the same format as a bbox object.
+#' @param x An object `sf`, `bbox`, `sfc`, `raster`, or `sp` object or a
+#'   `data.frame` that can be converted to an `sf` object or a list of `sf`,
+#'   `bbox`, or `sfc` objects. [st_bbox_asp()] also supports vectors in the same
+#'   format as a `bbox` object.
 #' @inheritParams st_buffer_ext
 #' @inheritParams get_asp
-#' @param crs Coordinate reference system of bounding box to return
-#' @param class Class of object to return (sf or bbox); defaults to "bbox".
+#' @param crs Coordinate reference system of bounding box to return; defaults to
+#'   `NULL` which maintains the crs of the input object.
+#' @param class Class of object to return (`sf` or `bbox`); defaults to "bbox".
 #' @param null.ok If `TRUE` and x is `NULL`, return `NULL`.
-#' @return Class `bbox` object
+#' @return A `bbox` object converted to match the class of the class parameter.
 #' @aliases st_bbox_adj
 #' @name st_bbox_ext
 #' @export
