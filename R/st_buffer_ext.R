@@ -79,7 +79,7 @@ st_buffer_ext <- function(x,
   # Get crs and rename gdal units to match options for set_units
   crs <- sf::st_crs(x)
 
-  dist <- diag_ratio_to_dist(x, dist, diag_ratio)
+  dist <- dist %||% sf_bbox_diag_ratio_to_dist(as_bbox(x), diag_ratio)
 
   unit <- unit %||% get_dist_units(dist, quiet = TRUE)
 
@@ -101,21 +101,6 @@ st_buffer_ext <- function(x,
   }
 
   sf::st_transform(x, lonlat_crs)
-}
-
-#' Return distance based on diagonal ratio if dist is NULL
-#'
-#' @noRd
-diag_ratio_to_dist <- function(x = NULL, dist = NULL, diag_ratio = NULL) {
-  if (is.null(x) | !is.null(dist)) {
-    return(dist)
-  }
-
-  if (!is.null(diag_ratio)) {
-    sf_bbox_diagdist(bbox = as_bbox(x), drop = TRUE) * diag_ratio
-  } else {
-    dist
-  }
 }
 
 #' Limit distance to the min/max values of dist_limits
