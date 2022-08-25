@@ -52,6 +52,7 @@ reference:
   - starts_with("is_dist")
   - '`convert_dist_units`'
   - '`convert_dist_scale`'
+  - '`compare_dist`'
   - starts_with("bind_units")
   - '`get_scale`'
 - title: Utility functions for paper and image sizes
