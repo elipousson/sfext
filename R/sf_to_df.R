@@ -1,13 +1,19 @@
 #' Convert between simple feature and data frame objects
 #'
-#' Helper function to convert a simple feature object to data frame by dropping
-#' geometry, converting geometry to well known text, or (if the geometry type is
-#' not POINT) getting coordinates for a centroid or point on surface. If an sfc
-#' object is provided,the "drop" geometry option is not supported.
+#' @description
+#' [sf_to_df()] converts a simple feature object to a data.frame by dropping
+#' geometry or, using [get_coords()], converting geometry to well known text, or
+#' (if the geometry type is not POINT) getting coordinates for a centroid or
+#' point on surface. If an sfc object is provided,the "drop" geometry option is
+#' not supported.
 #'
-#' [check_coords()] is a helper function used by [df_to_sf()] to suggest the
-#' appropriate coordinate column names based on the column names in the provided
-#' data frame.
+#' [df_to_sf()] converts a data.frame to a simple feature object using a
+#' geometry column (named "geometry"), address column (name matching the address
+#' parameter), well known text column (named "wkt"), or coords (must have
+#' columns matching coords values). Related helper functions include
+#' [check_coords()] to suggest the appropriate coordinate column names based on
+#' the column names in the provided data frame; [has_coords()] to check if a
+#' data frame has the specified coordinates.
 #'
 #' @param x A `sf` or `sfc` object or a data frame with lat/lon coordinates in a
 #'   single column or two separated columns.

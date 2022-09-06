@@ -100,15 +100,19 @@ to wkt or coordinates for the centroid or point on surface; \code{\link[=df_to_s
 returns a simple feature object with POINT geometry.
 }
 \description{
-Helper function to convert a simple feature object to data frame by dropping
-geometry, converting geometry to well known text, or (if the geometry type is
-not POINT) getting coordinates for a centroid or point on surface. If an sfc
-object is provided,the "drop" geometry option is not supported.
-}
-\details{
-\code{\link[=check_coords]{check_coords()}} is a helper function used by \code{\link[=df_to_sf]{df_to_sf()}} to suggest the
-appropriate coordinate column names based on the column names in the provided
-data frame.
+\code{\link[=sf_to_df]{sf_to_df()}} converts a simple feature object to a data.frame by dropping
+geometry or, using \code{\link[=get_coords]{get_coords()}}, converting geometry to well known text, or
+(if the geometry type is not POINT) getting coordinates for a centroid or
+point on surface. If an sfc object is provided,the "drop" geometry option is
+not supported.
+
+\code{\link[=df_to_sf]{df_to_sf()}} converts a data.frame to a simple feature object using a
+geometry column (named "geometry"), address column (name matching the address
+parameter), well known text column (named "wkt"), or coords (must have
+columns matching coords values). Related helper functions include
+\code{\link[=check_coords]{check_coords()}} to suggest the appropriate coordinate column names based on
+the column names in the provided data frame; \code{\link[=has_coords]{has_coords()}} to check if a
+data frame has the specified coordinates.
 }
 \examples{
 nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
