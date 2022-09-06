@@ -18,18 +18,18 @@ st_transform_ext(
 st_omerc(x, rotate = 0)
 }
 \arguments{
-\item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object, a list of sf objects.}
+\item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object, a list of sf objects, or a
+\code{data.frame} object (always returned as is).}
 
 \item{crs}{A character or numeric reference to a coordinate reference system
 supported by \code{\link[sf:st_crs]{sf::st_crs()}} or another  \code{sf}, \code{sfc}, or \code{bbox} object that
 is used to provide crs.}
 
 \item{class}{Class of object to return (\code{sf} or \code{bbox}). If x is an sf list,
-the returned object remains a list but may be converted to \code{bbox} if class
-= "sf".}
+the returned object remains a list but may be converted to \code{bbox} if \code{class = "sf"}.}
 
-\item{rotate}{If rotate is greater or less than 0, \link{st_transform_ext} calls
-\link{st_omerc} and returns an object with the Oblique Mercator projection
+\item{rotate}{If rotate is greater or less than 0, \code{\link[=st_transform_ext]{st_transform_ext()}} calls
+\code{\link[=st_omerc]{st_omerc()}} and returns an object with the Oblique Mercator projection
 passing the value of rotate to the gamma parameter of the projection.
 rotate must be between -45 and 45 degrees.}
 
@@ -45,8 +45,12 @@ An \code{sf}, \code{sfc}, or \code{bbox} object transformed to a new coordinate
 reference system.
 }
 \description{
-This function takes a \code{sf}, \code{sfc}, or \code{bbox} object and transform to
-coordinate reference system to match the object provided to crs.
+This function wraps \code{\link[sf:st_transform]{sf::st_transform()}} but supports a wider range of input
+objects and, using the \code{\link[=as_sf_class]{as_sf_class()}} function, returns a wider range of
+objects. Typically, takes a \code{sf}, \code{sfc}, or \code{bbox} object and transform to
+coordinate reference system to match the value of crs or the object provided
+to crs. If \code{x} is a data.frame or if \code{x} is \code{NULL} and \code{null.ok} is \code{TRUE}
+(defaults to \code{FALSE}) it is returned as is.
 }
 \seealso{
 \code{\link[sf:st_transform]{sf::st_transform()}},\code{\link[sf:st_crs]{sf::st_crs()}}

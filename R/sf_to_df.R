@@ -89,8 +89,9 @@ df_to_sf <- function(x,
                      call = caller_env(),
                      ...) {
   cli_abort_ifnot(
-    "{.arg x} can't be an sf object.",
-    condition = !is_sf(x)
+    "{.arg x} must be a {.cls data.frame}.",
+    condition = is.data.frame(x),
+    call = call
   )
 
   type <-
@@ -143,6 +144,16 @@ coords_df_to_sf <- function(x,
     coords <- check_coords(x = x, coords = coords, rev = rev)
   }
 
+  if (identical(has_coords(x, coords), character(0))) {
+    cli_warn(
+      c("{.arg x} can't be converted to a {.cls sf} object.",
+        " " = "Returning a {.cls {class(x)}} object."
+      ),
+      call = call
+    )
+    return(x)
+  }
+
   x <- format_coords(x, coords = coords, call = call)
 
   sf::st_as_sf(
@@ -167,7 +178,7 @@ check_coords <- function(x = NULL,
                          coords = NULL,
                          default = c("lon", "lat"),
                          rev = FALSE,
-                         call = caller_env) {
+                         call = caller_env()) {
   # If x is a data frame
   if (!is.null(x) && is.data.frame(x)) {
     x_has_coords <-
@@ -175,11 +186,11 @@ check_coords <- function(x = NULL,
 
     if (x_has_coords) {
       coords <- has_coords(x, coords = coords, value = TRUE)
-    } else if (!is.null(coords)) {
+    } else if (!is.null(coords) && !identical(has_coords(x, default), character(0))) {
       cli_warn(
         c(
-          "The provided {.arg coords} ({.val {coords}}) can't be found in {.arg x}.",
-          "Replacing {.arg coords} with {.arg default} ({.val {default}})."
+          "{.arg coords} ({.val {coords}}) can't be found in {.arg x}.",
+          " " = "Replacing {.arg coords} with {.arg default} ({.val {default}})."
         ),
         call = call
       )
@@ -298,15 +309,25 @@ wkt_df_to_sf <- function(x, crs = NULL) {
 #' @noRd
 #' @importFrom cli cli_inform
 format_coords <- function(x, coords = c("lon", "lat"), call = caller_env()) {
+  cli_abort_ifnot(
+    "{.arg coords} can't be {.val NULL} or {.val character(0)}.",
+    condition = !is.null(coords) && !identical(coords, character(0)),
+    call = call
+  )
+
+  cli_abort_ifnot(
+    "{.arg x} must be a {.cls data.frame} with columns named {.val {coords}}.",
+    condition = is.data.frame(x) && all(rlang::has_name(x, coords)),
+    call = call
+  )
+
   lon <- coords[[1]]
   lat <- coords[[2]]
 
-  stopifnot(
-    is.data.frame(x)
-  )
-
-  x[[lon]] <- as.numeric(x[[lon]])
-  x[[lat]] <- as.numeric(x[[lat]])
+  if (!all(is.numeric(x[[lon]])) | !all(is.numeric(x[[lat]]))) {
+    x[[lon]] <- as.numeric(x[[lon]])
+    x[[lat]] <- as.numeric(x[[lat]])
+  }
 
   missing_coords <- (is.na(x[[lon]]) | is.na(x[[lat]]))
   n_missing_coords <- sum(missing_coords)

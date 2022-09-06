@@ -1,17 +1,22 @@
 #' Transform or convert coordinates of a simple feature or bounding box object
 #'
-#' This function takes a `sf`, `sfc`, or `bbox` object and transform to
-#' coordinate reference system to match the object provided to crs.
+#' This function wraps [sf::st_transform()] but supports a wider range of input
+#' objects and, using the [as_sf_class()] function, returns a wider range of
+#' objects. Typically, takes a `sf`, `sfc`, or `bbox` object and transform to
+#' coordinate reference system to match the value of crs or the object provided
+#' to crs. If `x` is a data.frame or if `x` is `NULL` and `null.ok` is `TRUE`
+#' (defaults to `FALSE`) it is returned as is.
 #'
-#' @param x An `sf`, `sfc`, or `bbox` object, a list of sf objects.
+#' @param x An `sf`, `sfc`, or `bbox` object, a list of sf objects, or a
+#'   `data.frame` object (always returned as is).
 #' @param crs A character or numeric reference to a coordinate reference system
 #'   supported by [sf::st_crs()] or another  `sf`, `sfc`, or `bbox` object that
 #'   is used to provide crs.
 #' @param class Class of object to return (`sf` or `bbox`). If x is an sf list,
-#'   the returned object remains a list but may be converted to `bbox` if class
-#'   = "sf".
-#' @param rotate If rotate is greater or less than 0, [st_transform_ext] calls
-#'   [st_omerc] and returns an object with the Oblique Mercator projection
+#'   the returned object remains a list but may be converted to `bbox` if `class
+#'   = "sf"`.
+#' @param rotate If rotate is greater or less than 0, [st_transform_ext()] calls
+#'   [st_omerc()] and returns an object with the Oblique Mercator projection
 #'   passing the value of rotate to the gamma parameter of the projection.
 #'   rotate must be between -45 and 45 degrees.
 #' @param null.ok If `TRUE` and x is `NULL` return x without an error. Defaults
@@ -31,28 +36,34 @@ st_transform_ext <- function(x,
                              rotate = 0,
                              null.ok = FALSE,
                              list.ok = TRUE) {
+  if (is.data.frame(x) && !is_sf(x)) {
+    return(x)
+  }
+
+  skip_transform <- is.null(crs) | is_same_crs(x, crs)
+
+  if (skip_transform && is.null(class)) {
+    return(x)
+  }
+
   check_sf(x, ext = TRUE, null.ok = null.ok, list.ok = list.ok)
+
+  if (is.null(x)) {
+    return(x)
+  }
 
   type <-
     dplyr::case_when(
-      is.null(x) ~ "null_x",
-      is.null(crs) && is.null(class) ~ "null_crs",
-      is.null(crs) && !is.null(class) ~ "as_class",
+      skip_transform && !is.null(class) ~ "as_class",
       is_sf_list(x, ext = TRUE) ~ "list",
       rotate != 0 ~ "omerc",
-      is_same_crs(x, crs) ~ "same_crs",
       is_bbox(x) ~ "bbox",
       is_sf(x, ext = TRUE) ~ "sf"
     )
 
-  if (type %in% c("null_x", "null_crs")) {
-    return(x)
-  }
-
   x <-
     switch(type,
       "as_class" = x,
-      "same_crs" = x,
       "list" = purrr::map(x, ~ st_transform_ext(.x, crs, class, rotate)),
       "bbox" = sf_bbox_transform(x, crs = crs),
       "omerc" = st_omerc(x, rotate = rotate),

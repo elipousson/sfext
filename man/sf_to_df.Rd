@@ -37,7 +37,7 @@ check_coords(
   coords = NULL,
   default = c("lon", "lat"),
   rev = FALSE,
-  call = caller_env
+  call = caller_env()
 )
 
 has_coords(x, coords = NULL, value = TRUE)
