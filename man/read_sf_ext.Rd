@@ -14,7 +14,8 @@
 \alias{read_sf_gmap}
 \alias{read_sf_download}
 \alias{read_sf_gsheet}
-\title{Read spatial data in a bounding box to a simple feature object from multiple sources}
+\title{Read spatial data in a bounding box to a simple feature object from multiple
+sources}
 \usage{
 read_sf_ext(...)
 
@@ -40,6 +41,7 @@ read_sf_query(
 read_sf_excel(
   path,
   sheet = NULL,
+  combine_sheets = FALSE,
   bbox = NULL,
   coords = c("lon", "lat"),
   from_crs = 4326,
@@ -73,9 +75,15 @@ read_sf_esri(
   ...
 )
 
-read_sf_gist(url, id = NULL, bbox = NULL, ...)
+read_sf_gist(url, id = NULL, bbox = NULL, nth = 1, ...)
 
-read_sf_gmap(url, bbox = NULL, zm_drop = TRUE)
+read_sf_gmap(
+  url,
+  bbox = NULL,
+  layer = NULL,
+  combine_layers = FALSE,
+  zm_drop = TRUE
+)
 
 read_sf_download(
   url,
@@ -154,10 +162,10 @@ sheet.}
 \item{coords}{Character vector with coordinate values. Coordinates must use
 the same crs as the \code{from_crs} parameter.}
 
-\item{from_crs}{For \link{df_to_sf}, coordinate reference system used by
+\item{from_crs}{For \code{\link[=df_to_sf]{df_to_sf()}}, coordinate reference system used by
 coordinates or well known text in data frame.}
 
-\item{geo}{If \code{TRUE}, use \link{address_to_sf} to geocode address column; defaults
+\item{geo}{If \code{TRUE}, use \code{\link[=address_to_sf]{address_to_sf()}} to geocode address column; defaults
 to \code{FALSE}.}
 
 \item{address}{Address column name, Default: 'address'}
@@ -177,6 +185,23 @@ by the \code{col_types} argument.}
 useful when reading multiple input files and there is data in the file
 paths, such as the data collection date. If \code{NULL} (the default) no extra
 column is created.}
+
+\item{nth}{For \code{\link[=read_sf_gist]{read_sf_gist()}}, the file to return from the gist, e.g. 1 for
+first, 2 for second. Defaults to 1.}
+
+\item{layer}{layer name (varies by driver, may be a file name without
+extension); in case \code{layer} is missing, \code{st_read} will read the
+first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE})
+print a message when there are multiple layers, or give an error if there
+are no layers in \code{dsn}. If \code{dsn} is a database connection, then
+\code{layer} can be a table name or a database identifier (see
+\code{\link[DBI]{Id}}). It is also possible to omit \code{layer} and rather
+use the \code{query} argument.}
+
+\item{combine_layers, combine_sheets}{If \code{FALSE} (default), return a list with
+a sf object for each layer or sheet as a separate item. If \code{TRUE}, use
+\code{\link[purrr:map]{purrr::map_dfr()}} to combine layers or sheets into a single sf object
+using the layer or sheet name as an additional column.}
 
 \item{filename}{File name; if file name is \code{NULL}, name and file type are
 both required.}
@@ -214,13 +239,14 @@ not provided to \link{read_sf_gsheet}.}
 }
 \description{
 An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support reading spatial data
-based on a file path, URL, or the data name and associated package. A RDS, RDA, or RData file
-Optionally provide a bounding box to filter data (data is filtered before download or reading into memory where possible).
+based on a file path, URL, or the data name and associated package. A RDS,
+RDA, or RData file Optionally provide a bounding box to filter data (data is
+filtered before download or reading into memory where possible).
 }
 \details{
 Reading data from a url:
 
-\link{read_sf_url} supports multiple types of urls:
+\code{\link[=read_sf_url]{read_sf_url()}} supports multiple types of urls:
 \itemize{
 \item A MapServer or FeatureServer URL
 \item A URL for a GitHub gist with a single spatial data file (first file used
@@ -234,30 +260,30 @@ RData files supported by read_sf_path)
 \section{Reading data from a package}{
 
 
-\link{read_sf_pkg} looks for three types of package data:
+\code{\link[=read_sf_pkg]{read_sf_pkg()}} looks for three types of package data:
 \itemize{
 \item Data loaded with the package
 \item External data in the \code{extdata} system files folder.
-\item Cached data in the cache directory returned by \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
+\item Cached data in the cache directory returned by \code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}
 }
 }
 
 \section{Additional ... parameters}{
 
 
-\link{read_sf_ext} is a flexible function where ... are passed to one of the other
+\code{\link[=read_sf_ext]{read_sf_ext()}} is a flexible function where ... are passed to one of the other
 read functions depending on the provided parameters. The parameters \emph{must} be
 named to use this function.
 
-\link{read_sf_pkg} and \link{read_sf_download} both pass additional parameters
-to \link{read_sf_path} which supports query, name_col, name, and table. name and
+\code{\link[=read_sf_pkg]{read_sf_pkg()}} and \code{\link[=read_sf_download]{read_sf_download()}} both pass additional parameters
+to \code{\link[=read_sf_path]{read_sf_path()}} which supports query, name_col, name, and table. name and
 name_col are ignored if a query parameter is provided. If table is not
 provided, a expected layer name is created based on the file path.
 
-\link{read_sf_url} pass the where, name_col, and name for any ArcGIS FeatureServer or
-MapServer url (passed to \link{read_sf_esri}) or sheet if the url is for a Google
-Sheet (passed to \link[googlesheets4:range_read]{googlesheets4::read_sheet}), or a query or wkt filter
-parameter if the url is some other type (passed to \link[sf:st_read]{sf::read_sf}).
+\code{\link[=read_sf_url]{read_sf_url()}} pass the where, name_col, and name for any ArcGIS FeatureServer or
+MapServer url (passed to \code{\link[=read_sf_esri]{read_sf_esri()}}) or sheet if the url is for a Google
+Sheet (passed to \code{\link[googlesheets4:range_read]{googlesheets4::read_sheet()}}), or a query or wkt filter
+parameter if the url is some other type (passed to \code{\link[sf:st_read]{sf::read_sf()}}).
 }
 
 \seealso{

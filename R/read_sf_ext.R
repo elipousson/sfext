@@ -1,12 +1,14 @@
-#' Read spatial data in a bounding box to a simple feature object from multiple sources
+#' Read spatial data in a bounding box to a simple feature object from multiple
+#' sources
 #'
 #' An extended version of [sf::read_sf()] that support reading spatial data
-#' based on a file path, URL, or the data name and associated package. A RDS, RDA, or RData file
-#' Optionally provide a bounding box to filter data (data is filtered before download or reading into memory where possible).
+#' based on a file path, URL, or the data name and associated package. A RDS,
+#' RDA, or RData file Optionally provide a bounding box to filter data (data is
+#' filtered before download or reading into memory where possible).
 #'
 #' @details Reading data from a url:
 #'
-#' [read_sf_url] supports multiple types of urls:
+#' [read_sf_url()] supports multiple types of urls:
 #'
 #'   - A MapServer or FeatureServer URL
 #'   - A URL for a GitHub gist with a single spatial data file (first file used
@@ -18,27 +20,27 @@
 #'
 #' @section Reading data from a package:
 #'
-#' [read_sf_pkg] looks for three types of package data:
+#' [read_sf_pkg()] looks for three types of package data:
 #'
 #'   - Data loaded with the package
 #'   - External data in the `extdata` system files folder.
-#'   - Cached data in the cache directory returned by [rappdirs::user_cache_dir]
+#'   - Cached data in the cache directory returned by [rappdirs::user_cache_dir()]
 #'
 #' @section Additional ... parameters:
 #'
-#' [read_sf_ext] is a flexible function where ... are passed to one of the other
+#' [read_sf_ext()] is a flexible function where ... are passed to one of the other
 #' read functions depending on the provided parameters. The parameters *must* be
 #' named to use this function.
 #'
-#' [read_sf_pkg] and [read_sf_download] both pass additional parameters
-#' to [read_sf_path] which supports query, name_col, name, and table. name and
+#' [read_sf_pkg()] and [read_sf_download()] both pass additional parameters
+#' to [read_sf_path()] which supports query, name_col, name, and table. name and
 #' name_col are ignored if a query parameter is provided. If table is not
 #' provided, a expected layer name is created based on the file path.
 #'
-#' [read_sf_url] pass the where, name_col, and name for any ArcGIS FeatureServer or
-#' MapServer url (passed to [read_sf_esri]) or sheet if the url is for a Google
-#' Sheet (passed to [googlesheets4::read_sheet]), or a query or wkt filter
-#' parameter if the url is some other type (passed to [sf::read_sf]).
+#' [read_sf_url()] pass the where, name_col, and name for any ArcGIS FeatureServer or
+#' MapServer url (passed to [read_sf_esri()]) or sheet if the url is for a Google
+#' Sheet (passed to [googlesheets4::read_sheet()]), or a query or wkt filter
+#' parameter if the url is some other type (passed to [sf::read_sf()]).
 #'
 #' @param bbox A bounding box object; defaults to `NULL`. If `"bbox"` is provided,
 #'   only returns features intersecting the bounding box.
@@ -52,8 +54,12 @@
 #'   cache directory or extdata system files.
 #' @param coords Character vector with coordinate values. Coordinates must use
 #'   the same crs as the `from_crs` parameter.
-#' @param geo If `TRUE`, use [address_to_sf] to geocode address column; defaults
+#' @param geo If `TRUE`, use [address_to_sf()] to geocode address column; defaults
 #'   to `FALSE`.
+#' @param combine_layers,combine_sheets If `FALSE` (default), return a list with
+#'   a sf object for each layer or sheet as a separate item. If `TRUE`, use
+#'   [purrr::map_dfr()] to combine layers or sheets into a single sf object
+#'   using the layer or sheet name as an additional column.
 #' @inheritParams utils::download.file
 #' @inheritParams address_to_sf
 #' @inheritParams df_to_sf
@@ -76,7 +82,8 @@ read_sf_ext <- function(...) {
 
   cli_abort_ifnot(
     c("The parameters provided can't be matched to a function.",
-      "i" = "You must provide a {.arg url}, {.arg path}, {.arg package}, or {.arg dsn} argument."
+      "i" = "You must provide a {.arg url}, {.arg path}, {.arg package},
+      or {.arg dsn} argument."
     ),
     condition = (type != "missing")
   )
@@ -308,6 +315,7 @@ read_sf_query <- function(path,
 #' @importFrom purrr map
 read_sf_excel <- function(path,
                           sheet = NULL,
+                          combine_sheets = FALSE,
                           bbox = NULL,
                           coords = c("lon", "lat"),
                           from_crs = 4326,
@@ -317,30 +325,44 @@ read_sf_excel <- function(path,
   is_pkg_installed("readxl")
   # Convert XLS or XLSX file with coordinates to sf
 
-  if (!is.null(sheet) && length(sheet) > 1) {
+  sheet <- sheet %||% readxl::excel_sheets(path)
+
+  if ((length(sheet) > 1)) {
     params <- list2(...)
 
-    data <- purrr::map(
-      sheet,
-      ~ read_sf_excel(
-        path = path,
-        sheet = .x,
-        bbox = bbox,
-        coords = coords,
-        col_types = params$col_types
+    map_fn <- purrr::map
+
+    if (combine_sheets) {
+      map_fn <- purrr::map_dfr
+    }
+
+    return(
+      map_fn(
+        sheet,
+        ~ read_sf_excel(
+          path = path,
+          sheet = .x,
+          bbox = bbox,
+          coords = coords,
+          geo = geo,
+          address = address,
+          col_types = params$col_types
+        )
       )
     )
-
-    return(data)
   }
 
   data_df <- readxl::read_excel(path = path, sheet = sheet, ...)
 
-  data <- df_to_sf(data_df, coords = coords, geo = geo, address = address, from_crs = from_crs)
+  data <-
+    df_to_sf(
+      data_df,
+      coords = coords, from_crs = from_crs,
+      geo = geo, address = address
+    )
 
   if (!is_sf(data)) {
-    # FIXME: Add a warning for this possibility (may not actually work yet)
-    return(data_df)
+    return(data)
   }
 
   st_filter_ext(data, bbox)
@@ -367,11 +389,15 @@ read_sf_csv <- function(path,
 
   data_df <- readr::read_csv(file = path, show_col_types = show_col_types, ...)
 
-  data <- df_to_sf(data_df, coords = coords, geo = geo, address = address, crs = NULL, from_crs = from_crs)
+  data <-
+    df_to_sf(
+      data_df,
+      coords = coords, from_crs = from_crs,
+      geo = geo, address = address
+    )
 
   if (!is_sf(data)) {
-    # FIXME: Add a warning for this possibility (may not actually work yet)
-    return(data_df)
+    return(data)
   }
 
   st_filter_ext(data, bbox)
@@ -429,6 +455,8 @@ read_sf_url <- function(url,
     "excel" = read_sf_excel(
       url = url,
       bbox = bbox,
+      sheet = params$sheet,
+      combine_sheets = params$combine_sheets %||% FALSE,
       coords = coords,
       from_crs = from_crs,
       geo = geo,
@@ -455,11 +483,14 @@ read_sf_url <- function(url,
     ),
     "gist" = read_sf_gist(
       url = url,
-      bbox = bbox
+      bbox = bbox,
+      nth = params$nth %||% 1
     ),
     "gmap" = read_sf_gmap(
       url = url,
       bbox = bbox,
+      layer = params$layer,
+      combine_layers = params$combine_layers %||% FALSE,
       zm_drop = zm_drop
     ),
     "gsheet" = read_sf_gsheet(
@@ -506,16 +537,16 @@ read_sf_esri <- function(url,
 
   meta <- esri2sf::esrimeta(url)
 
-  is_esrisf <-
+  is_feature_layer <-
     !any(c(is.null(meta$geometryType), (meta$geometryType == "")))
 
-  if (is_esrisf) {
+  if (is_feature_layer) {
     coords <- NULL
   }
 
   where <- make_where_query(where, name, name_col, bbox, coords)
 
-  if (is_esrisf) {
+  if (is_feature_layer) {
     # Get FeatureServer with geometry
     return(
       esri2sf::esri2sf(
@@ -571,11 +602,14 @@ make_where_query <- function(where = NULL,
 
 #' @name read_sf_gist
 #' @rdname read_sf_ext
+#' @param nth For [read_sf_gist()], the file to return from the gist, e.g. 1 for
+#'   first, 2 for second. Defaults to 1.
 #' @inheritParams gistr::gist
 #' @export
 read_sf_gist <- function(url,
                          id = NULL,
                          bbox = NULL,
+                         nth = 1,
                          ...) {
   is_pkg_installed("gistr")
 
@@ -590,12 +624,8 @@ read_sf_gist <- function(url,
 
   check_null(gist_data$files)
 
-  if (length(gist_data$files) > 1) {
-    cli_warn("This gist has {length(gist_data$files)} files but only the first file is read.")
-  }
-
   read_sf_url(
-    url = gist_data$files[[1]]$raw_url,
+    url = gist_data$files[[which]]$raw_url,
     bbox = bbox,
     ...
   )
@@ -610,31 +640,48 @@ read_sf_gist <- function(url,
 #' @importFrom cli cli_progress_along
 read_sf_gmap <- function(url,
                          bbox = NULL,
+                         layer = NULL,
+                         combine_layers = FALSE,
                          zm_drop = TRUE) {
   url <- make_gmap_url(url)
 
-  layers <-
-    sf::st_layers(
-      dsn = url
+  layer <- layer %||% sf::st_layers(dsn = url)[["name"]]
+
+  if (length(layer) > 1) {
+    map_fn <- purrr::map
+
+    if (combine_layers) {
+      map_fn <- purrr::map_dfr
+    }
+
+    return(
+      map_fn(
+        cli::cli_progress_along(
+          layer,
+          "Downloading map layers"
+        ),
+        ~ dplyr::bind_cols(
+          read_sf_gmap(
+            url = url,
+            bbox = bbox,
+            layer = layer[.x],
+            combine_sheets = FALSE,
+            zm_drop = zm_drop
+          ),
+          layer = layer[.x]
+        )
+      )
     )
+  }
 
   data <-
-    purrr::map_dfr(
-      cli::cli_progress_along(
-        layers[["name"]],
-        "Downloading map layers"
-      ),
-      function(x) {
-        sf::read_sf(
-          dsn = url,
-          layer = layers[["name"]][x]
-        )
-      }
+    sf::read_sf(
+      dsn = url,
+      layer = layer
     )
 
   if (has_name(data, "Description")) {
     is_pkg_installed("naniar")
-
     data <- naniar::replace_with_na(data, replace = list("Description" = ""))
   }
 
@@ -670,7 +717,6 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
     glue("https://www.google.com/maps/d/u/0/kml?forcekml=1&mid={mid}")
   }
 }
-
 
 #' @name read_sf_download
 #' @rdname read_sf_ext
