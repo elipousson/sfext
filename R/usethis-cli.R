@@ -98,3 +98,17 @@ cli_warn_ifnot <- function(..., condition = FALSE, .data = NULL, call = caller_e
 
   invisible(return(NULL))
 }
+
+#'
+#' @noRd
+cli_paths <- function(path, ..., call = caller_env()) {
+  len_path <- length(path)
+
+  cli_inform(
+    c("v" = paste0(..., " {len_path} file{?s}:")),
+    call = call
+  )
+
+  path <- paste0("{.file ", path, "}")
+  cli::cli_bullets(setNames(path, rep("*", len_path)))
+}
