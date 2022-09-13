@@ -3,6 +3,7 @@
 \name{read_sf_exif}
 \alias{read_sf_exif}
 \alias{write_exif}
+\alias{write_exif_from}
 \alias{write_exif_keywords}
 \title{Read EXIF metadata to create a simple feature object or write
 EXIF metadata to image files}
@@ -11,36 +12,37 @@ read_sf_exif(
   path = NULL,
   filetype = NULL,
   bbox = NULL,
-  sort = "lon",
+  sort = NULL,
   tags = NULL,
   geometry = TRUE,
   ...
 )
 
 write_exif(
-  path = NULL,
+  path,
   filetype = NULL,
   title = NULL,
   author = NULL,
   date = NULL,
   keywords = NULL,
+  description = NULL,
   args = NULL,
-  overwrite = TRUE
+  overwrite = TRUE,
+  append_keywords = FALSE
 )
 
-write_exif_keywords(
+write_exif_from(
   path,
   filetype = NULL,
-  key_list,
+  from,
   .id = "name",
-  keywords = NULL,
+  tag = "keywords",
   join = NULL,
   overwrite = TRUE
 )
 }
 \arguments{
-\item{path}{A path to folder of one or more files with EXIF location
-metadata.}
+\item{path}{A path to folder or file.}
 
 \item{filetype}{The file extension or file type; defaults to \code{NULL}.}
 
@@ -48,11 +50,11 @@ metadata.}
 with location data outside the bounding box). If bbox is provided the
 returned data will match the crs of the bbox.}
 
-\item{sort}{Column name for variable to sort by. Currently supports "lon"
-(default), "lat", or "filename"}
+\item{sort}{Column name for variable to sort by passed to \code{\link[=sort_features]{sort_features()}}.
+Currently supports "lon", "lat", or "filename". Defaults to \code{NULL}.}
 
 \item{tags}{Optional list of EXIF tags to read from files. Must include GPS
-tags to create an sf object.}
+tags to create an \code{sf} object.}
 
 \item{geometry}{If \code{TRUE} (defualt), return a simple feature object. If
 \code{FALSE}, return a data.frame.}
@@ -73,24 +75,39 @@ Default: \code{NULL}.}
 is not \code{NULL}, title, author, date, and keywords are ignored; defaults to
 \code{NULL}.}
 
-\item{overwrite}{If TRUE, overwrite any existing EXIF metadata present in the
-provided fields; defaults to TRUE}
+\item{overwrite}{If \code{TRUE}, overwrite any existing EXIF metadata present in the
+provided fields; defaults to \code{TRUE}}
 
-\item{key_list}{List of sf objects with features with keywords, e.g. boundaries}
+\item{from}{A sf object or list of sf objects where each object has a column
+with a name matching the .id parameter. The attribute value in this column
+are used to assign the tag parameter to the file at the provided path based
+on the spatial relationship set by join. For example, from may be boundary
+data used to assign keywords based on photo locations.}
 
-\item{.id}{Column name in key_list with the values to use for keywords.}
+\item{.id}{Column name in from with the values to use for tag values.}
+
+\item{tag}{EXIF tag to update, supported options include "keywords", "title",
+or "description".}
 
 \item{join}{geometry predicate function; defaults to \code{NULL}, set to
-\link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON objects
-or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}
+\link[sf:geos_binary_pred]{sf::st_intersects} if from contains only POLYGON or MULTIPOLYGON objects
+or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if from contains other types.}
 }
 \description{
-Read EXIF data from folder of images.
-}
-\section{Writing EXIF metadata}{
-NA
-}
+\code{read_sf_exif()} read EXIF data from folder of files and, geometry is \code{TRUE}
+and coordinate metadata is available, convert the data to a sf object. This
+function also assigns a cardinal direction based on the direction metadata
+and recodes the orientation metadata.
 
+For \code{write_exif()} the parameters are used to multiple tags with the same
+values:
+\itemize{
+\item title: Title, IPTC:Headline, IPTC:ObjectName, XMP-dc:Title
+\item description: ImageDescription, XMP-dc:Description, and
+IPTC:Caption-Abstract
+\item keywords: Keywords, IPTC:Keywords, XMP-dc:Subject
+}
+}
 \examples{
 \dontrun{
   read_sf_exif(
