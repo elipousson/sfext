@@ -175,9 +175,13 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
     }
   }
 
-  cli_abort_ifnot(
-    condition = is_sf_list(x, ext = TRUE)
-  )
+  if (!is_sf_list(x, ext = TRUE)) {
+    cli_abort(
+      c("{.arg x} must be a list of {.cls sf} objects or a {.cls sf} object that
+      can be converted to a list.",
+        "i" = "The provided {.arg x} is class {.cls {class(x)}}.")
+    )
+  }
 
   if (is.null(names(x)) && !is.null(nm)) {
     if (clean_names) {
