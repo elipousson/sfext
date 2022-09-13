@@ -56,3 +56,69 @@ get_data_dir <- function(path = NULL,
     cli_inform(c("v" = "New directory created at {.file {path}}"))
   }
 }
+
+#' Get file types from a path
+#'
+#' @param path A valid directory or file path.
+#' @param filetype If not `NULL`, function returns file type as is.
+#' @param n Max number of unique file types to return. Returns warning and n
+#'   most common file types if path has more than n unique file types.
+#' @noRd
+#' @importFrom stringr str_extract
+get_path_filetype <- function(path, filetype = NULL, n = 1) {
+  if (!is.null(filetype)) {
+    return(filetype)
+  }
+
+  if (dir.exists(path)) {
+    file_list <- list.files(path)
+  } else if (file.exists(path)) {
+    file_list <- path
+  } else {
+    cli_abort(
+      c("A valid file or directory {.arg path} must be provided.",
+        "i" = "The provided {.arg path} {.file {path}} does not exist."
+      )
+    )
+  }
+
+  filetype <- str_extract_filetype(file_list)
+
+  if (length(unique(filetype)) <= n) {
+    return(unique(filetype))
+  }
+
+  # https://stackoverflow.com/questions/17374651/find-the-n-most-common-values-in-a-vector
+  filetype <- names(sort(table(filetype), decreasing = TRUE)[1:n])
+
+  cli_warn(
+    c("The directory {.file {path}} has more than {n} unique filetypes.",
+      "i" = "Using {n} most frequent filetype{?s}: {.val {filetype}}"
+    )
+  )
+
+  filetype
+}
+
+#' Get list of files at a path (using a single file type at a time)
+#'
+#' @noRd
+get_path_files <- function(path, filetype = NULL, full.names = TRUE) {
+  if (all(dir.exists(path))) {
+    return(
+      list.files(
+        path = path,
+        pattern = glue("\\.{get_path_filetype(path, filetype)}$"),
+        full.names = full.names
+      )
+    )
+  } else if (all(file.exists(path))) {
+    return(path)
+  }
+
+  cli_abort(
+    c("A valid file or directory {.arg path} must be provided.",
+      "i" = "The provided {.arg path} {.file {path}} does not exist."
+    )
+  )
+}
