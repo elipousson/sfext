@@ -115,8 +115,8 @@ read_sf_gsheet(
 
 \item{data}{Name of a package dataset; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
 
-\item{bbox}{A bounding box object; defaults to \code{NULL}. If \code{"bbox"} is provided,
-only returns features intersecting the bounding box.}
+\item{bbox}{A bounding box object; defaults to \code{NULL}. If \code{"bbox"} is
+provided, only returns features intersecting the bounding box.}
 
 \item{package}{Package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
 
@@ -144,10 +144,10 @@ provided. Use \code{sf::st_layers(dsn = dsn)[["name"]]} to see a list of
 available table names.}
 
 \item{name, name_col}{Name value and name column to use in generated a query
-for sources read with \link{read_sf_query} or \link{read_sf_esri}. This same
-convention is used by \link[getdata:get_location]{getdata::get_location} which wraps
-sfext::read_sf_ext allowing the use of these parameters with any
-\link{read_sf_ext} function. This option for filtering may be added to more
+for sources read with \code{\link[=read_sf_query]{read_sf_query()}} or \code{\link[=read_sf_esri]{read_sf_esri()}}. This same
+convention is used by \code{\link[getdata:get_location]{getdata::get_location()}} which wraps
+\code{\link[=read_sf_ext]{read_sf_ext()}} allowing the use of these parameters with any
+\code{\link[=read_sf_ext*]{read_sf_ext*()}} function. This option for filtering may be added to more
 read_sf_ext functions in the future.}
 
 \item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
@@ -165,8 +165,8 @@ the same crs as the \code{from_crs} parameter.}
 \item{from_crs}{For \code{\link[=df_to_sf]{df_to_sf()}}, coordinate reference system used by
 coordinates or well known text in data frame.}
 
-\item{geo}{If \code{TRUE}, use \code{\link[=address_to_sf]{address_to_sf()}} to geocode address column; defaults
-to \code{FALSE}.}
+\item{geo}{If \code{TRUE}, use \code{\link[=address_to_sf]{address_to_sf()}} to geocode address column;
+defaults to \code{FALSE}.}
 
 \item{address}{Address column name, Default: 'address'}
 
@@ -252,7 +252,7 @@ Reading data from a url:
 \item A URL for a GitHub gist with a single spatial data file (first file used
 if gist contains multiple)
 \item A URL for a spatial data file, CSV file, Excel file, or RDS file (RDA and
-RData files supported by read_sf_path)
+RData files supported by \code{\link[=read_sf_path]{read_sf_path()}})
 \item A Google Sheets URL
 \item A public Google Maps URL
 }
@@ -264,26 +264,28 @@ RData files supported by read_sf_path)
 \itemize{
 \item Data loaded with the package
 \item External data in the \code{extdata} system files folder.
-\item Cached data in the cache directory returned by \code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}
+\item Cached data in the cache directory returned by
+\code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}
 }
 }
 
 \section{Additional ... parameters}{
 
 
-\code{\link[=read_sf_ext]{read_sf_ext()}} is a flexible function where ... are passed to one of the other
-read functions depending on the provided parameters. The parameters \emph{must} be
-named to use this function.
+\code{\link[=read_sf_ext]{read_sf_ext()}} is a flexible function where ... are passed to one of the
+other read functions depending on the provided parameters. The parameters
+\emph{must} be named to use this function.
 
-\code{\link[=read_sf_pkg]{read_sf_pkg()}} and \code{\link[=read_sf_download]{read_sf_download()}} both pass additional parameters
-to \code{\link[=read_sf_path]{read_sf_path()}} which supports query, name_col, name, and table. name and
+\code{\link[=read_sf_pkg]{read_sf_pkg()}} and \code{\link[=read_sf_download]{read_sf_download()}} both pass additional parameters to
+\code{\link[=read_sf_path]{read_sf_path()}} which supports query, name_col, name, and table. name and
 name_col are ignored if a query parameter is provided. If table is not
 provided, a expected layer name is created based on the file path.
 
-\code{\link[=read_sf_url]{read_sf_url()}} pass the where, name_col, and name for any ArcGIS FeatureServer or
-MapServer url (passed to \code{\link[=read_sf_esri]{read_sf_esri()}}) or sheet if the url is for a Google
-Sheet (passed to \code{\link[googlesheets4:range_read]{googlesheets4::read_sheet()}}), or a query or wkt filter
-parameter if the url is some other type (passed to \code{\link[sf:st_read]{sf::read_sf()}}).
+\code{\link[=read_sf_url]{read_sf_url()}} pass the where, name_col, and name for any ArcGIS
+FeatureServer or MapServer url (passed to \code{\link[=read_sf_esri]{read_sf_esri()}}) or sheet if the
+url is for a Google Sheet (passed to \code{\link[googlesheets4:range_read]{googlesheets4::read_sheet()}}), or a
+query or wkt filter parameter if the url is some other type (passed to
+\code{\link[sf:st_read]{sf::read_sf()}}).
 }
 
 \seealso{

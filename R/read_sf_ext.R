@@ -14,7 +14,7 @@
 #'   - A URL for a GitHub gist with a single spatial data file (first file used
 #'   if gist contains multiple)
 #'   - A URL for a spatial data file, CSV file, Excel file, or RDS file (RDA and
-#'   RData files supported by read_sf_path)
+#'   RData files supported by [read_sf_path()])
 #'   - A Google Sheets URL
 #'   - A public Google Maps URL
 #'
@@ -24,26 +24,28 @@
 #'
 #'   - Data loaded with the package
 #'   - External data in the `extdata` system files folder.
-#'   - Cached data in the cache directory returned by [rappdirs::user_cache_dir()]
+#'   - Cached data in the cache directory returned by
+#'   [rappdirs::user_cache_dir()]
 #'
 #' @section Additional ... parameters:
 #'
-#' [read_sf_ext()] is a flexible function where ... are passed to one of the other
-#' read functions depending on the provided parameters. The parameters *must* be
-#' named to use this function.
+#'   [read_sf_ext()] is a flexible function where ... are passed to one of the
+#'   other read functions depending on the provided parameters. The parameters
+#'   *must* be named to use this function.
 #'
-#' [read_sf_pkg()] and [read_sf_download()] both pass additional parameters
-#' to [read_sf_path()] which supports query, name_col, name, and table. name and
-#' name_col are ignored if a query parameter is provided. If table is not
-#' provided, a expected layer name is created based on the file path.
+#'   [read_sf_pkg()] and [read_sf_download()] both pass additional parameters to
+#'   [read_sf_path()] which supports query, name_col, name, and table. name and
+#'   name_col are ignored if a query parameter is provided. If table is not
+#'   provided, a expected layer name is created based on the file path.
 #'
-#' [read_sf_url()] pass the where, name_col, and name for any ArcGIS FeatureServer or
-#' MapServer url (passed to [read_sf_esri()]) or sheet if the url is for a Google
-#' Sheet (passed to [googlesheets4::read_sheet()]), or a query or wkt filter
-#' parameter if the url is some other type (passed to [sf::read_sf()]).
+#'   [read_sf_url()] pass the where, name_col, and name for any ArcGIS
+#'   FeatureServer or MapServer url (passed to [read_sf_esri()]) or sheet if the
+#'   url is for a Google Sheet (passed to [googlesheets4::read_sheet()]), or a
+#'   query or wkt filter parameter if the url is some other type (passed to
+#'   [sf::read_sf()]).
 #'
-#' @param bbox A bounding box object; defaults to `NULL`. If `"bbox"` is provided,
-#'   only returns features intersecting the bounding box.
+#' @param bbox A bounding box object; defaults to `NULL`. If `"bbox"` is
+#'   provided, only returns features intersecting the bounding box.
 #' @param path A file path.
 #' @param url A url for a spatial data file, tabular data with coordinates, or a
 #'   ArcGIS FeatureServer or MapServer to access with [esri2sf::esri2sf()]
@@ -54,8 +56,8 @@
 #'   cache directory or extdata system files.
 #' @param coords Character vector with coordinate values. Coordinates must use
 #'   the same crs as the `from_crs` parameter.
-#' @param geo If `TRUE`, use [address_to_sf()] to geocode address column; defaults
-#'   to `FALSE`.
+#' @param geo If `TRUE`, use [address_to_sf()] to geocode address column;
+#'   defaults to `FALSE`.
 #' @param combine_layers,combine_sheets If `FALSE` (default), return a list with
 #'   a sf object for each layer or sheet as a separate item. If `TRUE`, use
 #'   [purrr::map_dfr()] to combine layers or sheets into a single sf object
@@ -97,7 +99,8 @@ read_sf_ext <- function(...) {
     )
 
   # FIXME: read_sf_ext has an issue with passing parameters that it shouldn't
-  # Adding a path = NULL parameter to read_sf_pkg may fix one of the issues temporarily but modify_fn_fmls needs an overhaul
+  # Adding a path = NULL parameter to read_sf_pkg may fix one of the issues
+  # temporarily but modify_fn_fmls needs an overhaul
   args <-
     modify_fn_fmls(
       params = params,
@@ -114,7 +117,11 @@ read_sf_ext <- function(...) {
 #' @noRd
 #' @importFrom purrr discard
 #' @importFrom utils modifyList
-modify_fn_fmls <- function(params, fn, keep_missing = FALSE, keep.null = FALSE, ...) {
+modify_fn_fmls <- function(params,
+                           fn,
+                           keep_missing = FALSE,
+                           keep.null = FALSE,
+                           ...) {
   fmls <- fn_fmls(fn)
 
   if (!keep_missing) {
@@ -135,13 +142,18 @@ modify_fn_fmls <- function(params, fn, keep_missing = FALSE, keep.null = FALSE, 
 #' @rdname read_sf_ext
 #' @export
 #' @importFrom dplyr case_when
-read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
+read_sf_pkg <- function(data,
+                        bbox = NULL,
+                        package = NULL,
+                        filetype = "gpkg",
+                        ...) {
   check_null(package)
 
   is_pkg_installed(package)
 
   if (!is.character(data)) {
-    cli_abort("{.arg data} must be a length 1 character vector with the name or filename of the package data.")
+    cli_abort("{.arg data} must be a length 1 character vector with the
+              name or filename of the package data.")
   }
 
   # Read package data
@@ -238,11 +250,7 @@ read_sf_rdata <- function(path,
 #' @rdname read_sf_ext
 #' @inheritParams sf::read_sf
 #' @param name,name_col Name value and name column to use in generated a query
-#'   for sources read with [read_sf_query] or [read_sf_esri]. This same
-#'   convention is used by [getdata::get_location] which wraps
-#'   sfext::read_sf_ext allowing the use of these parameters with any
-#'   [read_sf_ext] function. This option for filtering may be added to more
-#'   read_sf_ext functions in the future.
+#'   for sources read with [read_sf_query()] or [read_sf_esri()].
 #' @param table table can usually be inferred from basename of the data source.
 #'   table is used to generate a custom query if both name and name_col are
 #'   provided. Use `sf::st_layers(dsn = dsn)[["name"]]` to see a list of
@@ -816,8 +824,13 @@ read_sf_gsheet <- function(url,
 #' @noRd
 #' @importFrom dplyr left_join
 #' @importFrom sf st_drop_geometry
-join_sf_gsheet <- function(data, ss = NULL, sheet = 1, key = NULL, suffix = c("", "_gsheet")) {
-  if (cli_yeah("Are you ready to sync from Google Sheets back to an sf object?")) {
+join_sf_gsheet <- function(data,
+                           ss = NULL,
+                           sheet = 1,
+                           key = NULL,
+                           suffix = c("", "_gsheet")) {
+  if (cli_yeah("Are you ready to sync from Google Sheets
+               back to an sf object?")) {
     sheet_data <-
       sf::st_drop_geometry(
         read_sf_gsheet(
