@@ -171,8 +171,8 @@ filtered before download or reading into memory where possible).</p>
 
 
 <dt>bbox</dt>
-<dd><p>A bounding box object; defaults to <code>NULL</code>. If <code>"bbox"</code> is provided,
-only returns features intersecting the bounding box.</p></dd>
+<dd><p>A bounding box object; defaults to <code>NULL</code>. If <code>"bbox"</code> is
+provided, only returns features intersecting the bounding box.</p></dd>
 
 
 <dt>package</dt>
@@ -218,10 +218,10 @@ available table names.</p></dd>
 
 <dt>name, name_col</dt>
 <dd><p>Name value and name column to use in generated a query
-for sources read with read_sf_query or read_sf_esri. This same
-convention is used by getdata::get_location which wraps
-sfext::read_sf_ext allowing the use of these parameters with any
-read_sf_ext function. This option for filtering may be added to more
+for sources read with <code>read_sf_query()</code> or <code>read_sf_esri()</code>. This same
+convention is used by <code>getdata::get_location()</code> which wraps
+<code>read_sf_ext()</code> allowing the use of these parameters with any
+<code>read_sf_ext*()</code> function. This option for filtering may be added to more
 read_sf_ext functions in the future.</p></dd>
 
 
@@ -251,8 +251,8 @@ coordinates or well known text in data frame.</p></dd>
 
 
 <dt>geo</dt>
-<dd><p>If <code>TRUE</code>, use <code><a href="address_to_sf.html">address_to_sf()</a></code> to geocode address column; defaults
-to <code>FALSE</code>.</p></dd>
+<dd><p>If <code>TRUE</code>, use <code><a href="address_to_sf.html">address_to_sf()</a></code> to geocode address column;
+defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt>address</dt>
@@ -353,7 +353,7 @@ not provided to read_sf_gsheet.</p></dd>
 <li><p>A URL for a GitHub gist with a single spatial data file (first file used
 if gist contains multiple)</p></li>
 <li><p>A URL for a spatial data file, CSV file, Excel file, or RDS file (RDA and
-RData files supported by read_sf_path)</p></li>
+RData files supported by <code>read_sf_path()</code>)</p></li>
 <li><p>A Google Sheets URL</p></li>
 <li><p>A public Google Maps URL</p></li>
 </ul></div>
@@ -364,24 +364,26 @@ RData files supported by read_sf_path)</p></li>
 
 <p><code>read_sf_pkg()</code> looks for three types of package data:</p><ul><li><p>Data loaded with the package</p></li>
 <li><p>External data in the <code>extdata</code> system files folder.</p></li>
-<li><p>Cached data in the cache directory returned by <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code></p></li>
+<li><p>Cached data in the cache directory returned by
+<code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code></p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="additional-parameters">Additional ... parameters<a class="anchor" aria-label="anchor" href="#additional-parameters"></a></h2>
     
 
 
-<p><code>read_sf_ext()</code> is a flexible function where ... are passed to one of the other
-read functions depending on the provided parameters. The parameters <em>must</em> be
-named to use this function.</p>
-<p><code>read_sf_pkg()</code> and <code>read_sf_download()</code> both pass additional parameters
-to <code>read_sf_path()</code> which supports query, name_col, name, and table. name and
+<p><code>read_sf_ext()</code> is a flexible function where ... are passed to one of the
+other read functions depending on the provided parameters. The parameters
+<em>must</em> be named to use this function.</p>
+<p><code>read_sf_pkg()</code> and <code>read_sf_download()</code> both pass additional parameters to
+<code>read_sf_path()</code> which supports query, name_col, name, and table. name and
 name_col are ignored if a query parameter is provided. If table is not
 provided, a expected layer name is created based on the file path.</p>
-<p><code>read_sf_url()</code> pass the where, name_col, and name for any ArcGIS FeatureServer or
-MapServer url (passed to <code>read_sf_esri()</code>) or sheet if the url is for a Google
-Sheet (passed to <code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html" class="external-link">googlesheets4::read_sheet()</a></code>), or a query or wkt filter
-parameter if the url is some other type (passed to <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf()</a></code>).</p>
+<p><code>read_sf_url()</code> pass the where, name_col, and name for any ArcGIS
+FeatureServer or MapServer url (passed to <code>read_sf_esri()</code>) or sheet if the
+url is for a Google Sheet (passed to <code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html" class="external-link">googlesheets4::read_sheet()</a></code>), or a
+query or wkt filter parameter if the url is some other type (passed to
+<code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf()</a></code>).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
