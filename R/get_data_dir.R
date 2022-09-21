@@ -104,6 +104,10 @@ get_path_filetype <- function(path, filetype = NULL, n = 1) {
 #'
 #' @noRd
 get_path_files <- function(path, filetype = NULL, full.names = TRUE) {
+  if (is.data.frame(path) && rlang::has_name(path, "path")) {
+    path <- path[["path"]]
+  }
+
   if (all(dir.exists(path))) {
     return(
       list.files(
