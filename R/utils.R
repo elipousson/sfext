@@ -1,3 +1,7 @@
+# @staticimports pkg:stringstatic
+#  str_detect str_extract
+#  str_replace str_remove
+
 .onLoad <- function(lib, pkg) {
   run_on_load()
 
