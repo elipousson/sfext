@@ -217,7 +217,7 @@ check_coords <- function(x = NULL,
     call = call
   )
 
-  if (rev && grepl("LAT|lat|Y|y", coords[1])) {
+  if (rev && grepl("LAT|lat|Lat|Y|y", coords[1])) {
     coords <- rev(coords)
   }
 
