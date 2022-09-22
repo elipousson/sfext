@@ -41,12 +41,12 @@ st_join_ext <- function(x,
   }
 
   if (is_sf_list(y) && !is.null(.id)) {
+    id_nm <- .id
     y <- st_transform_ext(y, crs = x)
 
     condition <- all(sapply(y, has_name, .id))
-
     cli_abort_ifnot(
-      "If {.arg y} is a sf list, each entry must have a column named {.arg {.id}}.",
+      "If {.arg y} is a sf list, each entry must have a column named {.arg {id_nm}}.",
       condition = condition
     )
 
