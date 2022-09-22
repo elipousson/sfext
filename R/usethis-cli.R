@@ -63,7 +63,11 @@ cli_ask <- function(message, prompt = ">> ", ..., .envir = parent.frame()) {
 }
 
 #' @noRd
-cli_abort_ifnot <- function(..., condition = FALSE, .data = NULL, call = caller_env()) {
+cli_abort_ifnot <- function(...,
+                            condition = FALSE,
+                            .data = NULL,
+                            call = caller_env(),
+                            .envir =  parent.frame()) {
   if (!is_logical(condition)) {
     condition <- as_function(condition)
     condition <- condition(.data)
@@ -73,7 +77,8 @@ cli_abort_ifnot <- function(..., condition = FALSE, .data = NULL, call = caller_
   if (!condition) {
     cli_abort(
       ...,
-      call = call
+      call = call,
+      .envir = .envir
     )
   }
 
@@ -81,7 +86,11 @@ cli_abort_ifnot <- function(..., condition = FALSE, .data = NULL, call = caller_
 }
 
 #' @noRd
-cli_warn_ifnot <- function(..., condition = FALSE, .data = NULL, call = caller_env()) {
+cli_warn_ifnot <- function(...,
+                           condition = FALSE,
+                           .data = NULL,
+                           call = caller_env(),
+                           .envir =  parent.frame()) {
   if (!is_logical(condition)) {
     condition <- as_function(condition)
     condition <- condition(.data)
@@ -92,7 +101,8 @@ cli_warn_ifnot <- function(..., condition = FALSE, .data = NULL, call = caller_e
   if (!condition) {
     cli_warn(
       ...,
-      call = call
+      call = call,
+      .envir = .envir
     )
   }
 
@@ -101,12 +111,16 @@ cli_warn_ifnot <- function(..., condition = FALSE, .data = NULL, call = caller_e
 
 #'
 #' @noRd
-cli_paths <- function(path, ..., call = caller_env()) {
+cli_paths <- function(path,
+                      ...,
+                      call = caller_env(),
+                      .envir = parent.frame()) {
   len_path <- length(path)
 
   cli_inform(
     c("v" = paste0(..., " {len_path} file{?s}:")),
-    call = call
+    call = call,
+    .envir = .envir
   )
 
   path <- paste0("{.file ", path, "}")
