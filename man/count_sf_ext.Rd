@@ -96,7 +96,7 @@ Similar to \code{\link[=count_features]{count_features()}} and the two functions
 future.
 }
 \examples{
-nc <- sf::read_sf(path = system.file("shape/nc.shp", package = "sf"))
+nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 data <- sf::st_sample(nc, size = 75)
 
 # Count data based on nc

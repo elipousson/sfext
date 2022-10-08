@@ -24,7 +24,7 @@
 #'   a data frame.
 #'
 #' @examples
-#' nc <- sf::read_sf(path = system.file("shape/nc.shp", package = "sf"))
+#' nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 #' data <- sf::st_sample(nc, size = 75)
 #'
 #' # Count data based on nc
