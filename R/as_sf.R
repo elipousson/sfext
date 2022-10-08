@@ -179,7 +179,8 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
     cli_abort(
       c("{.arg x} must be a list of {.cls sf} objects or a {.cls sf} object that
       can be converted to a list.",
-        "i" = "The provided {.arg x} is class {.cls {class(x)}}.")
+        "i" = "The provided {.arg x} is class {.cls {class(x)}}."
+      )
     )
   }
 
@@ -315,6 +316,7 @@ as_point <- function(..., to = "POINT") {
   }
 
   if (any(sapply(params, is_bbox))) {
+    params[["crs"]] <- NA
     return(exec(sf_bbox_point, !!!params))
   }
 
