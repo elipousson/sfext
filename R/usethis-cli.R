@@ -124,5 +124,5 @@ cli_paths <- function(path,
   )
 
   path <- paste0("{.file ", path, "}")
-  cli::cli_bullets(setNames(path, rep("*", len_path)))
+  cli::cli_bullets(rlang::set_names(path, rep("*", len_path)))
 }

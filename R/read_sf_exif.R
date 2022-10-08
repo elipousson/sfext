@@ -379,7 +379,7 @@ write_exif_from <- function(path,
   )
 
   path_msg <- paste0("{.file ", path, "}")
-  cli::cli_bullets(setNames(path_msg, rep("*", len_path)))
+  cli::cli_bullets(rlang::set_names(path_msg, rep("*", len_path)))
 
   suppressMessages(
     walk2_write_exif(path, replacement_vals, tag)
