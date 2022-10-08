@@ -6,7 +6,7 @@
 #' Similar to [count_features()] and the two functions may be combined in the
 #' future.
 #'
-#' @inheritDotParams st_make_grid_ext -.id
+#' @inheritParams st_make_grid_ext
 #' @inheritParams sf::st_join
 #' @inheritParams dplyr::count
 #' @param data Data to count in relationship to y
@@ -16,12 +16,13 @@
 #'   has a column with the same name as .id (defaults to "id").
 #' @param replace_na If `TRUE`, replace NA values from count with 0. If `FALSE`,
 #'   filter NA values from the returned object.
-#' @param count_lims Optional numeric vector with minimum or both minimum and
+#' @param lims Optional numeric vector with minimum or both minimum and
 #'   maximum count values. If provided, any values below the minimum are set to
 #'   that minimum and any values above the maximum as set to the maximum. If
 #'   only one value is provided, it is assumed to be a minimum limit.
 #' @param geometry If `TRUE` (default) return a `sf` object. If `FALSE`, return
 #'   a data frame.
+#' @inheritDotParams st_make_grid_ext
 #'
 #' @examples
 #' nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
@@ -29,18 +30,20 @@
 #'
 #' # Count data based on nc
 #' count <- count_sf_ext(data = data, y = nc, .id = "FIPS")
-#' plot(count[, "n"], pal = heat.colors(n = max(count$n), alpha = 0.5), reset = FALSE)
-#' plot(data, add = TRUE, pch = 20)
+#' plot(count[, "n"], reset = FALSE)
+#' plot(data, col = "gray60", pch = 3, add = TRUE)
 #'
 #' # Count data based grid created by passing nc to st_make_grid_ext
 #' count_grid <- count_sf_ext(data = data, x = nc, .id = "FIPS")
-#' plot(count_grid[, "n"], pal = heat.colors(n = max(count_grid$n), alpha = 0.5), reset = FALSE)
-#' plot(data, add = TRUE, pch = 20)
+#' plot(count_grid[, "n"], reset = FALSE)
+#' plot(data, col = "gray60", pch = 3, add = TRUE)
 #'
+#' @returns A sf object or a tibble (if `geometry = FALSE`) with a column
+#'   counting occurrences of features from data.
+#' @export
 #' @importFrom dplyr count right_join filter mutate case_when select
 #' @importFrom sf st_join st_as_sf
 #' @importFrom tidyr replace_na
-#' @export
 count_sf_ext <- function(data,
                          x = NULL,
                          y = NULL,

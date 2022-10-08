@@ -46,8 +46,15 @@ Can be \code{NULL} or a variable:
 \item{replace_na}{If \code{TRUE}, replace NA values from count with 0. If \code{FALSE},
 filter NA values from the returned object.}
 
+\item{lims}{Optional numeric vector with minimum or both minimum and
+maximum count values. If provided, any values below the minimum are set to
+that minimum and any values above the maximum as set to the maximum. If
+only one value is provided, it is assumed to be a minimum limit.}
+
 \item{geometry}{If \code{TRUE} (default) return a \code{sf} object. If \code{FALSE}, return
 a data frame.}
+
+\item{.id}{A name to use for the cell id column. Defaults to "id".}
 
 \item{name}{The name of the new column in the output.
 
@@ -82,11 +89,10 @@ to units matching GDAL units for x; defaults to "meter"}
     \item{\code{cellsize}}{target cellsize}
     \item{\code{trim}}{If \code{TRUE}, x is trimmed to y with \code{\link[=st_trim]{st_trim()}}.}
   }}
-
-\item{count_lims}{Optional numeric vector with minimum or both minimum and
-maximum count values. If provided, any values below the minimum are set to
-that minimum and any values above the maximum as set to the maximum. If
-only one value is provided, it is assumed to be a minimum limit.}
+}
+\value{
+A sf object or a tibble (if \code{geometry = FALSE}) with a column
+counting occurrences of features from data.
 }
 \description{
 An extended version of \code{\link[dplyr:count]{dplyr::count()}} that makes it easier to count the
@@ -101,12 +107,12 @@ data <- sf::st_sample(nc, size = 75)
 
 # Count data based on nc
 count <- count_sf_ext(data = data, y = nc, .id = "FIPS")
-plot(count[, "n"], pal = heat.colors(n = max(count$n), alpha = 0.5), reset = FALSE)
-plot(data, add = TRUE, pch = 20)
+plot(count[, "n"], reset = FALSE)
+plot(data, col = "gray60", pch = 3, add = TRUE)
 
 # Count data based grid created by passing nc to st_make_grid_ext
 count_grid <- count_sf_ext(data = data, x = nc, .id = "FIPS")
-plot(count_grid[, "n"], pal = heat.colors(n = max(count_grid$n), alpha = 0.5), reset = FALSE)
-plot(data, add = TRUE, pch = 20)
+plot(count_grid[, "n"], reset = FALSE)
+plot(data, col = "gray60", pch = 3, add = TRUE)
 
 }
