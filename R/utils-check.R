@@ -18,7 +18,7 @@ check_null <- function(x = NULL,
     cli_abort("{.arg {arg}} must be NULL.", ...)
   }
 
-  invisible(return(TRUE))
+  return(invisible(TRUE))
 }
 
 #' Check if x is a character vector
@@ -29,7 +29,7 @@ check_character <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, ...)
   null.ok <- is.null(x) && null.ok
 
   if (is.character(x) | null.ok) {
-    invisible(return(TRUE))
+    return(invisible(TRUE))
   }
 
   cli_abort(
@@ -52,7 +52,7 @@ check_len <- function(x = NULL,
   null.ok <- is.null(x) && null.ok
 
   if (((length(x) >= min(len)) && (length(x) <= max(len))) | null.ok) {
-    invisible(return(TRUE))
+    return(invisible(TRUE))
   }
 
   if (length(len) > 1) {
@@ -83,7 +83,7 @@ check_grepl <- function(x = NULL,
 
   # FIXME: This will error if x is longer than 1
   if (grepl(pattern, x, ignore.case = ignore.case, perl = perl) | null.ok) {
-    invisible(return(TRUE))
+    return(invisible(TRUE))
   }
 
   message <-
@@ -112,7 +112,7 @@ check_starts_with <- function(x = NULL,
     )
 
   if (all(starts_with) | null.ok) {
-    invisible(return(TRUE))
+    return(invisible(TRUE))
   }
 
   message <-
@@ -136,7 +136,7 @@ check_logical <- function(x = NULL,
   null.ok <- is.null(x) && null.ok
 
   if (is_logical(x, n = n) | null.ok) {
-    invisible(return(TRUE))
+    return(invisible(TRUE))
   }
 
   cli_abort(
@@ -174,7 +174,7 @@ check_sf <- function(x,
   list.ok <- list.ok && is_sf_list(x, named = FALSE, ext, null.ok)
 
   if (is_sf(x, ext, null.ok) | list.ok) {
-    invisible(return(TRUE))
+    return(invisible(TRUE))
   }
 
   sf <- "sf"

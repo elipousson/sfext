@@ -6,7 +6,7 @@ ls_pkg_data <- function(pkg, envir = .GlobalEnv, call = caller_env()) {
   results <- utils::data(package = pkg, envir = envir)$results
 
   if (is_null(results) | is_empty(results)) {
-    invisible(return(NULL))
+    return(invisible(NULL))
   }
 
   results[, "Item"]
@@ -82,7 +82,7 @@ is_pkg_cachedata <- function(x, pkg, call = caller_env()) {
 #' @noRd
 is_pkg_installed <- function(pkg, repo = NULL) {
   if (requireNamespace(pkg, quietly = TRUE)) {
-    invisible(return(TRUE))
+    return(invisible(TRUE))
   }
   if (!is.null(repo)) {
     pkg <- repo

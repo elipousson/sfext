@@ -138,7 +138,7 @@ get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
       condition = quiet
     )
 
-    invisible(return(NULL))
+    return(invisible(NULL))
   }
 
   cli_abort_ifnot(

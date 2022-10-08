@@ -30,7 +30,7 @@ get_data_dir <- function(path = NULL,
     return(path)
   } else if (is.null(path)) {
     if (null.ok) {
-      invisible(return(path))
+      return(invisible(path))
     }
 
     cli_abort("{.arg path} can't be {.val NULL} when {.code null.ok = FALSE}")

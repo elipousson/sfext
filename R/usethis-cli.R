@@ -82,7 +82,7 @@ cli_abort_ifnot <- function(...,
     )
   }
 
-  invisible(return(NULL))
+  return(invisible(NULL))
 }
 
 #' @noRd
@@ -106,7 +106,7 @@ cli_warn_ifnot <- function(...,
     )
   }
 
-  invisible(return(NULL))
+  return(invisible(NULL))
 }
 
 #'
