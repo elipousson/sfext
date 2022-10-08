@@ -673,7 +673,7 @@ read_sf_gmap <- function(url,
             url = url,
             bbox = bbox,
             layer = layer[.x],
-            combine_sheets = FALSE,
+            combine_layers = FALSE,
             zm_drop = zm_drop
           ),
           layer = layer[.x]
