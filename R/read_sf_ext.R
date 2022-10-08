@@ -362,11 +362,17 @@ read_sf_excel <- function(path,
 
   data_df <- readxl::read_excel(path = path, sheet = sheet, ...)
 
+  if (is.null(coords) && !geo) {
+    return(data_df)
+  }
+
   data <-
     df_to_sf(
       data_df,
-      coords = coords, from_crs = from_crs,
-      geo = geo, address = address
+      coords = coords,
+      from_crs = from_crs,
+      geo = geo,
+      address = address
     )
 
   if (!is_sf(data)) {
@@ -397,11 +403,17 @@ read_sf_csv <- function(path,
 
   data_df <- readr::read_csv(file = path, show_col_types = show_col_types, ...)
 
+  if (is.null(coords) && !geo) {
+    return(data_df)
+  }
+
   data <-
     df_to_sf(
       data_df,
-      coords = coords, from_crs = from_crs,
-      geo = geo, address = address
+      coords = coords,
+      from_crs = from_crs,
+      geo = geo,
+      address = address
     )
 
   if (!is_sf(data)) {
@@ -576,6 +588,10 @@ read_sf_esri <- function(url,
       progress = TRUE,
       ...
     )
+
+  if (is.null(coords)) {
+    return(data)
+  }
 
   df_to_sf(data, from_crs = from_crs, coords = coords)
 }
@@ -814,7 +830,18 @@ read_sf_gsheet <- function(url,
 
   data <- googlesheets4::read_sheet(ss = ss, sheet = sheet, ...)
 
-  data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
+  if (is.null(coords) && !geo) {
+    return(data)
+  }
+
+  data <-
+    df_to_sf(
+      data,
+      coords = coords,
+      geo = geo,
+      address = address,
+      from_crs = from_crs
+      )
 
   st_filter_ext(data, bbox)
 }

@@ -111,7 +111,7 @@ df_to_sf <- function(x,
 
   x <-
     switch(type,
-      "geometry_df" = geometry_df_to_sf(x),
+      "geometry_df" = sf::st_as_sf(x),
       "join_sf" = join_sf_to_df(x, y, by = by, ...),
       "address_df" = address_to_sf(x, address = address, coords = coords, crs = crs, remove_coords = remove_coords, ...),
       "wkt_df" = wkt_df_to_sf(x, crs = from_crs),
@@ -138,7 +138,8 @@ join_sf_to_df <- function(x, y, by = NULL, ...) {
 #' @importFrom sf st_as_sf
 coords_df_to_sf <- function(x,
                             coords = c("lon", "lat"),
-                            into = NULL, sep = ",",
+                            into = NULL,
+                            sep = ",",
                             rev = FALSE,
                             remove_coords = FALSE,
                             crs = 4326,
@@ -205,7 +206,7 @@ check_coords <- function(x = NULL,
     }
   }
 
-  # If X is NUll or not a dataframe check_coords just validates coord pairs or
+  # If x is NULL or not a dataframe check_coords just validates coord pairs or
   # sets a default value
   coords <- coords %||% default
 
@@ -307,13 +308,6 @@ separate_coords <- function(x, coords, into, sep) {
       ~ readr::parse_number(.x)
     )
   )
-}
-
-#' Convert a data frame with a geometry list column to an sf object
-#' @noRd
-#' @importFrom sf st_as_sf
-geometry_df_to_sf <- function(x) {
-  sf::st_as_sf(x)
 }
 
 #' Convert a data frame with a wkt column to an sf object
