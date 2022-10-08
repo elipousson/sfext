@@ -69,7 +69,7 @@ write_sf_ext <- function(data,
       )
     )
 
-    invisible(return(NULL))
+    return(invisible(NULL))
   }
 
   # If data is sf object, write or cache it
@@ -94,7 +94,7 @@ write_sf_ext <- function(data,
   )
 
   if (!cache) {
-    invisible(return(NULL))
+    return(invisible(NULL))
   }
 
   write_sf_cache(
@@ -318,6 +318,7 @@ write_sf_types <- function(data,
         is_csv_path(filename) ~ "sf_csv",
         is_excel_path(filename) ~ "sf_excel",
         any(filetype %in% "gsheet") ~ "sf_gsheet",
+        any(filetype %in% "svg") ~ "sf_svg",
         !any(filetype %in% c("rda", "rds", "rdata")) ~ "sf_spatial",
         TRUE ~ "rda"
       )
@@ -345,7 +346,7 @@ write_sf_types <- function(data,
           )
 
       if (!ask) {
-        invisible(return(NULL))
+        return(invisible(NULL))
       }
     }
 
@@ -370,12 +371,73 @@ write_sf_types <- function(data,
 
   switch(type,
     "sf_csv" = readr::write_csv(x = data, file = path),
-    "sf_excel" = openxlsx::write.xlsx(data, fiile = path),
+    "sf_excel" = openxlsx::write.xlsx(data, file = path),
     "sf_gsheet" = write_sf_gsheet(data = data, filename = filename, ...),
     "sf_spatial" = sf::write_sf(obj = data, dsn = path, ...),
+    "sf_svg" = write_sf_svg(data = data, filename = filename, path = path, ...),
     "df_csv" = readr::write_csv(x = data, file = path),
-    "df_excel" = openxlsx::write.xlsx(data, fiile = path),
+    "df_excel" = openxlsx::write.xlsx(data, file = path),
     "rda" = readr::write_rds(x = data, file = path, ...)
+  )
+}
+
+
+#' Write an sf object to an svg file
+#'
+#' [write_sf_svg()] uses [ggplot2::geom_sf()] and [ggplot2::theme_void()] to
+#' create a simple plot of an sf object and then save the plot as an svg file
+#' using [ggplot2::ggsave()]. This function is convenient for working with
+#' designers or other collaborators interested in using spatial data outside of
+#' R or a desktop GIS application.
+#'
+#' @name write_sf_svg
+#' @inheritParams ggplot2::geom_sf
+#' @inheritDotParams ggplot2::geom_sf
+#' @inheritParams ggplot2::ggsave
+#' @export
+write_sf_svg <- function(data,
+                         filename = NULL,
+                         path = NULL,
+                         mapping = NULL,
+                         ...,
+                         scale = 1,
+                         width = NA,
+                         height = NA,
+                         units = c("in", "cm", "mm", "px"),
+                         dpi = 300) {
+
+  is_pkg_installed("ggplot2")
+
+  if (is.null(filename) && !is.null(path)) {
+    filename <- basename(path)
+  }
+
+  filetype <- str_extract_filetype(filename)
+  path <- str_remove(path, paste0(filename, "$"))
+
+  cli_abort_ifnot(
+    "{.arg filename} or {.arg path} must include a {.val svg} file extension.",
+    condition = (filetype == "svg")
+  )
+
+  if (is.null(mapping)) {
+    mapping <- ggplot2::aes()
+  }
+
+  plot <- ggplot2::ggplot(data = data) +
+    ggplot2::geom_sf(mapping = mapping, ...) +
+    ggplot2::theme_void()
+
+  ggplot2::ggsave(
+    filename = filename,
+    plot = plot,
+    device = "svg",
+    path = path,
+    scale = scale,
+    width = width,
+    height = height,
+    units = units,
+    dpi = dpi
   )
 }
 
@@ -422,6 +484,6 @@ check_file_overwrite <- function(filename = NULL,
       file.remove(path)
     }
 
-    invisible(return(NULL))
+    invisible(NULL)
   }
 }
