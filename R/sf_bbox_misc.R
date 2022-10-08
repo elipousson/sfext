@@ -76,7 +76,7 @@ sf_bbox_asp <- function(bbox, orientation = FALSE) {
 #'   corner, midpoint, or center of the bounding box. Options include "xmin",
 #'   "ymin", "xmax", "ymax", "xmid", "ymid".
 #' @export
-sf_bbox_point <- function(bbox, point = NULL, call = caller_env()) {
+sf_bbox_point <- function(bbox, point = NULL, crs = NULL, call = caller_env()) {
   point <-
     arg_match(
       point,
@@ -84,9 +84,10 @@ sf_bbox_point <- function(bbox, point = NULL, call = caller_env()) {
       multiple = TRUE, error_call = call
     )
 
-  stopifnot(
-    length(point) == 2
-  )
+  # Get CRS from bbox (unless CRS is NA)
+  crs <- crs %||% sf::st_crs(bbox)
+  # Convert bbox to simple list
+  bbox <- as.list(bbox)
 
   if (any(c("xmid", "ymid") %in% point)) {
     bbox <-
@@ -99,7 +100,21 @@ sf_bbox_point <- function(bbox, point = NULL, call = caller_env()) {
       )
   }
 
-  sf::st_point(c(bbox[[point[1]]], bbox[[point[2]]]))
+  stopifnot(
+    # Check to make sure point is a pair
+    length(point) == 2,
+    # Check to make sure an x,y pair is provided - not xx or yy
+    sum(grepl("^x", point)) + sum(grepl("^y", point)) == 2
+  )
+
+  point <- rev_coords(point)
+  x <- as_point(c(bbox[[point[1]]], bbox[[point[2]]]))
+
+  if (is.na(crs)) {
+    return(x)
+  }
+
+  sf::st_as_sfc(list(x), crs = crs)
 }
 
 #' @name sf_bbox_dist
@@ -114,8 +129,8 @@ sf_bbox_dist <- function(bbox, from, to, units = NULL, drop = TRUE, by_element =
 
   dist <-
     sf::st_distance(
-      x = sf_bbox_point(bbox, from),
-      y = sf_bbox_point(bbox, to),
+      x = sf_bbox_point(bbox, from, crs = NA),
+      y = sf_bbox_point(bbox, to, crs = NA),
       by_element = by_element,
       ...
     )
@@ -402,13 +417,13 @@ sf_bbox_to_npc <- function(point,
 
   xdist <-
     sf::st_distance(
-      sf_bbox_point(bbox, c("xmin", "ymin")),
+      sf_bbox_point(bbox, c("xmin", "ymin"), crs = NA),
       sf::st_point(c(marker[1], bbox[["ymin"]]))
     )
 
   ydist <-
     sf::st_distance(
-      sf_bbox_point(bbox, c("xmin", "ymin")),
+      sf_bbox_point(bbox, c("xmin", "ymin"), crs = NA),
       sf::st_point(c(bbox[["xmin"]], marker[2]))
     )
 
