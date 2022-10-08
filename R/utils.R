@@ -18,10 +18,12 @@
 
 utils::globalVariables(
   c(
-    "filename", "image_description", "image_height", "image_width", "latitude", "latitude_ref",
-    "longitude", "longitude_ref", "name", "orientation", "source_file",
-    "asp", "block_height", "block_width", "col_width", "gutter", "height",
-    "row_height", "width"
+    "filename", "image_description", "image_height", "image_width", "latitude",
+    "latitude_ref", "longitude", "longitude_ref", "name", "orientation",
+    "source_file", "asp", "block_height", "block_width", "col_width", "gutter",
+    "height", "row_height", "width", "img_cardinal_dir", "img_direction","path",
+    "x_nudge", "y_nudge"
+
   )
 )
 
