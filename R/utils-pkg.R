@@ -30,7 +30,7 @@ ls_pkg_extdata <- function(pkg, call = caller_env()) {
   path <- system.file("extdata", package = pkg)
 
   if (is.null(path)) {
-    invsible(return(path))
+    return(invisible(path))
     # cli_abort("{.file extdata} folder can't be found for the provided package {.val pkg}.")
   }
 
@@ -55,7 +55,7 @@ ls_pkg_cachedata <- function(pkg, call = caller_env()) {
   path <- get_data_dir(cache = TRUE, create = FALSE, pkg = pkg)
 
   if (is.null(path)) {
-    invsible(return(path))
+    return(invisible(path))
     # cli_abort("{.file cache} folder can't be found for the provided package {.val pkg}.")
   }
 
