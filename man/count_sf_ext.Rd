@@ -92,6 +92,8 @@ only one value is provided, it is assumed to be a minimum limit.}
 An extended version of \code{\link[dplyr:count]{dplyr::count()}} that makes it easier to count the
 occurrences of features from data that intersect with features from a second
 sf object (set by y) or created by passing x or data to \code{\link[=st_make_grid_ext]{st_make_grid_ext()}}.
+Similar to \code{\link[=count_features]{count_features()}} and the two functions may be combined in the
+future.
 }
 \examples{
 nc <- sf::read_sf(path = system.file("shape/nc.shp", package = "sf"))

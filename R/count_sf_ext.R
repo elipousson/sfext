@@ -3,6 +3,8 @@
 #' An extended version of [dplyr::count()] that makes it easier to count the
 #' occurrences of features from data that intersect with features from a second
 #' sf object (set by y) or created by passing x or data to [st_make_grid_ext()].
+#' Similar to [count_features()] and the two functions may be combined in the
+#' future.
 #'
 #' @inheritDotParams st_make_grid_ext -.id
 #' @inheritParams sf::st_join
@@ -70,8 +72,14 @@ count_sf_ext <- function(data,
 
   check_sf(y)
 
-  stopifnot(
-    rlang::has_name(y, .id)
+  cli_abort_ifnot(
+    "{.arg .id} must be a length 1 character vector.",
+    condition = is.character(.id) && (length(.id) == 1)
+  )
+
+  cli_abort_ifnot(
+    "{.arg y} must have a column with named {.val {(.id)}} to match the {.arg .id} parameter.",
+    condition = rlang::has_name(y, .id)
   )
 
   sf_col <- get_sf_col(y)

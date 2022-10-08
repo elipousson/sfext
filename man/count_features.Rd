@@ -54,6 +54,7 @@ by. If by is \code{NULL}, by is set to the same value as count.}
 \item{...}{Additional parameters passed to \code{\link[=st_join_ext]{st_join_ext()}}}
 }
 \description{
-Use \code{\link[=st_join_ext]{st_join_ext()}} and \code{\link[dplyr:count]{dplyr::count()}} to count features in x based on their
-spatial relationship with y.
+Use \code{\link[=st_join_ext]{st_join_ext()}} and \code{\link[dplyr:count]{dplyr::count()}} to count features in x based on
+their spatial relationship with y. Very similar to \code{\link[=count_sf]{count_sf()}} so they may
+be merged in the future.
 }

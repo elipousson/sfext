@@ -45,6 +45,7 @@ reference:
   - '`misc_sf`'
   - '`number_features`'
   - '`count_features`'
+  - '`count_sf_ext`'
   - '`make_sf_grid_list`'
   - starts_with("sf_bbox")
 - title: Utility functions for units and scales
