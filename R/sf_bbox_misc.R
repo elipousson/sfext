@@ -24,7 +24,10 @@
 #' @param coords Column names with coordinates for query. e,g, c("X", "Y") or
 #'   c("longitude", "latitude") (default). Used by [sf_bbox_to_lonlat_query()]
 #'   only.
-#' @param crs coordinate reference system to use for query; default 4326
+#' @param crs A coordinate reference system to use for
+#'   [sf_bbox_to_lonlat_query()] (defaults to 4326) or for resulting bounding
+#'   box ([sf_bbox_transform()]) or sfc object ([sf_bbox_point()]) (defaults to
+#'   `NULL`).
 #' @param from,to xy pairs (e.g. c("xmax", "ymax) defining points to measure
 #'   distance from and to. Used by [sf_bbox_dist()] only.
 #' @param drop If `FALSE`, distance functions return with units. If `FALSE`
@@ -123,7 +126,14 @@ sf_bbox_point <- function(bbox, point = NULL, crs = NULL, call = caller_env()) {
 #' @export
 #' @importFrom sf st_distance st_point st_crs
 #' @importFrom units drop_units as_units
-sf_bbox_dist <- function(bbox, from, to, units = NULL, drop = TRUE, by_element = TRUE, call = caller_env(), ...) {
+sf_bbox_dist <- function(bbox,
+                         from,
+                         to,
+                         units = NULL,
+                         drop = TRUE,
+                         by_element = TRUE,
+                         call = caller_env(),
+                         ...) {
   check_required(from)
   check_required(to)
 
@@ -201,7 +211,10 @@ sf_bbox_diagdist <- function(bbox, units = NULL, drop = TRUE) {
 #' @name sf_bbox_diag_ratio_to_dist
 #' @rdname sf_bbox_misc
 #' @export
-sf_bbox_diag_ratio_to_dist <- function(bbox, diag_ratio, units = NULL, drop = TRUE) {
+sf_bbox_diag_ratio_to_dist <- function(bbox,
+                                       diag_ratio,
+                                       units = NULL,
+                                       drop = TRUE) {
   if (is.null(diag_ratio) | is.null(bbox)) {
     return(NULL)
   }
