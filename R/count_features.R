@@ -1,7 +1,7 @@
 #' Count simple features based on relationship with a second simple feature object
 #'
 #' Use [st_join_ext()] and [dplyr::count()] to count features in x based on
-#' their spatial relationship with y. Very similar to [count_sf()] so they may
+#' their spatial relationship with y. Very similar to [count_sf_ext()] so they may
 #' be merged in the future.
 #'
 #' @param x Data frame or `sf` object, Default: `NULL`
