@@ -30,16 +30,19 @@ NULL
 #' @rdname str_misc
 #' @export
 #' @importFrom janitor make_clean_names
-str_fix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", clean_names = TRUE, pad = NULL, width = NULL) {
+str_fix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", clean_names = TRUE, pad = NULL, width = NULL, col_names = TRUE) {
   stopifnot(
     is.character(prefix) || is.null(prefix),
     is.character(string) || is.null(string),
     is.character(postfix) || is.null(postfix)
   )
 
+  init_string <- string
   string <- str_pad_digits(string, pad = pad, width = width)
 
   if (clean_names) {
+    # FIXME: make_clean_names has an optional prefix and postfix parameter - can
+    # I use those instead of the custom str_fix functions
     string <- janitor::make_clean_names(string)
   }
 
@@ -47,8 +50,14 @@ str_fix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", cle
   string <- str_prefix(string, prefix, sep, clean_names)
   string <- str_prefix(string, postfix, sep, clean_names, post = TRUE)
 
-  # Remove doublec underscores
-  gsub("_{2}", "_", string)
+  # Remove double underscores
+  string <- gsub("_{2}", "_", string)
+
+  if (!col_names && !any(purrr::map_lgl(init_string, ~ str_detect(.x, "^x")))) {
+    return(gsub("^x", "", string))
+  }
+
+  string
 }
 
 #' @name str_prefix

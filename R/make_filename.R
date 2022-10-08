@@ -59,7 +59,8 @@ make_filename <- function(name = NULL,
         string = name,
         clean_names = TRUE,
         pad = pad,
-        width = width
+        width = width,
+        col_names = FALSE
       )
   }
 
@@ -70,7 +71,8 @@ make_filename <- function(name = NULL,
       string = filename,
       postfix = postfix,
       clean_names = TRUE,
-      pad = NULL
+      pad = NULL,
+      col_names = FALSE
     )
 
   # Append filetype
