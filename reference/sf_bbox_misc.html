@@ -104,7 +104,7 @@ diag_ratio are <code>NULL</code></p></li>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sf_bbox_asp</span><span class="op">(</span><span class="va">bbox</span>, orientation <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">sf_bbox_point</span><span class="op">(</span><span class="va">bbox</span>, point <span class="op">=</span> <span class="cn">NULL</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">sf_bbox_point</span><span class="op">(</span><span class="va">bbox</span>, point <span class="op">=</span> <span class="cn">NULL</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">sf_bbox_dist</span><span class="op">(</span></span>
 <span>  <span class="va">bbox</span>,</span>
@@ -167,6 +167,13 @@ corner, midpoint, or center of the bounding box. Options include "xmin",
 "ymin", "xmax", "ymax", "xmid", "ymid".</p></dd>
 
 
+<dt>crs</dt>
+<dd><p>A coordinate reference system to use for
+<code>sf_bbox_to_lonlat_query()</code> (defaults to 4326) or for resulting bounding
+box (<code>sf_bbox_transform()</code>) or sfc object (<code>sf_bbox_point()</code>) (defaults to
+<code>NULL</code>).</p></dd>
+
+
 <dt>call</dt>
 <dd><p>Passed as the error_call parameter for <a href="https://rlang.r-lib.org/reference/arg_match.html" class="external-link">rlang::arg_match</a> to
 improve error messages when function is used internally. Used by
@@ -194,10 +201,6 @@ distance from and to. Used by <code>sf_bbox_dist()</code> only.</p></dd>
 
 <dt>...</dt>
 <dd><p>passed on to <a href="https://r-spatial.github.io/s2/reference/s2_is_collection.html" class="external-link">s2_distance</a> or <a href="https://r-spatial.github.io/s2/reference/s2_closest_feature.html" class="external-link">s2_distance_matrix</a></p></dd>
-
-
-<dt>crs</dt>
-<dd><p>coordinate reference system to use for query; default 4326</p></dd>
 
 
 <dt>sf_col</dt>
