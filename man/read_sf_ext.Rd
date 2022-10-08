@@ -144,11 +144,7 @@ provided. Use \code{sf::st_layers(dsn = dsn)[["name"]]} to see a list of
 available table names.}
 
 \item{name, name_col}{Name value and name column to use in generated a query
-for sources read with \code{\link[=read_sf_query]{read_sf_query()}} or \code{\link[=read_sf_esri]{read_sf_esri()}}. This same
-convention is used by \code{\link[getdata:get_location]{getdata::get_location()}} which wraps
-\code{\link[=read_sf_ext]{read_sf_ext()}} allowing the use of these parameters with any
-\code{\link[=read_sf_ext*]{read_sf_ext*()}} function. This option for filtering may be added to more
-read_sf_ext functions in the future.}
+for sources read with \code{\link[=read_sf_query]{read_sf_query()}} or \code{\link[=read_sf_esri]{read_sf_esri()}}.}
 
 \item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
 

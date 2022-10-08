@@ -21,7 +21,7 @@
 \usage{
 sf_bbox_asp(bbox, orientation = FALSE)
 
-sf_bbox_point(bbox, point = NULL, call = caller_env())
+sf_bbox_point(bbox, point = NULL, crs = NULL, call = caller_env())
 
 sf_bbox_dist(
   bbox,
@@ -76,6 +76,11 @@ defaults to \code{FALSE}.}
 corner, midpoint, or center of the bounding box. Options include "xmin",
 "ymin", "xmax", "ymax", "xmid", "ymid".}
 
+\item{crs}{A coordinate reference system to use for
+\code{\link[=sf_bbox_to_lonlat_query]{sf_bbox_to_lonlat_query()}} (defaults to 4326) or for resulting bounding
+box (\code{\link[=sf_bbox_transform]{sf_bbox_transform()}}) or sfc object (\code{\link[=sf_bbox_point]{sf_bbox_point()}}) (defaults to
+\code{NULL}).}
+
 \item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match} to
 improve error messages when function is used internally. Used by
 \code{\link[=sf_bbox_point]{sf_bbox_point()}}, \code{\link[=sf_bbox_dist]{sf_bbox_dist()}}, and \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
@@ -92,8 +97,6 @@ distance from and to. Used by \code{\link[=sf_bbox_dist]{sf_bbox_dist()}} only.}
 \item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
 
 \item{...}{passed on to \link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}}
-
-\item{crs}{coordinate reference system to use for query; default 4326}
 
 \item{sf_col}{name to use for geometry column after converting to simple
 feature object; defaults to "geometry".}

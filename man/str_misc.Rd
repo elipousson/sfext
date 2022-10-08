@@ -19,7 +19,8 @@ str_fix(
   sep = "_",
   clean_names = TRUE,
   pad = NULL,
-  width = NULL
+  width = NULL,
+  col_names = TRUE
 )
 
 str_prefix(

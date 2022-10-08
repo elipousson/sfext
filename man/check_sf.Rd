@@ -47,6 +47,9 @@ For more information about error calls, see \ifelse{html}{\link[rlang:topic-erro
   \describe{
     \item{\code{message}}{It is formatted via a call to \code{\link[cli:cli_bullets]{cli_bullets()}}.}
     \item{\code{.envir}}{Environment to evaluate the glue expressions in.}
+    \item{\code{.frame}}{The throwing context. Used as default for
+\code{.trace_bottom}, and to determine the internal package to mention
+in internal errors when \code{.internal} is \code{TRUE}.}
   }}
 }
 \description{
