@@ -212,4 +212,3 @@ sort_features <- function(x,
 #' @rdname number_features
 #' @export
 sort_sf <- sort_features
-

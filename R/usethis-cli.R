@@ -67,7 +67,7 @@ cli_abort_ifnot <- function(...,
                             condition = FALSE,
                             .data = NULL,
                             call = caller_env(),
-                            .envir =  parent.frame()) {
+                            .envir = parent.frame()) {
   if (!is_logical(condition)) {
     condition <- as_function(condition)
     condition <- condition(.data)
@@ -90,7 +90,7 @@ cli_warn_ifnot <- function(...,
                            condition = FALSE,
                            .data = NULL,
                            call = caller_env(),
-                           .envir =  parent.frame()) {
+                           .envir = parent.frame()) {
   if (!is_logical(condition)) {
     condition <- as_function(condition)
     condition <- condition(.data)
