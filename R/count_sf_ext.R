@@ -40,6 +40,7 @@
 #' @importFrom dplyr count right_join filter mutate case_when select
 #' @importFrom sf st_join st_as_sf
 #' @importFrom tidyr replace_na
+#' @export
 count_sf_ext <- function(data,
                          x = NULL,
                          y = NULL,
