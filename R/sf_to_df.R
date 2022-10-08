@@ -217,8 +217,23 @@ check_coords <- function(x = NULL,
     call = call
   )
 
-  if (rev && grepl("LAT|lat|Lat|Y|y", coords[1])) {
-    coords <- rev(coords)
+  if (rev) {
+    coords <- rev_coords(coords)
+  }
+
+  coords
+}
+
+#' Reverse coordinate column names if latitude or y appear first
+#'
+#' @noRd
+rev_coords <- function(coords, pattern = c("lat", "^y"), ignore.case = TRUE) {
+  if (grepl(
+    pattern = paste0(pattern, collapse = "|"),
+    x = coords[1],
+    ignore.case = ignore.case
+  )) {
+    return(rev(coords))
   }
 
   coords
@@ -314,7 +329,7 @@ wkt_df_to_sf <- function(x, crs = NULL) {
 #'
 #' @noRd
 #' @importFrom cli cli_inform
-format_coords <- function(x, coords = c("lon", "lat"), call = caller_env()) {
+format_coords <- function(x, coords = c("lon", "lat"), keep_missing = FALSE, call = caller_env()) {
   cli_abort_ifnot(
     "{.arg coords} can't be {.val NULL} or {.val character(0)}.",
     condition = !is.null(coords) && !identical(coords, character(0)),
@@ -340,20 +355,29 @@ format_coords <- function(x, coords = c("lon", "lat"), call = caller_env()) {
 
   if (n_missing_coords == nrow(x)) {
     cli_abort(
-      "{.arg x} must have one or more coordinate pairs in column{?s} {.val {coords}}.",
+      "{.arg x} must have one or more coordinate pairs in
+      column{?s} {.val {coords}}.",
       call = call
     )
   }
 
-  if (n_missing_coords > 0) {
+  if ((n_missing_coords > 0) && !keep_missing) {
     # Exclude rows with missing coordinates
     cli_inform(
-      "Removing {.val {n_missing_coords}} rows{?s} with missing coordinates.",
+      "Removing {.val {n_missing_coords}} row{?s} with
+      missing coordinates from {.arg x}.",
       call = call
     )
+
+    return(x[!missing_coords, ])
   }
 
-  x[!missing_coords, ]
+  cli_inform(
+    "{.arg x} has {.val {n_missing_coords}} row{?s} with missing coordinates.",
+    call = call
+  )
+
+  x
 }
 
 #' Use tidygeocoder to convert an address or data frame with an address column
