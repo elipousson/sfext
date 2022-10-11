@@ -12,6 +12,7 @@ address_to_sf(
   coords = c("lon", "lat"),
   remove_coords = FALSE,
   crs = NULL,
+  full_results = FALSE,
   ...
 )
 }
@@ -52,6 +53,9 @@ after converting a data frame to simple feature object; defaults to
 
 \item{crs}{Cordinate reference system to return, Default: 4326 for
 \code{\link[=sf_to_df]{sf_to_df()}} and \code{NULL} for \code{\link[=df_to_sf]{df_to_sf()}}.}
+
+\item{full_results}{returns all available data from the geocoding service if TRUE.
+If FALSE (default) then only latitude and longitude columns are returned from the geocoding service.}
 
 \item{...}{
   Arguments passed on to \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode}}

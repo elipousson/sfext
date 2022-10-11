@@ -392,7 +392,14 @@ format_coords <- function(x, coords = c("lon", "lat"), keep_missing = FALSE, cal
 #'  [tidygeocoder::geo()], [tidygeocoder::geocode()]
 #' @rdname address_to_sf
 #' @export
-address_to_sf <- function(x, address = "address", method = "osm", coords = c("lon", "lat"), remove_coords = FALSE, crs = NULL, ...) {
+address_to_sf <- function(x,
+                          address = "address",
+                          method = "osm",
+                          coords = c("lon", "lat"),
+                          remove_coords = FALSE,
+                          crs = NULL,
+                          full_results = FALSE,
+                          ...) {
   is_pkg_installed("tidygeocoder")
 
   if (is.character(x)) {
@@ -415,6 +422,7 @@ address_to_sf <- function(x, address = "address", method = "osm", coords = c("lo
       address = address,
       long = "lon",
       lat = "lat",
+      full_results = full_results,
       quiet = is_interactive(),
       ...
     )
