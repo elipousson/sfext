@@ -447,7 +447,8 @@ write_sf_svg <- function(data,
 #' @importFrom stringr str_detect
 check_file_overwrite <- function(filename = NULL,
                                  path = NULL,
-                                 overwrite = TRUE) {
+                                 overwrite = TRUE,
+                                 call = caller_env()) {
   filename <- filename %||% basename(path)
 
   if (!has_filetype(filename)) {
@@ -471,7 +472,8 @@ check_file_overwrite <- function(filename = NULL,
         "i" = "A file with the same name already exists and
         {.arg overwrite = FALSE}."
       ),
-      condition = overwrite
+      condition = overwrite,
+      call = call
     )
 
     cli_inform(
