@@ -18,6 +18,7 @@ reference:
   - '`is_geom_type`'
   - starts_with("as_point")
   - starts_with("as_sf")
+  - '`as_xy`'
 - title: Converting sf and data frame objects
   contents:
   - '`sf_to_df`'
