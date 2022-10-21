@@ -323,7 +323,7 @@ read_sf_query <- function(path,
       )
     }
 
-   data <- rlang::set_names(data, .name_repair(data))
+   names(data) <- .name_repair(names(data))
   }
 
   if (!zm_drop) {
