@@ -257,8 +257,7 @@ read_sf_rdata <- function(path,
 #'   available table names.
 #' @param .name_repair Supported by [read_sf_query()] but not as flexible as the
 #'   parameter from [readr::read_csv()] and currently only supports functions or
-#'   formulas applied directly to the data. The primary goal for this parameter
-#'   is to support [janitor::make_clean_names()] as an option.
+#'   formulas.
 #' @export
 #' @importFrom stringr str_extract
 #' @importFrom sf st_layers read_sf st_zm
@@ -324,7 +323,7 @@ read_sf_query <- function(path,
       )
     }
 
-   data <- .name_repair(data)
+   data <- rlang::set_names(data, .name_repair(data))
   }
 
   if (!zm_drop) {
