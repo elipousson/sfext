@@ -233,7 +233,8 @@ for sources read with <code>read_sf_query()</code> or <code>read_sf_esri()</code
 <dt>.name_repair</dt>
 <dd><p>Supported by <code>read_sf_query()</code> but not as flexible as the
 parameter from <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_csv()</a></code> and currently only supports functions or
-formulas.</p></dd>
+formulas applied directly to the data. The primary goal for this parameter
+is to support <code><a href="https://rdrr.io/pkg/janitor/man/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code> as an option.</p></dd>
 
 
 <dt>sheet</dt>
