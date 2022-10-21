@@ -35,6 +35,7 @@ read_sf_query(
   name_col = NULL,
   wkt_filter = NULL,
   zm_drop = FALSE,
+  .name_repair = NULL,
   ...
 )
 
@@ -149,6 +150,10 @@ for sources read with \code{\link[=read_sf_query]{read_sf_query()}} or \code{\li
 \item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
 
 \item{zm_drop}{If \code{TRUE}, drop Z and/or M dimensions using \link[sf:st_zm]{sf::st_zm}}
+
+\item{.name_repair}{Supported by \code{\link[=read_sf_query]{read_sf_query()}} but not as flexible as the
+parameter from \code{\link[readr:read_delim]{readr::read_csv()}} and currently only supports functions or
+formulas.}
 
 \item{sheet}{Sheet to read. Either a string (the name of a sheet), or an
 integer (the position of the sheet). Ignored if the sheet is specified via

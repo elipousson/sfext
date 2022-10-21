@@ -255,9 +255,13 @@ read_sf_rdata <- function(path,
 #'   table is used to generate a custom query if both name and name_col are
 #'   provided. Use `sf::st_layers(dsn = dsn)[["name"]]` to see a list of
 #'   available table names.
+#' @param .name_repair Supported by [read_sf_query()] but not as flexible as the
+#'   parameter from [readr::read_csv()] and currently only supports functions or
+#'   formulas.
 #' @export
 #' @importFrom stringr str_extract
-#' @importFrom sf read_sf st_zm
+#' @importFrom sf st_layers read_sf st_zm
+#' @importFrom rlang is_lambda as_function is_function set_names
 read_sf_query <- function(path,
                           dsn = NULL,
                           bbox = NULL,
@@ -267,6 +271,7 @@ read_sf_query <- function(path,
                           name_col = NULL,
                           wkt_filter = NULL,
                           zm_drop = FALSE,
+                          .name_repair = NULL,
                           ...) {
   dsn <- dsn %||% path
 
@@ -307,6 +312,19 @@ read_sf_query <- function(path,
       wkt_filter = wkt_filter,
       query = query
     )
+
+  if (!is.null(.name_repair)) {
+    if (rlang::is_lambda(.name_repair)) {
+      .name_repair <- rlang::as_function(.name_repair)
+    } else {
+      cli_abort_ifnot(
+        "{.arg .name_repair} must be a function or a formula, not a {.cls {(class(.name_repair))}} object.",
+        condition = rlang::is_function(.name_repair)
+      )
+    }
+
+   data <- rlang::set_names(data, .name_repair(data))
+  }
 
   if (!zm_drop) {
     return(data)
