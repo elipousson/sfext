@@ -153,7 +153,8 @@ for sources read with \code{\link[=read_sf_query]{read_sf_query()}} or \code{\li
 
 \item{.name_repair}{Supported by \code{\link[=read_sf_query]{read_sf_query()}} but not as flexible as the
 parameter from \code{\link[readr:read_delim]{readr::read_csv()}} and currently only supports functions or
-formulas.}
+formulas applied directly to the data. The primary goal for this parameter
+is to support \code{\link[janitor:make_clean_names]{janitor::make_clean_names()}} as an option.}
 
 \item{sheet}{Sheet to read. Either a string (the name of a sheet), or an
 integer (the position of the sheet). Ignored if the sheet is specified via
