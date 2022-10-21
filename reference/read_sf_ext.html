@@ -84,6 +84,7 @@ filtered before download or reading into memory where possible).</p>
 <span>  name_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  wkt_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  zm_drop <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  .name_repair <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -227,6 +228,12 @@ for sources read with <code>read_sf_query()</code> or <code>read_sf_esri()</code
 
 <dt>zm_drop</dt>
 <dd><p>If <code>TRUE</code>, drop Z and/or M dimensions using <a href="https://r-spatial.github.io/sf/reference/st_zm.html" class="external-link">sf::st_zm</a></p></dd>
+
+
+<dt>.name_repair</dt>
+<dd><p>Supported by <code>read_sf_query()</code> but not as flexible as the
+parameter from <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_csv()</a></code> and currently only supports functions or
+formulas.</p></dd>
 
 
 <dt>sheet</dt>
