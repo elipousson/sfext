@@ -323,7 +323,7 @@ read_sf_query <- function(path,
       )
     }
 
-   names(data) <- .name_repair(names(data))
+    names(data) <- .name_repair(names(data))
   }
 
   if (!zm_drop) {
@@ -689,30 +689,44 @@ read_sf_gmap <- function(url,
   layer <- layer %||% sf::st_layers(dsn = url)[["name"]]
 
   if (length(layer) > 1) {
-    map_fn <- purrr::map
+    cli_progress_layers <-
+      cli::cli_progress_along(
+        layer,
+        "Downloading map layers"
+      )
 
-    if (combine_layers) {
-      map_fn <- purrr::map_dfr
-    }
-
-    return(
-      map_fn(
-        cli::cli_progress_along(
-          layer,
-          "Downloading map layers"
-        ),
-        ~ dplyr::bind_cols(
+    map_gmap_layers <-
+      function(x) {
+        dplyr::bind_cols(
+          Layer = x,
           read_sf_gmap(
             url = url,
             bbox = bbox,
-            layer = layer[.x],
+            layer = x,
             combine_layers = FALSE,
             zm_drop = zm_drop
-          ),
-          layer = layer[.x]
+          )
         )
-      )
-    )
+      }
+
+    if (combine_layers) {
+      data <-
+        purrr::map_dfr(
+          cli_progress_layers,
+          ~ map_gmap_layers(layer[.x])
+        )
+    } else {
+      data <-
+        rlang::set_names(
+          purrr::map(
+            cli_progress_layers,
+            ~ map_gmap_layers(layer[.x])
+          ),
+          layer
+        )
+    }
+
+    return(data)
   }
 
   data <-
@@ -738,7 +752,7 @@ read_sf_gmap <- function(url,
 get_gmap_id <- function(url) {
   stringr::str_extract(
     url,
-    "(?<=mid=)[:graph:]+(?=&)"
+    "(?<=mid=)([:alnum:]|_)+((?=&)|(?=/$)|$)"
   )
 }
 
@@ -858,7 +872,7 @@ read_sf_gsheet <- function(url,
       geo = geo,
       address = address,
       from_crs = from_crs
-      )
+    )
 
   st_filter_ext(data, bbox)
 }
