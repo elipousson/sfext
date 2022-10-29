@@ -346,6 +346,7 @@ format_coords <- function(x, coords = c("lon", "lat"), keep_missing = FALSE, cal
 
   missing_coords <- (is.na(x[[lon]]) | is.na(x[[lat]]))
   n_missing_coords <- sum(missing_coords)
+  has_missing_coords <- n_missing_coords > 0
 
   if (n_missing_coords == nrow(x)) {
     cli_abort(
@@ -355,7 +356,7 @@ format_coords <- function(x, coords = c("lon", "lat"), keep_missing = FALSE, cal
     )
   }
 
-  if ((n_missing_coords > 0) && !keep_missing) {
+  if (has_missing_coords && !keep_missing) {
     # Exclude rows with missing coordinates
     cli_inform(
       "Removing {.val {n_missing_coords}} row{?s} with
@@ -366,10 +367,12 @@ format_coords <- function(x, coords = c("lon", "lat"), keep_missing = FALSE, cal
     return(x[!missing_coords, ])
   }
 
-  cli_inform(
-    "{.arg x} has {.val {n_missing_coords}} row{?s} with missing coordinates.",
-    call = call
-  )
+  if (has_missing_coords) {
+    cli_inform(
+      "{.arg x} has {.val {n_missing_coords}} row{?s} with missing coordinates.",
+      call = call
+    )
+  }
 
   x
 }
