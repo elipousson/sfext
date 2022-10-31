@@ -2,30 +2,34 @@
 #'
 #' Wrapper for [sf::st_union()] supporting the additional feature of a combined
 #' name column collapsed into a single vector with [cli::pluralize()].
+#' [st_union_by()] wraps [dplyr::group_by()] and [dplyr::summarise()] to allow
+#' quick unioning geometry by the passed parameters.
 #'
-#' @param x A `sf`, `sfc`, or `bbox` object, Default: `NULL`
-#' @param y A `sf` or `sfc` object, Default: `NULL`
+#' @param x A `sf`, `sfc`, or `bbox` object or `sf` only for [st_union_by()]
+#'   Required.
+#' @param y A `sf` or `sfc` object, defaults to `NULL`.
 #' @param name_col Column name to collapse into new name_col value, Default:
 #'   'name'
-#' @param sf_col Geometry column name to use if x is an sf object, Default:
-#'   'geometry'
+#' @param .sf_col Geometry column name to use if x is an `sf` object, Default:
+#'   `NULL`.
 #' @param label Length 1 character vector used if name_col is `NULL`.
-#' @param ext If `FALSE`, st_union_ext functions the same as [sf::st_union()],
-#'   Default: `TRUE`
-#' @param ... Additional parameters passed to [sf::st_union()]
-#' @return A sfc object if y is `NULL` and ext is `FALSE`. A tibble sf if x is a
-#'   sf object and y is `NULL`. If y is provided, [st_union_ext()] is identical to
-#'   [sf::st_union()]
+#' @param ext If `FALSE`, [st_union_ext()] functions the same as
+#'   [sf::st_union()], Default: `TRUE`
+#' @param ... Additional parameters passed to [sf::st_union()] or
+#'   [dplyr::group_by()].
+#' @return A `sfc` object if y is `NULL` and ext is `FALSE`. A tibble sf if x is
+#'   a sf object and y is `NULL`. If y is provided, [st_union_ext()] is
+#'   identical to [sf::st_union()]
 #' @rdname st_union_ext
 #' @example examples/st_union_ext.R
 #' @export
 #' @importFrom sf st_union st_geometry
 #' @importFrom cli pluralize
 #' @importFrom dplyr tibble mutate all_of
-st_union_ext <- function(x = NULL,
+st_union_ext <- function(x,
                          y = NULL,
                          name_col = "name",
-                         sf_col = "geometry",
+                         .sf_col = NULL,
                          label = NULL,
                          ext = TRUE,
                          ...) {
@@ -62,6 +66,8 @@ st_union_ext <- function(x = NULL,
       name_col <- names(x)[[1]]
     }
 
+    .sf_col <- .sf_col %||% get_sf_col(x) %||% "geometry"
+
     as_sf(
       dplyr::tibble(
         "{name_col}" := as.character(cli::pluralize("{x[[name_col]]}")),
@@ -82,4 +88,22 @@ st_union_ext <- function(x = NULL,
       )
     )
   }
+}
+
+#' @name st_union_by
+#' @rdname st_union_ext
+#' @export
+st_union_by <- function(x, ..., .sf_col = NULL) {
+  check_sf(x)
+  .sf_col <- .sf_col %||% get_sf_col(x)
+  x <-
+    dplyr::summarise(
+      dplyr::group_by(
+        sf::st_make_valid(x),
+        ...
+        ),
+      "{.sf_col}" := {.sf_col}
+    )
+
+  sf::st_make_valid(x)
 }

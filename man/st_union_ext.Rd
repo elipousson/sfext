@@ -2,44 +2,51 @@
 % Please edit documentation in R/st_union_ext.R
 \name{st_union_ext}
 \alias{st_union_ext}
+\alias{st_union_by}
 \title{Union simple feature objects and combine name column values}
 \usage{
 st_union_ext(
-  x = NULL,
+  x,
   y = NULL,
   name_col = "name",
-  sf_col = "geometry",
+  .sf_col = NULL,
   label = NULL,
   ext = TRUE,
   ...
 )
+
+st_union_by(x, ..., .sf_col = NULL)
 }
 \arguments{
-\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object, Default: \code{NULL}}
+\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object or \code{sf} only for \code{\link[=st_union_by]{st_union_by()}}
+Required.}
 
-\item{y}{A \code{sf} or \code{sfc} object, Default: \code{NULL}}
+\item{y}{A \code{sf} or \code{sfc} object, defaults to \code{NULL}.}
 
 \item{name_col}{Column name to collapse into new name_col value, Default:
 'name'}
 
-\item{sf_col}{Geometry column name to use if x is an sf object, Default:
-'geometry'}
+\item{.sf_col}{Geometry column name to use if x is an \code{sf} object, Default:
+\code{NULL}.}
 
 \item{label}{Length 1 character vector used if name_col is \code{NULL}.}
 
-\item{ext}{If \code{FALSE}, st_union_ext functions the same as \code{\link[sf:geos_combine]{sf::st_union()}},
-Default: \code{TRUE}}
+\item{ext}{If \code{FALSE}, \code{\link[=st_union_ext]{st_union_ext()}} functions the same as
+\code{\link[sf:geos_combine]{sf::st_union()}}, Default: \code{TRUE}}
 
-\item{...}{Additional parameters passed to \code{\link[sf:geos_combine]{sf::st_union()}}}
+\item{...}{Additional parameters passed to \code{\link[sf:geos_combine]{sf::st_union()}} or
+\code{\link[dplyr:group_by]{dplyr::group_by()}}.}
 }
 \value{
-A sfc object if y is \code{NULL} and ext is \code{FALSE}. A tibble sf if x is a
-sf object and y is \code{NULL}. If y is provided, \code{\link[=st_union_ext]{st_union_ext()}} is identical to
-\code{\link[sf:geos_combine]{sf::st_union()}}
+A \code{sfc} object if y is \code{NULL} and ext is \code{FALSE}. A tibble sf if x is
+a sf object and y is \code{NULL}. If y is provided, \code{\link[=st_union_ext]{st_union_ext()}} is
+identical to \code{\link[sf:geos_combine]{sf::st_union()}}
 }
 \description{
 Wrapper for \code{\link[sf:geos_combine]{sf::st_union()}} supporting the additional feature of a combined
 name column collapsed into a single vector with \code{\link[cli:pluralize]{cli::pluralize()}}.
+\code{\link[=st_union_by]{st_union_by()}} wraps \code{\link[dplyr:group_by]{dplyr::group_by()}} and \code{\link[dplyr:summarise]{dplyr::summarise()}} to allow
+quick unioning geometry by the passed parameters.
 }
 \examples{
 nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
