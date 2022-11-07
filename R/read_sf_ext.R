@@ -217,6 +217,7 @@ read_sf_rdata <- function(path,
                           file = NULL,
                           refhook = NULL,
                           bbox = NULL,
+                          .name_repair = "check_unique",
                           ...) {
   file <- file %||% path
 
@@ -233,6 +234,8 @@ read_sf_rdata <- function(path,
     file_name <- load(file)
     data <- get(file_name)
   }
+
+  data <- use_name_repair(data, .name_repair = .name_repair)
 
   if (!is_sf(data)) {
     cli_warn(
@@ -255,9 +258,7 @@ read_sf_rdata <- function(path,
 #'   table is used to generate a custom query if both name and name_col are
 #'   provided. Use `sf::st_layers(dsn = dsn)[["name"]]` to see a list of
 #'   available table names.
-#' @param .name_repair Supported by [read_sf_query()] but not as flexible as the
-#'   parameter from [readr::read_csv()] and currently only supports functions or
-#'   formulas.
+#' @param .name_repair Passed to repair parameter of [vctrs::vec_as_names()]
 #' @export
 #' @importFrom stringr str_extract
 #' @importFrom sf st_layers read_sf st_zm
@@ -271,39 +272,24 @@ read_sf_query <- function(path,
                           name_col = NULL,
                           wkt_filter = NULL,
                           zm_drop = FALSE,
-                          .name_repair = NULL,
+                          .name_repair = "check_unique",
                           ...) {
   dsn <- dsn %||% path
 
-  if (!is.null(name) && !is.null(name_col) && !is_geojson_path(dsn)) {
-    if (is.null(table)) {
-      table <-
-        stringr::str_extract(
-          basename(dsn),
-          "[:graph:]+(?=\\.)"
-        )
-    }
+  query <-
+    make_sf_query(
+      dsn = dsn,
+      table = table,
+      name = name,
+      name_col = name_col,
+      query = query
+    )
 
-    table <-
-      arg_match(
-        table,
-        as.character(sf::st_layers(dsn = dsn)[["name"]])
-      )
-
-    query <-
-      glue(
-        "select * from {table} where {name_col} IN
-    ({glue_collapse(paste0(\"'\", name, \"'\"), sep = ', ')})"
-      )
-  }
-
-  if (!is.null(bbox)) {
-    # Convert bbox to well known text
-    wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
-  }
-
-  query <- query %||% NA
-  wkt_filter <- wkt_filter %||% character(0)
+  wkt_filter <-
+    make_sf_wkt_filter(
+      wkt_filter = wkt_filter,
+      bbox = bbox
+    )
 
   # Read external, cached, or data at path with wkt_filter
   data <-
@@ -313,18 +299,8 @@ read_sf_query <- function(path,
       query = query
     )
 
-  if (!is.null(.name_repair)) {
-    if (rlang::is_lambda(.name_repair)) {
-      .name_repair <- rlang::as_function(.name_repair)
-    } else {
-      cli_abort_ifnot(
-        "{.arg .name_repair} must be a function or a formula, not a {.cls {(class(.name_repair))}} object.",
-        condition = rlang::is_function(.name_repair)
-      )
-    }
-
-    names(data) <- .name_repair(names(data))
-  }
+  data <-
+    use_name_repair(data, .name_repair = .name_repair)
 
   if (!zm_drop) {
     return(data)
@@ -347,6 +323,7 @@ read_sf_excel <- function(path,
                           from_crs = 4326,
                           geo = FALSE,
                           address = "address",
+                          .name_repair = "check_unique",
                           ...) {
   is_pkg_installed("readxl")
   # Convert XLS or XLSX file with coordinates to sf
@@ -372,13 +349,20 @@ read_sf_excel <- function(path,
           coords = coords,
           geo = geo,
           address = address,
-          col_types = params$col_types
+          col_types = params$col_types,
+          .name_repair = .name_repair
         )
       )
     )
   }
 
-  data_df <- readxl::read_excel(path = path, sheet = sheet, ...)
+  data_df <-
+    readxl::read_excel(
+      path = path,
+      sheet = sheet,
+      .name_repair = .name_repair,
+      ...
+    )
 
   if (is.null(coords) && !geo) {
     return(data_df)
@@ -411,23 +395,52 @@ read_sf_csv <- function(path,
                         from_crs = 4326,
                         geo = FALSE,
                         address = "address",
+                        wkt = NULL,
+                        .name_repair = "check_unique",
                         show_col_types = FALSE,
                         ...) {
   if (is_missing(path) && !is.null(url)) {
     path <- url
   }
 
-  is_pkg_installed("readr")
+  if (show_col_types) {
+    is_pkg_installed("readr")
+    data <-
+      readr::read_csv(
+        file = path,
+        show_col_types = show_col_types,
+        name_repair = .name_repair,
+        ...
+      )
+  } else {
+    options <- make_sf_options(options, coords, wkt)
 
-  data_df <- readr::read_csv(file = path, show_col_types = show_col_types, ...)
+    data <-
+      sf::read_sf(
+        path,
+        options = options,
+        crs = from_crs %||% NA_character_,
+        ...
+      )
+
+    data <-
+      use_name_repair(
+        data,
+        .name_repair
+      )
+  }
+
+  if (is_sf(data)) {
+    return(st_filter_ext(data, bbox))
+  }
 
   if (is.null(coords) && !geo) {
-    return(data_df)
+    return(data)
   }
 
   data <-
     df_to_sf(
-      data_df,
+      data,
       coords = coords,
       from_crs = from_crs,
       geo = geo,
@@ -480,6 +493,8 @@ read_sf_url <- function(url,
   zm_drop <- params$zm_drop %||% TRUE
   geo <- params$geo %||% FALSE
   address <- params$address %||% "address"
+  wkt <- params$wkt
+  .name_repair <- params$.name_repair %||% "check_unique"
 
   switch(url_type,
     "csv" = read_sf_csv(
@@ -488,7 +503,9 @@ read_sf_url <- function(url,
       coords = coords,
       from_crs = from_crs,
       geo = geo,
-      address = address
+      wkt = wkt,
+      address = address,
+      .name_repair = .name_repair
     ),
     "excel" = read_sf_excel(
       url = url,
@@ -498,7 +515,8 @@ read_sf_url <- function(url,
       coords = coords,
       from_crs = from_crs,
       geo = geo,
-      address = address
+      address = address,
+      .name_repair = .name_repair
     ),
     "download" = read_sf_download(
       url = url,
@@ -508,7 +526,8 @@ read_sf_url <- function(url,
       filetype = params$filetype %||% "geojson",
       prefix = params$prefix %||% "date",
       method = params$method %||% "auto",
-      unzip = params$unzip %||% FALSE
+      unzip = params$unzip %||% FALSE,
+      .name_repair = .name_repair
     ),
     "esri" = read_sf_esri(
       url = url,
@@ -517,19 +536,22 @@ read_sf_url <- function(url,
       name = params$name,
       name_col = params$name_col,
       coords = coords,
-      from_crs = from_crs
+      from_crs = from_crs,
+      .name_repair = .name_repair
     ),
     "gist" = read_sf_gist(
       url = url,
       bbox = bbox,
-      nth = params$nth %||% 1
+      nth = params$nth %||% 1,
+      .name_repair = .name_repair
     ),
     "gmap" = read_sf_gmap(
       url = url,
       bbox = bbox,
       layer = params$layer,
       combine_layers = params$combine_layers %||% FALSE,
-      zm_drop = zm_drop
+      zm_drop = zm_drop,
+      .name_repair = .name_repair
     ),
     "gsheet" = read_sf_gsheet(
       url = url,
@@ -538,12 +560,14 @@ read_sf_url <- function(url,
       coords = coords,
       from_crs = from_crs,
       geo = geo,
-      address = address
+      address = address,
+      .name_repair = .name_repair
     ),
     "rds" = read_sf_rdata(
       file = url,
       bbox = bbox,
-      refhook = params$refhook
+      refhook = params$refhook,
+      .name_repair = .name_repair
     ),
     "other" = read_sf_query(
       dsn = url,
@@ -553,7 +577,8 @@ read_sf_url <- function(url,
       table = params$table,
       name = params$name,
       name_col = params$name_col,
-      zm_drop = zm_drop
+      zm_drop = zm_drop,
+      .name_repair = .name_repair
     )
   )
 }
@@ -569,6 +594,7 @@ read_sf_esri <- function(url,
                          name_col = NULL,
                          coords = c("lon", "lat"),
                          from_crs = 4326,
+                         .name_repair = "check_unique",
                          ...) {
   is_pkg_installed(pkg = "esri2sf", repo = "elipousson/esri2sf")
 
@@ -592,6 +618,7 @@ read_sf_esri <- function(url,
         bbox = bbox,
         crs = NULL,
         progress = TRUE,
+        .name_repair = .name_repair,
         ...
       )
     )
@@ -603,6 +630,7 @@ read_sf_esri <- function(url,
       url = url,
       where = where,
       progress = TRUE,
+      .name_repair = .name_repair,
       ...
     )
 
@@ -613,33 +641,6 @@ read_sf_esri <- function(url,
   df_to_sf(data, from_crs = from_crs, coords = coords)
 }
 
-#' Helper to make query for read_sf_esri
-#'
-#' @noRd
-make_where_query <- function(where = NULL,
-                             name = NULL,
-                             name_col = NULL,
-                             bbox = NULL,
-                             coords = c("lon", "lat")) {
-  if (!is.null(where)) {
-    where <- paste0("(", where, ")")
-  }
-
-  if (!is.null(name) && !is.null(name_col)) {
-    where <- c(where, glue("({name_col} = '{name}')"))
-  }
-
-  if (!is.null(bbox) && !is.null(coords)) {
-    where <-
-      c(where, sf_bbox_to_lonlat_query(bbox = bbox, coords = coords))
-  }
-
-  if (is.null(where)) {
-    return(where)
-  }
-
-  paste(where[!is.na(where)], collapse = " AND ")
-}
 
 #' @name read_sf_gist
 #' @rdname read_sf_ext
@@ -666,7 +667,7 @@ read_sf_gist <- function(url,
   check_null(gist_data$files)
 
   read_sf_url(
-    url = gist_data$files[[which]]$raw_url,
+    url = gist_data$files[[nth]]$raw_url,
     bbox = bbox,
     ...
   )
@@ -683,7 +684,8 @@ read_sf_gmap <- function(url,
                          bbox = NULL,
                          layer = NULL,
                          combine_layers = FALSE,
-                         zm_drop = TRUE) {
+                         zm_drop = TRUE,
+                         .name_repair = "check_unique") {
   url <- make_gmap_url(url)
 
   layer <- layer %||% sf::st_layers(dsn = url)[["name"]]
@@ -740,6 +742,9 @@ read_sf_gmap <- function(url,
     data <- naniar::replace_with_na(data, replace = list("Description" = ""))
   }
 
+  data <-
+    use_name_repair(data, .name_repair = .name_repair)
+
   if (zm_drop) {
     data <- sf::st_zm(data)
   }
@@ -768,9 +773,11 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
     mid <- get_gmap_id(url)
   }
 
-  if (format == "kml") {
-    glue("https://www.google.com/maps/d/u/0/kml?forcekml=1&mid={mid}")
+  if (format != "kml") {
+    cli::cli_abort("{.arg format} must be {.val kml}.")
   }
+
+  glue("https://www.google.com/maps/d/u/0/kml?forcekml=1&mid={mid}")
 }
 
 #' @name read_sf_download
@@ -792,6 +799,7 @@ read_sf_download <-
            prefix = "date",
            method = "auto",
            unzip = FALSE,
+           .name_repair = "check_unique",
            ...) {
     path <- get_data_dir(path = path, cache = TRUE)
 
@@ -827,7 +835,7 @@ read_sf_download <-
       destfile <- zipdest
     }
 
-    read_sf_path(path = destfile, bbox = bbox, ...)
+    read_sf_path(path = destfile, bbox = bbox, .name_repair = .name_repair, ...)
   }
 
 #' @name read_sf_gsheet
@@ -846,6 +854,7 @@ read_sf_gsheet <- function(url,
                            from_crs = 4326,
                            geo = FALSE,
                            address = "address",
+                           .name_repair = "check_unique",
                            ...) {
   # Convert Google Sheet with coordinates to sf
   is_pkg_installed("googlesheets4")
@@ -859,7 +868,13 @@ read_sf_gsheet <- function(url,
 
   ss <- ss %||% url
 
-  data <- googlesheets4::read_sheet(ss = ss, sheet = sheet, ...)
+  data <-
+    googlesheets4::read_sheet(
+      ss = ss,
+      sheet = sheet,
+      .name_repair = .name_repair,
+      ...
+    )
 
   if (is.null(coords) && !geo) {
     return(data)
@@ -910,4 +925,128 @@ join_sf_gsheet <- function(data,
   }
 
   data
+}
+
+#' Use vctrs::vec_as_names function
+#'
+#' @noRd
+#' @importFrom vctrs vec_as_names
+use_name_repair <- function(data = NULL,
+                            .name_repair = "check_unique",
+                            repair_arg = "name_repair") {
+  names(data) <-
+    vctrs::vec_as_names(
+      names(data),
+      repair = .name_repair,
+      repair_arg = repair_arg
+    )
+
+  data
+}
+
+#' Make options parameter for read_sf_csv
+#'
+#' @noRd
+make_sf_options <- function(options = NULL,
+                            coords = NULL,
+                            wkt = NULL,
+                            rev = TRUE) {
+  if (!is.null(wkt) && (length(wkt) == 1)) {
+    options <-
+      c(options, glue("GEOM_POSSIBLE_NAMES={wkt}"))
+  } else if (!is.null(coords) && (length(coords) == 2)) {
+    coords <- check_coords(coords = coords, rev = rev)
+    options <-
+      c(
+        options,
+        glue("X_POSSIBLE_NAMES={coords[[1]]}"),
+        glue("Y_POSSIBLE_NAMES={coords[[2]]}")
+      )
+  }
+
+  options
+}
+
+#' Make a wkt_filter from a bbox for read_sf_query
+#'
+#' @noRd
+make_sf_wkt_filter <- function(wkt_filter = NULL,
+                               bbox = NULL) {
+  if (is.null(bbox)) {
+    return(wkt_filter %||% character(0))
+  }
+
+  if (!is.null(wkt_filter)) {
+    cli::cli_warn(
+      "{.arg wkt_filter} is ignored if {.arg bbox} is provided."
+    )
+  }
+
+  # Convert bbox to well known text
+  sf_bbox_to_wkt(bbox = bbox)
+}
+
+#' Make a query from a name and name_col value for read_sf_query
+#'
+#' @noRd
+make_sf_query <- function(dsn = NULL,
+                          table = NULL,
+                          name = NULL,
+                          name_col = NULL,
+                          query = NULL) {
+  if (any(c(is.null(name), is.null(name_col), is_geojson_path(dsn)))) {
+    return(query %||% NA)
+  }
+
+  table <-
+    table %||%
+    stringr::str_extract(
+      basename(dsn),
+      "[:graph:]+(?=\\.)"
+    )
+
+  table <-
+    arg_match(
+      table,
+      as.character(sf::st_layers(dsn = dsn)[["name"]])
+    )
+
+  if (!is.null(query)) {
+    cli::cli_warn(
+      "{.arg query} is ignored if {.arg name} and {.arg name_col} are provided."
+    )
+  }
+
+  glue(
+    "select * from {table} where {name_col} IN
+    ({glue_collapse(paste0(\"'\", name, \"'\"), sep = ', ')})"
+  )
+}
+
+#' Helper to make query for read_sf_esri
+#'
+#' @noRd
+make_where_query <- function(where = NULL,
+                             name = NULL,
+                             name_col = NULL,
+                             bbox = NULL,
+                             coords = c("lon", "lat")) {
+  if (!is.null(where)) {
+    where <- paste0("(", where, ")")
+  }
+
+  if (!is.null(name) && !is.null(name_col)) {
+    where <- c(where, glue("({name_col} = '{name}')"))
+  }
+
+  if (!is.null(bbox) && !is.null(coords)) {
+    where <-
+      c(where, sf_bbox_to_lonlat_query(bbox = bbox, coords = coords))
+  }
+
+  if (is.null(where)) {
+    return(where)
+  }
+
+  paste(where[!is.na(where)], collapse = " AND ")
 }

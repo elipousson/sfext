@@ -23,7 +23,14 @@ read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
 
 read_sf_path(path, bbox = NULL, ...)
 
-read_sf_rdata(path, file = NULL, refhook = NULL, bbox = NULL, ...)
+read_sf_rdata(
+  path,
+  file = NULL,
+  refhook = NULL,
+  bbox = NULL,
+  .name_repair = "check_unique",
+  ...
+)
 
 read_sf_query(
   path,
@@ -35,7 +42,7 @@ read_sf_query(
   name_col = NULL,
   wkt_filter = NULL,
   zm_drop = FALSE,
-  .name_repair = NULL,
+  .name_repair = "check_unique",
   ...
 )
 
@@ -48,6 +55,7 @@ read_sf_excel(
   from_crs = 4326,
   geo = FALSE,
   address = "address",
+  .name_repair = "check_unique",
   ...
 )
 
@@ -59,6 +67,8 @@ read_sf_csv(
   from_crs = 4326,
   geo = FALSE,
   address = "address",
+  wkt = NULL,
+  .name_repair = "check_unique",
   show_col_types = FALSE,
   ...
 )
@@ -73,6 +83,7 @@ read_sf_esri(
   name_col = NULL,
   coords = c("lon", "lat"),
   from_crs = 4326,
+  .name_repair = "check_unique",
   ...
 )
 
@@ -83,7 +94,8 @@ read_sf_gmap(
   bbox = NULL,
   layer = NULL,
   combine_layers = FALSE,
-  zm_drop = TRUE
+  zm_drop = TRUE,
+  .name_repair = "check_unique"
 )
 
 read_sf_download(
@@ -95,6 +107,7 @@ read_sf_download(
   prefix = "date",
   method = "auto",
   unzip = FALSE,
+  .name_repair = "check_unique",
   ...
 )
 
@@ -108,6 +121,7 @@ read_sf_gsheet(
   from_crs = 4326,
   geo = FALSE,
   address = "address",
+  .name_repair = "check_unique",
   ...
 )
 }
@@ -131,6 +145,8 @@ cache directory or extdata system files.}
 
 \item{refhook}{A function to handle reference objects.}
 
+\item{.name_repair}{Passed to repair parameter of \code{\link[vctrs:vec_as_names]{vctrs::vec_as_names()}}}
+
 \item{dsn}{data source name (interpretation varies by driver - for some
 drivers, \code{dsn} is a file name, but may also be a folder, or contain
 the name and access credentials of a database); in case of GeoJSON,
@@ -150,10 +166,6 @@ for sources read with \code{\link[=read_sf_query]{read_sf_query()}} or \code{\li
 \item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
 
 \item{zm_drop}{If \code{TRUE}, drop Z and/or M dimensions using \link[sf:st_zm]{sf::st_zm}}
-
-\item{.name_repair}{Supported by \code{\link[=read_sf_query]{read_sf_query()}} but not as flexible as the
-parameter from \code{\link[readr:read_delim]{readr::read_csv()}} and currently only supports functions or
-formulas.}
 
 \item{sheet}{Sheet to read. Either a string (the name of a sheet), or an
 integer (the position of the sheet). Ignored if the sheet is specified via
