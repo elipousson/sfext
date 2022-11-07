@@ -405,7 +405,6 @@ write_sf_svg <- function(data,
                          height = NA,
                          units = c("in", "cm", "mm", "px"),
                          dpi = 300) {
-
   is_pkg_installed("ggplot2")
 
   if (is.null(filename) && !is.null(path)) {

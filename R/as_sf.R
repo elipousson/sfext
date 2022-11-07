@@ -295,10 +295,11 @@ as_xy <- function(x,
 
   x <-
     switch(type,
-           "sf_bbox_point" = sf_bbox_point(as_bbox(data),
-                                           point = x, crs = crs, ...),
-           "as_point" = as_points(x, crs = crs, ...),
-           "point" = as_sfc(x, crs = crs, ...)
+      "sf_bbox_point" = sf_bbox_point(as_bbox(data),
+        point = x, crs = crs, ...
+      ),
+      "as_point" = as_points(x, crs = crs, ...),
+      "point" = as_sfc(x, crs = crs, ...)
     )
 
   rlang::set_names(
