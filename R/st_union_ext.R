@@ -45,7 +45,7 @@ st_union_ext <- function(x,
 
   sfc <- sf::st_union(x, ...)
 
-  if (!ext | !is_sf(x)) {
+  if (!ext || !is_sf(x)) {
     return(sfc)
   }
 
@@ -53,6 +53,8 @@ st_union_ext <- function(x,
     sf::st_geometry(x) <- sfc
     return(x)
   }
+
+  .sf_col <- .sf_col %||% get_sf_col(x)
 
   if (!is.null(name_col)) {
     if (!has_name(x, name_col)) {
@@ -66,25 +68,23 @@ st_union_ext <- function(x,
       name_col <- names(x)[[1]]
     }
 
-    .sf_col <- .sf_col %||% get_sf_col(x) %||% "geometry"
-
     as_sf(
       dplyr::tibble(
         "{name_col}" := as.character(cli::pluralize("{x[[name_col]]}")),
-        "{sf_col}" := sfc
+        "{.sf_col}" := sfc
       )
     )
   } else if (!is.null(label)) {
     as_sf(
       dplyr::tibble(
         "label" = label,
-        "{sf_col}" := sfc
+        "{.sf_col}" := sfc
       )
     )
   } else {
     as_sf(
       dplyr::tibble(
-        "{sf_col}" := sfc
+        "{.sf_col}" := sfc
       )
     )
   }
@@ -101,8 +101,10 @@ st_union_by <- function(x, ..., .sf_col = NULL) {
       dplyr::group_by(
         sf::st_make_valid(x),
         ...
-        ),
-      "{.sf_col}" := {.sf_col}
+      ),
+      "{.sf_col}" := {
+        .sf_col
+      }
     )
 
   sf::st_make_valid(x)
