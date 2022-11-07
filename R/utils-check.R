@@ -24,11 +24,14 @@ check_null <- function(x = NULL,
 #' Check if x is a character vector
 #'
 #' @noRd
-check_character <- function(x = NULL, arg = caller_arg(x), null.ok = FALSE, ...) {
+check_character <- function(x = NULL,
+                            arg = caller_arg(x),
+                            null.ok = FALSE,
+                            ...) {
   check_null(x, arg, null.ok)
   null.ok <- is.null(x) && null.ok
 
-  if (is.character(x) | null.ok) {
+  if (is.character(x) || null.ok) {
     return(invisible(TRUE))
   }
 
@@ -51,7 +54,7 @@ check_len <- function(x = NULL,
   check_null(x, arg, null.ok)
   null.ok <- is.null(x) && null.ok
 
-  if (((length(x) >= min(len)) && (length(x) <= max(len))) | null.ok) {
+  if (((length(x) >= min(len)) && (length(x) <= max(len))) || null.ok) {
     return(invisible(TRUE))
   }
 
@@ -82,7 +85,7 @@ check_grepl <- function(x = NULL,
   null.ok <- is.null(x) && null.ok
 
   # FIXME: This will error if x is longer than 1
-  if (grepl(pattern, x, ignore.case = ignore.case, perl = perl) | null.ok) {
+  if (grepl(pattern, x, ignore.case = ignore.case, perl = perl) || null.ok) {
     return(invisible(TRUE))
   }
 
@@ -111,7 +114,7 @@ check_starts_with <- function(x = NULL,
       ignore.case = ignore.case, perl = perl
     )
 
-  if (all(starts_with) | null.ok) {
+  if (all(starts_with) || null.ok) {
     return(invisible(TRUE))
   }
 
@@ -135,7 +138,7 @@ check_logical <- function(x = NULL,
   check_null(x, arg, null.ok, FALSE, call)
   null.ok <- is.null(x) && null.ok
 
-  if (is_logical(x, n = n) | null.ok) {
+  if (is_logical(x, n = n) || null.ok) {
     return(invisible(TRUE))
   }
 
@@ -173,7 +176,7 @@ check_sf <- function(x,
 
   list.ok <- list.ok && is_sf_list(x, named = FALSE, ext, null.ok)
 
-  if (is_sf(x, ext, null.ok) | list.ok) {
+  if (is_sf(x, ext, null.ok) || list.ok) {
     return(invisible(TRUE))
   }
 
@@ -214,11 +217,9 @@ check_df_paper <- function(x,
     return(TRUE)
   }
 
-  missing_names <- names[!is_valid_paper]
-
   cli_abort(
     c("A {.arg paper} data.frame must have columns named {.val {paper_names}}.",
-      "i" = "The provided {.arg paper} is missing {.val {missing_names}}."
+      "i" = "The provided {.arg paper} is missing {.val {names[!is_valid_paper]}}."
     )
   )
 }

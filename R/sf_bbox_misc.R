@@ -215,7 +215,7 @@ sf_bbox_diag_ratio_to_dist <- function(bbox,
                                        diag_ratio,
                                        units = NULL,
                                        drop = TRUE) {
-  if (is.null(diag_ratio) | is.null(bbox)) {
+  if (is.null(diag_ratio) || is.null(bbox)) {
     return(NULL)
   }
 
@@ -228,7 +228,7 @@ sf_bbox_diag_ratio_to_dist <- function(bbox,
 #' @export
 #' @importFrom sf st_crs st_transform st_bbox
 sf_bbox_transform <- function(bbox, crs = NULL) {
-  if (is.null(crs) | is_same_crs(bbox, crs)) {
+  if (is.null(crs) || is_same_crs(bbox, crs)) {
     return(bbox)
   }
 

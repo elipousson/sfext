@@ -61,7 +61,7 @@ count_sf_ext <- function(data,
   data <- as_sf(data)
 
   if (rlang::has_name(data, .id)) {
-    data <- dplyr::select(data, -{{ .id }})
+    data <- dplyr::select(data, -dplyr::all_of(.id))
   }
 
   y <-

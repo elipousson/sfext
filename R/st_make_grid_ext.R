@@ -131,7 +131,7 @@ st_make_grid_ext <- function(x,
       )
   }
 
-  if (filter | trim) {
+  if (filter || trim) {
     grid <- st_filter_ext(grid, x, crop = FALSE, trim = trim)
   }
 
@@ -211,7 +211,7 @@ get_grid_params <- function(bbox,
   } else if (!is.null(n)) {
     n <-
       dplyr::case_when(
-        rlang::has_length(n, 1) && (style == "square") ~ c(n, n / sf_bbox_asp(bbox)),
+        rlang::has_length(n, 1) && (style == "square") ~ c(n, n / bbox_asp),
         rlang::has_length(n, 1) ~ c(n, n)
       )
   }

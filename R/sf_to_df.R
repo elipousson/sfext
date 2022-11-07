@@ -339,7 +339,7 @@ format_coords <- function(x, coords = c("lon", "lat"), keep_missing = FALSE, cal
   lon <- coords[[1]]
   lat <- coords[[2]]
 
-  if (!all(is.numeric(x[[lon]])) | !all(is.numeric(x[[lat]]))) {
+  if (!all(is.numeric(x[[lon]])) || !all(is.numeric(x[[lat]]))) {
     x[[lon]] <- as.numeric(x[[lon]])
     x[[lat]] <- as.numeric(x[[lat]])
   }

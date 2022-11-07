@@ -180,7 +180,7 @@ st_circle <- function(x, scale = 1, inscribed = TRUE, dTolerance = 0.01, by_feat
       return(lwgeom::st_minimum_bounding_circle(x))
     }
 
-    x$st_circle_id <- seq(nrow(x))
+    x$st_circle_id <- seq_len(nrow(x))
     x <- as_sf_list(x, col = "st_circle_id")
 
     x <-

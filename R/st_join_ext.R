@@ -55,7 +55,7 @@ st_join_ext <- function(x,
     for (nm in names(y_list)) {
       y <-
         dplyr::rename(
-          dplyr::select(y_list[[nm]], .id),
+          dplyr::select(y_list[[nm]], dplyr::all_of(.id)),
           "{nm}" := .data[[.id]]
         )
 
