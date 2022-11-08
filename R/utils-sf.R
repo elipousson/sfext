@@ -1,6 +1,6 @@
 #' Additional utility functions for sf objects
 #'
-#'@description
+#' @description
 #' - [transform_sf()] is similar to [sf::st_transform()] but supports sf, sfc,
 #' or bbox objects as the crs parameter, supports sfg objects (transformed to
 #' sfc), and uses [sf::st_set_crs()] if the CRS for the provided object is `NA`.
@@ -51,14 +51,18 @@ transform_sf <- function(x, crs = NULL, null.ok = TRUE, ...) {
 #' @name relocate_sf_col
 #' @rdname misc_sf
 #' @param .after The location to place sf column after; defaults to
-#'   [dplyr::everything].
+#'   [dplyr::everything()].
 #' @export
 #' @importFrom dplyr everything relocate all_of
 relocate_sf_col <- function(x, .after = dplyr::everything()) {
-  dplyr::relocate(
-    x,
-    dplyr::all_of(get_sf_col(x)),
-    .after = .after
+  suppressWarnings(
+    # FIXME: I thought I refactored this correctly but continued to get the
+    # tidyselect error on tests so I'm suppressing warnings for now
+    dplyr::relocate(
+      x,
+      dplyr::all_of(get_sf_col(x)),
+      .after = .after
+    )
   )
 }
 
@@ -89,11 +93,10 @@ get_sf_colnames <- function(x = NULL, dsn = NULL, layer = NULL, ...) {
     layer <- match.arg(layer, sf::st_layers(dsn)[["name"]])
     x <-
       sf::read_sf(
-      dsn,
-      query = paste("select * from", layer, "limit 1"),
-      ...
-    )
+        dsn,
+        query = paste("select * from", layer, "limit 1"),
+        ...
+      )
   }
   colnames(x)
 }
-

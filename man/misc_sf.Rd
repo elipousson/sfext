@@ -33,7 +33,7 @@ a \code{sf}, \code{sfc}, \code{bbox}, or \code{crs} class object supported by \c
 \code{NULL}.}
 
 \item{.after}{The location to place sf column after; defaults to
-\link[dplyr:reexports]{dplyr::everything}.}
+\code{\link[dplyr:reexports]{dplyr::everything()}}.}
 
 \item{sf_col}{Name to use for the sf column after renaming; defaults to "geometry".}
 
