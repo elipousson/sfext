@@ -6,6 +6,7 @@
 \alias{relocate_sf_col}
 \alias{rename_sf_col}
 \alias{get_sf_col}
+\alias{get_sf_colnames}
 \title{Additional utility functions for sf objects}
 \usage{
 transform_sf(x, crs = NULL, null.ok = TRUE, ...)
@@ -15,6 +16,8 @@ relocate_sf_col(x, .after = dplyr::everything())
 rename_sf_col(x, sf_col = "geometry")
 
 get_sf_col(x = NULL)
+
+get_sf_colnames(x = NULL, dsn = NULL, layer = NULL, ...)
 }
 \arguments{
 \item{x}{A \code{sf} or \code{sfc} object. If x has a missing crs, the crs is set to
@@ -25,13 +28,43 @@ a \code{sf}, \code{sfc}, \code{bbox}, or \code{crs} class object supported by \c
 
 \item{null.ok}{If \code{TRUE} and crs is \code{NULL}, return x.}
 
-\item{...}{Additional parameters passed to \code{\link[sf:st_transform]{sf::st_transform()}}}
+\item{...}{Additional parameters passed to \code{\link[sf:st_transform]{sf::st_transform()}} by
+\code{\link[=transform_sf]{transform_sf()}} or to \code{\link[sf:st_read]{sf::read_sf()}} by \code{\link[=get_sf_colnames]{get_sf_colnames()}} if x is not
+\code{NULL}.}
 
 \item{.after}{The location to place sf column after; defaults to
 \link[dplyr:reexports]{dplyr::everything}.}
 
 \item{sf_col}{Name to use for the sf column after renaming; defaults to "geometry".}
+
+\item{dsn}{data source name (interpretation varies by driver - for some
+drivers, \code{dsn} is a file name, but may also be a folder, or contain
+the name and access credentials of a database); in case of GeoJSON,
+\code{dsn} may be the character string holding the geojson data. It can
+also be an open database connection.}
+
+\item{layer}{layer name (varies by driver, may be a file name without
+extension); in case \code{layer} is missing, \code{st_read} will read the
+first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE})
+print a message when there are multiple layers, or give an error if there
+are no layers in \code{dsn}. If \code{dsn} is a database connection, then
+\code{layer} can be a table name or a database identifier (see
+\code{\link[DBI]{Id}}). It is also possible to omit \code{layer} and rather
+use the \code{query} argument.}
 }
 \description{
-Additional utility functions for sf objects
+\itemize{
+\item \code{\link[=transform_sf]{transform_sf()}} is similar to \code{\link[sf:st_transform]{sf::st_transform()}} but supports sf, sfc,
+or bbox objects as the crs parameter, supports sfg objects (transformed to
+sfc), and uses \code{\link[sf:st_crs]{sf::st_set_crs()}} if the CRS for the provided object is \code{NA}.
+This function does not support bounding box transformations.
+\item \code{\link[=relocate_sf_col]{relocate_sf_col()}} relocates the sf geometry column after specified column
+(by default after everything).
+\item \code{\link[=rename_sf_col]{rename_sf_col()}} a wrapper for \code{\link[sf:st_geometry]{sf::st_set_geometry()}} that renames the sf
+column.
+\item \code{\link[=get_sf_col]{get_sf_col()}} returns the "sf_column" attribute.
+\item \code{\link[=get_sf_colnames]{get_sf_colnames()}} returns the column names of a file that can be read
+with \code{\link[sf:st_read]{sf::read_sf()}} to allow you to use column names to build a query (or
+provide a value for name_col) without reading the whole file.
+}
 }
