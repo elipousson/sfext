@@ -27,7 +27,7 @@
 #' @export
 #' @importFrom sf st_as_text st_point_on_surface st_coordinates
 #'   st_drop_geometry st_zm
-#' @importFrom dplyr select bind_cols
+#' @importFrom dplyr bind_cols
 get_coords <- function(x,
                        coords = NULL,
                        geometry = "centroid",
@@ -74,10 +74,9 @@ get_coords <- function(x,
     x <- has_same_name_col(x, coords[2], quiet = TRUE)
 
     x_coords <-
-      dplyr::select(
-        x_coords,
-        "{coords[1]}" := .data$X,
-        "{coords[2]}" := .data$Y
+      dplyr::bind_cols(
+        "{coords[1]}" := x_coords$X,
+        "{coords[2]}" := x_coords$Y
       )
   }
 
