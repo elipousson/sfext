@@ -1,9 +1,9 @@
 #' Distance units (data frame)
 #'
 #' A subset of units supported by the units package accessible through the
-#' [units::valid_udunits] function.
+#' [units::valid_udunits()] function.
 #'
-#' @format A data frame with 11 rows and 11 variables:
+#' @format A data frame with 15 rows and 11 variables:
 #' \describe{
 #'   \item{`symbol`}{symbols}
 #'   \item{`symbol_aliases`}{symbol aliases}
@@ -21,18 +21,18 @@
 
 #' Distance units (vector)
 #'
-#' A vector of supported distance units pulled from [dist_units].
+#' A vector of supported distance units pulled from `dist_units`.
 #'
-#' @format A character vector with 55 names, plural names, aliases, and symbols
+#' @format A character vector with 60 names, plural names, aliases, and symbols
 #'   for distance units.
 "dist_unit_options"
 
 #' Area units (vector)
 #'
-#' A vector of supported area units derived from [dist_units] and
-#' [units::valid_udunits].
+#' A vector of supported area units derived from `dist_units` and
+#' [units::valid_udunits()].
 #'
-#' @format A character vector with 35 names, plural names, and aliases for area
+#' @format A character vector with 40 names, plural names, and aliases for area
 #'   units.
 "area_unit_options"
 
@@ -69,7 +69,7 @@
 #'  Standard paper and image sizes
 #'
 #' Reference table of standard paper, postcard, photo print, and social media image
-#' sizes, for [get_paper] and [get_social_image] functions. Derived from
+#' sizes, for [get_paper()] and [get_social_image()] functions. Derived from
 #' [visioguy/PaperSizes](https://github.com/visioguy/PaperSizes/) repo, [Adobe UK
 #' guide to photo
 #' sizes](https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html)

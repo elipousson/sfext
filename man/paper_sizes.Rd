@@ -23,7 +23,7 @@ paper_sizes
 }
 \description{
 Reference table of standard paper, postcard, photo print, and social media image
-sizes, for \link{get_paper} and \link{get_social_image} functions. Derived from
+sizes, for \code{\link[=get_paper]{get_paper()}} and \code{\link[=get_social_image]{get_social_image()}} functions. Derived from
 \href{https://github.com/visioguy/PaperSizes/}{visioguy/PaperSizes} repo, \href{https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html}{Adobe UK guide to photo sizes}
 and other sources.
 }

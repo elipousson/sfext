@@ -5,13 +5,13 @@
 \alias{dist_unit_options}
 \title{Distance units (vector)}
 \format{
-A character vector with 55 names, plural names, aliases, and symbols
+A character vector with 60 names, plural names, aliases, and symbols
 for distance units.
 }
 \usage{
 dist_unit_options
 }
 \description{
-A vector of supported distance units pulled from \link{dist_units}.
+A vector of supported distance units pulled from \code{dist_units}.
 }
 \keyword{datasets}

@@ -5,7 +5,7 @@
 \alias{dist_units}
 \title{Distance units (data frame)}
 \format{
-A data frame with 11 rows and 11 variables:
+A data frame with 15 rows and 11 variables:
 \describe{
 \item{\code{symbol}}{symbols}
 \item{\code{symbol_aliases}}{symbol aliases}
@@ -25,6 +25,6 @@ dist_units
 }
 \description{
 A subset of units supported by the units package accessible through the
-\link[units:valid_udunits]{units::valid_udunits} function.
+\code{\link[units:valid_udunits]{units::valid_udunits()}} function.
 }
 \keyword{datasets}

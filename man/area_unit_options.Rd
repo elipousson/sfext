@@ -5,14 +5,14 @@
 \alias{area_unit_options}
 \title{Area units (vector)}
 \format{
-A character vector with 35 names, plural names, and aliases for area
+A character vector with 40 names, plural names, and aliases for area
 units.
 }
 \usage{
 area_unit_options
 }
 \description{
-A vector of supported area units derived from \link{dist_units} and
-\link[units:valid_udunits]{units::valid_udunits}.
+A vector of supported area units derived from \code{dist_units} and
+\code{\link[units:valid_udunits]{units::valid_udunits()}}.
 }
 \keyword{datasets}
