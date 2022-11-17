@@ -19,7 +19,12 @@ st_concave_hull <- function(x,
                             length_threshold = 0) {
   is_pkg_installed("concaveman")
 
-  check_sf(x)
+  check_sf(x, ext = TRUE)
+
+  if (!is_sf(x)) {
+    x <- as_sf(x)
+  }
+
 
   if (centroid) {
     x <- suppressMessages(sf::st_centroid(x))
@@ -35,7 +40,7 @@ st_concave_hull <- function(x,
   }
 
   if (!is_multipoint(x)) {
-    x <- sf::st_cast(x, to = "MULTIPOINT")
+    x <- suppressWarnings(sf::st_cast(x, to = "MULTIPOINT"))
   }
 
   geometry <-
@@ -50,5 +55,5 @@ st_concave_hull <- function(x,
     )
 
 
-  sf::st_set_geometry(x, as_sfc(geometry))
+  sf::st_set_geometry(x, as_sfc(geometry, crs = x))
 }
