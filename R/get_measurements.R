@@ -71,6 +71,11 @@ st_area_ext <- get_area
 #' @importFrom cli cli_alert_info
 #' @importFrom sf st_length
 get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "length") {
+  cli_abort_ifnot(
+    "{.arg x} must be a {.cls sf} or {.cls sfc} object.",
+    condition = is_sf(x) | is_sfc(x)
+  )
+
   if (is_point(x) | is_multipoint(x)) {
     convert_geom_type_alert(x, to = "LINE", with = "as_lines")
     x <- as_lines(x)
@@ -188,6 +193,11 @@ st_distance_ext <- get_dist
 #' @export
 get_bearing <- function(x, dir = FALSE, keep_all = TRUE, .id = "bearing") {
   is_pkg_installed("geosphere")
+
+  cli_abort_ifnot(
+    "{.arg x} must be a {.cls sf} or {.cls sfc} object.",
+    condition = is_sf(x) | is_sfc(x)
+  )
 
   if (is_sfc(x)) {
     x <- as_sf(x)
