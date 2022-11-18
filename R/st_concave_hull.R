@@ -19,15 +19,14 @@ st_concave_hull <- function(x,
                             length_threshold = 0) {
   is_pkg_installed("concaveman")
 
-  check_sf(x, ext = TRUE)
+  check_sf(x)
 
   if (!is_sf(x)) {
     x <- as_sf(x)
   }
 
-
   if (centroid) {
-    x <- suppressMessages(sf::st_centroid(x))
+    x <- suppressWarnings(sf::st_centroid(x))
   }
 
   if (!is.null(by)) {
@@ -39,8 +38,15 @@ st_concave_hull <- function(x,
       )
   }
 
+  if (is_point(x)) {
+    cli_warn(
+      "Features with POINT geometry should be combined using the {.arg by}
+      to create convex hulls."
+      )
+  }
+
   if (!is_multipoint(x)) {
-    x <- suppressWarnings(sf::st_cast(x, to = "MULTIPOINT"))
+    x <- sf::st_cast(x, to = "MULTIPOINT", warn = FALSE, do_split = FALSE)
   }
 
   geometry <-
