@@ -286,8 +286,8 @@ RData files supported by \code{\link[=read_sf_path]{read_sf_path()}})
 
 
 \code{\link[=read_sf_ext]{read_sf_ext()}} is a flexible function where ... are passed to one of the
-other read functions depending on the provided parameters. The parameters
-\emph{must} be named to use this function.
+other read functions depending on the provided parameters. If you are using
+more than one parameter, all parameters \emph{must} be named.
 
 \code{\link[=read_sf_pkg]{read_sf_pkg()}} and \code{\link[=read_sf_download]{read_sf_download()}} both pass additional parameters to
 \code{\link[=read_sf_path]{read_sf_path()}} which supports query, name_col, name, and table. name and

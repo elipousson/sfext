@@ -30,8 +30,8 @@
 #' @section Additional ... parameters:
 #'
 #'   [read_sf_ext()] is a flexible function where ... are passed to one of the
-#'   other read functions depending on the provided parameters. The parameters
-#'   *must* be named to use this function.
+#'   other read functions depending on the provided parameters. If you are using
+#'   more than one parameter, all parameters *must* be named.
 #'
 #'   [read_sf_pkg()] and [read_sf_download()] both pass additional parameters to
 #'   [read_sf_path()] which supports query, name_col, name, and table. name and
@@ -72,6 +72,19 @@
 #' @importFrom dplyr case_when
 read_sf_ext <- function(...) {
   params <- list2(...)
+
+  if ((length(params) == 1) && !is_named(params)) {
+    # FIXME: This should be updated to support the option of an unnamed first
+    # parameter but additional named parameters following.
+    nm <-
+      dplyr::case_when(
+      is_url(params[[1]]) ~ "url",
+      has_filetype(params[[1]]) ~ "path",
+      TRUE ~ "sf"
+    )
+
+    params <- rlang::set_names(params, nm)
+  }
 
   type <-
     dplyr::case_when(
