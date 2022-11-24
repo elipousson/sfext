@@ -19,7 +19,7 @@ st_erase <- function(x, y, flip = FALSE, union = TRUE, ...) {
   check_sf(x, ext = TRUE)
 
   if (is_bbox(x)) {
-    x <- as_sf(x)
+    x <- sf_bbox_to_sfc(x)
   }
 
   x <- st_make_valid_ext(x)
@@ -36,12 +36,10 @@ st_erase <- function(x, y, flip = FALSE, union = TRUE, ...) {
   y <- st_make_valid_ext(y)
 
   if (flip) {
-    x <- suppressWarnings(sf::st_intersection(x, y, ...))
-  } else {
-    x <- suppressWarnings(sf::st_difference(x, y, ...))
+    return(suppressWarnings(sf::st_intersection(x, y, ...)))
   }
 
-  x
+  suppressWarnings(sf::st_difference(x, y, ...))
 }
 
 #' @rdname st_erase

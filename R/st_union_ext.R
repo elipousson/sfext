@@ -24,8 +24,8 @@
 #' @example examples/st_union_ext.R
 #' @export
 #' @importFrom sf st_union st_geometry
+#' @importFrom dplyr tibble
 #' @importFrom cli pluralize
-#' @importFrom dplyr tibble mutate all_of
 st_union_ext <- function(x,
                          y = NULL,
                          name_col = "name",
@@ -36,7 +36,7 @@ st_union_ext <- function(x,
   check_sf(x, ext = TRUE)
 
   if (is_bbox(x)) {
-    x <- as_sfc(x)
+    x <- sf_bbox_to_sfc(x)
   }
 
   if (!is.null(y)) {
@@ -93,6 +93,8 @@ st_union_ext <- function(x,
 #' @name st_union_by
 #' @rdname st_union_ext
 #' @export
+#' @importFrom dplyr summarise group_by
+#' @importFrom sf st_make_valid
 st_union_by <- function(x, ..., .sf_col = NULL) {
   check_sf(x)
   .sf_col <- .sf_col %||% get_sf_col(x)

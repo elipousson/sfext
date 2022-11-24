@@ -23,7 +23,7 @@ st_nudge <- function(x,
   check_sf(x, ext = TRUE)
 
   if (is_bbox(x)) {
-    x <- as_sfc(x)
+    x <- sf_bbox_to_sfc(x)
   }
 
   is_x_sfc <- is_sfc(x)

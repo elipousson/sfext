@@ -65,7 +65,7 @@ st_filter_ext <- function(x,
   )
 
   if (is_bbox(x)) {
-    x <- as_sfc(x)
+    x <- sf_bbox_to_sfc(x)
   }
 
   if (erase) {
