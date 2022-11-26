@@ -100,7 +100,6 @@ get_coords <- function(x,
 #' @importFrom dplyr mutate row_number select bind_cols
 #' @importFrom purrr map
 #' @importFrom tibble enframe
-#' @importFrom tidyr unnest_wider
 #' @importFrom sf st_drop_geometry
 get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
   stopifnot(
@@ -126,6 +125,8 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
     )
 
   x <- dplyr::select(x, -.data[[col]])
+
+  is_pkg_installed("tidyr")
 
   minmax_df <-
     tidyr::unnest_wider(
