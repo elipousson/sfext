@@ -39,33 +39,36 @@ st_buffer_ext <- function(x,
                           diag_ratio = NULL,
                           unit = "meter",
                           dist_limits = NULL,
+                          end_style = NULL,
+                          join_style = NULL,
                           single_side = FALSE,
                           list.ok = TRUE,
                           ...) {
   if (is_sf_list(x, ext = TRUE) && list.ok) {
-    return(
+    x <-
       purrr::map(
         x,
-        ~ st_buffer_ext(.x, dist, diag_ratio, unit, dist_limits, single_side)
+        ~ st_buffer_ext(
+          .x,
+          dist, diag_ratio, unit, dist_limits,
+          end_style, join_style, single_side
+        )
       )
-    )
+
+    return(x)
+  }
+
+  # check_sf(x, ext = TRUE)
+
+  # If bbox, convert to sfc
+  if (is_bbox(x)) {
+    x <- sf_bbox_to_sfc(x)
   }
 
   # If dist is NULL and diag_ratio is NULL return x (with bbox converted to sf
   # if no buffer applied)
   if (is.null(dist) && is.null(diag_ratio)) {
-    if (is_bbox(x)) {
-      x <- as_sf(x)
-    }
-
     return(x)
-  }
-
-  check_sf(x, ext = TRUE)
-
-  # If bbox, convert to sf
-  if (is_bbox(x)) {
-    x <- as_sf(x)
   }
 
   # If longlat, save crs and transform to suggested crs
@@ -94,7 +97,25 @@ st_buffer_ext <- function(x,
     crs = crs
   )
 
-  x <- sf::st_buffer(x = x, dist = dist, singleSide = single_side, ...)
+  if (!is.null(end_style)) {
+    dist <- as.numeric(dist)
+  }
+
+  end_style <- end_style %||% "round"
+  join_style <- join_style %||% "round"
+
+  end_style <- arg_match(end_style, c("round", "flat", "square"))
+  join_style <- arg_match(join_style, c("round", "mitre", "bevel"))
+
+  x <-
+    sf::st_buffer(
+      x = x,
+      dist = dist,
+      singleSide = single_side,
+      endCapStyle = toupper(end_style),
+      joinStyle = toupper(join_style),
+      ...
+    )
 
   if (!is_lonlat) {
     return(x)
@@ -218,7 +239,7 @@ st_edge <- function(x,
   check_sf(x, ext = TRUE)
 
   if (is_bbox(x)) {
-    x <- as_sf(x)
+    x <- sf_bbox_to_sfc(x)
   }
 
   x_dist <-
