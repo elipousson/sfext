@@ -1,20 +1,20 @@
 
 #' Convert an sf, numeric, or other object to a POINT (sfg) or POINT, MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object
 #'
-#' Works with sf, sfc, and bbox objects using [sf::st_centroid]. Works with
-#' [sf_bbox_point]
+#' Works with sf, sfc, and bbox objects using [sf::st_centroid()]. Works with
+#' [sf_bbox_point()]
 #'
 #' @details Using as_point:
 #'
-#' For [as_point], ... is passed to [sf::st_centroid] if ... is a sf, sfc,
-#' or bbox object, [sf_bbox_point] includes a bbox object and a string
-#' indicating the requested point position, or [sf::st_point] if ... includes a
-#' numeric vector.
+#' [as_point()] always returns a single point sfg object. The ... parameter is
+#' passed to [sf::st_centroid()] if ... is a sf, sfc, or bbox object,
+#' [sf_bbox_point()] includes a bbox object and a string indicating the requested
+#' point position, or [sf::st_point()] if ... includes a numeric vector.
 #'
 #' @details Using as_points:
 #'
-#' For [as_points] parameters are passed to as_point using [purrr::map] and then
-#' converted to sfc using [sf::st_as_sfc]. The ... parameters must include a
+#' [as_points()] always returns an sfc object. The parameters are passed to as_point using [purrr::map] and then
+#' converted to sfc using [sf::st_as_sfc()]. The ... parameters must include a
 #' crs, otherwise the crs will be NA for the resulting sfc object.
 #'
 #' @rdname as_point
@@ -28,8 +28,7 @@
 #' @export
 #' @importFrom sf st_union st_centroid st_point st_cast
 as_point <- function(..., to = "POINT") {
-  params <-
-    list2(...)
+  params <- list2(...)
 
   if (length(params) == 1) {
     params <- params[[1]]
@@ -41,7 +40,7 @@ as_point <- function(..., to = "POINT") {
 
   if (is_sf(params, ext = TRUE)) {
     if (is_bbox(params)) {
-      params <- as_sfc(params)
+      params <- sf_bbox_to_sfc(params)
     }
 
     params <- sf::st_union(params)
@@ -49,8 +48,8 @@ as_point <- function(..., to = "POINT") {
     return(sf::st_centroid(params)[[1]])
   }
 
-  if (any(sapply(params, is_bbox))) {
-    params[["crs"]] <- NA
+  if (is_any(params, is_bbox)) {
+    params[["crs"]] <- NA_character_
     return(exec(sf_bbox_point, !!!params))
   }
 
@@ -97,9 +96,10 @@ as_points <- function(..., to = "POINT", call = caller_env()) {
 
 #' @details Using [as_startpoint] and [as_endpoint]:
 #'
-#' [as_startpoint] and [as_endpoint] require a line parameter that is passed to
-#' [lwgeom::st_startpoint] or [lwgeom::st_endpoint] respectively. Both functions
-#' always return a sfc object matching the CRS of the input geometry.
+#' [as_startpoint()] and [as_endpoint()] require a LINE geometry type sf or sfc
+#' object that is passed to [lwgeom::st_startpoint()] or [lwgeom::st_endpoint()]
+#' respectively. Both functions always return a sfc object matching the CRS of
+#' the input geometry.
 #'
 #' @name as_startpoints
 #' @rdname as_point
@@ -124,11 +124,11 @@ as_endpoint <- function(...) {
 #' @details Using [as_lines]:
 #'
 #' If params do not have POINT or MULTIPOINT geometry, they are passed to
-#' [as_points] to convert to an `sfc` object. If the parameters have  POINT
+#' [as_points()] to convert to an `sfc` object. If the parameters have  POINT
 #' geometry, they are combined to create a MULTIPOINT geometry.
 #'
-#' For [as_lines] the ... parameters are passed to [as_points] and/or
-#' [sf::st_cast].
+#' For [as_lines()] the ... parameters are passed to [as_points()] and/or
+#' [sf::st_cast()].
 #'
 #' Both as_line and as_lines do not consistently retain the coordinate reference
 #' system of the original object but this should be improved in the future.
@@ -217,13 +217,26 @@ as_polygons <- function(..., to = "POLYGON") {
     return(purrr::map_dfr(params, ~ as_sf(.x)))
   }
 
-  params <-
-    purrr::map_dfr(
-      params,
-      ~ as_sf(.x)
-    )
+  params <- purrr::map_dfr(params, ~ as_sf(.x))
 
   suppressWarnings(
     as_sf(sf::st_cast(params, to = to), crs = crs)
   )
+}
+
+#' @details Using [as_centroid()]
+#'
+#' [as_centroid()] always returns a sfc object with the same length and crs as
+#' the input object.
+#'
+#' @name as_centroid
+#' @rdname as_point
+#' @export
+#' @importFrom sf st_centroid st_geometry
+as_centroid <- function(x, ...) {
+  if (is_bbox(x)) {
+    x <- sf_bbox_to_sfc(x)
+  }
+
+  suppressWarnings(sf::st_geometry(sf::st_centroid(x, ...)))
 }
