@@ -6,7 +6,7 @@
 #' - Measure distances ([sf_bbox_dist()], [sf_bbox_xdist()], [sf_bbox_ydist()],
 #' and [sf_bbox_diagdist()])
 #' - Get an aspect ratio or orientation ([sf_bbox_asp()]) (counts asp between
-#' 0.9 and 1.1 as "square")
+#' 0.9 and 1.1 as "square" when tolerance is 0.1)
 #' - Return a point from any of the corners, center, or midpoints
 #' ([sf_bbox_point()])
 #' - Transform the coordinate reference system ([sf_bbox_transform()])
@@ -18,6 +18,8 @@
 #' - Convert a diag_ratio value to a distance value if a bbox and diag_ratio are
 #' provided ([sf_bbox_diag_ratio_to_dist()]); return `NULL` if bbox and
 #' diag_ratio are `NULL`
+#' - Convert a point and a corresponding bounding box into into a npc
+#' (normalised parent coordinates) value with [sf_bbox_to_npc()]
 #'
 #' @param bbox A bounding box object. Convert input objects to bounding boxes
 #'   with [sf::st_bbox()] or [as_bbox()]
@@ -33,17 +35,6 @@
 #' @param drop If `FALSE`, distance functions return with units. If `FALSE`
 #'   (default), distance functions return numeric values. Used by or passed to
 #'   [sf_bbox_dist()].
-#' @param orientation If `TRUE`, [sf_bbox_asp()] returns a suggested orientation
-#'   based on aspect ratio (< 0.9 "portrait"; > 1.1 "landscape"; else "square");
-#'   defaults to `FALSE`.
-#' @param x_nudge,y_nudge Length 1 or 2 numeric vector; unitless. Used by or
-#'   passed to [sf_bbox_shift()]
-#' @param side one or more sides to shift: "top", "bottom", "left", "right", or
-#'   "all". Used by [sf_bbox_shift()] only.
-#' @param dir If "in", contract the `bbox` by x_nudge and y_nudge. If "out",
-#'   expand the bbox by x_nudge and y_nudge. If dir is not `NULL`; absolute
-#'   values are used for x_nudge and y_nudge. Defaults to `NULL`. Used by
-#'   [sf_bbox_shift()] only.
 #' @param call Passed as the error_call parameter for [rlang::arg_match] to
 #'   improve error messages when function is used internally. Used by
 #'   [sf_bbox_point()], [sf_bbox_dist()], and [sf_bbox_shift()].
@@ -55,21 +46,27 @@ NULL
 #' @name sf_bbox_asp
 #' @rdname sf_bbox_misc
 #' @export
-sf_bbox_asp <- function(bbox, orientation = FALSE) {
-  xdist <- sf_bbox_xdist(bbox, drop = TRUE) # Get width
-  ydist <- sf_bbox_ydist(bbox, drop = TRUE) # Get height
-  bbox_asp <- xdist / ydist # Get width to height aspect ratio for bbox
+sf_bbox_asp <- function(bbox) {
+  # Get width and height
+  xdist <- sf_bbox_xdist(bbox, drop = TRUE)
+  ydist <- sf_bbox_ydist(bbox, drop = TRUE)
+  # Get width to height aspect ratio for bbox
+  xdist / ydist
+}
 
-  if (!orientation) {
-    return(bbox_asp)
-  }
+#' @name sf_bbox_orientation
+#' @rdname sf_bbox_misc
+#' @param tolerance Numeric value above or below 1 used by
+#'   [sf_bbox_orientation()] to describe an aspect ratio as landscape or
+#'   portrait; defaults to 0.1.
+#' @export
+sf_bbox_orientation <- function(bbox, tolerance = 0.1) {
+  bbox_asp <- sf_bbox_asp(bbox)
 
-  return(
-    dplyr::case_when(
-      bbox_asp > 1.1 ~ "landscape",
-      bbox_asp < 0.9 ~ "portrait",
-      TRUE ~ "square"
-    )
+  dplyr::case_when(
+    bbox_asp > 1 + tolerance ~ "landscape",
+    bbox_asp < 1 - tolerance ~ "portrait",
+    TRUE ~ "square"
   )
 }
 
@@ -79,6 +76,8 @@ sf_bbox_asp <- function(bbox, orientation = FALSE) {
 #'   corner, midpoint, or center of the bounding box. Options include "xmin",
 #'   "ymin", "xmax", "ymax", "xmid", "ymid".
 #' @export
+#' @importFrom rlang caller_env arg_match
+#' @importFrom sf st_crs st_point st_as_sfc
 sf_bbox_point <- function(bbox, point = NULL, crs = NULL, call = caller_env()) {
   point <-
     arg_match(
@@ -124,8 +123,9 @@ sf_bbox_point <- function(bbox, point = NULL, crs = NULL, call = caller_env()) {
 #' @rdname sf_bbox_misc
 #' @param units The units to return for sf_bbox_dist. Defaults to NULL.
 #' @export
-#' @importFrom sf st_distance st_point st_crs
+#' @importFrom sf st_distance st_crs
 #' @importFrom units drop_units as_units
+#' @importFrom rlang caller_env check_required arg_match
 sf_bbox_dist <- function(bbox,
                          from,
                          to,
@@ -261,19 +261,19 @@ sf_bbox_to_sf <- function(bbox, sf_col = "geometry") {
     sf::st_geometry(bbox_sf) <- sf_col
   }
 
-  return(bbox_sf)
+  bbox_sf
 }
 
 #' @rdname sf_bbox_misc
 #' @export
-#' @importFrom sf st_as_sf st_as_sfc
+#' @importFrom sf st_as_sfc
 sf_bbox_to_sfc <- function(bbox) {
   sf::st_as_sfc(bbox)
 }
 
 #' @rdname sf_bbox_misc
 #' @export
-#' @importFrom sf st_as_text st_as_sfc
+#' @importFrom sf st_as_text
 sf_bbox_to_wkt <- function(bbox) {
   # Convert bbox to well known text
   sf::st_as_text(sf_bbox_to_sfc(bbox))
@@ -281,22 +281,35 @@ sf_bbox_to_wkt <- function(bbox) {
 
 #' @rdname sf_bbox_misc
 #' @export
-#' @importFrom sf st_transform st_bbox
 sf_bbox_to_lonlat_query <- function(bbox, coords = c("longitude", "latitude"), crs = 4326) {
   bbox <- sf_bbox_transform(bbox, crs = crs)
 
-  # FIXME: This automatic reversal needs to be documented
-  if (grepl("lat|Y|y", coords[1])) {
-    coords <- rev(coords)
-  }
+  coords <- rev_coords(coords)
 
-  glue("({coords[1]} >= {bbox$xmin[[1]]}) AND ({coords[1]} <= {bbox$xmax[[1]]}) AND ({coords[2]} >= {bbox$ymin[[1]]}) AND ({coords[2]} <= {bbox$ymax[[1]]})")
+  paste0(
+    c(
+      sprintf("(%s >= %s)", coords[1], bbox$xmin),
+      sprintf("(%s <= %s)", coords[1], bbox$xmax),
+      sprintf("(%s >= %s)", coords[2], bbox$ymin),
+      sprintf("(%s <= %s)", coords[2], bbox$ymax)
+    ),
+    collapse = " AND "
+  )
 }
 
 
 #' @rdname sf_bbox_misc
 #' @name sf_bbox_shift
+#' @param x_nudge,y_nudge Length 1 or 2 numeric vector; unitless. Used by or
+#'   passed to [sf_bbox_shift()]. Required for  [sf_bbox_shift()].
+#' @param side one or more sides to shift: "top", "bottom", "left", "right", or
+#'   "all". Required for [sf_bbox_shift()].
+#' @param dir If "in", contract the `bbox` by x_nudge and y_nudge. If "out",
+#'   expand the bbox by x_nudge and y_nudge. If dir is not `NULL`; absolute
+#'   values are used for x_nudge and y_nudge. Defaults to `NULL`. Optional
+#'   [sf_bbox_shift()].
 #' @export
+#' @importFrom rlang caller_env arg_match has_length
 sf_bbox_shift <- function(bbox,
                           x_nudge = 0,
                           y_nudge = 0,
@@ -311,75 +324,61 @@ sf_bbox_shift <- function(bbox,
         "in" = c(1, -1),
         "out" = c(-1, 1)
       )
-  } else {
+  } else if (is.numeric(dir)) {
     dir <- c(dir * -1, dir)
   }
 
-  if ((length(x_nudge) == 1) && length(y_nudge) == 1) {
+  stopifnot(
+    is.numeric(x_nudge) && is.numeric(y_nudge),
+    (length(x_nudge) <= 2) && (length(y_nudge) <= 2)
+  )
+
+  if ((length(x_nudge) == 1) && (length(y_nudge) == 1)) {
     if (is.null(dir)) {
-      x_nudge <-
-        list(
-          "min" = x_nudge,
-          "max" = x_nudge
-        )
-
-      y_nudge <-
-        list(
-          "min" = y_nudge,
-          "max" = y_nudge
-        )
+      x_nudge <- as.list(rep(x_nudge, 2))
+      y_nudge <- as.list(rep(y_nudge, 2))
     } else if (is.numeric(dir)) {
-      x_nudge <- abs(x_nudge)
-      y_nudge <- abs(y_nudge)
-
-      x_nudge <-
-        list(
-          "min" = x_nudge * dir[[1]],
-          "max" = x_nudge * dir[[2]]
-        )
-
-      y_nudge <-
-        list(
-          "min" = y_nudge * dir[[1]],
-          "max" = y_nudge * dir[[2]]
-        )
+      x_nudge <- as.list(dir * abs(x_nudge))
+      y_nudge <- as.list(dir * abs(y_nudge))
     }
   } else if ((length(x_nudge) == 2) && (length(y_nudge) == 2)) {
-    x_nudge <-
-      list(
-        "min" = x_nudge[[1]],
-        "max" = x_nudge[[2]]
-      )
-
-    y_nudge <-
-      list(
-        "min" = y_nudge[[1]],
-        "max" = y_nudge[[2]]
-      )
+    x_nudge <- as.list(x_nudge)
+    y_nudge <- as.list(y_nudge)
   }
 
-  check_side <- function(x, side_opts) {
-    any(c(x, "all") %in% side_opts)
+  nm <- c("min", "max")
+  x_nudge <- rlang::set_names(x_nudge, nm)
+  y_nudge <- rlang::set_names(y_nudge, nm)
+
+  check_side <- function(x, y) {
+    is_any_in(c(x, "all"), y)
+  }
+
+  nudge_bbox <- function(bb, nudge, dim = "x", side = "min") {
+    dim <- paste0(dim, side)
+    bb[[dim]] <- bb[[dim]] + nudge[[side]]
+    bb
   }
 
   if (check_side("left", side)) {
-    bbox[["xmin"]] <- bbox[["xmin"]] + x_nudge[["min"]]
+    bbox <- nudge_bbox(bbox, x_nudge, "x", "min")
   }
 
   if (check_side("right", side)) {
-    bbox[["xmax"]] <- bbox[["xmax"]] + x_nudge[["max"]]
+    bbox <- nudge_bbox(bbox, x_nudge, "x", "max")
   }
 
   if (check_side("bottom", side)) {
-    bbox[["ymin"]] <- bbox[["ymin"]] + y_nudge[["min"]]
+    bbox <- nudge_bbox(bbox, y_nudge, "y", "min")
   }
 
   if (check_side("top", side)) {
-    bbox[["ymax"]] <- bbox[["ymax"]] + y_nudge[["max"]]
+    bbox <- nudge_bbox(bbox, y_nudge, "y", "max")
   }
 
-  return(bbox)
+  bbox
 }
+
 
 #' @rdname sf_bbox_misc
 #' @name sf_bbox_contract
@@ -412,36 +411,36 @@ sf_bbox_expand <- function(bbox,
 }
 
 #' @param point point to find npc coords for center
-#' @importFrom units drop_units
-#' @noRd
-sf_bbox_to_npc <- function(point,
-                           bbox) {
+#' @export
+#' @importFrom sf st_coordinates st_distance st_point
+sf_bbox_to_npc <- function(bbox,
+                           point) {
+  point <- st_transform_ext(point, bbox)
+  point <- sf::st_coordinates(as_centroid(point))
+
   if (is_sf(bbox)) {
-    bbox <- sf::st_bbox(bbox)
-  }
-
-  # crs <- sf::st_crs(bbox)
-
-  if (is_sf(marker)) {
-    marker <- sf::st_coordinates(st_center(marker, ext = FALSE))
+    bbox <- as_bbox(bbox)
   }
 
   npc <- c(0, 0)
 
-  xdist <-
+  min_point <- sf_bbox_point(bbox, c("xmin", "ymin"), crs = NA)
+
+  xdist_to_pt <-
     sf::st_distance(
-      sf_bbox_point(bbox, c("xmin", "ymin"), crs = NA),
-      sf::st_point(c(marker[1], bbox[["ymin"]]))
+      min_point,
+      sf::st_point(c(point[1], bbox[["ymin"]]))
     )
 
-  ydist <-
+  npc[1] <- xdist_to_pt / sf_bbox_xdist(bbox)
+
+  ydist_to_pt <-
     sf::st_distance(
-      sf_bbox_point(bbox, c("xmin", "ymin"), crs = NA),
-      sf::st_point(c(bbox[["xmin"]], marker[2]))
+      min_point,
+      sf::st_point(c(bbox[["xmin"]], point[2]))
     )
 
-  npc[1] <- units::drop_units(xdist) / sf_bbox_xdist(bbox)
-  npc[2] <- units::drop_units(ydist) / sf_bbox_ydist(bbox)
+  npc[2] <- ydist_to_pt / sf_bbox_ydist(bbox)
 
-  return(npc)
+  npc
 }
