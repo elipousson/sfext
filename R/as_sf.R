@@ -1,8 +1,10 @@
 #' Convert an object to a simple feature or bounding box object
 #'
-#' Both functions will pass a `NULL` value without returning an error. If a POINT
-#' or MULTIPOINT object is passed to [as_bbox] a 0.00000001 meter buffer is
-#' applied.
+#' Both functions will pass a `NULL` value without returning an error. If a
+#' POINT or MULTIPOINT object is passed to [as_bbox()] a 0.00000001 meter buffer
+#' is applied. If a character object is passed to [as_bbox()] it is passed to
+#' [osmdata::getbb()] using `format_out = "matrix"` which is converted into a
+#' bounding box.
 #'
 #' @param x A `sf`, `bbox`, `sfc`, `raster`, `sp`, or data frame object that can
 #'   be converted into a simple feature or bounding box object. [as_bbox()] can
@@ -80,12 +82,22 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
     return(sf_bbox_transform(bbox = x, crs = crs))
   }
 
+  if (is.character(x) && rlang::has_length(x, 1)) {
+    is_pkg_installed("osmdata")
+    x <- osmdata::getbb(x, format_out = "matrix", ...)
+    stopifnot(
+      !any(is.na(x))
+    )
+    crs <- 4326
+  }
+
   # Convert objects to sf if needed
   x_is <-
     dplyr::case_when(
       has_length(x, 4) && all(is.numeric(x)) ~ "num_bbox",
       is_geom_type(x, type = c("POINT", "MULTIPOINT")) ~ "sf_pt",
       is_sf(x, ext = TRUE) ~ "sf_or_sfc",
+      is.character(x) ~ "char",
       TRUE ~ "other"
     )
 
@@ -100,6 +112,7 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
         ),
         crs = crs, ...
       ),
+      "char" = osmdata::getbb(x, ...),
       "other" = sf::st_bbox(as_sf(x, ext = ext), ...)
     )
 
@@ -119,15 +132,19 @@ as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
   x_is <-
     dplyr::case_when(
       is_sf(x) ~ "sf",
+      # is.list(x) && is_all(x, is_sfc) ~ "sfc_list",
       is_sfg(x) ~ "sfg",
+      is.data.frame(x) ~ "df",
       TRUE ~ "other"
     )
 
   x <-
     switch(x_is,
-      "sfg" = sf::st_sfc(x, ...),
       "sf" = sf::st_geometry(x, ...),
-      "other" = sf::st_geometry(as_sf(x, ext = ext, ...))
+      "sfg" = sf::st_sfc(x, ...),
+      # "sfc_list" =
+      "df" = sf::st_geometry(as_sf(x, ext = ext, ...)),
+      "other" = sf::st_as_sfc(x, ...)
     )
 
   transform_sf(x, crs = crs)

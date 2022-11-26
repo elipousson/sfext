@@ -63,7 +63,9 @@ internally.}
 \item{data}{Data that can be converted to sf, sfc, bbox or a sf list object.}
 }
 \description{
-Both functions will pass a \code{NULL} value without returning an error. If a POINT
-or MULTIPOINT object is passed to \link{as_bbox} a 0.00000001 meter buffer is
-applied.
+Both functions will pass a \code{NULL} value without returning an error. If a
+POINT or MULTIPOINT object is passed to \code{\link[=as_bbox]{as_bbox()}} a 0.00000001 meter buffer
+is applied. If a character object is passed to \code{\link[=as_bbox]{as_bbox()}} it is passed to
+\code{\link[osmdata:getbb]{osmdata::getbb()}} using \code{format_out = "matrix"} which is converted into a
+bounding box.
 }
