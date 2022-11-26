@@ -43,7 +43,6 @@
 #' @export
 #' @importFrom dplyr count right_join filter mutate case_when select
 #' @importFrom sf st_join st_as_sf
-#' @importFrom tidyr replace_na
 count_sf_ext <- function(data,
                          x = NULL,
                          y = NULL,
@@ -118,6 +117,7 @@ count_sf_ext <- function(data,
     )
 
   if (replace_na) {
+    is_pkg_installed("tidyr")
     data_count <- tidyr::replace_na(data_count, rlang::set_names(list(0), name))
   } else if (!keep_na) {
     data_count <- dplyr::filter(data_count, !is.na(.data[[name]]))
