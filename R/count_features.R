@@ -38,7 +38,7 @@ count_features <- function(x = NULL,
 
   cli_abort_ifnot(
     "{.arg y} must be an sf object (if {.arg nm} is provided), an sf list, or NULL (if {.arg count} is provided).",
-    condition = is_sf_list(y) | !is.null(count),
+    condition = is_sf_list(y) | !is.null(count)
   )
 
   if (is_sf(x) && is_sf_list(y)) {
