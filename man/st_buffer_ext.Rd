@@ -11,6 +11,8 @@ st_buffer_ext(
   diag_ratio = NULL,
   unit = "meter",
   dist_limits = NULL,
+  end_style = NULL,
+  join_style = NULL,
   single_side = FALSE,
   list.ok = TRUE,
   ...

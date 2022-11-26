@@ -3,6 +3,7 @@
 \name{sf_bbox_misc}
 \alias{sf_bbox_misc}
 \alias{sf_bbox_asp}
+\alias{sf_bbox_orientation}
 \alias{sf_bbox_point}
 \alias{sf_bbox_dist}
 \alias{sf_bbox_xdist}
@@ -19,7 +20,9 @@
 \alias{sf_bbox_expand}
 \title{Measure, transform, and convert bounding boxes}
 \usage{
-sf_bbox_asp(bbox, orientation = FALSE)
+sf_bbox_asp(bbox)
+
+sf_bbox_orientation(bbox, tolerance = 0.1)
 
 sf_bbox_point(bbox, point = NULL, crs = NULL, call = caller_env())
 
@@ -68,9 +71,9 @@ sf_bbox_expand(bbox, x_nudge = 0, y_nudge = 0)
 \arguments{
 \item{bbox}{A bbox object.}
 
-\item{orientation}{If \code{TRUE}, \code{\link[=sf_bbox_asp]{sf_bbox_asp()}} returns a suggested orientation
-based on aspect ratio (< 0.9 "portrait"; > 1.1 "landscape"; else "square");
-defaults to \code{FALSE}.}
+\item{tolerance}{Numeric value above or below 1 used by
+\code{\link[=sf_bbox_orientation]{sf_bbox_orientation()}} to describe an aspect ratio as landscape or
+portrait; defaults to 0.1.}
 
 \item{point}{A length 2 character vector representing a coordinate pair at a
 corner, midpoint, or center of the bounding box. Options include "xmin",
@@ -106,15 +109,15 @@ c("longitude", "latitude") (default). Used by \code{\link[=sf_bbox_to_lonlat_que
 only.}
 
 \item{x_nudge, y_nudge}{Length 1 or 2 numeric vector; unitless. Used by or
-passed to \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}}
+passed to \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}. Required for  \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
 
 \item{side}{one or more sides to shift: "top", "bottom", "left", "right", or
-"all". Used by \code{\link[=sf_bbox_shift]{sf_bbox_shift()}} only.}
+"all". Required for \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
 
 \item{dir}{If "in", contract the \code{bbox} by x_nudge and y_nudge. If "out",
 expand the bbox by x_nudge and y_nudge. If dir is not \code{NULL}; absolute
-values are used for x_nudge and y_nudge. Defaults to \code{NULL}. Used by
-\code{\link[=sf_bbox_shift]{sf_bbox_shift()}} only.}
+values are used for x_nudge and y_nudge. Defaults to \code{NULL}. Optional
+\code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
 }
 \value{
 sf object
@@ -125,7 +128,7 @@ Simple bounding box functions that you can use to:
 \item Measure distances (\code{\link[=sf_bbox_dist]{sf_bbox_dist()}}, \code{\link[=sf_bbox_xdist]{sf_bbox_xdist()}}, \code{\link[=sf_bbox_ydist]{sf_bbox_ydist()}},
 and \code{\link[=sf_bbox_diagdist]{sf_bbox_diagdist()}})
 \item Get an aspect ratio or orientation (\code{\link[=sf_bbox_asp]{sf_bbox_asp()}}) (counts asp between
-0.9 and 1.1 as "square")
+0.9 and 1.1 as "square" when tolerance is 0.1)
 \item Return a point from any of the corners, center, or midpoints
 (\code{\link[=sf_bbox_point]{sf_bbox_point()}})
 \item Transform the coordinate reference system (\code{\link[=sf_bbox_transform]{sf_bbox_transform()}})
@@ -137,6 +140,8 @@ well known text (\code{\link[=sf_bbox_to_wkt]{sf_bbox_to_wkt()}}), or a simple f
 \item Convert a diag_ratio value to a distance value if a bbox and diag_ratio are
 provided (\code{\link[=sf_bbox_diag_ratio_to_dist]{sf_bbox_diag_ratio_to_dist()}}); return \code{NULL} if bbox and
 diag_ratio are \code{NULL}
+\item Convert a point and a corresponding bounding box into into a npc
+(normalised parent coordinates) value with \code{\link[=sf_bbox_to_npc]{sf_bbox_to_npc()}}
 }
 }
 \seealso{

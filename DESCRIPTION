@@ -25,7 +25,6 @@ Imports:
     sf,
     stringr,
     tibble,
-    tidyr,
     units,
     vctrs
 Suggests: 
@@ -46,7 +45,8 @@ Suggests:
     readxl,
     rmarkdown,
     testthat (>= 3.0.0),
-    tidygeocoder
+    tidygeocoder,
+    tidyr
 VignetteBuilder: 
     knitr
 Remotes: 
