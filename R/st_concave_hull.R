@@ -42,7 +42,7 @@ st_concave_hull <- function(x,
     cli_warn(
       "Features with POINT geometry should be combined using the {.arg by}
       to create convex hulls."
-      )
+    )
   }
 
   if (!is_multipoint(x)) {
@@ -56,7 +56,8 @@ st_concave_hull <- function(x,
         concaveman::concaveman(
           points = as_sf(.x),
           concavity = concavity,
-          length_threshold = length_threshold)
+          length_threshold = length_threshold
+        )
       )
     )
 
