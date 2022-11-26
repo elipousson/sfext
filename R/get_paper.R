@@ -110,9 +110,10 @@ get_paper <- function(paper = "letter",
 #' Set paper orientation and swap width/height if needed
 #'
 #' @noRd
+#' @importFrom dplyr mutate
 set_paper_orientation <- function(paper, orientation = NULL, bbox = NULL) {
   if (!is.null(bbox)) {
-    orientation <- sf_bbox_asp(bbox = bbox, orientation = TRUE)
+    orientation <- sf_bbox_orientation(bbox)
   } else {
     orientation <-
       match.arg(
@@ -152,7 +153,6 @@ set_paper_orientation <- function(paper, orientation = NULL, bbox = NULL) {
 #' Get paper using name
 #'
 #' @noRd
-#' @importFrom dplyr filter
 get_paper_name <- function(paper) {
   paper_sizes[tolower(paper_sizes[["name"]]) %in% tolower(paper), ]
 }
@@ -160,7 +160,6 @@ get_paper_name <- function(paper) {
 #' Get paper using standard and optional series or size
 #'
 #' @noRd
-#' @importFrom dplyr filter
 get_paper_standard <- function(standard, series = NULL, size = NULL) {
   standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
   paper <- paper_sizes[paper_sizes[["standard"]] %in% standard, ]
@@ -175,7 +174,7 @@ get_paper_standard <- function(standard, series = NULL, size = NULL) {
     paper <- paper[paper[["size"]] %in% size, ]
   }
 
-  return(paper)
+  paper
 }
 
 #' Get paper using width, height, or both
