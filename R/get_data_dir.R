@@ -43,7 +43,7 @@ get_data_dir <- function(path = NULL,
 
   if (is_interactive()) {
     create <-
-      cli_yeah(
+      cli_yesno(
         c(
           "x" = "The directory {.file {path}} does not exist.",
           ">" = "Do you want to create a directory at this location?"
