@@ -23,12 +23,14 @@ reference:
   contents:
   - '`sf_to_df`'
   - '`address_to_sf`'
+  - '`coords_to_sf`'
 - title: Modify sf, sfc, and bbox objects
   contents:
   - '`st_bbox_ext`'
   - '`st_buffer_ext`'
   - '`st_erase`'
   - '`st_clip`'
+  - '`st_concave_hull`'
   - '`st_union_ext`'
   - '`st_join_ext`'
   - '`st_filter_ext`'
