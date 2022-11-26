@@ -73,26 +73,21 @@
 read_sf_ext <- function(...) {
   params <- list2(...)
 
-  if ((length(params) == 1) && !is_named(params)) {
-    # FIXME: This should be updated to support the option of an unnamed first
-    # parameter but additional named parameters following.
-    nm <-
+  if (!is_named(params[1])) {
+    names(params)[1] <-
       dplyr::case_when(
-      is_url(params[[1]]) ~ "url",
-      has_filetype(params[[1]]) ~ "path",
-      TRUE ~ "sf"
-    )
-
-    params <- rlang::set_names(params, nm)
+        is_url(params[[1]]) ~ "url",
+        has_filetype(params[[1]]) ~ "path",
+        TRUE ~ "dsn"
+      )
   }
 
   type <-
     dplyr::case_when(
-      !is.null(params$package) ~ "pkg",
       !is.null(params$url) ~ "url",
       !is.null(params$path) ~ "path",
-      !is.null(params$dsn) ~ "sf",
-      TRUE ~ "missing"
+      !is.null(params$package) ~ "pkg",
+      TRUE ~ "sf"
     )
 
   cli_abort_ifnot(
@@ -915,7 +910,7 @@ join_sf_gsheet <- function(data,
                            sheet = 1,
                            key = NULL,
                            suffix = c("", "_gsheet")) {
-  if (cli_yeah("Are you ready to sync from Google Sheets
+  if (cli_yesno("Are you ready to sync from Google Sheets
                back to an sf object?")) {
     sheet_data <-
       sf::st_drop_geometry(
