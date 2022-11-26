@@ -166,7 +166,7 @@ as_dist_units <- function(x, units = NULL, null.ok = FALSE, call = caller_env())
 
   if (is.numeric(x) && !is_dist_units(x)) {
     units::as_units(x, units)
-  } else if (cli_yeah("Did you mean to convert {.var x} to {.val {units}}?")) {
+  } else if (cli_yesno("Did you mean to convert {.var x} to {.val {units}}?")) {
     convert_dist_units(
       dist = x,
       to = units
@@ -201,11 +201,6 @@ is_same_area <- function(x, y, units = NULL, union = TRUE, diff = FALSE, ...) {
   }
 
   all.equal(as.numeric(is_diff_area(x, y, union = union)), 0, ...)
-}
-
-#' @noRd
-is_units <- function(x) {
-  is_class(x, "units")
 }
 
 #' @noRd
