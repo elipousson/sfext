@@ -339,7 +339,7 @@ write_sf_types <- function(data,
     if (!(filetype %in% c("rda", "rds", "RData"))) {
       ask <-
         is_interactive() &&
-          cli_yeah(
+          cli_yesno(
             c("{.arg data} is not a simple feature object.",
               ">" = "Do you want to save {.arg data} as a RDA file?"
             )
@@ -440,26 +440,41 @@ write_sf_svg <- function(data,
   )
 }
 
-#' Check before overwriting file
+
+
+#' Check if a file exists and remove file or error
 #'
 #' @noRd
-#' @importFrom stringr str_detect
+#' @importFrom rlang caller_env is_interactive
 check_file_overwrite <- function(filename = NULL,
                                  path = NULL,
                                  overwrite = TRUE,
+                                 ask = TRUE,
                                  call = caller_env()) {
   filename <- filename %||% basename(path)
+  filepath <- filename
 
-  if (!has_filetype(filename)) {
-    abort()
+  if (!is.null(path)) {
+    if (has_filetype(path) && is.null(filename)) {
+      filepath <- path
+      path <- dirname(path)
+    } else {
+      filepath <- file.path(path, filename)
+    }
   }
 
-  if (filename %in% list.files(path)) {
-    if (!overwrite && is_interactive()) {
+  cli_abort_ifnot(
+    "{.arg filename} or {.arg path} must include a valid file type.",
+    condition = has_filetype(filepath),
+    call = call
+  )
+
+  if (file.exists(filepath)) {
+    if (!overwrite && ask && rlang::is_interactive()) {
       overwrite <-
-        cli_yeah(
+        cli_yesno(
           c(
-            "i" = "A file with the same name exists in {.file {path}}",
+            "i" = "A file with the same name exists in {.path {path}}",
             ">" = "Do you want to overwrite {.val {filename}}?"
           )
         )
@@ -468,23 +483,19 @@ check_file_overwrite <- function(filename = NULL,
     cli_abort_ifnot(
       c(
         "!" = "{.file {filename}} can't be saved.",
-        "i" = "A file with the same name already exists and
-        {.arg overwrite = FALSE}."
+        "i" = "A file with the same name already exists.
+        Set {.code overwrite = TRUE} to remove."
       ),
       condition = overwrite,
       call = call
     )
 
     cli_inform(
-      c("v" = "Removing {.val {filename}} from {.file {path}}")
+      c("v" = "Removing {.path {filepath}}")
     )
 
-    if (!stringr::str_detect(path, paste0(filename, "$"))) {
-      file.remove(file.path(path, filename))
-    } else {
-      file.remove(path)
-    }
-
-    invisible(NULL)
+    file.remove(filepath)
   }
+
+  invisible(NULL)
 }
