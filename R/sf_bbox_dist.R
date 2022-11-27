@@ -18,6 +18,7 @@
 #' @inheritParams sf::st_distance
 #' @param call Passed as the error_call parameter for [rlang::arg_match] to
 #'   improve error messages when function is used internally.
+#' @family dist
 #' @export
 #' @importFrom sf st_distance st_crs
 #' @importFrom units drop_units as_units

@@ -2,122 +2,48 @@
 % Please edit documentation in R/sf_bbox_misc.R
 \name{sf_bbox_misc}
 \alias{sf_bbox_misc}
-\alias{sf_bbox_asp}
-\alias{sf_bbox_orientation}
-\alias{sf_bbox_point}
-\alias{sf_bbox_dist}
-\alias{sf_bbox_xdist}
-\alias{sf_bbox_ydist}
-\alias{sf_bbox_diagdist}
-\alias{sf_bbox_diag_ratio_to_dist}
-\alias{sf_bbox_transform}
 \alias{sf_bbox_to_sf}
 \alias{sf_bbox_to_sfc}
+\alias{sf_bbox_transform}
+\alias{sf_bbox_point}
 \alias{sf_bbox_to_wkt}
 \alias{sf_bbox_to_lonlat_query}
-\alias{sf_bbox_shift}
-\alias{sf_bbox_contract}
-\alias{sf_bbox_expand}
+\alias{sf_bbox_to_npc}
 \title{Measure, transform, and convert bounding boxes}
 \usage{
-sf_bbox_asp(bbox)
-
-sf_bbox_orientation(bbox, tolerance = 0.1)
-
-sf_bbox_point(bbox, point = NULL, crs = NULL, call = caller_env())
-
-sf_bbox_dist(
-  bbox,
-  from,
-  to,
-  units = NULL,
-  drop = TRUE,
-  by_element = TRUE,
-  call = caller_env(),
-  ...
-)
-
-sf_bbox_xdist(bbox, units = NULL, drop = TRUE)
-
-sf_bbox_ydist(bbox, units = NULL, drop = TRUE)
-
-sf_bbox_diagdist(bbox, units = NULL, drop = TRUE)
-
-sf_bbox_diag_ratio_to_dist(bbox, diag_ratio, units = NULL, drop = TRUE)
-
-sf_bbox_transform(bbox, crs = NULL)
-
 sf_bbox_to_sf(bbox, sf_col = "geometry")
 
 sf_bbox_to_sfc(bbox)
+
+sf_bbox_transform(bbox, crs = NULL)
+
+sf_bbox_point(bbox, point = NULL, crs = NULL, call = caller_env())
 
 sf_bbox_to_wkt(bbox)
 
 sf_bbox_to_lonlat_query(bbox, coords = c("longitude", "latitude"), crs = 4326)
 
-sf_bbox_shift(
-  bbox,
-  x_nudge = 0,
-  y_nudge = 0,
-  side = c("all", "top", "bottom", "left", "right"),
-  dir = NULL,
-  call = caller_env()
-)
-
-sf_bbox_contract(bbox, x_nudge = 0, y_nudge = 0)
-
-sf_bbox_expand(bbox, x_nudge = 0, y_nudge = 0)
+sf_bbox_to_npc(bbox, point)
 }
 \arguments{
 \item{bbox}{A bbox object.}
 
-\item{tolerance}{Numeric value above or below 1 used by
-\code{\link[=sf_bbox_orientation]{sf_bbox_orientation()}} to describe an aspect ratio as landscape or
-portrait; defaults to 0.1.}
-
-\item{point}{A length 2 character vector representing a coordinate pair at a
-corner, midpoint, or center of the bounding box. Options include "xmin",
-"ymin", "xmax", "ymax", "xmid", "ymid".}
+\item{sf_col}{name to use for geometry column after converting to simple
+feature object; defaults to "geometry".}
 
 \item{crs}{A coordinate reference system to use for
 \code{\link[=sf_bbox_to_lonlat_query]{sf_bbox_to_lonlat_query()}} (defaults to 4326) or for resulting bounding
 box (\code{\link[=sf_bbox_transform]{sf_bbox_transform()}}) or sfc object (\code{\link[=sf_bbox_point]{sf_bbox_point()}}) (defaults to
 \code{NULL}).}
 
+\item{point}{point to find npc coords for center}
+
 \item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match} to
-improve error messages when function is used internally. Used by
-\code{\link[=sf_bbox_point]{sf_bbox_point()}}, \code{\link[=sf_bbox_dist]{sf_bbox_dist()}}, and \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
+improve error messages when function is used internally.}
 
-\item{from, to}{xy pairs (e.g. c("xmax", "ymax) defining points to measure
-distance from and to. Used by \code{\link[=sf_bbox_dist]{sf_bbox_dist()}} only.}
-
-\item{units}{The units to return for sf_bbox_dist. Defaults to NULL.}
-
-\item{drop}{If \code{FALSE}, distance functions return with units. If \code{FALSE}
-(default), distance functions return numeric values. Used by or passed to
-\code{\link[=sf_bbox_dist]{sf_bbox_dist()}}.}
-
-\item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
-
-\item{...}{passed on to \link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}}
-
-\item{sf_col}{name to use for geometry column after converting to simple
-feature object; defaults to "geometry".}
-
-\item{coords}{Column names with coordinates for query. e,g, c("X", "Y") or
-c("longitude", "latitude") (default). Used by \code{\link[=sf_bbox_to_lonlat_query]{sf_bbox_to_lonlat_query()}}
+\item{coords}{Column names with coordinates for query. e.g. \code{c("X", "Y")} or
+\code{c("longitude", "latitude")} (default). Used by \code{\link[=sf_bbox_to_lonlat_query]{sf_bbox_to_lonlat_query()}}
 only.}
-
-\item{x_nudge, y_nudge}{Length 1 or 2 numeric vector; unitless. Used by or
-passed to \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}. Required for  \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
-
-\item{side}{one or more sides to shift: "top", "bottom", "left", "right", or
-"all". Required for \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
-
-\item{dir}{If "in", contract the \code{bbox} by x_nudge and y_nudge. If "out",
-expand the bbox by x_nudge and y_nudge. If dir is not \code{NULL}; absolute
-values are used for x_nudge and y_nudge. Defaults to \code{NULL}. Optional
-\code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
 }
 \value{
 sf object
@@ -125,21 +51,13 @@ sf object
 \description{
 Simple bounding box functions that you can use to:
 \itemize{
-\item Measure distances (\code{\link[=sf_bbox_dist]{sf_bbox_dist()}}, \code{\link[=sf_bbox_xdist]{sf_bbox_xdist()}}, \code{\link[=sf_bbox_ydist]{sf_bbox_ydist()}},
-and \code{\link[=sf_bbox_diagdist]{sf_bbox_diagdist()}})
-\item Get an aspect ratio or orientation (\code{\link[=sf_bbox_asp]{sf_bbox_asp()}}) (counts asp between
-0.9 and 1.1 as "square" when tolerance is 0.1)
+\item Convert a bounding box to a simple feature object
+(\code{\link[=sf_bbox_to_sf]{sf_bbox_to_sf()}}) or simple feature collection (\code{\link[=sf_bbox_to_sfc]{sf_bbox_to_sfc()}})
+\item Transform the coordinate reference system (\code{\link[=sf_bbox_transform]{sf_bbox_transform()}})
 \item Return a point from any of the corners, center, or midpoints
 (\code{\link[=sf_bbox_point]{sf_bbox_point()}})
-\item Transform the coordinate reference system (\code{\link[=sf_bbox_transform]{sf_bbox_transform()}})
 \item Convert a bounding box to a SQL style query (\code{\link[=sf_bbox_to_lonlat_query]{sf_bbox_to_lonlat_query()}}),
-well known text (\code{\link[=sf_bbox_to_wkt]{sf_bbox_to_wkt()}}), or a simple feature object
-(\code{\link[=sf_bbox_to_sf]{sf_bbox_to_sf()}})
-\item Shift, expand, or contract a bounding box (\code{\link[=sf_bbox_shift]{sf_bbox_shift()}},
-\code{\link[=sf_bbox_expand]{sf_bbox_expand()}}, \code{\link[=sf_bbox_contract]{sf_bbox_contract()}})
-\item Convert a diag_ratio value to a distance value if a bbox and diag_ratio are
-provided (\code{\link[=sf_bbox_diag_ratio_to_dist]{sf_bbox_diag_ratio_to_dist()}}); return \code{NULL} if bbox and
-diag_ratio are \code{NULL}
+well known text (\code{\link[=sf_bbox_to_wkt]{sf_bbox_to_wkt()}})
 \item Convert a point and a corresponding bounding box into into a npc
 (normalised parent coordinates) value with \code{\link[=sf_bbox_to_npc]{sf_bbox_to_npc()}}
 }
@@ -149,12 +67,4 @@ diag_ratio are \code{NULL}
 \item \code{\link[sf:st_as_sf]{sf::st_as_sf()}},\code{\link[sf:st_as_sfc]{sf::st_as_sfc()}}
 \item \code{\link[sfx:st_extent]{sfx::st_extent()}}
 }
-
-Other dist: 
-\code{\link{compare_dist}()},
-\code{\link{convert_dist_scale}()},
-\code{\link{convert_dist_units}()},
-\code{\link{get_measurements}},
-\code{\link{is_dist_units}()}
 }
-\concept{dist}

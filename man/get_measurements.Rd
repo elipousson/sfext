@@ -122,6 +122,6 @@ Other dist:
 \code{\link{convert_dist_scale}()},
 \code{\link{convert_dist_units}()},
 \code{\link{is_dist_units}()},
-\code{\link{sf_bbox_misc}}
+\code{\link{sf_bbox_dist}()}
 }
 \concept{dist}

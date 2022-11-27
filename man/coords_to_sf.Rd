@@ -2,6 +2,11 @@
 % Please edit documentation in R/coords_to_sf.R
 \name{coords_to_sf}
 \alias{coords_to_sf}
+\alias{check_coords}
+\alias{rev_coords}
+\alias{has_coords}
+\alias{format_coords}
+\alias{separate_coords}
 \title{Convert a data frame with one or more coordinate columns to an sf object}
 \usage{
 coords_to_sf(
@@ -14,10 +19,42 @@ coords_to_sf(
   crs = 4326,
   call = caller_env()
 )
+
+check_coords(
+  x = NULL,
+  coords = NULL,
+  default = c("lon", "lat"),
+  rev = FALSE,
+  call = caller_env()
+)
+
+rev_coords(coords, pattern = c("lat", "^y"), ignore.case = TRUE)
+
+has_coords(x, coords = NULL, value = TRUE)
+
+format_coords(
+  x,
+  coords = c("lon", "lat"),
+  keep_missing = FALSE,
+  call = caller_env()
+)
+
+separate_coords(x, coords, into = c("lon", "lat"), sep = ",")
 }
 \arguments{
 \item{coords}{Coordinate columns for input data.frame or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").}
+
+\item{into}{If coords is a single column name with both longitude and
+latitude, \code{into} is used as the names of the new columns that coords is
+separated into. Passed to \code{\link[tidyr:separate]{tidyr::separate()}}.}
+
+\item{sep}{If coords is a single column name with both longitude and
+latitude, \code{sep} is used as the separator between coordinate values. Passed
+to \code{\link[tidyr:separate]{tidyr::separate()}}.}
+
+\item{rev}{If \code{TRUE}, reverse \code{c("lat", "lon")} coords to \code{c("lon", "lat")}.
+\code{\link[=check_coords]{check_coords()}} only.}
 
 \item{remove_coords}{For \code{\link[=df_to_sf]{df_to_sf()}}, if \code{TRUE}, remove the coordinate columns
 after converting a data frame to simple feature object; defaults to
@@ -25,6 +62,16 @@ after converting a data frame to simple feature object; defaults to
 
 \item{crs}{Coordinate reference system used by the coordinates in the
 provided data frame.}
+
+\item{default}{Default coordinate values; defaults to \code{c("lon", "lat")}.}
+
+\item{pattern}{Pattern passed to \code{\link[=grepl]{grepl()}} used to match vectors that are
+reversed.}
+
+\item{ignore.case}{If \code{TRUE}, pattern matching is not case sensitive.}
+
+\item{value}{If \code{TRUE}, return the value of the coordinate column names. Used
+by \code{\link[=has_coords]{has_coords()}}.}
 
 \item{keep_all}{If \code{FALSE}, drop all columns other than those named in
 coords, Default: \code{TRUE}.}
