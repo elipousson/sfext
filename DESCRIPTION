@@ -18,6 +18,7 @@ Depends:
 Imports: 
     cli,
     dplyr,
+    filenamr (>= 0.1.0),
     glue,
     janitor,
     purrr,
@@ -49,8 +50,9 @@ Suggests:
     tidyr
 VignetteBuilder: 
     knitr
-Remotes: 
-    elipousson/esri2sf
+Remotes:  
+    elipousson/esri2sf,
+    elipousson/filenamr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8

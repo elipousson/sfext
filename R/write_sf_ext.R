@@ -74,10 +74,10 @@ write_sf_ext <- function(data,
 
   # If data is sf object, write or cache it
   filename <-
-    make_filename(
+    filenamr::make_filename(
       name = name,
       label = label,
-      filetype = filetype,
+      fileext = filetype,
       filename = filename,
       path = NULL,
       prefix = prefix,
@@ -125,10 +125,10 @@ write_sf_cache <- function(data,
                            create = TRUE,
                            ...) {
   filename <-
-    make_filename(
+    filenamr::make_filename(
       name = name,
       label = label,
-      filetype = filetype,
+      fileext = filetype,
       filename = filename,
       prefix = prefix,
       postfix = postfix,
@@ -173,10 +173,10 @@ write_sf_gist <- function(data,
   is_pkg_installed("gistr")
 
   filename <-
-    make_filename(
+    filenamr::make_filename(
       name = name,
       label = label,
-      filetype = filetype,
+      fileext = filetype,
       filename = filename,
       prefix = prefix,
       postfix = postfix,
@@ -237,10 +237,10 @@ write_sf_gsheet <- function(data,
   }
 
   filename <-
-    make_filename(
+    filenamr::make_filename(
       name = name,
       label = label,
-      filetype = NULL,
+      fileext = NULL,
       filename = filename,
       prefix = prefix,
       postfix = postfix,
