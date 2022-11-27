@@ -9,7 +9,7 @@
 \alias{sf_bbox_to_wkt}
 \alias{sf_bbox_to_lonlat_query}
 \alias{sf_bbox_to_npc}
-\title{Measure, transform, and convert bounding boxes}
+\title{Convert and tranform bounding boxes}
 \usage{
 sf_bbox_to_sf(bbox, sf_col = "geometry")
 

@@ -20,8 +20,6 @@
 #' @param remove_coords For [df_to_sf()], if `TRUE`, remove the coordinate columns
 #'   after converting a data frame to simple feature object; defaults to
 #'   `FALSE`.
-#' @param keep_all If `FALSE`, drop all columns other than those named in
-#'   coords, Default: `TRUE`.
 #' @param crs Coordinate reference system used by the coordinates in the
 #'   provided data frame.
 #' @export

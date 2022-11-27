@@ -24,11 +24,13 @@ count_sf_ext(
 \arguments{
 \item{data}{Data to count in relationship to y}
 
-\item{x}{Optional sf object passed to \code{\link[=st_make_grid_ext]{st_make_grid_ext()}}. Defaults to \code{NULL}.}
+\item{x}{Optional sf object passed to \code{\link[=st_make_grid_ext]{st_make_grid_ext()}}. Defaults to
+\code{NULL}.}
 
-\item{y}{If \code{NULL} (default), y defaults to an \code{sf} object created by \code{\link[=st_make_grid_ext]{st_make_grid_ext()}} using x or data (if x is
-\code{NULL}) as the x parameter for \code{\link[=st_make_grid_ext]{st_make_grid_ext()}}. If not \code{NULL}, y must be an \code{sf} object that
-has a column with the same name as .id (defaults to "id").}
+\item{y}{If \code{NULL} (default), y defaults to an \code{sf} object created by
+\code{\link[=st_make_grid_ext]{st_make_grid_ext()}} using x or data (if x is \code{NULL}) as the x parameter
+for \code{\link[=st_make_grid_ext]{st_make_grid_ext()}}. If not \code{NULL}, y must be an \code{sf} object that has
+a column with the same name as .id (defaults to "id").}
 
 \item{join}{geometry predicate function with the same profile as \link[sf]{st_intersects}; see details}
 
@@ -43,8 +45,10 @@ Can be \code{NULL} or a variable:
 
 \item{sort}{If \code{TRUE}, will show the largest groups at the top.}
 
-\item{replace_na}{If \code{TRUE}, replace NA values from count with 0. If \code{FALSE},
-filter NA values from the returned object.}
+\item{replace_na}{If \code{TRUE}, replace NA values from count with 0.}
+
+\item{keep_na}{If \code{TRUE}, filter NA values from count. Ignored if replace_na
+is \code{TRUE}.}
 
 \item{lims}{Optional numeric vector with minimum or both minimum and
 maximum count values. If provided, any values below the minimum are set to

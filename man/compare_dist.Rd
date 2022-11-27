@@ -32,9 +32,14 @@ an sf or sfc object, to and any additional ... parameters are passed to
 \code{\link[sf:geos_measures]{sf::st_distance()}} using x as the first argument and to as the second. If
 x is a numeric vector the value of to is ignored.}
 
-\item{what}{If "ratio", dist divided by the comparison distance. If what is
+\item{how}{If "ratio", dist divided by the comparison distance. If what is
 "fit", return the number of times dist fits in the comparison distance
 without remainder. If "longer", "shorter", "same", return a logical vector.}
+
+\item{tolerance}{passed to \code{\link[=all.equal]{all.equal()}} if \code{how = "same"}}
+
+\item{...}{Additional parameters passed to \code{\link[sf:geos_measures]{sf::st_distance()}} if to is an sf
+or sfc object or \code{\link[=sf_bbox_dist]{sf_bbox_dist()}} if to is a length 2 character vector.}
 }
 \value{
 A logical or numeric vector.

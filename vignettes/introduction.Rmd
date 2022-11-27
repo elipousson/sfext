@@ -96,23 +96,23 @@ The fourth, `read_sf_query()`, is most similar to `sf::read_sf` but provides an 
 
 ### Writing sf objects
 
-`write_sf_ext()` wraps `sf::write_sf` but uses `make_filename()` to support the creation of consistent file names using labels or date prefixes to organize exports. 
+`write_sf_ext()` wraps `sf::write_sf` but uses `filenamr::make_filename()` to support the creation of consistent file names using labels or date prefixes to organize exports. 
 
 ```{r}
-make_filename(
+filenamr::make_filename(
   name = "Ashe County",
   label = "NC",
   prefix = "date",
-  filetype = "gpkg"
+  fileext = "gpkg"
 )
 ```
 
 `write_sf_ext()` also supports the automatic creation of destination folders and the use of a package-specific cache folder created by `rappdirs::user_cache_dir()`.
 
 ```{r}
-get_data_dir(path = "example_path/to_folder", create = FALSE)
+filenamr::get_data_dir(path = "example_path/to_folder", create = FALSE)
 
-get_data_dir(cache = TRUE)
+filenamr::get_data_dir(cache = TRUE)
 ```
 
 ## Converting sf objects

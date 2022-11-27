@@ -30,7 +30,7 @@
 #'   cached files that use the same file name.
 #' @param cache If `TRUE`, write `sf` object to file in cache directory;
 #'   defaults to `FALSE`.
-#' @inheritParams make_filename
+#' @inheritParams filenamr::make_filename
 #' @inheritParams write_sf_cache
 #' @param ... If data is an sf object and the filetype is "csv" or "xlsx", the
 #'   ... parameters are passed to [sf_to_df()] or to [sf::write_sf()] otherwise. If
@@ -233,7 +233,7 @@ write_sf_gsheet <- function(data,
   is_pkg_installed("googlesheets4")
 
   if (!is.null(filename)) {
-    filename <- str_remove_filetype(filename, filetype = "gsheet")
+    filename <- filenamr::str_remove_fileext(filename, fileext = "gsheet")
   }
 
   filename <-
@@ -269,6 +269,8 @@ write_sf_gsheet <- function(data,
 #' @noRd
 #' @importFrom sf write_sf
 #' @importFrom stringr str_remove
+#' @importFrom cliExtras cli_yesno
+#' @importFrom filenamr has_fileext str_extract_fileext str_add_fileext check_file_overwrite
 write_sf_types <- function(data,
                            filename = NULL,
                            path = NULL,
@@ -283,8 +285,9 @@ write_sf_types <- function(data,
   }
 
   # Set filename from path if ends with a filetype
-  if (has_filetype(path)) {
+  if (filenamr::has_fileext(path)) {
     if (!is.null(filename)) {
+      # FIXME: Is this just an internal error or can this be triggered by a user?
       cli_abort("A {.arg filename} *or* {.arg path} with a filename must be
       provided. Both can't be provided.")
     }
@@ -293,9 +296,9 @@ write_sf_types <- function(data,
   }
 
   # Get filetype from filename if filetype is NULL
-  filetype <- filetype %||% str_extract_filetype(filename)
+  filetype <- filetype %||% filenamr::str_extract_fileext(filename)
   # Add filetype to filename if it doesn't have a filename at the end
-  filename <- str_add_filetype(filename, filetype)
+  filename <- filenamr::str_add_fileext(filename, filetype)
 
   # Remove filename from path
   # FIXME: assumes that the user has not provided both a filename
@@ -303,7 +306,7 @@ write_sf_types <- function(data,
   folder_path <- stringr::str_remove(path, glue("{filename}$"))
 
   # Check if overwrite is needed and possible
-  check_file_overwrite(
+  filenamr::check_file_overwrite(
     filename = filename,
     path = folder_path,
     overwrite = overwrite
@@ -350,8 +353,8 @@ write_sf_types <- function(data,
       }
     }
 
-    path <- str_remove_filetype(path, filetype)
-    path <- str_add_filetype(path, "rda")
+    path <- filenamr::str_remove_fileext(path, filetype)
+    path <- filenamr::str_add_fileext(path, "rda")
   }
 
   # Check if readr is installed
@@ -359,7 +362,7 @@ write_sf_types <- function(data,
     is_pkg_installed("readr")
   } else if (type %in% c("sf_excel", "df_excel")) {
     is_pkg_installed("openxlsx")
-    path <- str_add_filetype(path, "xlsx")
+    path <- filenamr::str_add_fileext(path, "xlsx")
   }
 
   # Drop geometry for sf to csv export
@@ -395,6 +398,7 @@ write_sf_types <- function(data,
 #' @inheritDotParams ggplot2::geom_sf
 #' @inheritParams ggplot2::ggsave
 #' @export
+#' @importFrom filenamr str_extract_fileext
 write_sf_svg <- function(data,
                          filename = NULL,
                          path = NULL,
@@ -411,7 +415,7 @@ write_sf_svg <- function(data,
     filename <- basename(path)
   }
 
-  filetype <- str_extract_filetype(filename)
+  filetype <- filenamr::str_extract_fileext(filename)
   path <- str_remove(path, paste0(filename, "$"))
 
   cli_abort_ifnot(
@@ -455,7 +459,7 @@ check_file_overwrite <- function(filename = NULL,
   filepath <- filename
 
   if (!is.null(path)) {
-    if (has_filetype(path) && is.null(filename)) {
+    if (filenamr::has_fileext(path) && is.null(filename)) {
       filepath <- path
       path <- dirname(path)
     } else {
@@ -465,7 +469,7 @@ check_file_overwrite <- function(filename = NULL,
 
   cli_abort_ifnot(
     "{.arg filename} or {.arg path} must include a valid file type.",
-    condition = has_filetype(filepath),
+    condition = filenamr::has_fileext(filepath),
     call = call
   )
 

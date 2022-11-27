@@ -23,9 +23,12 @@
 #'   an sf or sfc object, to and any additional ... parameters are passed to
 #'   [sf::st_distance()] using x as the first argument and to as the second. If
 #'   x is a numeric vector the value of to is ignored.
-#' @param what If "ratio", dist divided by the comparison distance. If what is
+#' @param how If "ratio", dist divided by the comparison distance. If what is
 #'   "fit", return the number of times dist fits in the comparison distance
 #'   without remainder. If "longer", "shorter", "same", return a logical vector.
+#' @param tolerance passed to [all.equal()] if `how = "same"`
+#' @param ... Additional parameters passed to [sf::st_distance()] if to is an sf
+#'   or sfc object or [sf_bbox_dist()] if to is a length 2 character vector.
 #' @family dist
 #' @returns A logical or numeric vector.
 #' @export

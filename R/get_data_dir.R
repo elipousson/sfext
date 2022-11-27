@@ -82,7 +82,7 @@ get_path_filetype <- function(path, filetype = NULL, n = 1) {
     )
   }
 
-  filetype <- str_extract_filetype(file_list)
+  filetype <- filenamr::str_extract_fileext(file_list)
 
   if (length(unique(filetype)) <= n) {
     return(unique(filetype))

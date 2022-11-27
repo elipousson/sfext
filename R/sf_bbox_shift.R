@@ -5,6 +5,7 @@
 #' [sf_bbox_expand()], [sf_bbox_contract()])
 #'
 #' @name sf_bbox_shift
+#' @param bbox A `bbox` object.
 #' @param x_nudge,y_nudge Length 1 or 2 numeric vector; unitless. Used by or
 #'   passed to [sf_bbox_shift()]. Required for  [sf_bbox_shift()].
 #' @param side one or more sides to shift: "top", "bottom", "left", "right", or

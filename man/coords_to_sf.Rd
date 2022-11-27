@@ -72,9 +72,6 @@ reversed.}
 
 \item{value}{If \code{TRUE}, return the value of the coordinate column names. Used
 by \code{\link[=has_coords]{has_coords()}}.}
-
-\item{keep_all}{If \code{FALSE}, drop all columns other than those named in
-coords, Default: \code{TRUE}.}
 }
 \description{
 \itemize{

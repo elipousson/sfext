@@ -22,10 +22,12 @@
 #' @param geometry Type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'.
 #' @inheritParams coords_to_sf
+#' @inheritParams dplyr::left_join
 #' @return [sf_to_df()] returns a data frame with geometry dropped or converted
 #'   to wkt or coordinates for the centroid or point on surface; [df_to_sf()]
 #'   returns a simple feature object with POINT geometry.
-#' @inheritParams dplyr::left_join
+#' @param keep_all If `FALSE`, drop all columns other than those named in
+#'   coords, Default: `TRUE`.
 #' @seealso [sf::st_coordinates()]
 #' @example examples/sf_to_df.R
 #' @rdname sf_to_df
@@ -62,6 +64,8 @@ sf_to_df <- function(x,
 #' @param y A sf object passed as y argument to [dplyr::left_join()].
 #' @param by A character vector of variables to join by passed to
 #'   [dplyr::left_join()].
+#' @param call Passed as the [cli::cli_abort] to improve error messages when
+#'   function is used internally.
 #' @seealso
 #'  [ggspatial::df_spatial()]
 #'  [sf::st_as_sf()]

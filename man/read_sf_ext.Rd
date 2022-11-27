@@ -186,6 +186,9 @@ defaults to \code{FALSE}.}
 \item{url}{A url for a spatial data file, tabular data with coordinates, or a
 ArcGIS FeatureServer or MapServer to access with \code{\link[esri2sf:esri2sf]{esri2sf::esri2sf()}}}
 
+\item{wkt}{Name of column with well-known text for geometry. Used by
+\code{\link[=read_sf_csv]{read_sf_csv()}}.}
+
 \item{show_col_types}{If \code{FALSE}, do not show the guessed column types. If
 \code{TRUE} always show the column types, even if they are supplied. If \code{NULL}
 (the default) only show the column types if they are not explicitly supplied
@@ -303,7 +306,6 @@ query or wkt filter parameter if the url is some other type (passed to
 
 \seealso{
 Other read_write: 
-\code{\link{make_filename}()},
 \code{\link{read_sf_exif}()}
 }
 \concept{read_write}

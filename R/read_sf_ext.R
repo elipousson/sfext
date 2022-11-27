@@ -70,6 +70,7 @@
 #' @family read_write
 #' @export
 #' @importFrom dplyr case_when
+#' @importFrom filenamr has_fileext
 read_sf_ext <- function(...) {
   params <- list2(...)
 
@@ -77,7 +78,7 @@ read_sf_ext <- function(...) {
     names(params)[1] <-
       dplyr::case_when(
         is_url(params[[1]]) ~ "url",
-        has_filetype(params[[1]]) ~ "path",
+        filenamr::has_fileext(params[[1]]) ~ "path",
         TRUE ~ "dsn"
       )
   }
@@ -159,10 +160,11 @@ read_sf_pkg <- function(data,
 
   is_pkg_installed(package)
 
-  if (!is.character(data)) {
-    cli_abort("{.arg data} must be a length 1 character vector with the
-              name or filename of the package data.")
-  }
+  cli_abort_ifnot(
+    "{.arg data} must be a length 1 character vector with
+    the name or filename of the package data.",
+    condition = is.character(data)
+  )
 
   # Read package data
   if (is_pkg_data(data, package)) {
@@ -171,7 +173,7 @@ read_sf_pkg <- function(data,
   }
 
   # FIXME: This triggers an alert with lintr but works fine
-  filename <- str_add_filetype(data, filetype = filetype)
+  filename <- filenamr::str_add_fileext(data, fileext = filetype)
 
   path <-
     dplyr::case_when(
@@ -395,6 +397,8 @@ read_sf_excel <- function(path,
 #' @name read_sf_csv
 #' @rdname read_sf_ext
 #' @inheritParams readr::read_csv
+#' @param wkt Name of column with well-known text for geometry. Used by
+#'   [read_sf_csv()].
 #' @export
 read_sf_csv <- function(path,
                         url = NULL,
@@ -794,10 +798,11 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
 #'   folder, unzipped into a temporary directory (created with [tempdir()]), and
 #'   then read to a file using the specified file type.
 #' @inheritParams get_data_dir
-#' @inheritParams make_filename
+#' @inheritParams filenamr::make_filename
 #' @export
 #' @importFrom sf st_crs
 #' @importFrom utils download.file unzip
+#' @importFrom filenamr make_filename
 read_sf_download <-
   function(url,
            filename,
@@ -812,11 +817,11 @@ read_sf_download <-
     path <- get_data_dir(path = path, cache = TRUE)
 
     destfile <-
-      make_filename(
+      filenamr::make_filename(
         prefix = prefix,
         filename = filename,
         path = path,
-        filetype = filetype
+        fileext = filetype
       )
 
     utils::download.file(
@@ -827,11 +832,11 @@ read_sf_download <-
 
     if (unzip) {
       zipdest <-
-        make_filename(
+        filenamr::make_filename(
           prefix = prefix,
           filename = filename,
           path = tempdir(),
-          filetype = filetype
+          fileext = filetype
         )
 
       utils::unzip(
@@ -853,6 +858,7 @@ read_sf_download <-
 #'   not provided to [read_sf_gsheet].
 #' @export
 #' @importFrom rlang is_missing
+#' @importFrom cliExtras cli_ask
 read_sf_gsheet <- function(url,
                            sheet = NULL,
                            ss = NULL,
@@ -870,7 +876,7 @@ read_sf_gsheet <- function(url,
   if (ask) {
     ss <-
       googlesheets4::gs4_find(
-        cli_ask("What is the name of the Google Sheet to return?")
+        cliExtras::cli_ask("What is the name of the Google Sheet to return?")
       )
   }
 
@@ -905,6 +911,7 @@ read_sf_gsheet <- function(url,
 #' @noRd
 #' @importFrom dplyr left_join
 #' @importFrom sf st_drop_geometry
+#' @importFrom cliExtras cli_yesno
 join_sf_gsheet <- function(data,
                            ss = NULL,
                            sheet = 1,

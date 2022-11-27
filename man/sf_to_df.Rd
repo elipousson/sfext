@@ -75,6 +75,9 @@ to \code{FALSE}.}
 \item{by}{A character vector of variables to join by passed to
 \code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.}
 
+\item{call}{Passed as the \link[cli:cli_abort]{cli::cli_abort} to improve error messages when
+function is used internally.}
+
 \item{...}{Other parameters passed onto methods.}
 }
 \value{

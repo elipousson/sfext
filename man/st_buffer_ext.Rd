@@ -39,6 +39,12 @@ to units matching GDAL units for x; defaults to "meter"}
 used as lower and upper limits on distance buffer). Units must match the
 provided units; defaults to \code{NULL}.}
 
+\item{end_style}{"round" (default), "flat", or "square" passed to the
+endCapStyle parameter of \code{\link[sf:geos_unary]{sf::st_buffer()}}.}
+
+\item{join_style}{"round" (default), "mitre", or "bevel" passed to the
+joinStyle parameter of \code{\link[sf:geos_unary]{sf::st_buffer()}}.}
+
 \item{single_side}{If \code{TRUE}, single-sided buffers are returned for linear
 geometries, in which case negative dist values give buffers on the
 right-hand side, positive on the left.}

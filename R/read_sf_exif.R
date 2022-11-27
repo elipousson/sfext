@@ -214,6 +214,7 @@ fmt_exif_direction <- function(data, .after = "img_direction") {
 #' @param overwrite If `TRUE`, overwrite any existing EXIF metadata present in the
 #'   provided fields; defaults to `TRUE`
 #' @export
+#' @importFrom cliExtras cli_paths
 write_exif <- function(path,
                        filetype = NULL,
                        title = NULL,
@@ -289,7 +290,7 @@ write_exif <- function(path,
       )
     )
 
-    cli_paths(path, "Updated EXIF metadata for")
+    cliExtras::cli_paths(path, "Updated EXIF metadata for")
   }
 }
 

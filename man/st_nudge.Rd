@@ -16,7 +16,12 @@ st_nudge(
 )
 }
 \arguments{
-\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object}
+\item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that can
+be converted into a simple feature or bounding box object. \code{\link[=as_bbox]{as_bbox()}} can
+also convert a vector with xmin, ymin, xmax, and ymax values.
+\code{\link[=as_sf_list]{as_sf_list()}} only supports sf objects or a data frames with a sf list
+column named "data" (typically created by using \code{\link[dplyr:group_nest]{dplyr::group_nest()}} on an
+sf object.}
 
 \item{to}{sf object to use as new center for x or length 2 numeric vector
 with the nudge_y and nudge_x distance (in that order).}
@@ -31,6 +36,9 @@ numeric).}
 \item{scale}{numeric; scale factor, Default: 1}
 
 \item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
+
+\item{crs}{Coordinate reference system for \code{sf}, \code{bbox}, \code{sfc} or \code{sf} list
+object to return.}
 }
 \description{
 Nudge, move, or shift a \code{sf}, \code{sfc}, or \code{bbox} object to the center of

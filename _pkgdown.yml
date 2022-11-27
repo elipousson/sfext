@@ -9,8 +9,6 @@ reference:
   - '`write_sf_svg`'
   - '`read_sf_exif`'
   - '`get_data_dir`'
-  - '`make_filename`'
-  - '`str_misc`'
 - title: Check and convert sf, sfc, and bbox objects
   contents:
   - '`is_sf`'

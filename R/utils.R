@@ -60,6 +60,7 @@ group_by_col <- function(data, col = NULL) {
 #' @name has_same_name_col
 #' @noRd
 #' @importFrom dplyr select all_of rename
+#' @importFrom cliExtras cli_yesno
 has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet = FALSE, drop = TRUE) {
   if (!has_name(x, col)) {
     return(x)

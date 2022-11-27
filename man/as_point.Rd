@@ -38,6 +38,8 @@ LINESTRING or MULTILINESTRING.}
 \item{call}{Passed as the call parameter for \link[cli:cli_abort]{cli::cli_abort} or
 \link[rlang:arg_match]{rlang::arg_match} to improve error messages when function is used
 internally.}
+
+\item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object.}
 }
 \description{
 Works with sf, sfc, and bbox objects using \code{\link[sf:geos_unary]{sf::st_centroid()}}. Works with

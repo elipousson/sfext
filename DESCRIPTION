@@ -17,6 +17,7 @@ Depends:
     R (>= 2.10)
 Imports: 
     cli,
+    cliExtras (>= 0.1.0),
     dplyr,
     filenamr (>= 0.1.0),
     glue,
@@ -29,6 +30,7 @@ Imports:
     units,
     vctrs
 Suggests: 
+    concaveman,
     covr,
     esri2sf (>= 0.1.1),
     exiftoolr,
@@ -41,6 +43,7 @@ Suggests:
     lwgeom,
     naniar,
     openxlsx,
+    osmdata,
     rappdirs,
     readr,
     readxl,
@@ -50,9 +53,10 @@ Suggests:
     tidyr
 VignetteBuilder: 
     knitr
-Remotes:  
+Remotes: 
     elipousson/esri2sf,
-    elipousson/filenamr
+    elipousson/filenamr,
+    elipousson/cliExtras
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8

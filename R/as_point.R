@@ -231,6 +231,7 @@ as_polygons <- function(..., to = "POLYGON") {
 #'
 #' @name as_centroid
 #' @rdname as_point
+#' @param x A `sf`, `sfc`, or `bbox` object.
 #' @export
 #' @importFrom sf st_centroid st_geometry
 as_centroid <- function(x, ...) {

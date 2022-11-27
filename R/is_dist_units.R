@@ -155,6 +155,7 @@ get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
 #' @export
 #' @importFrom sf st_crs
 #' @importFrom units as_units
+#' @importFrom cliExtras cli_yesno
 as_dist_units <- function(x, units = NULL, null.ok = FALSE, call = caller_env()) {
   units <- get_dist_units(units, null.ok = null.ok)
 

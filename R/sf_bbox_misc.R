@@ -1,4 +1,4 @@
-#' Measure, transform, and convert bounding boxes
+#' Convert and tranform bounding boxes
 #'
 #' @description
 #' Simple bounding box functions that you can use to:
@@ -13,8 +13,8 @@
 #' - Convert a point and a corresponding bounding box into into a npc
 #' (normalised parent coordinates) value with [sf_bbox_to_npc()]
 #'
-#' @param bbox A bounding box object. Convert input objects to bounding boxes
-#'   with [sf::st_bbox()] or [as_bbox()]
+#' @param bbox A `bbox` object. Convert input objects to bounding boxes
+#'   with [sf::st_bbox()] or [as_bbox()].
 #' @param coords Column names with coordinates for query. e.g. `c("X", "Y")` or
 #'   `c("longitude", "latitude")` (default). Used by [sf_bbox_to_lonlat_query()]
 #'   only.

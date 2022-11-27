@@ -34,8 +34,10 @@ sf_bbox_asp(bbox)
 sf_bbox_orientation(bbox, tolerance = 0.1)
 }
 \arguments{
-\item{from, to}{xy pairs (e.g. c("xmax", "ymax) defining points to measure
-distance from and to.}
+\item{bbox}{A \code{bbox} object.}
+
+\item{from, to}{Length 2 character vectors with xy pairs (e.g. c("xmax",
+"ymax) defining points to measure distance from and to.}
 
 \item{units}{The units to return for sf_bbox_dist. Defaults to NULL.}
 
@@ -48,6 +50,9 @@ distance from and to.}
 improve error messages when function is used internally.}
 
 \item{...}{passed on to \link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}}
+
+\item{diag_ratio}{Proportion of the diagonal distance (ratio of distance to
+the full diagonal distance) across the bounding box.}
 
 \item{tolerance}{Numeric value above or below 1 used by
 \code{\link[=sf_bbox_orientation]{sf_bbox_orientation()}} to describe an aspect ratio as landscape or

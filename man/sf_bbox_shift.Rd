@@ -20,6 +20,8 @@ sf_bbox_contract(bbox, x_nudge = 0, y_nudge = 0)
 sf_bbox_expand(bbox, x_nudge = 0, y_nudge = 0)
 }
 \arguments{
+\item{bbox}{A \code{bbox} object.}
+
 \item{x_nudge, y_nudge}{Length 1 or 2 numeric vector; unitless. Used by or
 passed to \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}. Required for  \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
 

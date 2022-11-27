@@ -10,12 +10,15 @@
 #' @inheritParams sf::st_join
 #' @inheritParams dplyr::count
 #' @param data Data to count in relationship to y
-#' @param x Optional sf object passed to [st_make_grid_ext()]. Defaults to `NULL`.
-#' @param y If `NULL` (default), y defaults to an `sf` object created by [st_make_grid_ext()] using x or data (if x is
-#'   `NULL`) as the x parameter for [st_make_grid_ext()]. If not `NULL`, y must be an `sf` object that
-#'   has a column with the same name as .id (defaults to "id").
-#' @param replace_na If `TRUE`, replace NA values from count with 0. If `FALSE`,
-#'   filter NA values from the returned object.
+#' @param x Optional sf object passed to [st_make_grid_ext()]. Defaults to
+#'   `NULL`.
+#' @param y If `NULL` (default), y defaults to an `sf` object created by
+#'   [st_make_grid_ext()] using x or data (if x is `NULL`) as the x parameter
+#'   for [st_make_grid_ext()]. If not `NULL`, y must be an `sf` object that has
+#'   a column with the same name as .id (defaults to "id").
+#' @param replace_na If `TRUE`, replace NA values from count with 0.
+#' @param keep_na If `TRUE`, filter NA values from count. Ignored if replace_na
+#'   is `TRUE`.
 #' @param lims Optional numeric vector with minimum or both minimum and
 #'   maximum count values. If provided, any values below the minimum are set to
 #'   that minimum and any values above the maximum as set to the maximum. If

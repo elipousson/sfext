@@ -10,6 +10,7 @@
 #'   system of the input object.
 #' @param unit Units for nudge_y and nudge_x distance (also used if to is
 #'   numeric).
+#' @inheritParams as_sfc
 #' @inheritParams st_scale_rotate
 #' @export
 st_nudge <- function(x,
@@ -33,7 +34,7 @@ st_nudge <- function(x,
   if (is_sf(to, ext = TRUE)) {
     to <- as_sfc(to, crs = crs)
 
-    if (length(geom) != length(to)) {
+    if (length(geometry) != length(to)) {
       to <- sf::st_union(to)
     }
 
@@ -44,8 +45,8 @@ st_nudge <- function(x,
     nudge_x <- to[[2]]
   } else {
     cli_abort(
-      "{.arg to} must have a {.cls {c('sf', 'sfc', 'bbox')}} or be a length 2
-      {.cls numeric} vector."
+      "{.arg to} must have a {.cls sf}, {.cls sfc}, or {.cls bbox} class
+      or be a length 2 {.cls numeric} vector."
     )
   }
 

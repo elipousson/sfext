@@ -23,6 +23,10 @@
 #' @param dist_limits Numeric vector of any length (minimum and maximum values
 #'   used as lower and upper limits on distance buffer). Units must match the
 #'   provided units; defaults to `NULL`.
+#' @param end_style "round" (default), "flat", or "square" passed to the
+#'   endCapStyle parameter of [sf::st_buffer()].
+#' @param join_style "round" (default), "mitre", or "bevel" passed to the
+#'   joinStyle parameter of [sf::st_buffer()].
 #' @param single_side If `TRUE`, single-sided buffers are returned for linear
 #'   geometries, in which case negative dist values give buffers on the
 #'   right-hand side, positive on the left.

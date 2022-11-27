@@ -10,8 +10,9 @@
 #' 0.9 and 1.1 as "square" when tolerance is 0.1) or ([sf_bbox_orientation()])
 #'
 #' @name sf_bbox_dist
-#' @param from,to xy pairs (e.g. c("xmax", "ymax) defining points to measure
-#'   distance from and to.
+#' @param bbox A `bbox` object.
+#' @param from,to Length 2 character vectors with xy pairs (e.g. c("xmax",
+#'   "ymax) defining points to measure distance from and to.
 #' @param units The units to return for sf_bbox_dist. Defaults to NULL.
 #' @param drop If `FALSE`, distance functions return with units. If `FALSE`
 #'   (default), distance functions return numeric values.
@@ -107,6 +108,8 @@ sf_bbox_diagdist <- function(bbox, units = NULL, drop = TRUE) {
 
 #' @name sf_bbox_diag_ratio_to_dist
 #' @rdname sf_bbox_dist
+#' @param diag_ratio Proportion of the diagonal distance (ratio of distance to
+#'   the full diagonal distance) across the bounding box.
 #' @export
 sf_bbox_diag_ratio_to_dist <- function(bbox,
                                        diag_ratio,
