@@ -53,7 +53,7 @@ number_features <- function(x,
   x <- has_same_name_col(x, col = .id)
 
   if (!is.null(sort)) {
-    data <-
+    x <-
       sort_features(
         x,
         col = col,
@@ -166,7 +166,7 @@ sort_features <- function(x,
       "dist_xmid_ymid"
     )
 
-  if (any(sort %in% c(dist_opts)) | !is.null(to)) {
+  if (any(sort %in% c(dist_opts)) || !is.null(to)) {
     if (is.null(to)) {
       # FIXME: Shouldn't this split the sort string first and then match to the options?
       sort <- arg_match(sort, dist_opts, multiple = FALSE)
