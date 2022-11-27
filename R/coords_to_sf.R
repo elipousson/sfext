@@ -64,7 +64,7 @@ coords_to_sf <- function(x,
   )
 }
 
-#' @rdname coords_to_df
+#' @rdname coords_to_sf
 #' @name check_coords
 #' @param default Default coordinate values; defaults to `c("lon", "lat")`.
 #' @param rev If `TRUE`, reverse `c("lat", "lon")` coords to `c("lon", "lat")`.
@@ -117,7 +117,7 @@ check_coords <- function(x = NULL,
   coords
 }
 
-#' @rdname coords_to_df
+#' @rdname coords_to_sf
 #' @name rev_coords
 #' @param pattern Pattern passed to [grepl()] used to match vectors that are
 #'   reversed.
@@ -135,7 +135,7 @@ rev_coords <- function(coords, pattern = c("lat", "^y"), ignore.case = TRUE) {
   coords
 }
 
-#' @rdname coords_to_df
+#' @rdname coords_to_sf
 #' @name has_coords
 #' @param value If `TRUE`, return the value of the coordinate column names. Used
 #'   by [has_coords()].
@@ -180,7 +180,7 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
 }
 
 
-#' @rdname coords_to_df
+#' @rdname coords_to_sf
 #' @name format_coords
 #' @export
 #' @importFrom cli cli_inform
@@ -241,7 +241,7 @@ format_coords <- function(x,
   x
 }
 
-#' @rdname coords_to_df
+#' @rdname coords_to_sf
 #' @name separate_coords
 #' @param into If coords is a single column name with both longitude and
 #'   latitude, `into` is used as the names of the new columns that coords is

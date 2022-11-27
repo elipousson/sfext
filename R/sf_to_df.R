@@ -21,7 +21,7 @@
 #'   [sf_to_df()] and `NULL` for [df_to_sf()].
 #' @param geometry Type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'.
-#' @inheritParams coords_to_df
+#' @inheritParams coords_to_sf
 #' @return [sf_to_df()] returns a data frame with geometry dropped or converted
 #'   to wkt or coordinates for the centroid or point on surface; [df_to_sf()]
 #'   returns a simple feature object with POINT geometry.
