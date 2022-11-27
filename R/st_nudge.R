@@ -26,15 +26,9 @@ st_nudge <- function(x,
     x <- sf_bbox_to_sfc(x)
   }
 
-  is_x_sfc <- is_sfc(x)
-
   crs <- crs %||% sf::st_crs(x)
 
-  if (is_x_sfc) {
-    geom <- sf::st_transform(x, crs = crs)
-  } else {
-    geom <- as_sfc(x, crs = crs)
-  }
+  geometry <- as_sfc(x, crs = crs)
 
   if (is_sf(to, ext = TRUE)) {
     to <- as_sfc(to, crs = crs)
@@ -43,11 +37,8 @@ st_nudge <- function(x,
       to <- sf::st_union(to)
     }
 
-    to <- st_center(to, "sfc")
-
-    x_center <- st_center(sf::st_union(x), "sfc")
-
-    geom <- sf::st_set_crs(geom + (to - x_center), crs)
+    geometry <- geometry + (as_centroid(to) - as_centroid(sf::st_union(x)))
+    geometry <- sf::st_set_crs(geometry, crs)
   } else if (is.numeric(to) && (length(to) == 2)) {
     nudge_y <- to[[1]]
     nudge_x <- to[[2]]
@@ -71,13 +62,13 @@ st_nudge <- function(x,
         )
     }
 
-    geom <- sf::st_set_crs(geom + nudge, crs)
+    geometry <- sf::st_set_crs(geometry + nudge, crs)
   }
 
-  if (is_x_sfc) {
-    x <- geom
+  if (is_sf(x)) {
+    x <- sf::st_set_geometry(x, geometry)
   } else {
-    x <- sf::st_set_geometry(x, geom)
+    x <- geometry
   }
 
   st_scale_rotate(x, scale = scale, rotate = rotate)
