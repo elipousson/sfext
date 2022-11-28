@@ -50,7 +50,11 @@ compare_dist <- function(dist,
       (length(to) == 1) && is.character(to) ~ to
     )
 
-  if (is_sf(to) | is_sfc(to)) {
+  if (compare_to == "dist") {
+    if (is_bbox(to)) {
+      to <- sf_bbox_to_sfc(to)
+    }
+
     x <- sf::st_distance(x, y = to, ...)
     compare_to <- "x"
   }
