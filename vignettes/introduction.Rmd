@@ -235,7 +235,9 @@ glimpse(get_area(nc[1:3, ], unit = "mi^2"))
 
 `get_dist()` supports a more varied range of options including using the "to" parameter to define a corner or center of the input sf object bounding box.
 
-```{r}
+```{r, eval=FALSE}
+nc <- sf::st_transform(nc, 3857)
+
 # use drop = TRUE, to drop the units class and return a numeric column
 dist_example_min <- get_dist(nc, to = c("xmin", "ymin"), unit = "mi", drop = TRUE)
 
