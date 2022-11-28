@@ -43,7 +43,7 @@ st_nudge <- function(x,
   } else if (is.numeric(to) && (length(to) == 2)) {
     nudge_y <- to[[1]]
     nudge_x <- to[[2]]
-  } else {
+  } else if (!is.null(to)) {
     cli_abort(
       "{.arg to} must have a {.cls sf}, {.cls sfc}, or {.cls bbox} class
       or be a length 2 {.cls numeric} vector."
