@@ -91,13 +91,15 @@ future.</p>
 
 
 <dt>x</dt>
-<dd><p>Optional sf object passed to <code><a href="st_make_grid_ext.html">st_make_grid_ext()</a></code>. Defaults to <code>NULL</code>.</p></dd>
+<dd><p>Optional sf object passed to <code><a href="st_make_grid_ext.html">st_make_grid_ext()</a></code>. Defaults to
+<code>NULL</code>.</p></dd>
 
 
 <dt>y</dt>
-<dd><p>If <code>NULL</code> (default), y defaults to an <code>sf</code> object created by <code><a href="st_make_grid_ext.html">st_make_grid_ext()</a></code> using x or data (if x is
-<code>NULL</code>) as the x parameter for <code><a href="st_make_grid_ext.html">st_make_grid_ext()</a></code>. If not <code>NULL</code>, y must be an <code>sf</code> object that
-has a column with the same name as .id (defaults to "id").</p></dd>
+<dd><p>If <code>NULL</code> (default), y defaults to an <code>sf</code> object created by
+<code><a href="st_make_grid_ext.html">st_make_grid_ext()</a></code> using x or data (if x is <code>NULL</code>) as the x parameter
+for <code><a href="st_make_grid_ext.html">st_make_grid_ext()</a></code>. If not <code>NULL</code>, y must be an <code>sf</code> object that has
+a column with the same name as .id (defaults to "id").</p></dd>
 
 
 <dt>join</dt>
@@ -120,8 +122,12 @@ Can be <code>NULL</code> or a variable:</p><ul><li><p>If <code>NULL</code> (the 
 
 
 <dt>replace_na</dt>
-<dd><p>If <code>TRUE</code>, replace NA values from count with 0. If <code>FALSE</code>,
-filter NA values from the returned object.</p></dd>
+<dd><p>If <code>TRUE</code>, replace NA values from count with 0.</p></dd>
+
+
+<dt>keep_na</dt>
+<dd><p>If <code>TRUE</code>, filter NA values from count. Ignored if replace_na
+is <code>TRUE</code>.</p></dd>
 
 
 <dt>lims</dt>

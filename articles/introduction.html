@@ -212,27 +212,28 @@ name and name_col parameter.</p>
 <h3 id="writing-sf-objects">Writing sf objects<a class="anchor" aria-label="anchor" href="#writing-sf-objects"></a>
 </h3>
 <p><code><a href="../reference/write_sf_ext.html">write_sf_ext()</a></code> wraps <code><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">sf::write_sf</a></code> but uses
-<code><a href="../reference/make_filename.html">make_filename()</a></code> to support the creation of consistent file
-names using labels or date prefixes to organize exports.</p>
+<code><a href="https://elipousson.github.io/filenamr/reference/make_filename.html" class="external-link">filenamr::make_filename()</a></code> to support the creation of
+consistent file names using labels or date prefixes to organize
+exports.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/make_filename.html">make_filename</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu">filenamr</span><span class="fu">::</span><span class="fu"><a href="https://elipousson.github.io/filenamr/reference/make_filename.html" class="external-link">make_filename</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"Ashe County"</span>,</span>
 <span>  label <span class="op">=</span> <span class="st">"NC"</span>,</span>
 <span>  prefix <span class="op">=</span> <span class="st">"date"</span>,</span>
-<span>  filetype <span class="op">=</span> <span class="st">"gpkg"</span></span>
+<span>  fileext <span class="op">=</span> <span class="st">"gpkg"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2022-11-07_nc_ashe_county.gpkg"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2022_11-28_nc_ashe_county.gpkg"</span></span></code></pre></div>
 <p><code><a href="../reference/write_sf_ext.html">write_sf_ext()</a></code> also supports the automatic creation of
 destination folders and the use of a package-specific cache folder
 created by <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_data_dir.html">get_data_dir</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"example_path/to_folder"</span>, create <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: The provided `path` <span style="color: #0000BB;">example_path/to_folder</span> does not</span></span>
-<span><span class="co">#&gt; exist.</span></span>
+<code class="sourceCode R"><span><span class="fu">filenamr</span><span class="fu">::</span><span class="fu"><a href="https://elipousson.github.io/filenamr/reference/get_data_dir.html" class="external-link">get_data_dir</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"example_path/to_folder"</span>, create <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: The provided `path` <span style="color: #0000BB;">example_path/to_folder</span> can't be</span></span>
+<span><span class="co">#&gt; found.</span></span>
 <span><span class="co">#&gt; [1] "example_path/to_folder"</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/get_data_dir.html">get_data_dir</a></span><span class="op">(</span>cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> New directory created at <span style="color: #0000BB;">~/.cache/sfext</span></span></span></code></pre></div>
+<span><span class="fu">filenamr</span><span class="fu">::</span><span class="fu"><a href="https://elipousson.github.io/filenamr/reference/get_data_dir.html" class="external-link">get_data_dir</a></span><span class="op">(</span>cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "~/.cache"</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -338,7 +339,7 @@ vectors or data frames.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/address_to_sf.html">address_to_sf</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"350 Fifth Avenue, New York, NY 10118"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Passing 1 address to the Nominatim single address geocoder</span></span>
-<span><span class="co">#&gt; Query completed in: 1.9 seconds</span></span>
+<span><span class="co">#&gt; Query completed in: 2.3 seconds</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
 <span><span class="co">#&gt; Attribute-geometry relationship: 3 constant, 0 aggregate, 0 identity</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
@@ -434,26 +435,20 @@ input objects to sf results).</p>
 including using the “to” parameter to define a corner or center of the
 input sf object bounding box.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># use drop = TRUE, to drop the units class and return a numeric column</span></span>
+<code class="sourceCode R"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># use drop = TRUE, to drop the units class and return a numeric column</span></span>
 <span><span class="va">dist_example_min</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_measurements.html">get_dist</a></span><span class="op">(</span><span class="va">nc</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xmin"</span>, <span class="st">"ymin"</span><span class="op">)</span>, unit <span class="op">=</span> <span class="st">"mi"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">dist_example_min</span>, <span class="va">NAME</span>, <span class="va">dist</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 100</span></span>
-<span><span class="co">#&gt; Columns: 3</span></span>
-<span><span class="co">#&gt; $ NAME     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Ashe", "Alleghany", "Surry", "Currituck", "Northampton", "He…</span></span>
-<span><span class="co">#&gt; $ dist     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 237.6835, 255.1623, 269.8047, 499.9448, 428.0397, 448.0652, 4…</span></span>
-<span><span class="co">#&gt; $ geometry <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [°]&gt;</span> MULTIPOLYGON (((-81.47276 3..., MULTIPOLYGON (((…</span></span>
 <span></span>
 <span><span class="va">nc_basemap</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dist_example_min</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">dist</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="introduction_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dist_example_min</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">dist</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">dist_example_mid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_measurements.html">get_dist</a></span><span class="op">(</span><span class="va">nc</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xmid"</span>, <span class="st">"ymid"</span><span class="op">)</span>, unit <span class="op">=</span> <span class="st">"mi"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">nc_basemap</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dist_example_mid</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">dist</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="introduction_files/figure-html/unnamed-chunk-18-2.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

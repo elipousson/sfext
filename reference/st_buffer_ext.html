@@ -69,6 +69,8 @@ transformed back into the original CRS after the buffer has been applied.</p>
 <span>  diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  unit <span class="op">=</span> <span class="st">"meter"</span>,</span>
 <span>  dist_limits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  end_style <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  join_style <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  single_side <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  list.ok <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -105,6 +107,16 @@ to units matching GDAL units for x; defaults to "meter"</p></dd>
 <dd><p>Numeric vector of any length (minimum and maximum values
 used as lower and upper limits on distance buffer). Units must match the
 provided units; defaults to <code>NULL</code>.</p></dd>
+
+
+<dt>end_style</dt>
+<dd><p>"round" (default), "flat", or "square" passed to the
+endCapStyle parameter of <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer()</a></code>.</p></dd>
+
+
+<dt>join_style</dt>
+<dd><p>"round" (default), "mitre", or "bevel" passed to the
+joinStyle parameter of <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer()</a></code>.</p></dd>
 
 
 <dt>single_side</dt>

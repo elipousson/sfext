@@ -69,7 +69,7 @@ value</h1>
 
     <div class="ref-description section level2">
     <p>Compare dist to a distance based on x. If to is "xdist" (default), "ydist",
-"diagdist", or any length 2 character vector supported by <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code>
+"diagdist", or any length 2 character vector supported by <code><a href="sf_bbox_dist.html">sf_bbox_dist()</a></code>
 dist is compared to the resulting distance. If to is an sf or sfc object, the
 comparison distance is the results from <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_distance()</a></code> with x as the
 first parameter and to as the second. x can also be a numeric value with or
@@ -110,18 +110,27 @@ be in the provided units or the units of the coordinate reference system
 
 <dt>to</dt>
 <dd><p>Distance to compare dist with. Standard options include "xdist"
-(default), "ydist", or "diagdist" to compare to <code><a href="sf_bbox_misc.html">sf_bbox_xdist()</a></code>,
-<code><a href="sf_bbox_misc.html">sf_bbox_ydist()</a></code>, or <code><a href="sf_bbox_misc.html">sf_bbox_diagdist()</a></code>. If to is a length 2 character
-vector, x, to, and any ... parameters are passed to <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code>. If to is
+(default), "ydist", or "diagdist" to compare to <code><a href="sf_bbox_dist.html">sf_bbox_xdist()</a></code>,
+<code><a href="sf_bbox_dist.html">sf_bbox_ydist()</a></code>, or <code><a href="sf_bbox_dist.html">sf_bbox_diagdist()</a></code>. If to is a length 2 character
+vector, x, to, and any ... parameters are passed to <code><a href="sf_bbox_dist.html">sf_bbox_dist()</a></code>. If to is
 an sf or sfc object, to and any additional ... parameters are passed to
 <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_distance()</a></code> using x as the first argument and to as the second. If
 x is a numeric vector the value of to is ignored.</p></dd>
 
 
-<dt>what</dt>
+<dt>how</dt>
 <dd><p>If "ratio", dist divided by the comparison distance. If what is
 "fit", return the number of times dist fits in the comparison distance
 without remainder. If "longer", "shorter", "same", return a logical vector.</p></dd>
+
+
+<dt>tolerance</dt>
+<dd><p>passed to <code><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal()</a></code> if <code>how = "same"</code></p></dd>
+
+
+<dt>...</dt>
+<dd><p>Additional parameters passed to <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_distance()</a></code> if to is an sf
+or sfc object or <code><a href="sf_bbox_dist.html">sf_bbox_dist()</a></code> if to is a length 2 character vector.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -137,7 +146,7 @@ without remainder. If "longer", "shorter", "same", return a logical vector.</p><
 <code><a href="convert_dist_units.html">convert_dist_units</a>()</code>,
 <code><a href="get_measurements.html">get_measurements</a></code>,
 <code><a href="is_dist_units.html">is_dist_units</a>()</code>,
-<code><a href="sf_bbox_misc.html">sf_bbox_misc</a></code></p></div>
+<code><a href="sf_bbox_dist.html">sf_bbox_dist</a>()</code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

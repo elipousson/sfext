@@ -279,6 +279,11 @@ defaults to <code>FALSE</code>.</p></dd>
 ArcGIS FeatureServer or MapServer to access with <code><a href="https://rdrr.io/pkg/esri2sf/man/esri2sf.html" class="external-link">esri2sf::esri2sf()</a></code></p></dd>
 
 
+<dt>wkt</dt>
+<dd><p>Name of column with well-known text for geometry. Used by
+<code>read_sf_csv()</code>.</p></dd>
+
+
 <dt>show_col_types</dt>
 <dd><p>If <code>FALSE</code>, do not show the guessed column types. If
 <code>TRUE</code> always show the column types, even if they are supplied. If <code>NULL</code>
@@ -388,8 +393,8 @@ RData files supported by <code>read_sf_path()</code>)</p></li>
 
 
 <p><code>read_sf_ext()</code> is a flexible function where ... are passed to one of the
-other read functions depending on the provided parameters. The parameters
-<em>must</em> be named to use this function.</p>
+other read functions depending on the provided parameters. If you are using
+more than one parameter, all parameters <em>must</em> be named.</p>
 <p><code>read_sf_pkg()</code> and <code>read_sf_download()</code> both pass additional parameters to
 <code>read_sf_path()</code> which supports query, name_col, name, and table. name and
 name_col are ignored if a query parameter is provided. If table is not
@@ -403,7 +408,6 @@ query or wkt filter parameter if the url is some other type (passed to
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other read_write: 
-<code><a href="make_filename.html">make_filename</a>()</code>,
 <code><a href="read_sf_exif.html">read_sf_exif</a>()</code></p></div>
     </div>
 

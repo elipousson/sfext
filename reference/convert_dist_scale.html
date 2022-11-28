@@ -59,13 +59,15 @@ standard_scales."><meta property="og:image" content="https://elipousson.github.i
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">convert_dist_scale</span><span class="op">(</span></span>
 <span>  dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scale <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scale_standard <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scale_series <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scale_unit <span class="op">=</span> <span class="st">"in"</span>,</span>
+<span>  scale_factor <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  actual_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dpi <span class="op">=</span> <span class="fl">120</span>,</span>
 <span>  paper <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  orientation <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  scale <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  scale_unit <span class="op">=</span> <span class="st">"in"</span>,</span>
-<span>  actual_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  scale_factor <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dpi <span class="op">=</span> <span class="fl">120</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -73,8 +75,36 @@ standard_scales."><meta property="og:image" content="https://elipousson.github.i
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dist</dt>
-<dd><p>distance to convert. If paper is provided, paper width and height
-are used as dist.</p></dd>
+<dd><p>distance to convert. If paper is provided, dist is optional and
+paper width and height are used as dist.</p></dd>
+
+
+<dt>scale</dt>
+<dd><p>Scale name from <code>standard_scales[["scale"]]</code>.</p></dd>
+
+
+<dt>scale_standard, scale_series</dt>
+<dd><p>Passed to standard and scale parameters of
+<code><a href="get_scale.html">get_scale()</a></code>.</p></dd>
+
+
+<dt>scale_unit</dt>
+<dd><p>"mm" (converted to cm by dividing by 10), "cm", "px"
+(converted to inches by dividing by dpi), or "in".</p></dd>
+
+
+<dt>scale_factor</dt>
+<dd><p>factor for converting from scale_unit to actual_unit,
+e.g. if 1" = 1', the scale factor is 12. optional if scale if provided;
+defaults to <code>NULL</code>.</p></dd>
+
+
+<dt>actual_unit</dt>
+<dd><p>any unit supported by <code><a href="convert_dist_units.html">convert_dist_units()</a></code></p></dd>
+
+
+<dt>dpi</dt>
+<dd><p>dots per square inch (used as conversion factor for "px" to "in")</p></dd>
 
 
 <dt>paper</dt>
@@ -84,29 +114,6 @@ are used as dist.</p></dd>
 <dt>orientation</dt>
 <dd><p>Orientation "portrait", "landscape", or "square", Default:
 'portrait'.</p></dd>
-
-
-<dt>scale</dt>
-<dd><p>Scale name from <code>standard_scales[["scale"]]</code>.</p></dd>
-
-
-<dt>scale_unit</dt>
-<dd><p>"mm" (converted to cm by dividing by 10), "cm", "px"
-(converted to inches by dividing by dpi), or "in".</p></dd>
-
-
-<dt>actual_unit</dt>
-<dd><p>any unit supported by <code><a href="convert_dist_units.html">convert_dist_units()</a></code></p></dd>
-
-
-<dt>scale_factor</dt>
-<dd><p>factor for converting from scale_unit to actual_unit,
-e.g. if 1" = 1', the scale factor is 12. optional if scale if provided;
-defaults to <code>NULL</code>.</p></dd>
-
-
-<dt>dpi</dt>
-<dd><p>dots per square inch (used as conversion factor for "px" to "in")</p></dd>
 
 
 <dt>...</dt>
@@ -142,7 +149,7 @@ nrow and columns (variable spacing is not currently supported); defaults to 0.</
 <dd><p>A numeric vector or ggplot2 margin object.</p></dd>
 
     <dt><code>bbox</code></dt>
-<dd><p>A bounding box to use to get orientation using <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> with orientation = TRUE.</p></dd>
+<dd><p>A bounding box to use to get orientation using <code><a href="sf_bbox_dist.html">sf_bbox_asp()</a></code> with orientation = TRUE.</p></dd>
 
   
 </dl></dd>
@@ -165,7 +172,7 @@ as columns named actual_width and actual_height.</p></li>
 <code><a href="convert_dist_units.html">convert_dist_units</a>()</code>,
 <code><a href="get_measurements.html">get_measurements</a></code>,
 <code><a href="is_dist_units.html">is_dist_units</a>()</code>,
-<code><a href="sf_bbox_misc.html">sf_bbox_misc</a></code></p></div>
+<code><a href="sf_bbox_dist.html">sf_bbox_dist</a>()</code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

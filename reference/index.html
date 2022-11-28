@@ -84,16 +84,6 @@ EXIF metadata to image files</dd>
           <code><a href="get_data_dir.html">get_data_dir()</a></code> 
         </dt>
         <dd>Check if data directory exists and create a new directory if needed</dd>
-      </dl><dl><dt>
-          
-          <code><a href="make_filename.html">make_filename()</a></code> 
-        </dt>
-        <dd>Make file name and path with optional label, prefix, or postfix</dd>
-      </dl><dl><dt>
-          
-          <code><a href="str_misc.html">str_fix()</a></code> <code><a href="str_misc.html">str_prefix()</a></code> <code><a href="str_misc.html">has_filetype()</a></code> <code><a href="str_misc.html">str_add_filetype()</a></code> <code><a href="str_misc.html">str_remove_filetype()</a></code> <code><a href="str_misc.html">str_extract_filetype()</a></code> <code><a href="str_misc.html">str_pad_digits()</a></code> <code><a href="str_misc.html">str_extract_digits()</a></code> 
-        </dt>
-        <dd>Modify strings to help make consistent file names</dd>
       </dl></div><div class="section level2">
       <h2 id="check-and-convert-sf-sfc-and-bbox-objects">Check and convert sf, sfc, and bbox objects<a class="anchor" aria-label="anchor" href="#check-and-convert-sf-sfc-and-bbox-objects"></a></h2>
       
@@ -122,7 +112,7 @@ EXIF metadata to image files</dd>
         <dd>What geometry type is this feature?</dd>
       </dl><dl><dt>
           
-          <code><a href="as_point.html">as_point()</a></code> <code><a href="as_point.html">as_points()</a></code> <code><a href="as_point.html">as_startpoint()</a></code> <code><a href="as_point.html">as_endpoint()</a></code> <code><a href="as_point.html">as_line()</a></code> <code><a href="as_point.html">as_lines()</a></code> <code><a href="as_point.html">as_polygons()</a></code> 
+          <code><a href="as_point.html">as_point()</a></code> <code><a href="as_point.html">as_points()</a></code> <code><a href="as_point.html">as_startpoint()</a></code> <code><a href="as_point.html">as_endpoint()</a></code> <code><a href="as_point.html">as_line()</a></code> <code><a href="as_point.html">as_lines()</a></code> <code><a href="as_point.html">as_polygons()</a></code> <code><a href="as_point.html">as_centroid()</a></code> 
         </dt>
         <dd>Convert an sf, numeric, or other object to a POINT (sfg) or POINT, MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object</dd>
       </dl><dl><dt>
@@ -148,7 +138,7 @@ EXIF metadata to image files</dd>
 
       <dl><dt>
           
-          <code><a href="sf_to_df.html">sf_to_df()</a></code> <code><a href="sf_to_df.html">df_to_sf()</a></code> <code><a href="sf_to_df.html">check_coords()</a></code> <code><a href="sf_to_df.html">has_coords()</a></code> 
+          <code><a href="sf_to_df.html">sf_to_df()</a></code> <code><a href="sf_to_df.html">df_to_sf()</a></code> 
         </dt>
         <dd>Convert between simple feature and data frame objects</dd>
       </dl><dl><dt>
@@ -157,6 +147,11 @@ EXIF metadata to image files</dd>
         </dt>
         <dd>Use tidygeocoder to convert an address or data frame with an address column
 to an sf object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="coords_to_sf.html">coords_to_sf()</a></code> <code><a href="coords_to_sf.html">check_coords()</a></code> <code><a href="coords_to_sf.html">rev_coords()</a></code> <code><a href="coords_to_sf.html">has_coords()</a></code> <code><a href="coords_to_sf.html">format_coords()</a></code> <code><a href="coords_to_sf.html">separate_coords()</a></code> 
+        </dt>
+        <dd>Convert a data frame with one or more coordinate columns to an sf object</dd>
       </dl></div><div class="section level2">
       <h2 id="modify-sf-sfc-and-bbox-objects">Modify sf, sfc, and bbox objects<a class="anchor" aria-label="anchor" href="#modify-sf-sfc-and-bbox-objects"></a></h2>
       
@@ -188,6 +183,11 @@ to an sf object</dd>
           <code><a href="st_clip.html">st_clip()</a></code> 
         </dt>
         <dd>Clip the side or corner of a simple feature or bounding box object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="st_concave_hull.html">st_concave_hull()</a></code> 
+        </dt>
+        <dd>Make a concave hull around simple feature object by attribute</dd>
       </dl><dl><dt>
           
           <code><a href="st_union_ext.html">st_union_ext()</a></code> <code><a href="st_union_ext.html">st_union_by()</a></code> 
@@ -262,7 +262,7 @@ to an sf object</dd>
 
       <dl><dt>
           
-          <code><a href="misc_sf.html">transform_sf()</a></code> <code><a href="misc_sf.html">relocate_sf_col()</a></code> <code><a href="misc_sf.html">rename_sf_col()</a></code> <code><a href="misc_sf.html">get_sf_col()</a></code> 
+          <code><a href="misc_sf.html">transform_sf()</a></code> <code><a href="misc_sf.html">relocate_sf_col()</a></code> <code><a href="misc_sf.html">rename_sf_col()</a></code> <code><a href="misc_sf.html">get_sf_col()</a></code> <code><a href="misc_sf.html">get_sf_colnames()</a></code> 
         </dt>
         <dd>Additional utility functions for sf objects</dd>
       </dl><dl><dt>
@@ -287,9 +287,24 @@ to an sf object</dd>
         <dd>Make a sf list by grid position</dd>
       </dl><dl><dt>
           
-          <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_point()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_xdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_ydist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_diagdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_diag_ratio_to_dist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_transform()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sfc()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_wkt()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_lonlat_query()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_expand()</a></code> 
+          <code><a href="sf_bbox_corners.html">sf_bbox_corners()</a></code> 
         </dt>
-        <dd>Measure, transform, and convert bounding boxes</dd>
+        <dd>Get bounding box corner points from a bbox, sfc, or sf object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sf_bbox_dist.html">sf_bbox_dist()</a></code> <code><a href="sf_bbox_dist.html">sf_bbox_xdist()</a></code> <code><a href="sf_bbox_dist.html">sf_bbox_ydist()</a></code> <code><a href="sf_bbox_dist.html">sf_bbox_diagdist()</a></code> <code><a href="sf_bbox_dist.html">sf_bbox_diag_ratio_to_dist()</a></code> <code><a href="sf_bbox_dist.html">sf_bbox_asp()</a></code> <code><a href="sf_bbox_dist.html">sf_bbox_orientation()</a></code> 
+        </dt>
+        <dd>Measure a bounding box using x, y, or diagonal distance</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sfc()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_transform()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_point()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_wkt()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_lonlat_query()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_npc()</a></code> 
+        </dt>
+        <dd>Convert and tranform bounding boxes</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sf_bbox_shift.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_shift.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_shift.html">sf_bbox_expand()</a></code> 
+        </dt>
+        <dd>Shift sides, contract, or expand a bounding box</dd>
       </dl></div><div class="section level2">
       <h2 id="utility-functions-for-units-and-scales">Utility functions for units and scales<a class="anchor" aria-label="anchor" href="#utility-functions-for-units-and-scales"></a></h2>
       

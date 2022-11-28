@@ -72,7 +72,12 @@ another feature and/or by a set distance.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>A <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object</p></dd>
+<dd><p>A <code>sf</code>, <code>bbox</code>, <code>sfc</code>, <code>raster</code>, <code>sp</code>, or data frame object that can
+be converted into a simple feature or bounding box object. <code><a href="as_sf.html">as_bbox()</a></code> can
+also convert a vector with xmin, ymin, xmax, and ymax values.
+<code><a href="as_sf.html">as_sf_list()</a></code> only supports sf objects or a data frames with a sf list
+column named "data" (typically created by using <code><a href="https://dplyr.tidyverse.org/reference/group_nest.html" class="external-link">dplyr::group_nest()</a></code> on an
+sf object.</p></dd>
 
 
 <dt>to</dt>
@@ -97,6 +102,11 @@ numeric).</p></dd>
 
 <dt>rotate</dt>
 <dd><p>numeric; degrees to rotate (-360 to 360), Default: 0</p></dd>
+
+
+<dt>crs</dt>
+<dd><p>Coordinate reference system for <code>sf</code>, <code>bbox</code>, <code>sfc</code> or <code>sf</code> list
+object to return.</p></dd>
 
 </dl></div>
 
