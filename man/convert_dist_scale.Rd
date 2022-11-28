@@ -6,37 +6,42 @@
 \usage{
 convert_dist_scale(
   dist = NULL,
+  scale = NULL,
+  scale_standard = NULL,
+  scale_series = NULL,
+  scale_unit = "in",
+  scale_factor = NULL,
+  actual_unit = NULL,
+  dpi = 120,
   paper = NULL,
   orientation = NULL,
-  scale = NULL,
-  scale_unit = "in",
-  actual_unit = NULL,
-  scale_factor = NULL,
-  dpi = 120,
   ...
 )
 }
 \arguments{
-\item{dist}{distance to convert. If paper is provided, paper width and height
-are used as dist.}
-
-\item{paper}{Paper, Default: 'letter'.}
-
-\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
-'portrait'.}
+\item{dist}{distance to convert. If paper is provided, dist is optional and
+paper width and height are used as dist.}
 
 \item{scale}{Scale name from \code{standard_scales[["scale"]]}.}
 
+\item{scale_standard, scale_series}{Passed to standard and scale parameters of
+\code{\link[=get_scale]{get_scale()}}.}
+
 \item{scale_unit}{"mm" (converted to cm by dividing by 10), "cm", "px"
 (converted to inches by dividing by dpi), or "in".}
-
-\item{actual_unit}{any unit supported by \code{\link[=convert_dist_units]{convert_dist_units()}}}
 
 \item{scale_factor}{factor for converting from scale_unit to actual_unit,
 e.g. if 1" = 1', the scale factor is 12. optional if scale if provided;
 defaults to \code{NULL}.}
 
+\item{actual_unit}{any unit supported by \code{\link[=convert_dist_units]{convert_dist_units()}}}
+
 \item{dpi}{dots per square inch (used as conversion factor for "px" to "in")}
+
+\item{paper}{Paper, Default: 'letter'.}
+
+\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
+'portrait'.}
 
 \item{...}{
   Arguments passed on to \code{\link[=get_paper]{get_paper}}
