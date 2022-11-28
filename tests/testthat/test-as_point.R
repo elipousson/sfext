@@ -24,4 +24,6 @@ test_that("as_point works", {
   expect_true(is_line(as_lines(nc_pt_1, nc_pt_2, crs = nc_crs)))
   # FIXME: If as_lines is provided with sfg and sfc objects it returns a difficult to interpret error
   expect_true(is_line(as_lines(c(nc_pt_1, nc_pt_2), c(nc_pt_2, nc_pt_1), crs = nc_crs)))
+
+  expect_s3_class(as_centroid(as_bbox(nc)), "sfc")
 })
