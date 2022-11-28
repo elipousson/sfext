@@ -5,7 +5,7 @@
 \alias{dist_unit_options}
 \title{Distance units (vector)}
 \format{
-A character vector with 60 names, plural names, aliases, and symbols
+A character vector with 86 names, plural names, aliases, and symbols
 for distance units.
 }
 \usage{

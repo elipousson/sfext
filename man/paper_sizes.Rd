@@ -5,7 +5,7 @@
 \alias{paper_sizes}
 \title{Standard paper and image sizes}
 \format{
-A data frame with 85 rows and 9 variables:
+A data frame with 117 rows and 9 variables:
 \describe{
 \item{\code{name}}{Name of paper}
 \item{\code{series}}{Series}
@@ -14,7 +14,8 @@ A data frame with 85 rows and 9 variables:
 \item{\code{units}}{Units ("in", "mm", or "px") for dimensions}
 \item{\code{width}}{Width in units}
 \item{\code{height}}{Height in units}
-\item{\code{orientation}}{Portrait (width less than height), landscape, or square}
+\item{\code{orientation}}{Portrait (width less than height), landscape, or
+square}
 \item{\code{type}}{Type (paper, postcard, print, or social)}
 }
 }
@@ -22,9 +23,10 @@ A data frame with 85 rows and 9 variables:
 paper_sizes
 }
 \description{
-Reference table of standard paper, postcard, photo print, and social media image
-sizes, for \code{\link[=get_paper]{get_paper()}} and \code{\link[=get_social_image]{get_social_image()}} functions. Derived from
-\href{https://github.com/visioguy/PaperSizes/}{visioguy/PaperSizes} repo, \href{https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html}{Adobe UK guide to photo sizes}
+Reference table of standard paper, postcard, photo print, and social media
+image sizes, for \code{\link[=get_paper]{get_paper()}} and \code{\link[=get_social_image]{get_social_image()}} functions. Derived
+from \href{https://github.com/visioguy/PaperSizes/}{visioguy/PaperSizes} repo,
+\href{https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html}{Adobe UK guide to photo sizes}
 and other sources.
 }
 \keyword{datasets}

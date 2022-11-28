@@ -3,7 +3,7 @@
 #' A subset of units supported by the units package accessible through the
 #' [units::valid_udunits()] function.
 #'
-#' @format A data frame with 15 rows and 11 variables:
+#' @format A data frame with 33 rows and 12 variables:
 #' \describe{
 #'   \item{`symbol`}{symbols}
 #'   \item{`symbol_aliases`}{symbol aliases}
@@ -16,6 +16,8 @@
 #'   \item{`comment`}{comment}
 #'   \item{`dimensionless`}{logical indicator for dimensionless units}
 #'   \item{`source_xml`}{source XML}
+#'   \item{`unit_opts`}{character vector with symbols, singular, and plural
+#'   names for the unit}
 #' }
 "dist_units"
 
@@ -23,7 +25,7 @@
 #'
 #' A vector of supported distance units pulled from `dist_units`.
 #'
-#' @format A character vector with 60 names, plural names, aliases, and symbols
+#' @format A character vector with 86 names, plural names, aliases, and symbols
 #'   for distance units.
 "dist_unit_options"
 
@@ -32,7 +34,7 @@
 #' A vector of supported area units derived from `dist_units` and
 #' [units::valid_udunits()].
 #'
-#' @format A character vector with 40 names, plural names, and aliases for area
+#' @format A character vector with 41 names, plural names, and aliases for area
 #'   units.
 "area_unit_options"
 
@@ -59,23 +61,25 @@
 #'   \item{`scale_cm_unit`}{Unit of actual distance for 1 cm scale.}
 #'   \item{`scale_cm_accuracy`}{Accuracy of 1 cm scale (approximate or exact)}
 #'   \item{`size_latlon`}{Standard size in latitude/longitude}
-#'   \item{`size_latlon_unit`}{Unit of latitude/longitude size (minutes or degrees)}
+#'   \item{`size_latlon_unit`}{Unit of latitude/longitude size (minutes or
+#'   degrees)}
 #'   \item{`area_approx`}{Approximate actual area}
 #'   \item{`area_approx_unit`}{Approximate area unit}
-#'   \item{`series_status`}{Series status (select USGS map series are "abandoned")}
+#'   \item{`series_status`}{Series status (select USGS map series are
+#'   "abandoned")}
 #' }
 "standard_scales"
 
 #'  Standard paper and image sizes
 #'
-#' Reference table of standard paper, postcard, photo print, and social media image
-#' sizes, for [get_paper()] and [get_social_image()] functions. Derived from
-#' [visioguy/PaperSizes](https://github.com/visioguy/PaperSizes/) repo, [Adobe UK
-#' guide to photo
+#' Reference table of standard paper, postcard, photo print, and social media
+#' image sizes, for [get_paper()] and [get_social_image()] functions. Derived
+#' from [visioguy/PaperSizes](https://github.com/visioguy/PaperSizes/) repo,
+#' [Adobe UK guide to photo
 #' sizes](https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html)
 #' and other sources.
 #'
-#' @format A data frame with 85 rows and 9 variables:
+#' @format A data frame with 117 rows and 9 variables:
 #' \describe{
 #'   \item{`name`}{Name of paper}
 #'   \item{`series`}{Series}
@@ -84,7 +88,8 @@
 #'   \item{`units`}{Units ("in", "mm", or "px") for dimensions}
 #'   \item{`width`}{Width in units}
 #'   \item{`height`}{Height in units}
-#'   \item{`orientation`}{Portrait (width less than height), landscape, or square}
+#'   \item{`orientation`}{Portrait (width less than height), landscape, or
+#'   square}
 #'   \item{`type`}{Type (paper, postcard, print, or social)}
 #' }
 "paper_sizes"

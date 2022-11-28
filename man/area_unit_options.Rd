@@ -5,7 +5,7 @@
 \alias{area_unit_options}
 \title{Area units (vector)}
 \format{
-A character vector with 40 names, plural names, and aliases for area
+A character vector with 41 names, plural names, and aliases for area
 units.
 }
 \usage{

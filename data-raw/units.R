@@ -1,16 +1,21 @@
-## code to prepare `DATASET` dataset goes here
 select_unit_options <-
   c(
-    "arc_degree", "arc_minute", "arc_second", "cm", "m", "metre", "meter", "meters", "km", "kilometer", "kilometers",
-    "inch", "in", "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile", "radian",
-    "mm", "millimeter", "millimeters", "millimetre", "millimetres", "US_survey_foot", "US_survey_feet", "US_survey_yard", "US_survey_mile", "US_statute_mile"
+    "arc_degree", "arc_minute", "arc_second", "cm", "m", "metre", "meter",
+    "meters", "km", "kilometer", "kilometers", "inch", "in", "ft", "foot",
+    "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile", "nmile",
+    "radian", "mm", "millimeter", "millimeters", "millimetre", "millimetres",
+    "US_survey_foot", "US_survey_feet", "US_survey_yard", "US_survey_mile",
+    "US_statute_mile", "big_point", "barleycorn", "furlong", "rod", "fathom",
+    "printers_pica", "chain", "printers_point", "micron", "mil", "arpentlin",
+    "light_year", "parsec", "astronomical_unit", "astronomical_unit_BIPM_2006",
+    "angstrom", "fermi"
   )
 
-add_metric_units <-
+ext_metric_units <-
   tibble::tribble(
     ~symbol, ~symbol_aliases, ~name_singular, ~name_singular_aliases, ~name_plural, ~name_plural_aliases, ~def, ~definition, ~comment, ~dimensionless, ~source_xml,
-    "km", "", "kilometer", "kilometre", "kilometers", "kilometres", "m * 1000", "length equivalent to 1000 meters", NA, FALSE, NA,
-    "cm", "", "centimeter", "centimetre", "centimeters", "centimetres", "m/100", "length equivalent to 0.01 meter", NA, FALSE, NA
+    "km", "", "kilometer", "kilometre", "kilometers", "kilometres", "1000 m", "unit of length equal to 1000 meters", NA, FALSE, NA,
+    "cm", "", "centimeter", "centimetre", "centimeters", "centimetres", "0.01 m", "unit of length equal to 0.01 meter", NA, FALSE, NA
   )
 
 valid_units <-
@@ -18,9 +23,13 @@ valid_units <-
 
 valid_units <-
   valid_units |>
-  dplyr::bind_rows(add_metric_units)
+  dplyr::bind_rows(ext_metric_units)
 
-units_filter_cols <- c("symbol", "symbol_aliases", "name_singular", "name_singular_aliases", "name_plural", "name_plural_aliases")
+units_filter_cols <-
+  c(
+    "symbol", "symbol_aliases", "name_singular", "name_singular_aliases",
+    "name_plural", "name_plural_aliases"
+  )
 
 dist_units <-
   valid_units |>
@@ -29,6 +38,27 @@ dist_units <-
       dplyr::any_of(units_filter_cols),
       ~ (.x %in% select_unit_options)
     )
+  )
+
+dist_units <-
+  dplyr::mutate(
+    dist_units,
+    unit_opts = stringr::str_c(
+      name_singular, name_plural, name_singular_aliases, name_plural_aliases,
+      symbol, symbol_aliases,
+      sep = ";"
+    ),
+    unit_opts = stringr::str_split(unit_opts, ";")
+  )
+
+drop_blank <- function(x) {
+  x[x != ""]
+}
+
+dist_units$unit_opts <-
+  purrr::map(
+    dist_units$unit_opts,
+    ~ drop_blank(.x)
   )
 
 dist_units <-
@@ -78,7 +108,7 @@ area_unit_options <-
     "ft", "yd", "mi", "km", "cm", "metre", "inch", "foot", "yard", "mile", "kilometre",
     "centimetre", "international_feet", "kilometers", "centimeters", "feet", "kilometres",
     "centimetres", "US_survey_foot", "US_survey_feet", "US_survey_yard", "US_survey_mile", "US_statute_mile"
-  ), "^2"), "hectare", "hectares", "acre", "acres", "acre_foot", "acre_feet")
+  ), "^2"), "hectare", "hectares", "acre", "acres", "acre_foot", "acre_feet", "nmile")
 
 usethis::use_data(
   area_unit_options,

@@ -5,7 +5,7 @@
 \alias{dist_units}
 \title{Distance units (data frame)}
 \format{
-A data frame with 15 rows and 11 variables:
+A data frame with 33 rows and 12 variables:
 \describe{
 \item{\code{symbol}}{symbols}
 \item{\code{symbol_aliases}}{symbol aliases}
@@ -18,6 +18,8 @@ A data frame with 15 rows and 11 variables:
 \item{\code{comment}}{comment}
 \item{\code{dimensionless}}{logical indicator for dimensionless units}
 \item{\code{source_xml}}{source XML}
+\item{\code{unit_opts}}{character vector with symbols, singular, and plural
+names for the unit}
 }
 }
 \usage{
