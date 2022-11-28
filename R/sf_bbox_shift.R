@@ -29,8 +29,8 @@ sf_bbox_shift <- function(bbox,
   if (is.character(dir)) {
     dir <-
       switch(dir,
-             "in" = c(1, -1),
-             "out" = c(-1, 1)
+        "in" = c(1, -1),
+        "out" = c(-1, 1)
       )
   } else if (is.numeric(dir)) {
     dir <- c(dir * -1, dir)
