@@ -29,4 +29,39 @@ test_that("get_paper works", {
     get_paper(paper = "letter", orientation = "landscape", margin = "extrawide")$block_asp,
     7 / 4.5
   )
+
+  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc_bbox <- sf::st_bbox(nc)
+
+  expect_identical(
+    get_paper(paper = "letter", bbox = nc_bbox)$orientation,
+  "landscape"
+  )
+
+  expect_identical(
+    get_paper(paper = "8.5 in. x 7 in.", orientation = "portrait")$orientation,
+    "portrait"
+  )
+
+  expect_identical(
+    get_social_image(
+        image = "Twitter single image post",
+        orientation = "landscape"
+      )$width,
+    1200
+  )
+
+  expect_identical(
+    get_social_image(
+      platform = "Twitter"
+    )$name,
+    "Twitter single image post"
+  )
+
+  expect_identical(
+    get_social_image(
+      format = "post"
+    )$name,
+    "Instagram post"
+  )
 })
