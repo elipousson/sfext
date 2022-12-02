@@ -69,8 +69,8 @@
 #' @name read_sf_ext
 #' @family read_write
 #' @export
+#' @importFrom rlang list2 is_named
 #' @importFrom dplyr case_when
-#' @importFrom filenamr has_fileext
 read_sf_ext <- function(...) {
   params <- list2(...)
 
@@ -78,7 +78,7 @@ read_sf_ext <- function(...) {
     names(params)[1] <-
       dplyr::case_when(
         is_url(params[[1]]) ~ "url",
-        filenamr::has_fileext(params[[1]]) ~ "path",
+        has_fileext(params[[1]]) ~ "path",
         TRUE ~ "dsn"
       )
   }

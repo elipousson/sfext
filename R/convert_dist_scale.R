@@ -39,11 +39,11 @@ convert_dist_scale <- function(dist = NULL,
                                ...) {
   if (is.character(scale) && has_length(scale, 1)) {
     scale_nm <- scale
-    scale <- get_scale(scale = scale, standard = standard, series = series)
+    scale <- get_scale(scale = scale, standard = scale_standard, series = scale_series)
 
     cli_abort_ifnot(
       c("{.arg scale} {.val {scale_nm}} returned {nrow(scale)} scales from {.code standard_scales}.",
-        "i" = "Provide {.arg standard} and {.arg series} parameters to return only 1 scale."
+        "i" = "Provide {.arg scale_standard} and {.arg scale_series} parameters to return only 1 scale."
       ),
       condition = nrow(scale) == 1
     )

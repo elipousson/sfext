@@ -159,6 +159,7 @@ write_sf_cache <- function(data,
 #' @param token A personal access token on GitHub with permission to create
 #'   gists; defaults to Sys.getenv("GITHUB_PAT")
 #' @export
+#' @importFrom filenamr make_filename
 write_sf_gist <- function(data,
                           name = NULL,
                           label = NULL,
@@ -270,7 +271,7 @@ write_sf_gsheet <- function(data,
 #' @importFrom sf write_sf
 #' @importFrom stringr str_remove
 #' @importFrom cliExtras cli_yesno
-#' @importFrom filenamr has_fileext str_extract_fileext str_add_fileext check_file_overwrite
+#' @importFrom filenamr str_extract_fileext str_add_fileext check_file_overwrite
 write_sf_types <- function(data,
                            filename = NULL,
                            path = NULL,
@@ -285,7 +286,7 @@ write_sf_types <- function(data,
   }
 
   # Set filename from path if ends with a filetype
-  if (filenamr::has_fileext(path)) {
+  if (has_fileext(path)) {
     if (!is.null(filename)) {
       # FIXME: Is this just an internal error or can this be triggered by a user?
       cli_abort("A {.arg filename} *or* {.arg path} with a filename must be
@@ -459,7 +460,7 @@ check_file_overwrite <- function(filename = NULL,
   filepath <- filename
 
   if (!is.null(path)) {
-    if (filenamr::has_fileext(path) && is.null(filename)) {
+    if (has_fileext(path) && is.null(filename)) {
       filepath <- path
       path <- dirname(path)
     } else {
@@ -469,7 +470,7 @@ check_file_overwrite <- function(filename = NULL,
 
   cli_abort_ifnot(
     "{.arg filename} or {.arg path} must include a valid file type.",
-    condition = filenamr::has_fileext(filepath),
+    condition = has_fileext(filepath),
     call = call
   )
 

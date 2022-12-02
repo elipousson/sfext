@@ -3,6 +3,29 @@
 # Imported from pkg:isstatic
 # ======================================================================
 
+#' Does string contain the specified file type or any file extension?
+#'
+#' Check if string contains any filetype or the provided filetype. If string is
+#' `NULL`, returns `FALSE`.
+#'
+#' @param string String to be tested with or without filetype. Defaults to
+#'   `NULL`.
+#' @param fileext File type to test against. Optional.
+#' @param ignore.case If `FALSE`, the pattern matching is case sensitive. If
+#'   `TRUE`, case is ignored.
+#' @noRd
+has_fileext <- function(string = NULL, fileext = NULL, ignore.case = FALSE) {
+  if (is.null(string)) {
+    return(FALSE)
+  }
+
+  if (is.null(fileext)) {
+    fileext <- "[a-zA-Z0-9]+"
+  }
+
+  is_fileext_path(string, fileext, ignore.case)
+}
+
 #' Do two object have an identical length?
 #'
 #' @param x,y Two strings or character vectors to compare.
@@ -43,7 +66,7 @@ is_any_in <- function(x, y) {
 #'
 #' @noRd
 is_csv_path <- function(x, ignore.case = TRUE) {
-  is_filetype_path(x, "csv", ignore.case)
+  is_fileext_path(x, "csv", ignore.case)
 }
 
 #' Is a character vector an ArcGIS MapServer or FeatureServer URL?
@@ -58,15 +81,15 @@ is_esri_url <- function(x) {
 #'
 #' @noRd
 is_excel_path <- function(x, ignore.case = TRUE) {
-  is_filetype_path(x, c("xls", "xlsx"), ignore.case)
+  is_fileext_path(x, c("xls", "xlsx"), ignore.case)
 }
 
-#' Is this a file path or url ending in the specified filetype?
+#' Is this a file path or url ending in the specified file extension?
 #'
 #' @noRd
-is_filetype_path <- function(x, filetype, ignore.case = TRUE) {
+is_fileext_path <- function(x, fileext, ignore.case = TRUE) {
   grepl(
-    paste0("\\.", paste0(filetype, collapse = "|"), "$(?!\\.)"),
+    paste0("\\.", paste0(fileext, collapse = "|"), "$(?!\\.)"),
     x,
     ignore.case = ignore.case, perl = TRUE
   )
@@ -76,7 +99,7 @@ is_filetype_path <- function(x, filetype, ignore.case = TRUE) {
 #'
 #' @noRd
 is_geojson_path <- function(x, ignore.case = TRUE) {
-  is_filetype_path(x, "geojson", ignore.case)
+  is_fileext_path(x, "geojson", ignore.case)
 }
 
 #' Is a character vector a URL for a GitHub Gist?
@@ -107,7 +130,7 @@ is_gsheet_url <- function(x) {
 #'
 #' @noRd
 is_rda_path <- function(x, ignore.case = TRUE) {
-  is_filetype_path(x, "rda", ignore.case)
+  is_fileext_path(x, "rda", ignore.case)
 }
 
 #' Is this a RDS, RDA, or RData file path or url?
@@ -118,7 +141,7 @@ is_rdata_path <- function(x, ignore.case = TRUE) {
     c(
       is_rda_path(x, ignore.case),
       is_rds_path(x, ignore.case),
-      is_filetype_path(x, "RData", ignore.case)
+      is_fileext_path(x, "RData", ignore.case)
     )
   )
 }
@@ -127,7 +150,7 @@ is_rdata_path <- function(x, ignore.case = TRUE) {
 #'
 #' @noRd
 is_rds_path <- function(x, ignore.case = TRUE) {
-  is_filetype_path(x, "rds", ignore.case)
+  is_fileext_path(x, "rds", ignore.case)
 }
 
 #' Is this a unit class object?
