@@ -72,14 +72,15 @@
 
 #'  Standard paper and image sizes
 #'
-#' Reference table of standard paper, postcard, photo print, and social media
-#' image sizes, for [get_paper()] and [get_social_image()] functions. Derived
-#' from [visioguy/PaperSizes](https://github.com/visioguy/PaperSizes/) repo,
-#' [Adobe UK guide to photo
+#' Reference table of standard paper, postcard, photo print, social media image
+#' sizes, and playing card sizes for [get_paper()] and [get_social_image()]
+#' functions. Derived from
+#' [visioguy/PaperSizes](https://github.com/visioguy/PaperSizes/) repo, [Adobe
+#' UK guide to photo
 #' sizes](https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html)
 #' and other sources.
 #'
-#' @format A data frame with 117 rows and 9 variables:
+#' @format A data frame with 123 rows and 9 variables:
 #' \describe{
 #'   \item{`name`}{Name of paper}
 #'   \item{`series`}{Series}

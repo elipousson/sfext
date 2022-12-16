@@ -5,7 +5,7 @@
 \alias{paper_sizes}
 \title{Standard paper and image sizes}
 \format{
-A data frame with 117 rows and 9 variables:
+A data frame with 123 rows and 9 variables:
 \describe{
 \item{\code{name}}{Name of paper}
 \item{\code{series}}{Series}
@@ -23,10 +23,10 @@ square}
 paper_sizes
 }
 \description{
-Reference table of standard paper, postcard, photo print, and social media
-image sizes, for \code{\link[=get_paper]{get_paper()}} and \code{\link[=get_social_image]{get_social_image()}} functions. Derived
-from \href{https://github.com/visioguy/PaperSizes/}{visioguy/PaperSizes} repo,
-\href{https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html}{Adobe UK guide to photo sizes}
+Reference table of standard paper, postcard, photo print, social media image
+sizes, and playing card sizes for \code{\link[=get_paper]{get_paper()}} and \code{\link[=get_social_image]{get_social_image()}}
+functions. Derived from
+\href{https://github.com/visioguy/PaperSizes/}{visioguy/PaperSizes} repo, \href{https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html}{Adobe UK guide to photo sizes}
 and other sources.
 }
 \keyword{datasets}
