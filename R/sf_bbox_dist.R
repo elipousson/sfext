@@ -150,3 +150,47 @@ sf_bbox_orientation <- function(bbox, tolerance = 0.1) {
     TRUE ~ "square"
   )
 }
+
+#' @name sf_bbox_check_fit
+#' @rdname sf_bbox_dist
+#' @param dist Distance to compare with bounding box for [sf_bbox_check_fit()].
+#'   If dist is length 1 compare to bounding box diagonal distance. If dist is
+#'   length 2, compare to bounding box x and y distances. Return TRUE if dist
+#'   fits within bounding box or FALSE if dist exceeds bounding box limits.
+sf_bbox_check_fit <- function(bbox,
+                              units = NULL,
+                              dist = NULL) {
+  units <- units %||% get_dist_units(bbox)
+
+  if (length(dist) == 2) {
+    fit_check <-
+      is_longer(
+        sf_bbox_xdist(bbox, units, drop = FALSE),
+      convert_dist_units(
+        dist = dist[[1]],
+        to = units
+      )
+    ) && is_longer(
+      sf_bbox_ydist(bbox, units, drop = FALSE),
+      convert_dist_units(
+        dist = dist[[2]],
+        to = units
+      )
+    )
+
+    return(fit_check)
+  }
+
+  stopifnot(
+    length(dist) == 1
+  )
+
+  is_longer(
+      sf_bbox_diagdist(bbox, units, drop = FALSE),
+      convert_dist_units(
+        dist = dist,
+        to = units
+      )
+    )
+}
+

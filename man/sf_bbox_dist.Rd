@@ -8,6 +8,7 @@
 \alias{sf_bbox_diag_ratio_to_dist}
 \alias{sf_bbox_asp}
 \alias{sf_bbox_orientation}
+\alias{sf_bbox_check_fit}
 \title{Measure a bounding box using x, y, or diagonal distance}
 \usage{
 sf_bbox_dist(
@@ -32,6 +33,8 @@ sf_bbox_diag_ratio_to_dist(bbox, diag_ratio, units = NULL, drop = TRUE)
 sf_bbox_asp(bbox)
 
 sf_bbox_orientation(bbox, tolerance = 0.1)
+
+sf_bbox_check_fit(bbox, units = NULL, dist = NULL)
 }
 \arguments{
 \item{bbox}{A \code{bbox} object.}
@@ -57,6 +60,11 @@ the full diagonal distance) across the bounding box.}
 \item{tolerance}{Numeric value above or below 1 used by
 \code{\link[=sf_bbox_orientation]{sf_bbox_orientation()}} to describe an aspect ratio as landscape or
 portrait; defaults to 0.1.}
+
+\item{dist}{Distance to compare with bounding box for \code{\link[=sf_bbox_check_fit]{sf_bbox_check_fit()}}.
+If dist is length 1 compare to bounding box diagonal distance. If dist is
+length 2, compare to bounding box x and y distances. Return TRUE if dist
+fits within bounding box or FALSE if dist exceeds bounding box limits.}
 }
 \description{
 \itemize{
