@@ -4,7 +4,7 @@
 #' - [is_diff_dist()]: What is the difference between x and y distance?
 #' - [is_same_dist()]: Is x the same distance as y? or does the bbox of x and bbox
 #' of y have the same x, y, or diagonal distance?
-#' - [is_shorter()], is_longer: Is x shorter or longer than y?
+#' - [is_shorter()], [is_longer()]: Is x shorter or longer than y?
 #' - [is_same_area()]: do x and y have the same area?
 #' - [is_same_units()]: are x and y character strings that represent the same
 #' units or objects that use the same units?
@@ -29,25 +29,20 @@ is_dist_units <- function(x) {
 #' @export
 #' @importFrom dplyr case_when
 is_diff_dist <- function(x, y, units = NULL) {
-  which_is_units <-
-    dplyr::case_when(
-      is_units(x) && !is_units(y) ~ "x",
-      !is_units(x) && is_units(y) ~ "y",
-      is_units(x) && is_units(y) ~ "xy",
-      TRUE ~ "neither"
+  if (!is.null(units)) {
+    x <- convert_dist_units(x, to = units)
+    y <- convert_dist_units(y, to = units)
+  } else if (is_units(x)) {
+    y <- convert_dist_units(y, to = x)
+  } else if (is_units(y)) {
+    x <- convert_dist_units(x, to = y)
+  } else {
+    cli_abort(
+      "units can't be determined for {.arg x} or {.arg y}."
     )
+  }
 
-  cli_abort_ifnot(
-    "units can't be determined for {.arg x} or {.arg y}.",
-    condition = !((which_is_units == "neither") && is.null(units))
-  )
-
-  switch(which_is_units,
-    "x" = diff(c(x, as_dist_units(y, units = x))),
-    "y" = diff(c(as_dist_units(x, units = y), y)),
-    "xy" = diff(c(x, y)),
-    "neither" = diff(c(as_units(x, units = units), as_units(y, units = units)))
-  )
+  diff(c(x, y))
 }
 
 #' @name is_same_dist
@@ -96,14 +91,14 @@ is_same_dist <- function(x, y, dist = NULL, diff = FALSE, call = caller_env(), .
 #' @rdname is_dist_units
 #' @export
 is_longer <- function(x, y) {
-  as.numeric(is_diff_dist(x, y)) > 0
+  as.numeric(is_diff_dist(x, y)) < 0
 }
 
 #' @name is_shorter
 #' @rdname is_dist_units
 #' @export
 is_shorter <- function(x, y) {
-  as.numeric(is_diff_dist(x, y)) < 0
+  as.numeric(is_diff_dist(x, y)) > 0
 }
 
 #' @name get_dist_units
@@ -124,23 +119,38 @@ get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
 
   check_null(x)
 
-  if (is_sf(x)) {
-    return(sf::st_crs(x)$units_gdal)
+  if (is.character(x)) {
+    return(
+      rlang::arg_match(
+        x,
+        c(dist_unit_options, area_unit_options),
+        multiple = multiple
+        )
+    )
   }
 
   if (is_units(x)) {
-    if (all(
-      as.character(units(x)[["numerator"]]) %in% dist_unit_options
-    ) && !(as.character(units(x)) %in% area_unit_options)) {
+    x_is_dist_unit <-
+      all(as.character(units(x)[["numerator"]]) %in% dist_unit_options)
+
+    x_not_area_unit <-
+      !(as.character(units(x)) %in% area_unit_options)
+
+    if (x_is_dist_unit && x_not_area_unit) {
       return(as.character(units(x)[["numerator"]]))
     }
 
     return(as.character(units(x)))
   }
 
+  if (is_sf(x, ext = TRUE)) {
+    return(sf::st_crs(x)$units_gdal)
+  }
+
   if (is.numeric(x)) {
     cliExtras::cli_warn_ifnot(
-      "{.var units} can't be determined for a numeric vector with no {.arg units} attribute.",
+      "{.var units} can't be determined for a numeric vector with no
+      {.arg units} attribute.",
       condition = quiet
     )
 
@@ -154,7 +164,6 @@ get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
     condition = inherits(x, c("character", "units", "sf"))
   )
 
-  rlang::arg_match(x, c(dist_unit_options, area_unit_options), multiple = multiple)
 }
 
 #' @name as_dist_units

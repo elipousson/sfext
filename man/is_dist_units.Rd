@@ -69,7 +69,7 @@ comparing area with \code{\link[=is_diff_area]{is_diff_area()}} or \code{\link[=
 \item \code{\link[=is_diff_dist]{is_diff_dist()}}: What is the difference between x and y distance?
 \item \code{\link[=is_same_dist]{is_same_dist()}}: Is x the same distance as y? or does the bbox of x and bbox
 of y have the same x, y, or diagonal distance?
-\item \code{\link[=is_shorter]{is_shorter()}}, is_longer: Is x shorter or longer than y?
+\item \code{\link[=is_shorter]{is_shorter()}}, \code{\link[=is_longer]{is_longer()}}: Is x shorter or longer than y?
 \item \code{\link[=is_same_area]{is_same_area()}}: do x and y have the same area?
 \item \code{\link[=is_same_units]{is_same_units()}}: are x and y character strings that represent the same
 units or objects that use the same units?

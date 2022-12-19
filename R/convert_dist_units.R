@@ -26,10 +26,10 @@ convert_dist_units <- function(dist,
 
     if (!is.null(from) && !is_same_units(from, dist_from)) {
       cli::cli_warn(
-          c("{.arg dist} is class {.cls units} and is using different units
+        c("{.arg dist} is class {.cls units} and is using different units
             than {.arg from}.",
-            "*" = "Replacing {.arg from} with {.val {dist_from}}."
-          )
+          "*" = "Replacing {.arg from} with {.val {dist_from}}."
+        )
       )
     }
 
@@ -38,10 +38,10 @@ convert_dist_units <- function(dist,
   }
 
   if (!is.null(from)) {
-    dist <- set_dist_units(dist, value = from)
+    dist <- set_dist_units(dist, value = get_dist_units(from))
   }
 
-  dist <- set_dist_units(dist, value = to)
+  dist <- set_dist_units(dist, value = get_dist_units(to))
 
   if (!is.null(digits)) {
     dist <- round(dist, digits = digits)
