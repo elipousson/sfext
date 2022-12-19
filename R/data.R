@@ -47,7 +47,7 @@
 #' scales
 #' <https://www.usfa.fema.gov/downloads/pdf/nfa/engineer-architect-scales.pdf>
 #'
-#' @format A data frame with 32 rows and 16 variables:
+#' @format A data frame with 36 rows and 16 variables:
 #' \describe{
 #'   \item{`scale`}{Scale name}
 #'   \item{`standard`}{Standard (USGS, architectural, or engineering)}

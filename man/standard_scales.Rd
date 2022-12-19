@@ -5,7 +5,7 @@
 \alias{standard_scales}
 \title{Standard map, architectural, and engineering scales}
 \format{
-A data frame with 32 rows and 16 variables:
+A data frame with 36 rows and 16 variables:
 \describe{
 \item{\code{scale}}{Scale name}
 \item{\code{standard}}{Standard (USGS, architectural, or engineering)}

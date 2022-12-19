@@ -1,7 +1,7 @@
 test_that("get_scale works", {
   expect_identical(
     nrow(get_scale(scale = "1:20,000")),
-    1L
+    2L
   )
 
   expect_identical(
