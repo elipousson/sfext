@@ -35,7 +35,7 @@ test_that("get_paper works", {
 
   expect_identical(
     get_paper(paper = "letter", bbox = nc_bbox)$orientation,
-  "landscape"
+    "landscape"
   )
 
   expect_identical(
@@ -45,9 +45,9 @@ test_that("get_paper works", {
 
   expect_identical(
     get_social_image(
-        image = "Twitter single image post",
-        orientation = "landscape"
-      )$width,
+      image = "Twitter single image post",
+      orientation = "landscape"
+    )$width,
     1200
   )
 
