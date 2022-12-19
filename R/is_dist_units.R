@@ -1,16 +1,18 @@
 #' General utility functions for working with distance units objects
 #'
-#' - [is_dist_units]: Is x a distance unit object?
-#' - [is_diff_dist]: What is the difference between x and y distance?
-#' - [is_same_dist]: Is x the same distance as y? or does the bbox of x and bbox of y have the same x, y, or diagonal distance?
-#' - [is_shorter], is_longer: Is x shorter or longer than y?
-#' - [is_same_area]: do x and y have the same area?
-#'
+#' - [is_dist_units()]: Is x a distance unit object?
+#' - [is_diff_dist()]: What is the difference between x and y distance?
+#' - [is_same_dist()]: Is x the same distance as y? or does the bbox of x and bbox
+#' of y have the same x, y, or diagonal distance?
+#' - [is_shorter()], is_longer: Is x shorter or longer than y?
+#' - [is_same_area()]: do x and y have the same area?
+#' - [is_same_units()]: are x and y character strings that represent the same
+#' units or objects that use the same units?
 #' There are two additional functions that support these utility functions:
 #'
-#' - [get_dist_units]: Get the distance units from x (if x is a sf or units
+#' - [get_dist_units()]: Get the distance units from x (if x is a sf or units
 #' objects or a character string from [dist_unit_options])
-#' - [as_dist_units]: Convert x to units using [units::as_units]
+#' - [as_dist_units()]: Convert x to units using [units::as_units]
 #'
 #' @name is_dist_units
 #' @param x,y objects to check
@@ -113,6 +115,8 @@ is_shorter <- function(x, y) {
 #' @param quiet If `TRUE`, suppress warning messages.
 #' @export
 #' @importFrom sf st_crs
+#' @importFrom rlang arg_match
+#' @importFrom cliExtras cli_warn_ifnot cli_abort_ifnot
 get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
   if (is.null(x) && null.ok) {
     return(x)
@@ -125,7 +129,9 @@ get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
   }
 
   if (is_units(x)) {
-    if (all(as.character(units(x)[["numerator"]]) %in% dist_unit_options) && !(as.character(units(x)) %in% area_unit_options)) {
+    if (all(
+      as.character(units(x)[["numerator"]]) %in% dist_unit_options
+    ) && !(as.character(units(x)) %in% area_unit_options)) {
       return(as.character(units(x)[["numerator"]]))
     }
 
@@ -133,7 +139,7 @@ get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
   }
 
   if (is.numeric(x)) {
-    cli_warn_ifnot(
+    cliExtras::cli_warn_ifnot(
       "{.var units} can't be determined for a numeric vector with no {.arg units} attribute.",
       condition = quiet
     )
@@ -141,33 +147,46 @@ get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
     return(invisible(NULL))
   }
 
-  cli_abort_ifnot(
-    "{.var units} must be a chracter string from {.code dist_unit_options} or {.code area_unit_options},
-    a {.code unit} class object, or a `sf` object with a valid crs.",
-    condition = class(x) %in% c("character", "units", "sf")
+  cliExtras::cli_abort_ifnot(
+    "{.var units} must be a {.cls character} string from
+    {.code dist_unit_options} or {.code area_unit_options}, a {.cls units}
+    object, or a {.cls sf} object with a valid crs.",
+    condition = inherits(x, c("character", "units", "sf"))
   )
 
-  arg_match(x, c(dist_unit_options, area_unit_options), multiple = multiple)
+  rlang::arg_match(x, c(dist_unit_options, area_unit_options), multiple = multiple)
 }
 
 #' @name as_dist_units
 #' @rdname is_dist_units
 #' @export
-#' @importFrom sf st_crs
+#' @importFrom rlang arg_match
 #' @importFrom units as_units
 #' @importFrom cliExtras cli_yesno
-as_dist_units <- function(x, units = NULL, null.ok = FALSE, call = caller_env()) {
+as_dist_units <- function(x,
+                          units = NULL,
+                          null.ok = FALSE,
+                          call = caller_env()) {
   units <- get_dist_units(units, null.ok = null.ok)
 
-  if (!is.null(units)) {
-    units <- arg_match(units, c(dist_unit_options, area_unit_options), error_call = call)
-  } else if (null.ok) {
+  if (is.null(units) && null.ok) {
     return(x)
   }
 
+  units <-
+    rlang::arg_match(
+      units,
+      c(dist_unit_options, area_unit_options),
+      error_call = call
+    )
+
   if (is.numeric(x) && !is_dist_units(x)) {
-    units::as_units(x, units)
-  } else if (cli_yesno("Did you mean to convert {.var x} to {.val {units}}?")) {
+    return(units::as_units(x, units))
+  }
+
+  if (cliExtras::cli_yesno(
+    "Did you mean to convert {.var x} to {.val {units}}?"
+    )) {
     convert_dist_units(
       dist = x,
       to = units
@@ -177,34 +196,71 @@ as_dist_units <- function(x, units = NULL, null.ok = FALSE, call = caller_env())
 
 #' @name is_diff_area
 #' @rdname  is_dist_units
-#' @param union If `TRUE`, union objects before comparing area with
-#'   [is_diff_area()] or [is_same_area()], defaults to `TRUE`.
+#' @param combine If `TRUE`, combine objects with [sf::st_combine()] before
+#'   comparing area with [is_diff_area()] or [is_same_area()], defaults to
+#'   `TRUE`.
 #' @export
 #' @importFrom sf st_union st_area
-is_diff_area <- function(x, y, units = NULL, union = TRUE) {
-  if (union) {
-    x <- sf::st_union(x)
-    y <- sf::st_union(y)
+is_diff_area <- function(x, y, units = NULL, combine = TRUE) {
+  if (combine) {
+    return(diff(st_combined_area(x), st_combined_area(y)))
   }
 
-  x_area <- sf::st_area(x)
-  y_area <- sf::st_area(y)
+  diff(sf::st_area(x), sf::st_area(y))
+}
 
-  diff(x_area, y_area)
+#' @noRd
+st_combined_area <- function(x) {
+  sf::st_area(sf::st_combine(x))
 }
 
 #' @name is_same_area
 #' @rdname  is_dist_units
 #' @export
-is_same_area <- function(x, y, units = NULL, union = TRUE, diff = FALSE, ...) {
+is_same_area <- function(x, y, units = NULL, combine = TRUE, diff = FALSE, ...) {
   if (diff) {
-    return(is_diff_area(x, y, units = units, union = union))
+    return(is_diff_area(x, y, units = units, combine = combine))
   }
 
-  all.equal(as.numeric(is_diff_area(x, y, union = union)), 0, ...)
+  all.equal(as.numeric(is_diff_area(x, y, combine = combine)), 0, ...)
 }
 
 #' @noRd
-is_same_units <- function(x, y) {
-  as.character(units(x)) == as.character(units(y))
+#' @importFrom units as_units
+as_units_attr <- function(x) {
+  if (is.character(x)) {
+    x <- units::as_units(x)
+  }
+
+  units(x)
+}
+
+#' @name is_same_units
+#' @rdname  is_dist_units
+#' @export
+#' @importFrom units as_units
+is_same_units <- function(x, y = NULL) {
+  if (any(is.null(c(x, y)))) {
+    return(FALSE)
+  }
+
+  x <- as_units_attr(x)
+  y <- as_units_attr(y)
+
+  in_opts <- c("in", "inch", "inches", "international_inch", "international_inches")
+  ft_opts <- c("ft", "foot", "feet", "international_foot", "international_feet")
+  yd_opts <- c("yd", "yard", "yards", "international_yard", "international_yards")
+
+  nums <- c(x[["numerator"]], y[["numerator"]])
+  dens <- c(x[["denominator"]], y[["denominator"]])
+
+  if (any(
+    c(all(nums %in% in_opts), all(nums %in% ft_opts), all(nums %in% yd_opts))
+  ) && (
+  all(dens == character(0)) | (dens[1] == dens[2])
+    )) {
+    return(TRUE)
+  }
+
+  units::as_units(x) == units::as_units(y)
 }

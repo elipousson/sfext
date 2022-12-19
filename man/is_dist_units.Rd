@@ -11,6 +11,7 @@
 \alias{as_dist_units}
 \alias{is_diff_area}
 \alias{is_same_area}
+\alias{is_same_units}
 \title{General utility functions for working with distance units objects}
 \usage{
 is_dist_units(x)
@@ -27,9 +28,11 @@ get_dist_units(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE)
 
 as_dist_units(x, units = NULL, null.ok = FALSE, call = caller_env())
 
-is_diff_area(x, y, units = NULL, union = TRUE)
+is_diff_area(x, y, units = NULL, combine = TRUE)
 
-is_same_area(x, y, units = NULL, union = TRUE, diff = FALSE, ...)
+is_same_area(x, y, units = NULL, combine = TRUE, diff = FALSE, ...)
+
+is_same_units(x, y = NULL)
 }
 \arguments{
 \item{x, y}{objects to check}
@@ -56,24 +59,28 @@ units, \link{get_dist_units} may return multiple units. Passed to \link[rlang:ar
 
 \item{quiet}{If \code{TRUE}, suppress warning messages.}
 
-\item{union}{If \code{TRUE}, union objects before comparing area with
-\code{\link[=is_diff_area]{is_diff_area()}} or \code{\link[=is_same_area]{is_same_area()}}, defaults to \code{TRUE}.}
+\item{combine}{If \code{TRUE}, combine objects with \code{\link[sf:geos_combine]{sf::st_combine()}} before
+comparing area with \code{\link[=is_diff_area]{is_diff_area()}} or \code{\link[=is_same_area]{is_same_area()}}, defaults to
+\code{TRUE}.}
 }
 \description{
 \itemize{
-\item \link{is_dist_units}: Is x a distance unit object?
-\item \link{is_diff_dist}: What is the difference between x and y distance?
-\item \link{is_same_dist}: Is x the same distance as y? or does the bbox of x and bbox of y have the same x, y, or diagonal distance?
-\item \link{is_shorter}, is_longer: Is x shorter or longer than y?
-\item \link{is_same_area}: do x and y have the same area?
+\item \code{\link[=is_dist_units]{is_dist_units()}}: Is x a distance unit object?
+\item \code{\link[=is_diff_dist]{is_diff_dist()}}: What is the difference between x and y distance?
+\item \code{\link[=is_same_dist]{is_same_dist()}}: Is x the same distance as y? or does the bbox of x and bbox
+of y have the same x, y, or diagonal distance?
+\item \code{\link[=is_shorter]{is_shorter()}}, is_longer: Is x shorter or longer than y?
+\item \code{\link[=is_same_area]{is_same_area()}}: do x and y have the same area?
+\item \code{\link[=is_same_units]{is_same_units()}}: are x and y character strings that represent the same
+units or objects that use the same units?
+There are two additional functions that support these utility functions:
 }
 }
 \details{
-There are two additional functions that support these utility functions:
 \itemize{
-\item \link{get_dist_units}: Get the distance units from x (if x is a sf or units
+\item \code{\link[=get_dist_units]{get_dist_units()}}: Get the distance units from x (if x is a sf or units
 objects or a character string from \link{dist_unit_options})
-\item \link{as_dist_units}: Convert x to units using \link[units:units]{units::as_units}
+\item \code{\link[=as_dist_units]{as_dist_units()}}: Convert x to units using \link[units:units]{units::as_units}
 }
 }
 \seealso{
