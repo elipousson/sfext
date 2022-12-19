@@ -24,13 +24,14 @@ convert_dist_units <- function(dist,
   if (is_units(dist)) {
     dist_from <- get_dist_units(dist)
 
-    cli_warn_ifnot(
-      c("{.arg dist} is class {.cls units} and has different units than
-        {.arg from} ({.val {from}}).",
-        "*" = "Replacing {.arg from} with {.val {dist_from}}."
-      ),
-      condition = is.null(from) | (dist_from == from)
-    )
+    if (!is.null(from) && !is_same_units(from, dist_from)) {
+      cli::cli_warn(
+          c("{.arg dist} is class {.cls units} and is using different units
+            than {.arg from}.",
+            "*" = "Replacing {.arg from} with {.val {dist_from}}."
+          )
+      )
+    }
 
     from <- dist_from
     dist <- units::drop_units(dist)
