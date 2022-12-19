@@ -102,7 +102,7 @@ convert_dist_scale <- function(dist = NULL,
 
   dist <-
     convert_dist_units(
-      dist = dist * scale_factor,
+      dist = as.numeric(dist * scale_factor),
       to = actual_unit
     )
 
