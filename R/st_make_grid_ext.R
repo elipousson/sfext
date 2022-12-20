@@ -168,11 +168,11 @@ get_grid_params <- function(bbox,
     }
 
     if (!is.null(ncol) && is_longer(ncol * cellsize[1], sf_bbox_xdist(bbox))) {
-      cli::cli_alert_danger("The cellsize will not fit within the width of the bounding box with the number of columns requested.")
+      cli::cli_warn("The cellsize will not fit within the width of the bounding box with the number of columns requested.")
     }
 
     if (!is.null(nrow) && is_longer(nrow * cellsize[2], sf_bbox_ydist(bbox))) {
-      cli::cli_alert_danger("The specified cellsize will not fit within the height of the bounding box with the number of nrow requested.")
+      cli::cli_warn("The specified cellsize will not fit within the height of the bounding box with the number of nrow requested.")
     }
   }
 
