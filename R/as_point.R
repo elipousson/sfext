@@ -113,7 +113,7 @@ as_startpoint <- function(x) {
   )
 
   if (is_multiline(x)) {
-    x <- suppressWarnings(sf::st_cast(x, "LINESTRING"))
+    x <- suppressWarnings(sf::st_cast(as_sf(x), "LINESTRING"))
     x <- x[1, ]
   }
 
@@ -132,7 +132,7 @@ as_endpoint <- function(x) {
     )
 
   if (is_multiline(x)) {
-    x <- suppressWarnings(sf::st_cast(x, "LINESTRING"))
+    x <- suppressWarnings(sf::st_cast(as_sf(x), "LINESTRING"))
     x <- x[nrow(x), ]
   }
 
