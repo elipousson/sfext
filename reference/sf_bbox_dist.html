@@ -102,7 +102,9 @@ diag_ratio are <code>NULL</code></p></li>
 <span></span>
 <span><span class="fu">sf_bbox_asp</span><span class="op">(</span><span class="va">bbox</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">sf_bbox_orientation</span><span class="op">(</span><span class="va">bbox</span>, tolerance <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">sf_bbox_orientation</span><span class="op">(</span><span class="va">bbox</span>, tolerance <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">sf_bbox_check_fit</span><span class="op">(</span><span class="va">bbox</span>, units <span class="op">=</span> <span class="cn">NULL</span>, dist <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -147,6 +149,13 @@ the full diagonal distance) across the bounding box.</p></dd>
 <dd><p>Numeric value above or below 1 used by
 <code>sf_bbox_orientation()</code> to describe an aspect ratio as landscape or
 portrait; defaults to 0.1.</p></dd>
+
+
+<dt>dist</dt>
+<dd><p>Distance to compare with bounding box for <code>sf_bbox_check_fit()</code>.
+If dist is length 1 compare to bounding box diagonal distance. If dist is
+length 2, compare to bounding box x and y distances. Return TRUE if dist
+fits within bounding box or FALSE if dist exceeds bounding box limits.</p></dd>
 
 </dl></div>
     <div class="section level2">
