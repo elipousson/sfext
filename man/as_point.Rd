@@ -17,9 +17,9 @@ as_point(..., to = "POINT")
 
 as_points(..., to = "POINT", call = caller_env())
 
-as_startpoint(...)
+as_startpoint(x)
 
-as_endpoint(...)
+as_endpoint(x)
 
 as_line(..., to = "LINESTRING", call = caller_env())
 
@@ -61,10 +61,10 @@ crs, otherwise the crs will be NA for the resulting sfc object.
 
 Using \link{as_startpoint} and \link{as_endpoint}:
 
-\code{\link[=as_startpoint]{as_startpoint()}} and \code{\link[=as_endpoint]{as_endpoint()}} require a LINE geometry type sf or sfc
-object that is passed to \code{\link[lwgeom:st_startpoint]{lwgeom::st_startpoint()}} or \code{\link[lwgeom:st_startpoint]{lwgeom::st_endpoint()}}
-respectively. Both functions always return a sfc object matching the CRS of
-the input geometry.
+\code{\link[=as_startpoint]{as_startpoint()}} and \code{\link[=as_endpoint]{as_endpoint()}} require a LINESTRING OR MULTILINESTRING
+geometry type sf or sfc object that is passed to \code{\link[lwgeom:st_startpoint]{lwgeom::st_startpoint()}} or
+\code{\link[lwgeom:st_startpoint]{lwgeom::st_endpoint()}} respectively. Both functions always return a sfc
+object matching the CRS of the input geometry.
 
 Using \link{as_lines}:
 

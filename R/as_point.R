@@ -96,29 +96,47 @@ as_points <- function(..., to = "POINT", call = caller_env()) {
 
 #' @details Using [as_startpoint] and [as_endpoint]:
 #'
-#' [as_startpoint()] and [as_endpoint()] require a LINE geometry type sf or sfc
-#' object that is passed to [lwgeom::st_startpoint()] or [lwgeom::st_endpoint()]
-#' respectively. Both functions always return a sfc object matching the CRS of
-#' the input geometry.
+#' [as_startpoint()] and [as_endpoint()] require a LINESTRING OR MULTILINESTRING
+#' geometry type sf or sfc object that is passed to [lwgeom::st_startpoint()] or
+#' [lwgeom::st_endpoint()] respectively. Both functions always return a sfc
+#' object matching the CRS of the input geometry.
 #'
 #' @name as_startpoints
 #' @rdname as_point
 #' @export
-as_startpoint <- function(...) {
-  is_pkg_installed("lwgeom")
-  params <- list2(...)
-  cli_abort_ifnot(condition = all(sapply(params, is_line)))
-  exec(lwgeom::st_startpoint, !!!params)
+as_startpoint <- function(x) {
+  rlang::check_installed("lwgeom")
+
+  cliExtras::cli_abort_ifnot(
+    "Must have LINESTRING or MULTILINESTRING geometry.",
+    condition = is_line(x) | is_multiline(x)
+  )
+
+  if (is_multiline(x)) {
+    x <- suppressWarnings(sf::st_cast(x, "LINESTRING"))
+    x <- x[1, ]
+  }
+
+  lwgeom::st_startpoint(x)
 }
 
 #' @name as_endpoints
 #' @rdname as_point
 #' @export
-as_endpoint <- function(...) {
-  is_pkg_installed("lwgeom")
-  params <- list2(...)
-  cli_abort_ifnot(condition = all(sapply(params, is_line)))
-  exec(lwgeom::st_endpoint, !!!params)
+as_endpoint <- function(x) {
+  rlang::check_installed("lwgeom")
+
+  cliExtras::cli_abort_ifnot(
+    "Must have LINESTRING or MULTILINESTRING geometry.",
+    condition = is_line(x) | is_multiline(x)
+    )
+
+  if (is_multiline(x)) {
+    x <- suppressWarnings(sf::st_cast(x, "LINESTRING"))
+    x <- x[nrow(x), ]
+  }
+
+  lwgeom::st_endpoint(x)
 }
 
 #' @details Using [as_lines]:
