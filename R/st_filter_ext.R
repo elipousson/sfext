@@ -13,7 +13,7 @@
 #' @param crs Coordinate reference system to return.
 #' @param .predicate geometry predicate function with the same profile as
 #'   [sf::st_intersects()]; see details for [sf::st_filter()] for more options.
-#' @param geom_type Character string passed to type argument of [is_geom_type()]
+#' @param type Character string passed to type argument of [sf::st_is()]
 #'   to filter features to only those matching the specified geometry type.
 #' @param null.ok If `y = NULL` and `null.ok = TRUE`, x is returned without
 #'   changes. Defaults to `TRUE`.
@@ -23,6 +23,9 @@
 #' @inheritDotParams sf::st_filter -x -y
 #' @name st_filter_ext
 #' @export
+#' @importFrom sf st_intersects st_bbox st_filter st_crop
+#' @importFrom purrr map
+#' @importFrom dplyr case_when
 st_filter_ext <- function(x,
                           y = NULL,
                           crop = FALSE,
@@ -30,12 +33,14 @@ st_filter_ext <- function(x,
                           erase = FALSE,
                           crs = NULL,
                           .predicate = sf::st_intersects,
-                          geom_type = NULL,
-                          null.ok = TRUE,
+                          type = NULL,
                           list.ok = TRUE,
                           ...) {
-  if (is.null(y) && null.ok) {
-    return(x)
+  if (is.null(y)) {
+    if (!is.null(type)) {
+      return(st_filter_geom_type(transform_sf(x, crs = crs), type = type))
+    }
+    return(transform_sf(x, crs = crs))
   }
 
   if (is_sf_list(x, ext = TRUE) && list.ok) {
@@ -50,8 +55,7 @@ st_filter_ext <- function(x,
           erase = erase,
           crs = crs,
           .predicate = sf::st_intersects,
-          geom_type = geom_type,
-          null.ok = null.ok,
+          type = type,
           list.ok = list.ok
         )
       )
@@ -105,26 +109,35 @@ st_filter_ext <- function(x,
       "filter" = x
     )
 
-  x <- filter_geom_type(x, geom_type)
+  x <- st_filter_geom_type(x, type)
 
   transform_sf(x, crs = crs)
 }
 
 #' Filter by geometry type
 #'
-#' @noRd
-filter_geom_type <- function(x, type = NULL, null.ok = TRUE) {
-  check_sf(x, ext = TRUE)
+#' @rdname st_filter_geom_type
+#' @name st_filter_ext
+#' @param type Geometry type.
+#' @export
+#' @importFrom sf st_is
+st_filter_geom_type <- function(x, type = NULL) {
+  cli_abort_ifnot(
+    "{.arg x} must be an {.cls sf} or {.cls sfc} object.",
+    condition = is_sf(x) | is_sfc(x)
+  )
 
-  if (is.null(type) && null.ok) {
+  if (is.null(type)) {
     return(x)
   }
 
-  type <- is_geom_type(x, type = type, by_geometry = TRUE)
+  match <- sf::st_is(x, type)
 
   if (is_sf(x)) {
-    return(x[type, ])
+    return(x[match, ])
   }
 
-  x[type]
+  if (is_sfc(x)) {
+    x[match]
+  }
 }

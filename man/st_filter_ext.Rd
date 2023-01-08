@@ -12,8 +12,7 @@ st_filter_ext(
   erase = FALSE,
   crs = NULL,
   .predicate = sf::st_intersects,
-  geom_type = NULL,
-  null.ok = TRUE,
+  type = NULL,
   list.ok = TRUE,
   ...
 )
@@ -34,11 +33,8 @@ ignored.}
 \item{.predicate}{geometry predicate function with the same profile as
 \code{\link[sf:geos_binary_pred]{sf::st_intersects()}}; see details for \code{\link[sf:st_join]{sf::st_filter()}} for more options.}
 
-\item{geom_type}{Character string passed to type argument of \code{\link[=is_geom_type]{is_geom_type()}}
+\item{type}{Character string passed to type argument of \code{\link[sf:st_is]{sf::st_is()}}
 to filter features to only those matching the specified geometry type.}
-
-\item{null.ok}{If \code{y = NULL} and \code{null.ok = TRUE}, x is returned without
-changes. Defaults to \code{TRUE}.}
 
 \item{list.ok}{If \code{TRUE}, x can be a list of \code{sf}, \code{sfc}, or \code{bbox} objects.
 If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supported. Defaults to
@@ -49,6 +45,9 @@ If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supporte
   \describe{
     \item{\code{}}{}
   }}
+
+\item{null.ok}{If \code{y = NULL} and \code{null.ok = TRUE}, x is returned without
+changes. Defaults to \code{TRUE}.}
 }
 \description{
 Extend \code{\link[sf:st_join]{sf::st_filter()}} to filter a sf list or a \code{sf}, \code{sfc}, or \code{bbox} with
