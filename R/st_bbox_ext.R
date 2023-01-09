@@ -14,6 +14,8 @@
 #'   format as a `bbox` object.
 #' @inheritParams st_buffer_ext
 #' @inheritParams get_asp
+#' @param nudge Passed as to parameter [st_nudge()] when not `NULL`. Numeric
+#'   vector or sf object.
 #' @param crs Coordinate reference system of bounding box to return; defaults to
 #'   `NULL` which maintains the crs of the input object.
 #' @param class Class of object to return (`sf` or `bbox`); defaults to "bbox".
@@ -31,6 +33,7 @@ st_bbox_ext <- function(x = NULL,
                         unit = NULL,
                         crs = NULL,
                         class = "bbox",
+                        nudge = NULL,
                         null.ok = TRUE,
                         list.ok = TRUE) {
   if (is.null(x) && null.ok) {
@@ -53,6 +56,10 @@ st_bbox_ext <- function(x = NULL,
       )
 
     return(bbox_list)
+  }
+
+  if (!is.null(nudge)) {
+    x <- st_nudge(x, to = nudge)
   }
 
   # Get buffered area

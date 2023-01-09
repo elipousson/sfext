@@ -14,6 +14,7 @@ st_bbox_ext(
   unit = NULL,
   crs = NULL,
   class = "bbox",
+  nudge = NULL,
   null.ok = TRUE,
   list.ok = TRUE
 )
@@ -46,6 +47,9 @@ to units matching GDAL units for x; defaults to "meter"}
 \code{NULL} which maintains the crs of the input object.}
 
 \item{class}{Class of object to return (\code{sf} or \code{bbox}); defaults to "bbox".}
+
+\item{nudge}{Passed as to parameter \code{\link[=st_nudge]{st_nudge()}} when not \code{NULL}. Numeric
+vector or sf object.}
 
 \item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{NULL}.}
 
