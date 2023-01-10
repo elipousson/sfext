@@ -777,8 +777,7 @@ get_gmap_id <- function(url) {
 #' @noRd
 make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
   cli_abort_ifnot(
-    "{.arg url} must be a valid Google Maps url.",
-    condition = is_gmap_url(url)
+    "{.arg url} must be a valid Google Maps url." = is_gmap_url(url)
   )
 
   if (!is.null(url)) {
@@ -991,11 +990,10 @@ make_sf_wkt_filter <- function(wkt_filter = NULL,
     return(wkt_filter %||% character(0))
   }
 
-  if (!is.null(wkt_filter)) {
-    cli::cli_warn(
-      "{.arg wkt_filter} is ignored if {.arg bbox} is provided."
-    )
-  }
+  cli_warn_ifnot(
+    "{.arg wkt_filter} is ignored if {.arg bbox} is provided." =
+      is.null(wkt_filter)
+  )
 
   # Convert bbox to well known text
   sf_bbox_to_wkt(bbox = bbox)
@@ -1026,11 +1024,10 @@ make_sf_query <- function(dsn = NULL,
       as.character(sf::st_layers(dsn = dsn)[["name"]])
     )
 
-  if (!is.null(query)) {
-    cli::cli_warn(
-      "{.arg query} is ignored if {.arg name} and {.arg name_col} are provided."
-    )
-  }
+  cli_warn_ifnot(
+    "{.arg query} is ignored if {.arg name}
+      and {.arg name_col} are provided." = is.null(query)
+  )
 
   glue(
     "select * from {table} where {name_col} IN
