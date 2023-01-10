@@ -120,12 +120,14 @@ get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
   check_null(x)
 
   if (is.character(x)) {
+    x <- underscore(x)
+
     return(
       rlang::arg_match(
         x,
         c(dist_unit_options, area_unit_options),
         multiple = multiple
-        )
+      )
     )
   }
 
@@ -163,7 +165,6 @@ get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
     object, or a {.cls sf} object with a valid crs.",
     condition = inherits(x, c("character", "units", "sf"))
   )
-
 }
 
 #' @name as_dist_units
@@ -195,7 +196,7 @@ as_dist_units <- function(x,
 
   if (cliExtras::cli_yesno(
     "Did you mean to convert {.var x} to {.val {units}}?"
-    )) {
+  )) {
     convert_dist_units(
       dist = x,
       to = units
@@ -266,8 +267,8 @@ is_same_units <- function(x, y = NULL) {
   if (any(
     c(all(nums %in% in_opts), all(nums %in% ft_opts), all(nums %in% yd_opts))
   ) && (
-  all(dens == character(0)) | (dens[1] == dens[2])
-    )) {
+    all(dens == character(0)) | (dens[1] == dens[2])
+  )) {
     return(TRUE)
   }
 
