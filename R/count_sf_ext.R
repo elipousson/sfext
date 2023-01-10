@@ -132,14 +132,17 @@ count_sf_ext <- function(data,
     )
 
     min_count <- as.integer(min(lims))
+    n_lims <- length(lims)
 
-    if (length(lims) > 1) {
+    if (n_lims > 1) {
       max_count <- as.integer(max(lims))
       cli::cli_inform(
         "Make sure caption or legend indicates that all values at or below
         {.val {min_count}} or at or above {.val {max_count}} are binned."
       )
-    } else {
+    }
+
+    if (n_lims == 1) {
       cli::cli_inform(
         "Make sure caption or legend indicates that all values at or below
         {.val {min_count}} are binned."
