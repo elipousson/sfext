@@ -212,17 +212,17 @@ get_social_image <- function(image = NULL, platform = NULL, format = NULL, orien
   image_sizes <- paper_sizes[paper_sizes$type == "social", ]
 
   if (!is.null(platform)) {
-    platform <- arg_match(platform, unique(image_sizes$standard))
+    platform <- arg_match(platform, as.character(unique(image_sizes$standard)))
     image_sizes <- image_sizes[image_sizes$standard %in% platform, ]
   }
 
   if (!is.null(format)) {
-    format <- arg_match(format, unique(image_sizes$size))
+    format <- arg_match(format, as.character(unique(image_sizes$size)))
     image_sizes <- image_sizes[image_sizes$size %in% format, ]
   }
 
   image <- image %||% image_sizes$name[1]
-  image <- arg_match(image, image_sizes$name)
+  image <- arg_match(image, as.character(image_sizes$name))
 
   get_paper(
     paper = image,

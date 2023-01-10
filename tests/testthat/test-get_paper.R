@@ -55,13 +55,13 @@ test_that("get_paper works", {
     get_social_image(
       platform = "Twitter"
     )$name,
-    "Twitter single image post"
+    "Twitter cover photo"
   )
 
   expect_identical(
     get_social_image(
       format = "post"
     )$name,
-    "Instagram post"
+    "Facebook post"
   )
 })
