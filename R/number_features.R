@@ -64,27 +64,9 @@ number_features <- function(x,
       )
   }
 
-  x <-
-    dplyr::mutate(
-      x,
-      "{.id}" := dplyr::row_number() + (num_start - 1),
-      .before = dplyr::everything()
-    )
+  x <- as_numbered_labels(x, labels = num_style, col = .id, start = num_start)
 
-  num_style <- arg_match(num_style, c("arabic", "alph", "Alph", "roman", "Roman"))
-
-  x[[.id]] <-
-    switch(num_style,
-      "arabic" = x[[.id]],
-      "alph" = tolower(sapply(x[[.id]], int_to_alph)),
-      "Alph" = toupper(sapply(x[[.id]], int_to_alph)),
-      "roman" = tolower(utils::as.roman(x[[.id]])),
-      "Roman" = toupper(utils::as.roman(x[[.id]]))
-    )
-
-  if (!is.null(suffix)) {
-    x[[.id]] <- paste0(x[[.id]], suffix)
-  }
+  x <- dplyr::relocate(x, dplyr::all_of(.id), .before = dplyr::everything())
 
   x
 }
@@ -94,24 +76,6 @@ number_features <- function(x,
 #' @export
 number_sf <- number_features
 
-#' Adapted from https://stackoverflow.com/a/44274075
-#'
-#' @noRd
-int_to_alph <- function(num, suffix = NULL, base = 26) {
-  rest <- (num - 1) %/% base
-
-  suffix <-
-    paste0(
-      LETTERS[((num - 1) %% base) + 1],
-      suffix
-    )
-
-  if (rest > 0) {
-    return(Recall(rest, suffix, base))
-  }
-
-  suffix
-}
 
 #' @name sort_features
 #' @rdname number_features
