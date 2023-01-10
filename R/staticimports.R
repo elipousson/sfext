@@ -3,6 +3,288 @@
 # Imported from pkg:isstatic
 # ======================================================================
 
+#' Convert an alphabetical character object from A to Z into a corresponding
+#' integer
+#'
+#' Integers and NA values are passed as is. Double or characters with no
+#' corresponding Roman numeral are converting to NA values.
+#'
+#' @param x Character vector of length n strings to compare to dict. Typically,
+#'   letters from "A" to "Z". Case sensitive.
+#' @param dict Character vector to match to x. Default: LETTERS.
+#' @param n Maximum character length for non-NA objects permitted. Set to NULL
+#'   or >1 if dict includes objects with more than one character.
+#' @param quiet If `TRUE`, suppress warnings for introduction of NA values
+#'   through coercion.
+##' @param call Default: [parent.frame()]. Passed to input checking functions
+#'   to improve error messages.
+#' @returns A length 1 integer between 1 and 26.
+#' @noRd
+alpha_to_int <- function(x,
+                         dict = LETTERS,
+                         n = 1,
+                         quiet = TRUE,
+                         call = parent.frame()) {
+  check_nchar(x, n, call = call)
+  x[x %in% dict] <- seq_along(dict)[dict %in% x]
+  as_integer(x, quiet)
+}
+
+#' as.integer with option to suppress warnings for NA coercion
+#'
+#' @inheritParams base::as.integer
+#' @param quiet If `TRUE`, suppress warnings about creation of NA values through
+#'   coercion of object types. Default to `TRUE`.
+#' @noRd
+as_integer <- function(x, quiet = TRUE) {
+  if (isTRUE(quiet)) {
+    return(suppressWarnings(as.integer(x)))
+  }
+
+  as.integer(x)
+}
+
+#' Convert a numeric vector to a vector of numbered labels
+#'
+#' This function allows the creation of numbered labels for a vector using a
+#' range of numbering styles.
+#'
+#' @param x An integer or other vector or a data.frame. An integer vector or
+#'   integer column is used as the number that is converted based on the label
+#'   style. If x is not an integer or data.frame with an integer column, the
+#'   numbering is created based on [seq_along()].
+#' @param labels Label style. Options include "arabic", "alph", "Alph", "alpha",
+#'   "Alpha", "roman", or "Roman".
+#' @param start Starting number or value. Letters are supported if label style
+#'   is "alph", "Alph", "alpha", or  "Alpha" and Roman numerals are supported if
+#'   label is "roman" or "Roman".
+#' @param suffix Suffix character to follow number labels. For example, if `x =
+#'   1` and `suffix = "."` the returned label would be "1."
+#' @param base Base used in alphabetical number labels. Highest letter to use
+#'   for alphabetical numbers. Single digit letters (A to Z) or numbers 1 to 26
+#'   are supported. For example, if base is 3, alphabetical labels for numbers
+#'   higher than 3 have the prior value prefixed so 3 would be "C" and 4 would
+#'   be "AA". Defaults to 26 which converts 27 to "AA", 53 to "BA", etc.
+#' @param cols Column name to use for added column for number labels when x is a
+#'   data.frame. Defaults to "num_label". If cols is length 2, the first item in
+#'   the vector is assumed to be the column name from the data.frame to use as x
+#'   and the second item is used as the column name for the added column with
+#'   number labels.
+#' @inheritParams as_integer
+#' @param call Default: [parent.frame()]. Passed to input checking functions
+#'   to improve error message traceback.
+#' @param pad,side If pad is not `NULL`, pass pad and side to [str_pad()] added
+#'   from the [stringstatic::str_pad()] package.
+#' @returns
+#' - If x is a vector, function returns numeric vector if labels is
+#'   "arabic" or a character vector otherwise.
+#' - If x is a data.frame, [as_numbered_labels()] returns a modified data.frame
+#'   with an added column with a name matching the second value of the cols
+#'   parameter.
+#' @noRd
+as_numbered_labels <- function(x,
+                               labels = "arabic",
+                               start = NULL,
+                               suffix = NULL,
+                               base = 26,
+                               cols = "num_label",
+                               pad = NULL,
+                               side = "left",
+                               quiet = TRUE,
+                               call = parent.frame()) {
+  if (is.data.frame(x)) {
+    num_col <- cols
+    x_col <- c(1:nrow(x))
+
+    if (length(cols) == 2) {
+      num_col <- cols[2]
+      check_name(x, cols[1])
+      x_col <- x[, cols[1]]
+    }
+
+    x[num_col, ] <-
+      as_numbered_labels(
+        x_col, labels, start, suffix, base, col, pad, side, quiet, call
+      )
+
+    return(x)
+  }
+
+  if (str_detect(labels, " ")) {
+    start <- str_extract(labels, "(?<= ).+$")
+    check_nchar(start, n = 1)
+    labels <- str_extract(labels, "^.+(?= )")
+    labels <- tolower(labels)
+    if (str_detect(start, "[A-Z]")) {
+      labels <- tosentence(labels)
+    }
+  }
+
+  labels <-
+    match.arg(
+      labels, c("arabic", "alph", "Alph", "alpha", "Alpha", "roman", "Roman")
+    )
+
+  if (!is.integer(x)) {
+    x <- seq_along(x)
+  }
+
+  x <- set_start_number(x, start, labels)
+
+  num_labels <-
+    switch(labels,
+      "arabic" = x,
+      "alph" = sapply(x, int_to_alpha,
+        base = base,
+        dict = letters, quiet = quiet
+      ),
+      "alpha" = sapply(x, int_to_alpha,
+        base = base,
+        dict = letters, quiet = quiet
+      ),
+      "Alph" = sapply(x, int_to_alpha, base = base, quiet = quiet),
+      "Alpha" = sapply(x, int_to_alpha, base = base, quiet = quiet),
+      "roman" = tolower(as_roman(x, quiet)),
+      "Roman" = toupper(as_roman(x, quiet))
+    )
+
+  if (!is.null(pad)) {
+    num_labels <- str_pad(num_labels, max(nchar(num_labels)), side, pad)
+  }
+
+  if (is.null(suffix)) {
+    return(num_labels)
+  }
+
+  paste0(num_labels, suffix)
+}
+
+#' as.roman with option to suppress warnings for NA coercion
+#'
+#' @inheritParams utils::as.roman
+#' @param quiet If `TRUE`, suppress warnings about creation of NA values through
+#'   coercion of object types. Default to `TRUE`.
+#' @noRd
+as_roman <- function(x, quiet = TRUE) {
+  if (isTRUE(quiet)) {
+    return(suppressWarnings(utils::as.roman(x)))
+  }
+
+  utils::as.roman(x)
+}
+
+#' @noRd
+check_if <- function(condition, message = NULL, call = parent.frame()) {
+  if (isTRUE(condition)) {
+    return(invisible(NULL))
+  }
+
+  stop(
+    message,
+    call. = call
+  )
+}
+
+#' @noRd
+check_name <- function(x, name = NULL, call = parent.frame()) {
+  check_if(
+    condition = has_all_names(x, name),
+    message = paste0(
+      "`x` must have ", plural_words("name", length(name), after = " "), name,
+      ", but ", combine_words(name[!(name %in% names(x))]), " are all missing."
+    ),
+    call = call
+  )
+}
+
+#' @noRd
+check_nchar <- function(x, n = 1, ..., call = parent.frame()) {
+  num_char <- unique(nchar(x[!is.na(x)], ...))
+
+  message <- num_char
+
+  if (length(num_char) > 1) {
+    message <- paste("a range from", min(num_char), "to", max(num_char))
+  }
+
+  message <- paste0(
+    "All objects in `x` must have ", n, plural_words(" character", n),
+    ", not ", message, "."
+  )
+
+  check_if(
+    condition = is.null(n) | all(n == num_char),
+    message = message,
+    call = call
+  )
+}
+
+#' Combine multiple words into a single string
+#'
+#' @author Yihui Xie \email{xie@yihui.name}
+#'   ([ORCID](https://orcid.org/0000-0003-0645-5666))
+#'
+#' @source Adapted from [knitr::combine_words()] in the
+#'   [knitr](https://yihui.org/knitr/) package.
+#'
+#' @inherit knitr::combine_words
+#' @returns A character string
+#' @noRd
+combine_words <- function(words,
+                          sep = ", ",
+                          and = " and ",
+                          before = "",
+                          after = before,
+                          oxford_comma = TRUE) {
+  n <- length(words)
+
+  rs <- function (x) {
+    if (is.null(x))
+      x = as.character(x)
+    x
+  }
+
+  if (n == 0) {
+    return(words)
+  }
+
+  words <- paste0(before, words, after)
+
+  if (n == 1) {
+    return(rs(words))
+  }
+
+  if (n == 2) {
+    return(rs(paste(words, collapse = if (is_blank(and)) sep else and)))
+  }
+
+  if (oxford_comma && grepl("^ ", and) && grepl(" $", sep)) {
+    and <- gsub("^ ", "", and)
+  }
+
+  words[n] <- paste0(and, words[n])
+
+  if (!oxford_comma) {
+    words[n - 1] <- paste0(words[n - 1:0], collapse = "")
+    words <- words[-n]
+  }
+
+  rs(paste(words, collapse = sep))
+}
+
+#' Does an object have all of the provided names?
+#'
+#' @param x A data frame or another named object.
+#' @param name Element name(s) to check.
+#' @noRd
+has_all_names <- function(x, name) {
+  if (anyNA(c(x, name))) {
+    return(FALSE)
+  }
+
+  all(utils::hasName(x, name))
+}
+
 #' Does string contain the specified file type or any file extension?
 #'
 #' Check if string contains any filetype or the provided filetype. If string is
@@ -35,10 +317,63 @@ has_same_len <- function(x, y, ...) {
   identical(length(x), length(y), ...)
 }
 
+#' Convert a integer into a corresponding letter or multi-letter string
+#'
+#' Character values in the provided dict (default to letters "A" to "Z") are
+#' passed as is. Non-integer numeric values or characters that are not found in
+#' the provided dict are converting to NA values.
+#'
+#' @source Adapted from the recursive solution provided by G. Grothendieck in [a
+#'   May 31, 2017 StackOverflow answer](https://stackoverflow.com/a/44274075).
+#'
+#' @param x An integer vector or a vector that can be coerced to an integer
+#'   vector
+#' @param suffix Suffix character to follow alpha character, e.g. if `x = 1` and
+#'   `suffix = "."` the returned label would be "A.". suffix is also used to
+#'   separate values when x is greater than base, e.g. `x = 27` and `suffix =
+#'   "."` returns "A.A." Defaults to `NULL`.
+#' @param base If base is not numeric, it is converted to an integer with
+#'   [alpha_to_int()].
+#' @param dict Character vector to compare to x. Default: LETTERS.
+#' @param quiet If `TRUE`, suppress warnings for introduction of NA values
+#'   through coercion.
+#' @returns An integer vector composed of objects between 1 and 26 with the same
+#'   length as x.
+#' @noRd
+int_to_alpha <- function(x,
+                         suffix = NULL,
+                         base = 26,
+                         dict = LETTERS,
+                         quiet = TRUE) {
+  x <- as_integer(x, quiet)
+
+  if (!is.numeric(base)) {
+    base <- alpha_to_int(base, dict)
+  }
+
+  rest <- (x - 1) %/% base
+
+  alpha <-
+    paste0(
+      dict[((x - 1) %% base) + 1],
+      suffix
+    )
+
+  if (rest > 0) {
+    return(Recall(rest, alpha, base, dict))
+  }
+
+  alpha
+}
+
 #' Do all items in a list or vector return TRUE from a predicate function?
 #'
-#' @param x A list or vector passed to [vapply()].
-#' @param FUN Function passed to FUN parameter of [vapply()].
+#' @param x A list or vector passed to X parameter of [vapply()].
+#' @inheritParams base::vapply
+#' @inheritDotParams base::vapply -X
+#' @returns `TRUE` if FUN returns `TRUE` for all elements of x or `FALSE` if any
+#'   element returns `FALSE`.
+#' @seealso [is_any()]
 #' @noRd
 is_all <- function(x, FUN, ...) {
   all(vapply(x, FUN, FUN.VALUE = TRUE, ...))
@@ -62,8 +397,27 @@ is_any_in <- function(x, y) {
   any(x %in% y)
 }
 
+#' @inherit xfun::is_blank
+#'
+#' @author Yihui Xie \email{xie@yihui.name}
+#'   ([ORCID](https://orcid.org/0000-0003-0645-5666))
+#'
+#' @source Adapted from [xfun::is_blank()] in the
+#'   [xfun](https://yihui.org/xfun/) package.
+#'
+#' @examples
+#' is_blank("")
+#' is_blank("abc")
+#' is_blank(c("", "  ", "\n\t"))
+#' is_blank(c("", " ", "abc"))
+#' @noRd
+is_blank <- function(x) {
+  all(grepl("^\\s*$", x))
+}
+
 #' Is this a CSV file path or url?
 #'
+#' @inheritParams is_fileext_path
 #' @noRd
 is_csv_path <- function(x, ignore.case = TRUE) {
   is_fileext_path(x, "csv", ignore.case)
@@ -79,6 +433,7 @@ is_esri_url <- function(x) {
 
 #' Is this a Excel file path or url?
 #'
+#' @inheritParams is_fileext_path
 #' @noRd
 is_excel_path <- function(x, ignore.case = TRUE) {
   is_fileext_path(x, c("xls", "xlsx"), ignore.case)
@@ -86,6 +441,10 @@ is_excel_path <- function(x, ignore.case = TRUE) {
 
 #' Is this a file path or url ending in the specified file extension?
 #'
+#' @param x A character vector to check.
+#' @param fileext A file extension (or multiple file extensions) to compare to
+#'   x. Required.
+#' @inheritParams base::grepl
 #' @noRd
 is_fileext_path <- function(x, fileext, ignore.case = TRUE) {
   grepl(
@@ -97,6 +456,7 @@ is_fileext_path <- function(x, fileext, ignore.case = TRUE) {
 
 #' Is this a GeoJSON file path or url?
 #'
+#' @inheritParams is_fileext_path
 #' @noRd
 is_geojson_path <- function(x, ignore.case = TRUE) {
   is_fileext_path(x, "geojson", ignore.case)
@@ -128,6 +488,7 @@ is_gsheet_url <- function(x) {
 
 #' Is this a RDA file path or url?
 #'
+#' @inheritParams is_fileext_path
 #' @noRd
 is_rda_path <- function(x, ignore.case = TRUE) {
   is_fileext_path(x, "rda", ignore.case)
@@ -135,6 +496,7 @@ is_rda_path <- function(x, ignore.case = TRUE) {
 
 #' Is this a RDS, RDA, or RData file path or url?
 #'
+#' @inheritParams is_fileext_path
 #' @noRd
 is_rdata_path <- function(x, ignore.case = TRUE) {
   any(
@@ -148,6 +510,7 @@ is_rdata_path <- function(x, ignore.case = TRUE) {
 
 #' Is this a RDS file path or url?
 #'
+#' @inheritParams is_fileext_path
 #' @noRd
 is_rds_path <- function(x, ignore.case = TRUE) {
   is_fileext_path(x, "rds", ignore.case)
@@ -158,7 +521,7 @@ is_rds_path <- function(x, ignore.case = TRUE) {
 #' @param x Object to be tested.
 #' @noRd
 is_unit <- function(x) {
-  inherits(x, c("unit", "unit_v2"))
+  inherits(x, "unit")
 }
 
 #' Is this a units class object?
@@ -179,10 +542,66 @@ is_url <- function(x) {
     x
   )
 }
-# Generated by staticimports; do not edit by hand.
-# ======================================================================
-# Imported from pkg:stringstatic
-# ======================================================================
+
+#' Simple helper for pluralizing words
+#'
+#' @noRd
+plural_words <- function(words,
+                         n = 1,
+                         suffix = "s",
+                         before = "",
+                         after = "",
+                         replacement = NULL) {
+  words <- paste0(before, words, after)
+
+  if (is.null(replacement)) {
+    replacement <- paste0(words, suffix)
+  }
+
+  if (n > 1) {
+    return(replacement)
+  }
+
+  words
+}
+
+#' Convert a Roman numeral character object into a corresponding integer
+#'
+#' Integers and NA objects are passed as is. Double numeric objects or
+#' characters with no corresponding Roman numeral are converting to NA values.
+#'
+#' @param x An integer vector or a character vector with characters representing
+#'   Roman numerals.
+#' @param quiet If `TRUE`, suppress warnings for introduction of NA values
+#'   through coercion.
+#' @noRd
+roman_to_int <- function(x, quiet = TRUE) {
+  as_integer(as_roman(x, quiet), quiet)
+}
+
+#' Set start number for numeric vector x
+#'
+#' Helper for [as_numbered_labels()].
+#'
+#' @inheritParams as_numbered_labels
+#' @noRd
+set_start_number <- function(x, start = NULL, labels = "arabic") {
+  if (is.null(start)) {
+    start <- 1
+  }
+
+  if (!is.numeric(start)) {
+    if (labels %in% c("alph", "Alph", "alpha", "Alpha")) {
+      start <- alpha_to_int(toupper(start))
+    }
+
+    if (labels %in% c("roman", "Roman")) {
+      start <- roman_to_int(start)
+    }
+  }
+
+  x + (start - 1)
+}
 
 #' Detect the presence or absence of a pattern in a string
 #'
@@ -283,6 +702,212 @@ str_extract <- function(string, pattern) {
   unlist(result)
 }
 
+#' Duplicate and concatenate strings within a character vector
+#'
+#' Dependency-free drop-in alternative for `stringr::str_pad()`.
+#'
+#' @author Eli Pousson \email{eli.pousson@gmail.com}
+#'   ([ORCID](https://orcid.org/0000-0001-8280-1706))
+#'
+#'   Alexander Rossell Hayes \email{alexander@rossellhayes.com}
+#'   ([ORCID](https://orcid.org/0000-0001-9412-0457))
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param string Input vector.
+#'   Either a character vector, or something coercible to one.
+#' @param width Minimum width of padded strings.
+#' @param side Side on which padding character is added (left, right or both).
+#' @param pad Single padding character (default is a space).
+#' @param use_width If `FALSE`,
+#'   use the length of the string instead of the width;
+#'   see [str_width()]/[str_length()] for the difference.
+#'
+#' @return A character vector.
+#' @noRd
+str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE) {
+  if (!is.numeric(width)) {
+    return(string[NA])
+  }
+
+  if (any(nchar(pad, type = "width") != 1)) {
+    stop("each string in `pad` should consist of code points of total width 1")
+  }
+
+  side <- match.arg(side)
+
+  nchar_type <- if (isTRUE(use_width)) "width" else "chars"
+  string_width <- nchar(string, nchar_type)
+  pad_width <- width - string_width
+  pad_width[pad_width < 0] <- 0
+
+  switch(side,
+    "left" = paste0(strrep(pad, pad_width), string),
+    "right" = paste0(string, strrep(pad, pad_width)),
+    "both" = paste0(
+      strrep(pad, floor(pad_width / 2)),
+      string,
+      strrep(pad, ceiling(pad_width / 2))
+    )
+  )
+}
+
+#' Convert to a common sentence case
+#'
+#' @author Joachim Schork \email{info@joachimschork.com}
+#'
+#' @source [Statistics Globe](https://statisticsglobe.com/r-capitalize-first-letter-of-character-string-containing-multiple-words)
+#'
+#' @param x a character vector, or an object that can be coerced to character by
+#'   [as.character()].
+#' @noRd
+tosentence <- function(x) {
+  gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", x, perl = TRUE)
+}
+# Generated by staticimports; do not edit by hand.
+# ======================================================================
+# Imported from pkg:stringstatic
+# ======================================================================
+
+#' Control regex matching behavior
+#'
+#' Dependency-free drop-in alternative for `stringr::regex()`.
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param pattern Pattern to modify behavior.
+#' @param ignore_case Should case differences be ignored in the match?
+#' @param multiline
+#'   If `TRUE`, `$` and `^` match the beginning and end of each line.
+#'   If `FALSE`, the default, only match the start and end of the input.
+#' @param comments
+#'   If `TRUE`, white space and comments beginning with `#` are ignored.
+#'   Escape literal spaces with `\\`.
+#' @param dotall If `TRUE`, `.` will also match line terminators.
+#'
+#' @return An integer vector.
+#' @noRd
+regex <- function(
+	pattern,
+	ignore_case = FALSE,
+	multiline = FALSE,
+	comments = FALSE,
+	dotall = FALSE
+	) {
+	options <- c(
+		if (isTRUE(multiline)) "m",
+		if (isTRUE(dotall)) "s",
+		if (isTRUE(comments)) "x"
+	)
+
+	if (length(options) > 0) {
+		pattern <- paste0("(?", paste(options, collapse = ""), ")", pattern)
+	}
+
+	structure(
+		pattern,
+		options = list(
+			case_insensitive = ignore_case,
+			multiline = multiline,
+			comments = comments,
+			dotall = dotall
+		),
+		class = c("regex", "pattern", "character")
+	)
+}
+
+#' Detect the presence or absence of a pattern in a string
+#'
+#' Dependency-free drop-in alternative for `stringr::str_detect()`.
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param string Input vector.
+#'   Either a character vector, or something coercible to one.
+#'
+#' @param pattern Pattern to look for.
+#'
+#'   The default interpretation is a regular expression,
+#'   as described in [base::regex].
+#'   Control options with [regex()].
+#'
+#'   Match a fixed string (i.e. by comparing only bytes), using [fixed()].
+#'   This is fast, but approximate.
+#'
+#' @param negate If `TRUE`, return non-matching elements.
+#'
+#' @return A logical vector.
+#' @noRd
+str_detect <- function(string, pattern, negate = FALSE) {
+	is_fixed <- inherits(pattern, "fixed")
+	ignore.case <- isTRUE(attr(pattern, "options")$case_insensitive)
+
+	if (length(string) == 0 || length(pattern) == 0) return(logical(0))
+
+	indices <- Vectorize(grep, c("pattern", "x"), USE.NAMES = FALSE)(
+		pattern,
+		x = string,
+		ignore.case = ignore.case,
+		perl = !is_fixed,
+		fixed = is_fixed,
+		invert = negate
+	)
+
+	result <- as.logical(lengths(indices))
+	result[is.na(string)] <- NA
+	result
+}
+
+#' Extract matching patterns from a string
+#'
+#' Dependency-free drop-in alternative for `stringr::str_extract()`.
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param string Input vector.
+#'   Either a character vector, or something coercible to one.
+#'
+#' @param pattern Pattern to look for.
+#'
+#'   The default interpretation is a regular expression,
+#'   as described in [base::regex].
+#'   Control options with [regex()].
+#'
+#'   Match a fixed string (i.e. by comparing only bytes), using [fixed()].
+#'   This is fast, but approximate.
+#'
+#' @return A character matrix.
+#'   The first column is the complete match,
+#'   followed by one column for each capture group.
+#' @noRd
+str_extract <- function(string, pattern) {
+	ignore.case <- isTRUE(attr(pattern, "options")$case_insensitive)
+	is_fixed <- !ignore.case && inherits(pattern, "fixed")
+
+	if (length(string) == 0 || length(pattern) == 0) return(character(0))
+
+	result <- Map(
+		function(string, pattern) {
+			if (is.na(string) || is.na(pattern)) return(NA_character_)
+
+			regmatches(
+				x = string,
+				m = regexpr(
+					pattern = pattern,
+					text = string,
+					ignore.case = ignore.case,
+					perl = !is_fixed,
+					fixed = is_fixed
+				)
+			)
+		},
+		string, pattern, USE.NAMES = FALSE
+	)
+
+	result[lengths(result) == 0] <- NA_character_
+	unlist(result)
+}
+
 #' Remove matched patterns in a string
 #'
 #' Dependency-free drop-in alternative for `stringr::str_remove()`.
@@ -304,19 +929,19 @@ str_extract <- function(string, pattern) {
 #' @return A character vector.
 #' @noRd
 str_remove <- function(string, pattern) {
-  ignore.case <- isTRUE(attr(pattern, "options")$case_insensitive)
-  is_fixed <- !ignore.case && inherits(pattern, "fixed")
+	ignore.case <- isTRUE(attr(pattern, "options")$case_insensitive)
+	is_fixed <- !ignore.case && inherits(pattern, "fixed")
 
-  sub <- Vectorize(sub, c("pattern", "x"), USE.NAMES = FALSE)
+	sub <- Vectorize(sub, c("pattern", "x"), USE.NAMES = FALSE)
 
-  sub(
-    pattern,
-    replacement = "",
-    x = string,
-    ignore.case = ignore.case,
-    perl = !is_fixed,
-    fixed = is_fixed
-  )
+	sub(
+		pattern,
+		replacement = "",
+		x = string,
+		ignore.case = ignore.case,
+		perl = !is_fixed,
+		fixed = is_fixed
+	)
 }
 
 #' Replace matched patterns in a string
@@ -350,17 +975,17 @@ str_remove <- function(string, pattern) {
 #' @return A character vector.
 #' @noRd
 str_replace <- function(string, pattern, replacement) {
-  ignore.case <- isTRUE(attr(pattern, "options")$case_insensitive)
-  is_fixed <- !ignore.case && inherits(pattern, "fixed")
+	ignore.case <- isTRUE(attr(pattern, "options")$case_insensitive)
+	is_fixed <- !ignore.case && inherits(pattern, "fixed")
 
-  sub <- Vectorize(sub, c("pattern", "replacement", "x"), USE.NAMES = FALSE)
+	sub <- Vectorize(sub, c("pattern", "replacement", "x"), USE.NAMES = FALSE)
 
-  sub(
-    pattern,
-    replacement,
-    x = string,
-    ignore.case = ignore.case,
-    perl = !is_fixed,
-    fixed = is_fixed
-  )
+	sub(
+		pattern,
+		replacement,
+		x = string,
+		ignore.case = ignore.case,
+		perl = !is_fixed,
+		fixed = is_fixed
+	)
 }

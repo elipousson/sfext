@@ -767,9 +767,9 @@ read_sf_gmap <- function(url,
 #' Get map ID from url
 #' @noRd
 get_gmap_id <- function(url) {
-  stringr::str_extract(
+  str_extract(
     url,
-    "(?<=mid=)([:alnum:]|_)+((?=&)|(?=/$)|$)"
+    regex("(?<=mid=)([[:alnum:]]|_)+((?=&)|(?=/$)|$)")
   )
 }
 
@@ -1013,9 +1013,9 @@ make_sf_query <- function(dsn = NULL,
 
   table <-
     table %||%
-    stringr::str_extract(
+    str_extract(
       basename(dsn),
-      "[:graph:]+(?=\\.)"
+      regex("[[:graph:]]+(?=\\.)")
     )
 
   table <-

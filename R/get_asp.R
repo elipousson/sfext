@@ -12,7 +12,6 @@
 #' @inheritParams get_paper
 #' @inheritDotParams get_paper
 #' @export
-#' @importFrom stringr str_extract
 get_asp <- function(asp = NULL,
                     paper = NULL,
                     orientation = NULL,
@@ -45,7 +44,7 @@ get_asp <- function(asp = NULL,
   switch(type,
     "null" = asp,
     "num" = asp,
-    "char" = as.numeric(stringr::str_extract(asp, ".+(?=:)")) / as.numeric(stringr::str_extract(asp, "(?<=:).+")),
+    "char" = as.numeric(str_extract(asp, ".+(?=:)")) / as.numeric(str_extract(asp, "(?<=:).+")),
     "paper" = get_paper(paper = paper, orientation = orientation, bbox = bbox, ...)[["asp"]],
     "block" = get_paper(paper = paper, orientation = orientation, bbox = bbox, margin = margin, ...)[["block_asp"]],
     "bbox" = sf_bbox_asp(bbox)

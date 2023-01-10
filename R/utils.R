@@ -1,11 +1,12 @@
 # @staticimports pkg:stringstatic
 #  str_detect str_extract
-#  str_replace str_remove
+#  str_replace str_remove regex
 
 # @staticimports pkg:isstatic
 #  is_any is_all has_same_len is_any_in is_url is_esri_url is_gsheet_url
 #  is_gist_url is_gmap_url is_unit is_rds_path is_rda_path is_rdata_path
-#  is_excel_path is_csv_path is_geojson_path is_units has_fileext
+#  is_excel_path is_csv_path is_geojson_path is_units has_fileext int_to_alpha
+#  as_numbered_labels
 
 .onLoad <- function(lib, pkg) {
   rlang::run_on_load()
