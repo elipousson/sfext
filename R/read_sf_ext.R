@@ -625,7 +625,7 @@ read_sf_esri <- function(url,
       esri2sf::esri2sf(
         url = url,
         where = where,
-        bbox = bbox,
+        geometry = bbox,
         crs = NULL,
         progress = TRUE,
         .name_repair = .name_repair,
