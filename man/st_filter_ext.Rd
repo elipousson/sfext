@@ -2,6 +2,7 @@
 % Please edit documentation in R/st_filter_ext.R
 \name{st_filter_ext}
 \alias{st_filter_ext}
+\alias{st_filter_geom_type}
 \title{Filter, crop, trim, or erase a simple feature object or list}
 \usage{
 st_filter_ext(
@@ -16,6 +17,8 @@ st_filter_ext(
   list.ok = TRUE,
   ...
 )
+
+st_filter_geom_type(x, type = NULL)
 }
 \arguments{
 \item{x, y}{A \code{sf}, \code{sfc}, or \code{bbox} object. x may also be a \code{sf} list
@@ -33,8 +36,7 @@ ignored.}
 \item{.predicate}{geometry predicate function with the same profile as
 \code{\link[sf:geos_binary_pred]{sf::st_intersects()}}; see details for \code{\link[sf:st_join]{sf::st_filter()}} for more options.}
 
-\item{type}{Character string passed to type argument of \code{\link[sf:st_is]{sf::st_is()}}
-to filter features to only those matching the specified geometry type.}
+\item{type}{Geometry type.}
 
 \item{list.ok}{If \code{TRUE}, x can be a list of \code{sf}, \code{sfc}, or \code{bbox} objects.
 If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supported. Defaults to
@@ -45,12 +47,9 @@ If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supporte
   \describe{
     \item{\code{}}{}
   }}
-
-\item{null.ok}{If \code{y = NULL} and \code{null.ok = TRUE}, x is returned without
-changes. Defaults to \code{TRUE}.}
 }
 \description{
 Extend \code{\link[sf:st_join]{sf::st_filter()}} to filter a sf list or a \code{sf}, \code{sfc}, or \code{bbox} with
 options to crop, trim or erase the geometry of the input object based on a
-predicate function.
+predicate function. Returns x transformed to match crs if y is \code{NULL}.
 }

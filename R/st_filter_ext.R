@@ -2,7 +2,7 @@
 #'
 #' Extend [sf::st_filter()] to filter a sf list or a `sf`, `sfc`, or `bbox` with
 #' options to crop, trim or erase the geometry of the input object based on a
-#' predicate function.
+#' predicate function. Returns x transformed to match crs if y is `NULL`.
 #'
 #' @param x,y A `sf`, `sfc`, or `bbox` object. x may also be a `sf` list
 #'   objects. If x is an `sf` list, additional parameters in `...` will be
@@ -15,8 +15,6 @@
 #'   [sf::st_intersects()]; see details for [sf::st_filter()] for more options.
 #' @param type Character string passed to type argument of [sf::st_is()]
 #'   to filter features to only those matching the specified geometry type.
-#' @param null.ok If `y = NULL` and `null.ok = TRUE`, x is returned without
-#'   changes. Defaults to `TRUE`.
 #' @param list.ok If `TRUE`, x can be a list of `sf`, `sfc`, or `bbox` objects.
 #'   If `FALSE`, only `sf`, `sfc`, or `bbox` objects are supported. Defaults to
 #'   `TRUE`.
@@ -81,7 +79,7 @@ st_filter_ext <- function(x,
 
   y <- st_transform_ext(y, crs = x)
 
-  type <-
+  case <-
     dplyr::case_when(
       crop ~ "crop",
       trim ~ "trim",
@@ -102,7 +100,7 @@ st_filter_ext <- function(x,
     )
 
   x <-
-    switch(type,
+    switch(case,
       "crop" = suppressWarnings(sf::st_crop(x, y)),
       "trim" = st_trim(x, y),
       "erase" = st_erase(x, y),
@@ -116,8 +114,8 @@ st_filter_ext <- function(x,
 
 #' Filter by geometry type
 #'
-#' @rdname st_filter_geom_type
-#' @name st_filter_ext
+#' @rdname st_filter_ext
+#' @name st_filter_geom_type
 #' @param type Geometry type.
 #' @export
 #' @importFrom sf st_is
