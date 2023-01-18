@@ -541,7 +541,7 @@ read_sf_url <- function(url,
     ),
     "esri" = read_sf_esri(
       url = url,
-      location = bbox,
+      bbox = bbox,
       where = params$where,
       name = params$name,
       name_col = params$name_col,
