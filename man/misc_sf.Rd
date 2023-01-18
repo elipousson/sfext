@@ -35,7 +35,8 @@ a \code{sf}, \code{sfc}, \code{bbox}, or \code{crs} class object supported by \c
 \item{.after}{The location to place sf column after; defaults to
 \code{\link[dplyr:reexports]{dplyr::everything()}}.}
 
-\item{sf_col}{Name to use for the sf column after renaming; defaults to "geometry".}
+\item{sf_col}{Name to use for the sf column after renaming; defaults to
+"geometry".}
 
 \item{dsn}{data source name (interpretation varies by driver - for some
 drivers, \code{dsn} is a file name, but may also be a folder, or contain

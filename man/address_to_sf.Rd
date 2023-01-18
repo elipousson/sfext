@@ -17,7 +17,8 @@ address_to_sf(
 )
 }
 \arguments{
-\item{x}{Data frame with an address column. Multiple address columns are not currently supported.}
+\item{x}{Data frame with an address column. Multiple address columns are not
+currently supported.}
 
 \item{address}{Address column name, Default: 'address'}
 

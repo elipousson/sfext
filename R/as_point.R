@@ -1,5 +1,6 @@
 
-#' Convert an sf, numeric, or other object to a POINT (sfg) or POINT, MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object
+#' Convert an sf, numeric, or other object to a POINT (sfg) or POINT,
+#' MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object
 #'
 #' Works with sf, sfc, and bbox objects using [sf::st_centroid()]. Works with
 #' [sf_bbox_point()]
@@ -8,14 +9,16 @@
 #'
 #' [as_point()] always returns a single point sfg object. The ... parameter is
 #' passed to [sf::st_centroid()] if ... is a sf, sfc, or bbox object,
-#' [sf_bbox_point()] includes a bbox object and a string indicating the requested
-#' point position, or [sf::st_point()] if ... includes a numeric vector.
+#' [sf_bbox_point()] includes a bbox object and a string indicating the
+#' requested point position, or [sf::st_point()] if ... includes a numeric
+#' vector.
 #'
 #' @details Using as_points:
 #'
-#' [as_points()] always returns an sfc object. The parameters are passed to as_point using [purrr::map] and then
-#' converted to sfc using [sf::st_as_sfc()]. The ... parameters must include a
-#' crs, otherwise the crs will be NA for the resulting sfc object.
+#' [as_points()] always returns an sfc object. The parameters are passed to
+#' as_point using [purrr::map] and then converted to sfc using
+#' [sf::st_as_sfc()]. The ... parameters must include a crs, otherwise the crs
+#' will be NA for the resulting sfc object.
 #'
 #' @rdname as_point
 #' @name as_points
@@ -129,7 +132,7 @@ as_endpoint <- function(x) {
   cliExtras::cli_abort_ifnot(
     "Must have LINESTRING or MULTILINESTRING geometry.",
     condition = is_line(x) | is_multiline(x)
-    )
+  )
 
   if (is_multiline(x)) {
     x <- suppressWarnings(sf::st_cast(as_sf(x), "LINESTRING"))

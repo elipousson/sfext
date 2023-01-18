@@ -1,4 +1,5 @@
-#' Cast geometry of a simple feature object or simple feature collection to another type
+#' Cast geometry of a simple feature object or simple feature collection to
+#' another type
 #'
 #' Wrapper for [sf::st_cast()] that currently supports casting MULTIPOLYGON to
 #' POLYGON or MULTIPOLYGON or POLYGON to POINT or, if simplify = FALSE, can cast

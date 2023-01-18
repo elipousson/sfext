@@ -105,9 +105,25 @@ df_to_sf <- function(x,
     switch(type,
       "geometry_df" = sf::st_as_sf(x),
       "join_sf" = join_sf_to_df(x, y, by = by, ...),
-      "address_df" = address_to_sf(x, address = address, coords = coords, crs = crs, remove_coords = remove_coords, ...),
+      "address_df" = address_to_sf(
+        x,
+        address = address,
+        coords = coords,
+        crs = crs,
+        remove_coords = remove_coords,
+        ...
+      ),
       "wkt_df" = wkt_df_to_sf(x, crs = from_crs),
-      "coords_df" = coords_to_sf(x, coords = coords, crs = from_crs, into = into, sep = sep, rev = rev, remove_coords = remove_coords, call = call),
+      "coords_df" = coords_to_sf(
+        x,
+        coords = coords,
+        crs = from_crs,
+        into = into,
+        sep = sep,
+        rev = rev,
+        remove_coords = remove_coords,
+        call = call
+      ),
     )
 
   st_transform_ext(x = x, crs = crs, class = "sf")
@@ -141,7 +157,8 @@ wkt_df_to_sf <- function(x, crs = NULL) {
 #' parameters passed to [tidygeocoder::geocode()] which passes `...` parameters to
 #' [tidygeocoder::geo()].
 #'
-#' @param x Data frame with an address column. Multiple address columns are not currently supported.
+#' @param x Data frame with an address column. Multiple address columns are not
+#'   currently supported.
 #' @param address Address column name, Default: 'address'
 #' @inheritParams tidygeocoder::geo
 #' @inheritParams df_to_sf

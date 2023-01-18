@@ -11,7 +11,8 @@
 \alias{as_lines}
 \alias{as_polygons}
 \alias{as_centroid}
-\title{Convert an sf, numeric, or other object to a POINT (sfg) or POINT, MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object}
+\title{Convert an sf, numeric, or other object to a POINT (sfg) or POINT,
+MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object}
 \usage{
 as_point(..., to = "POINT")
 
@@ -50,14 +51,16 @@ Using as_point:
 
 \code{\link[=as_point]{as_point()}} always returns a single point sfg object. The ... parameter is
 passed to \code{\link[sf:geos_unary]{sf::st_centroid()}} if ... is a sf, sfc, or bbox object,
-\code{\link[=sf_bbox_point]{sf_bbox_point()}} includes a bbox object and a string indicating the requested
-point position, or \code{\link[sf:st]{sf::st_point()}} if ... includes a numeric vector.
+\code{\link[=sf_bbox_point]{sf_bbox_point()}} includes a bbox object and a string indicating the
+requested point position, or \code{\link[sf:st]{sf::st_point()}} if ... includes a numeric
+vector.
 
 Using as_points:
 
-\code{\link[=as_points]{as_points()}} always returns an sfc object. The parameters are passed to as_point using \link[purrr:map]{purrr::map} and then
-converted to sfc using \code{\link[sf:st_as_sfc]{sf::st_as_sfc()}}. The ... parameters must include a
-crs, otherwise the crs will be NA for the resulting sfc object.
+\code{\link[=as_points]{as_points()}} always returns an sfc object. The parameters are passed to
+as_point using \link[purrr:map]{purrr::map} and then converted to sfc using
+\code{\link[sf:st_as_sfc]{sf::st_as_sfc()}}. The ... parameters must include a crs, otherwise the crs
+will be NA for the resulting sfc object.
 
 Using \link{as_startpoint} and \link{as_endpoint}:
 

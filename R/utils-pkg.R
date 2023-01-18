@@ -31,7 +31,8 @@ ls_pkg_extdata <- function(pkg, call = caller_env()) {
 
   if (is.null(path)) {
     return(invisible(path))
-    # cli_abort("{.file extdata} folder can't be found for the provided package {.val pkg}.")
+    # cli_abort("{.file extdata} folder can't be found for the provided package
+    # {.val pkg}.")
   }
 
   list.files(path)

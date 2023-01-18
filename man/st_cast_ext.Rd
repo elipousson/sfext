@@ -2,7 +2,8 @@
 % Please edit documentation in R/st_cast_ext.R
 \name{st_cast_ext}
 \alias{st_cast_ext}
-\title{Cast geometry of a simple feature object or simple feature collection to another type}
+\title{Cast geometry of a simple feature object or simple feature collection to
+another type}
 \usage{
 st_cast_ext(x, to = "POINT", simplify = TRUE, ...)
 }

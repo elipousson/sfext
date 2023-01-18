@@ -40,16 +40,24 @@ st_donut(x, width = 0.4, scale = 1, inscribed = FALSE, by_feature = TRUE, ...)
 
 \item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
 
+\item{class}{Class to return for \code{\link[=st_center]{st_center()}}: "sfc", "sf", "geometry"
+(original input geometry), "x" (original input object), "crs" (original
+input crs), or "list" (including all other class types).}
+
 \item{ext}{If \code{TRUE}, st_center returns a list with the centroid as a \code{sfc}
 object, as an \code{sf} object (with lon and lat values), the original geometry
-(x), and the original crs. objects; defaults TRUE. If \code{FALSE}, return an \code{sf}
-object.}
+(x), and the original crs. objects; defaults TRUE. If \code{FALSE}, return an
+\code{sf} object.}
 
 \item{...}{Additional parameters passed to \code{\link[sf:geos_unary]{sf::st_centroid()}} by
 \code{\link[=st_center]{st_center()}} or \code{\link[=st_circle]{st_circle()}} by \code{\link[=st_donut]{st_donut()}}.}
 
-\item{inscribed}{If \code{TRUE}, make circle, square, or donut inscribed within x, if
-\code{FALSE}, make it circumscribed. Use}
+\item{inscribed}{If \code{TRUE}, make circle, square, or donut inscribed within x,
+if \code{FALSE}, make it circumscribed.}
+
+\item{by_feature}{If \code{TRUE}, create new geometry for each feature. If
+\code{FALSE}, create new geometry for all features combine with
+\code{\link[=st_union_ext]{st_union_ext()}}.}
 
 \item{dTolerance}{numeric; tolerance parameter, specified for all or for each
 feature geometry. If you run \code{st_simplify}, the input data is
@@ -73,15 +81,15 @@ transformations
 \item Get the center point for a \code{sf} object
 \item Get a circumscribed square or approximate inscribed square in a \code{sf} object
 \item Get a circumscribed circle or inscribed circle in a \code{sf} object
-\item Get a donut for a \code{sf} object (may return unexpected results if inscribed = TRUE)
+\item Get a donut for a \code{sf} object (may not work if \code{inscribed = TRUE})
 }
 
 st_inscribed_square wraps \code{\link[sf:geos_unary]{sf::st_inscribed_circle()}} but limits the circle
 to 1 segment per quadrant (\code{nQuadSegs = 1}) and then rotates the resulting
 geometry 45 degrees to provide a (mostly) inscribed square. A different
 rotation value can be provided to change the orientation of the shape, e.g.
-\code{rotate = -45} to return a diamond shape. \code{\link[=st_square]{st_square()}} wraps \code{\link[=st_bbox_ext]{st_bbox_ext()}} with
-\code{asp = 1}.
+\code{rotate = -45} to return a diamond shape. \code{\link[=st_square]{st_square()}} wraps \code{\link[=st_bbox_ext]{st_bbox_ext()}}
+with \code{asp = 1}.
 }
 \examples{
 nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))

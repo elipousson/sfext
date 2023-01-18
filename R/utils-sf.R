@@ -29,7 +29,7 @@ NULL
 #' @export
 #' @importFrom sf st_crs st_set_crs st_transform
 transform_sf <- function(x, crs = NULL, null.ok = TRUE, ...) {
-  if ((is.null(crs) && null.ok) | is_same_crs(x, crs)) {
+  if (any(c((is.null(crs) && null.ok), is_same_crs(x, crs)))) {
     return(x)
   }
 
@@ -68,7 +68,8 @@ relocate_sf_col <- function(x, .after = dplyr::everything()) {
 
 #' @name rename_sf_col
 #' @rdname misc_sf
-#' @param sf_col Name to use for the sf column after renaming; defaults to "geometry".
+#' @param sf_col Name to use for the sf column after renaming; defaults to
+#'   "geometry".
 #' @export
 #' @importFrom sf st_set_geometry
 rename_sf_col <- function(x, sf_col = "geometry") {
