@@ -159,7 +159,7 @@ address_to_sf <- function(x,
                           crs = NULL,
                           full_results = FALSE,
                           ...) {
-  is_pkg_installed("tidygeocoder")
+  rlang::check_installed("tidygeocoder")
 
   if (is.character(x)) {
     # Make vector into address column

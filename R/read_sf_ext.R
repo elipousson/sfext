@@ -158,7 +158,7 @@ read_sf_pkg <- function(data,
                         ...) {
   check_null(package)
 
-  is_pkg_installed(package)
+  rlang::check_installed(package)
 
   cli_abort_ifnot(
     "{.arg data} must be a length 1 character vector with
@@ -173,7 +173,7 @@ read_sf_pkg <- function(data,
   }
 
   # FIXME: This triggers an alert with lintr but works fine
-  filename <- filenamr::str_add_fileext(data, fileext = filetype)
+  filename <- str_add_fileext(data, fileext = filetype)
 
   path <-
     dplyr::case_when(
@@ -205,9 +205,9 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 
   type <-
     dplyr::case_when(
-      is_csv_path(path) ~ "csv",
-      is_excel_path(path) ~ "excel",
-      is_rdata_path(path) ~ "rdata",
+      is_csv_fileext(path) ~ "csv",
+      is_excel_fileext(path) ~ "excel",
+      is_rdata_fileext(path) ~ "rdata",
       TRUE ~ "query"
     )
 
@@ -233,12 +233,12 @@ read_sf_rdata <- function(path,
 
   type <-
     dplyr::case_when(
-      is_rds_path(file) ~ "rds",
-      is_rdata_path(file) ~ "rdata"
+      is_rds_fileext(file) ~ "rds",
+      is_rdata_fileext(file) ~ "rdata"
     )
 
   if (type == "rds") {
-    is_pkg_installed("readr")
+    rlang::check_installed("readr")
     data <- readr::read_rds(file, refhook = refhook)
   } else {
     file_name <- load(file)
@@ -270,7 +270,6 @@ read_sf_rdata <- function(path,
 #'   available table names.
 #' @param .name_repair Passed to repair parameter of [vctrs::vec_as_names()]
 #' @export
-#' @importFrom stringr str_extract
 #' @importFrom sf st_layers read_sf st_zm
 #' @importFrom rlang is_lambda as_function is_function set_names
 read_sf_query <- function(path,
@@ -335,7 +334,7 @@ read_sf_excel <- function(path,
                           address = "address",
                           .name_repair = "check_unique",
                           ...) {
-  is_pkg_installed("readxl")
+  rlang::check_installed("readxl")
   # Convert XLS or XLSX file with coordinates to sf
 
   sheet <- sheet %||% readxl::excel_sheets(path)
@@ -416,7 +415,7 @@ read_sf_csv <- function(path,
   }
 
   if (show_col_types) {
-    is_pkg_installed("readr")
+    rlang::check_installed("readr")
     data <-
       readr::read_csv(
         file = path,
@@ -470,7 +469,6 @@ read_sf_csv <- function(path,
 #' @rdname read_sf_ext
 #' @param zm_drop If `TRUE`, drop Z and/or M dimensions using [sf::st_zm]
 #' @export
-#' @importFrom stringr str_detect
 #' @importFrom sf read_sf st_zm
 #' @importFrom dplyr case_when
 read_sf_url <- function(url,
@@ -486,13 +484,13 @@ read_sf_url <- function(url,
 
   url_type <-
     dplyr::case_when(
-      is_csv_path(url) ~ "csv",
-      is_excel_path(url) ~ "excel",
+      is_csv_fileext(url) ~ "csv",
+      is_excel_fileext(url) ~ "excel",
       is_esri_url(url) ~ "esri",
       is_gist_url(url) ~ "gist",
       is_gmap_url(url) ~ "gmap",
       is_gsheet_url(url) ~ "gsheet",
-      is_rds_path(url) ~ "rds",
+      is_rds_fileext(url) ~ "rds",
       !is.null(params$filename) ~ "download",
       TRUE ~ "other"
     )
@@ -665,7 +663,7 @@ read_sf_gist <- function(url,
                          bbox = NULL,
                          nth = 1,
                          ...) {
-  is_pkg_installed("gistr")
+  rlang::check_installed("gistr")
 
   if (!is_missing(url) && is.null(id)) {
     id <- url
@@ -750,7 +748,7 @@ read_sf_gmap <- function(url,
     )
 
   if (has_name(data, "Description")) {
-    is_pkg_installed("naniar")
+    rlang::check_installed("naniar")
     data <- naniar::replace_with_na(data, replace = list("Description" = ""))
   }
 
@@ -870,7 +868,7 @@ read_sf_gsheet <- function(url,
                            .name_repair = "check_unique",
                            ...) {
   # Convert Google Sheet with coordinates to sf
-  is_pkg_installed("googlesheets4")
+  rlang::check_installed("googlesheets4")
 
   if (ask) {
     ss <-
@@ -1007,7 +1005,7 @@ make_sf_query <- function(dsn = NULL,
                           name = NULL,
                           name_col = NULL,
                           query = NULL) {
-  if (any(c(is.null(name), is.null(name_col), is_geojson_path(dsn)))) {
+  if (any(c(is.null(name), is.null(name_col), is_geojson_fileext(dsn)))) {
     return(query %||% NA)
   }
 

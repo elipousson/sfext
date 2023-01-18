@@ -171,7 +171,7 @@ write_sf_gist <- function(data,
                           public = TRUE,
                           browse = FALSE,
                           token = Sys.getenv("GITHUB_PAT")) {
-  is_pkg_installed("gistr")
+  rlang::check_installed("gistr")
 
   filename <-
     filenamr::make_filename(
@@ -220,7 +220,6 @@ write_sf_gist <- function(data,
 #'   provided data.
 #' @inheritParams googlesheets4::sheet_write
 #' @export
-#' @importFrom stringr str_remove
 write_sf_gsheet <- function(data,
                             name = NULL,
                             label = NULL,
@@ -231,10 +230,10 @@ write_sf_gsheet <- function(data,
                             ask = FALSE,
                             key = NULL,
                             ...) {
-  is_pkg_installed("googlesheets4")
+  rlang::check_installed("googlesheets4")
 
   if (!is.null(filename)) {
-    filename <- filenamr::str_remove_fileext(filename, fileext = "gsheet")
+    filename <- str_remove_fileext(filename, fileext = "gsheet")
   }
 
   filename <-
@@ -269,9 +268,8 @@ write_sf_gsheet <- function(data,
 #'
 #' @noRd
 #' @importFrom sf write_sf
-#' @importFrom stringr str_remove
 #' @importFrom cliExtras cli_yesno
-#' @importFrom filenamr str_extract_fileext str_add_fileext check_file_overwrite
+#' @importFrom filenamr check_file_overwrite
 write_sf_types <- function(data,
                            filename = NULL,
                            path = NULL,
@@ -288,7 +286,8 @@ write_sf_types <- function(data,
   # Set filename from path if ends with a filetype
   if (has_fileext(path)) {
     if (!is.null(filename)) {
-      # FIXME: Is this just an internal error or can this be triggered by a user?
+      # FIXME: Is this just an internal error or can this be triggered by a
+      # user?
       cli_abort("A {.arg filename} *or* {.arg path} with a filename must be
       provided. Both can't be provided.")
     }
@@ -297,14 +296,14 @@ write_sf_types <- function(data,
   }
 
   # Get filetype from filename if filetype is NULL
-  filetype <- filetype %||% filenamr::str_extract_fileext(filename)
+  filetype <- filetype %||% str_extract_fileext(filename)
   # Add filetype to filename if it doesn't have a filename at the end
-  filename <- filenamr::str_add_fileext(filename, filetype)
+  filename <- str_add_fileext(filename, filetype)
 
   # Remove filename from path
   # FIXME: assumes that the user has not provided both a filename
   # and a path ending in a filename - add a check to confirm
-  folder_path <- stringr::str_remove(path, glue("{filename}$"))
+  folder_path <- str_remove(path, glue("{filename}$"))
 
   # Check if overwrite is needed and possible
   filenamr::check_file_overwrite(
@@ -319,8 +318,8 @@ write_sf_types <- function(data,
   if (is_sf(data)) {
     type <-
       dplyr::case_when(
-        is_csv_path(filename) ~ "sf_csv",
-        is_excel_path(filename) ~ "sf_excel",
+        is_csv_fileext(filename) ~ "sf_csv",
+        is_excel_fileext(filename) ~ "sf_excel",
         any(filetype %in% "gsheet") ~ "sf_gsheet",
         any(filetype %in% "svg") ~ "sf_svg",
         !any(filetype %in% c("rda", "rds", "rdata")) ~ "sf_spatial",
@@ -333,8 +332,8 @@ write_sf_types <- function(data,
   } else {
     type <-
       dplyr::case_when(
-        is_csv_path(filename) && is.data.frame(data) ~ "df_csv",
-        is_excel_path(filename) && is.data.frame(data) ~ "df_excel",
+        is_csv_fileext(filename) && is.data.frame(data) ~ "df_csv",
+        is_excel_fileext(filename) && is.data.frame(data) ~ "df_excel",
         TRUE ~ "rda"
       )
   }
@@ -354,16 +353,16 @@ write_sf_types <- function(data,
       }
     }
 
-    path <- filenamr::str_remove_fileext(path, filetype)
-    path <- filenamr::str_add_fileext(path, "rda")
+    path <- str_remove_fileext(path, filetype)
+    path <- str_add_fileext(path, "rda")
   }
 
   # Check if readr is installed
   if (type %in% c("sf_csv", "df_csv", "rda")) {
-    is_pkg_installed("readr")
+    rlang::check_installed("readr")
   } else if (type %in% c("sf_excel", "df_excel")) {
-    is_pkg_installed("openxlsx")
-    path <- filenamr::str_add_fileext(path, "xlsx")
+    rlang::check_installed("openxlsx")
+    path <- str_add_fileext(path, "xlsx")
   }
 
   # Drop geometry for sf to csv export
@@ -399,7 +398,6 @@ write_sf_types <- function(data,
 #' @inheritDotParams ggplot2::geom_sf
 #' @inheritParams ggplot2::ggsave
 #' @export
-#' @importFrom filenamr str_extract_fileext
 write_sf_svg <- function(data,
                          filename = NULL,
                          path = NULL,
@@ -410,13 +408,13 @@ write_sf_svg <- function(data,
                          height = NA,
                          units = c("in", "cm", "mm", "px"),
                          dpi = 300) {
-  is_pkg_installed("ggplot2")
+  rlang::check_installed("ggplot2")
 
   if (is.null(filename) && !is.null(path)) {
     filename <- basename(path)
   }
 
-  filetype <- filenamr::str_extract_fileext(filename)
+  filetype <- str_extract_fileext(filename)
   path <- str_remove(path, paste0(filename, "$"))
 
   cli_abort_ifnot(

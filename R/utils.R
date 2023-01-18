@@ -4,9 +4,10 @@
 
 # @staticimports pkg:isstatic
 #  is_any is_all has_same_len is_any_in is_url is_esri_url is_gsheet_url
-#  is_gist_url is_gmap_url is_unit is_rds_path is_rda_path is_rdata_path
-#  is_excel_path is_csv_path is_geojson_path is_units has_fileext int_to_alpha
-#  as_numbered_labels
+#  is_gist_url is_gmap_url is_unit is_rds_fileext is_rda_fileext
+#  is_rdata_fileext is_excel_fileext is_csv_fileext is_geojson_fileext is_units
+#  has_fileext int_to_alpha as_numbered_labels str_add_fileext
+#  str_remove_fileext str_extract_fileext
 
 .onLoad <- function(lib, pkg) {
   rlang::run_on_load()

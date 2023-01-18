@@ -272,9 +272,10 @@ combine_words <- function(words,
   rs(paste(words, collapse = sep))
 }
 
-#' Does an object have all of the provided names?
+#' Does this object have all of the provided names?
 #'
-#' @param x A data frame or another named object.
+#' @rdname is_named
+#' @name has_all_names
 #' @param name Element name(s) to check.
 #' @noRd
 has_all_names <- function(x, name) {
@@ -295,6 +296,7 @@ has_all_names <- function(x, name) {
 #' @param fileext File type to test against. Optional.
 #' @param ignore.case If `FALSE`, the pattern matching is case sensitive. If
 #'   `TRUE`, case is ignored.
+#' @seealso [isstatic::is_fileext_path()]
 #' @noRd
 has_fileext <- function(string = NULL, fileext = NULL, ignore.case = FALSE) {
   if (is.null(string)) {
@@ -373,16 +375,20 @@ int_to_alpha <- function(x,
 #' @inheritDotParams base::vapply -X
 #' @returns `TRUE` if FUN returns `TRUE` for all elements of x or `FALSE` if any
 #'   element returns `FALSE`.
-#' @seealso [is_any()]
+#' @seealso [isstatic::is_any()]
 #' @noRd
 is_all <- function(x, FUN, ...) {
   all(vapply(x, FUN, FUN.VALUE = TRUE, ...))
 }
 
-#' Do any items in a list or vector return TRUE from a predicate function?
+#' Do any items in a list or vector return `TRUE` from a predicate function?
 #'
 #' @param x A list or vector passed to [vapply()].
-#' @param FUN Function passed to FUN parameter of [vapply()].
+#' @inheritParams base::vapply
+#' @inheritDotParams base::vapply -X
+#' @returns `TRUE` if FUN returns `TRUE` for any element of x or `FALSE` if all
+#'   elements return `FALSE`.
+#' @seealso [isstatic::is_all()]
 #' @noRd
 is_any <- function(x, FUN, ...) {
   any(vapply(x, FUN, FUN.VALUE = TRUE, ...))
@@ -415,36 +421,41 @@ is_blank <- function(x) {
   all(grepl("^\\s*$", x))
 }
 
-#' Is this a CSV file path or url?
+#' [is_csv_fileext]: Does this text end with a CSV file extension?
 #'
-#' @inheritParams is_fileext_path
+#' @name is_csv_fileext
+#' @rdname is_fileext_path
 #' @noRd
-is_csv_path <- function(x, ignore.case = TRUE) {
+is_csv_fileext <- function(x, ignore.case = TRUE) {
   is_fileext_path(x, "csv", ignore.case)
 }
 
-#' Is a character vector an ArcGIS MapServer or FeatureServer URL?
+#' - [is_esri_url()]: Is an object an ArcGIS MapServer or FeatureServer URL?
 #'
-#' @param x Object to be tested.
+#' @name is_esri_url
+#' @rdname is_url
 #' @noRd
 is_esri_url <- function(x) {
-  grepl("/MapServer|/FeatureServer", x)
+  is_url(x) && grepl("/MapServer|/FeatureServer", x)
 }
 
-#' Is this a Excel file path or url?
+#' [is_excel_fileext]: Does this text end with a XLS or XLSX file extension?
 #'
-#' @inheritParams is_fileext_path
+#' @name is_excel_fileext
+#' @rdname is_fileext_path
 #' @noRd
-is_excel_path <- function(x, ignore.case = TRUE) {
+is_excel_fileext <- function(x, ignore.case = TRUE) {
   is_fileext_path(x, c("xls", "xlsx"), ignore.case)
 }
 
-#' Is this a file path or url ending in the specified file extension?
+#' Does this text end in the provided file extension?
 #'
-#' @param x A character vector to check.
-#' @param fileext A file extension (or multiple file extensions) to compare to
-#'   x. Required.
+#' @param x A character vector to check for matches, or an object which can be
+#'   coerced by [as.character()] to a character vector.
+#' @param fileext A file extension to compare to x. Required. If a vector of
+#'   multiple extensions are provided, returns `TRUE` for any match.
 #' @inheritParams base::grepl
+#' @seealso [isstatic::has_fileext()]
 #' @noRd
 is_fileext_path <- function(x, fileext, ignore.case = TRUE) {
   grepl(
@@ -454,65 +465,72 @@ is_fileext_path <- function(x, fileext, ignore.case = TRUE) {
   )
 }
 
-#' Is this a GeoJSON file path or url?
+#' [is_geojson_fileext]: Does this text end with a GeoJSON file extension?
 #'
-#' @inheritParams is_fileext_path
+#' @name is_geojson_fileext
+#' @rdname is_fileext_path
 #' @noRd
-is_geojson_path <- function(x, ignore.case = TRUE) {
+is_geojson_fileext <- function(x, ignore.case = TRUE) {
   is_fileext_path(x, "geojson", ignore.case)
 }
 
-#' Is a character vector a URL for a GitHub Gist?
+#' - [is_gist_url()]: Is an object a URL for a GitHub Gist?
 #'
-#' @param x Object to be tested.
+#' @name is_gist_url
+#' @rdname is_url
 #' @noRd
 is_gist_url <- function(x) {
   grepl("^https://gist.github.com/", x)
 }
 
-#' Is a character vector a Google Maps URL?
+#' - [is_gmap_url()]: Is an object a Google Maps URL?
 #'
-#' @param x Object to be tested.
+#' @name is_gmap_url
+#' @rdname is_url
 #' @noRd
 is_gmap_url <- function(x) {
   grepl("^https://www.google.com/maps/", x)
 }
 
-#' Is a character vector a Google Sheets URL?
+#' - [is_gsheet_url()]: Is an object a Google Sheets URL?
 #'
-#' @param x Object to be tested.
+#' @name is_gsheet_url
+#' @rdname is_url
 #' @noRd
 is_gsheet_url <- function(x) {
   grepl("^https://docs.google.com/spreadsheets/", x)
 }
 
-#' Is this a RDA file path or url?
+#' [is_rda_fileext]: Does this text end with a rda file extension?
 #'
-#' @inheritParams is_fileext_path
+#' @name is_rda_fileext
+#' @rdname is_fileext_path
 #' @noRd
-is_rda_path <- function(x, ignore.case = TRUE) {
+is_rda_fileext <- function(x, ignore.case = TRUE) {
   is_fileext_path(x, "rda", ignore.case)
 }
 
-#' Is this a RDS, RDA, or RData file path or url?
+#' [is_rdata_fileext]: Does this text end with a rds, rda, or RData file extension?
 #'
-#' @inheritParams is_fileext_path
+#' @name is_rdata_fileext
+#' @rdname is_fileext_path
 #' @noRd
-is_rdata_path <- function(x, ignore.case = TRUE) {
+is_rdata_fileext <- function(x, ignore.case = TRUE) {
   any(
     c(
-      is_rda_path(x, ignore.case),
-      is_rds_path(x, ignore.case),
+      is_rda_fileext(x, ignore.case),
+      is_rds_fileext(x, ignore.case),
       is_fileext_path(x, "RData", ignore.case)
     )
   )
 }
 
-#' Is this a RDS file path or url?
+#' [is_rds_fileext]: Does this text end with a rds file extension?
 #'
-#' @inheritParams is_fileext_path
+#' @name is_rds_fileext
+#' @rdname is_fileext_path
 #' @noRd
-is_rds_path <- function(x, ignore.case = TRUE) {
+is_rds_fileext <- function(x, ignore.case = TRUE) {
   is_fileext_path(x, "rds", ignore.case)
 }
 
@@ -532,9 +550,9 @@ is_units <- function(x) {
   inherits(x, "units")
 }
 
-#' Is a character vector a URL?
+#' Is an object a URL?
 #'
-#' @param x Object to be tested.
+#' @param x A object to be tested.
 #' @noRd
 is_url <- function(x) {
   grepl(
@@ -601,6 +619,23 @@ set_start_number <- function(x, start = NULL, labels = "arabic") {
   }
 
   x + (start - 1)
+}
+
+#'
+#' @name str_add_fileext
+#' @rdname str_fileext
+#' @param fileext File extension string
+#' @noRd
+str_add_fileext <- function(string, fileext = NULL) {
+  if (!is.null(fileext) & all(has_fileext(string, fileext))) {
+    return(string)
+  }
+
+  if (any(has_fileext(string))) {
+    string <- str_remove_fileext(string)
+  }
+
+  paste0(string, ".", fileext)
 }
 
 #' Detect the presence or absence of a pattern in a string
@@ -702,6 +737,19 @@ str_extract <- function(string, pattern) {
   unlist(result)
 }
 
+#' @name str_extract_fileext
+#' @rdname str_fileext
+#' @noRd
+str_extract_fileext <- function(string, fileext = NULL) {
+  if (is.null(fileext)) {
+    fileext <- "[a-zA-Z0-9]+"
+  }
+  regmatches(
+    string,
+    regexpr(paste0("(?<=\\.)", fileext, "$(?!\\.)"), string, perl = TRUE)
+    )
+}
+
 #' Duplicate and concatenate strings within a character vector
 #'
 #' Dependency-free drop-in alternative for `stringr::str_pad()`.
@@ -750,6 +798,53 @@ str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ",
       strrep(pad, ceiling(pad_width / 2))
     )
   )
+}
+
+#' Remove matched patterns in a string
+#'
+#' Dependency-free drop-in alternative for `stringr::str_remove()`.
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param string Input vector.
+#'   Either a character vector, or something coercible to one.
+#'
+#' @param pattern Pattern to look for.
+#'
+#'   The default interpretation is a regular expression,
+#'   as described in [base::regex].
+#'   Control options with [regex()].
+#'
+#'   Match a fixed string (i.e. by comparing only bytes), using [fixed()].
+#'   This is fast, but approximate.
+#'
+#' @return A character vector.
+#' @noRd
+str_remove <- function(string, pattern) {
+  ignore.case <- isTRUE(attr(pattern, "options")$case_insensitive)
+  is_fixed <- !ignore.case && inherits(pattern, "fixed")
+
+  sub <- Vectorize(sub, c("pattern", "x"), USE.NAMES = FALSE)
+
+  sub(
+    pattern,
+    replacement = "",
+    x = string,
+    ignore.case = ignore.case,
+    perl = !is_fixed,
+    fixed = is_fixed
+  )
+}
+
+#' @name str_remove_fileext
+#' @rdname str_fileext
+#' @noRd
+str_remove_fileext <- function(string, fileext = NULL) {
+  if (is.null(fileext)) {
+    fileext <- str_extract_fileext(string)
+  }
+
+  str_remove(string, paste0("\\.", fileext, "$"))
 }
 
 #' Convert to a common sentence case

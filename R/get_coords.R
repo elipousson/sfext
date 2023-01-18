@@ -126,7 +126,7 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
 
   x <- dplyr::select(x, -.data[[col]])
 
-  is_pkg_installed("tidyr")
+  rlang::check_installed("tidyr")
 
   minmax_df <-
     tidyr::unnest_wider(

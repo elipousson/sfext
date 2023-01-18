@@ -77,7 +77,7 @@ read_sf_exif <- function(path = NULL,
                          tags = NULL,
                          geometry = TRUE,
                          ...) {
-  is_pkg_installed("exiftoolr")
+  rlang::check_installed("exiftoolr")
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
   # filetype <- match.arg(filetype, c("jpg", "jpeg", "png", "tiff", "pdf"))
@@ -225,7 +225,7 @@ write_exif <- function(path,
                        args = NULL,
                        overwrite = TRUE,
                        append_keywords = FALSE) {
-  is_pkg_installed("exiftoolr")
+  rlang::check_installed("exiftoolr")
 
   # FIXME: I want to implement a method that allows adding, replacing, or modifying exif
   if (is.null(args)) {

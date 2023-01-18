@@ -83,7 +83,7 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
   }
 
   if (is.character(x) && rlang::has_length(x, 1)) {
-    is_pkg_installed("osmdata")
+    rlang::check_installed("osmdata")
     x <- osmdata::getbb(x, format_out = "matrix", ...)
     stopifnot(
       !any(is.na(x))
@@ -338,7 +338,7 @@ pluck_len1 <- function(x) {
 #'
 #' @noRd
 as_start_end_points <- function(x, crs = 4326, class = "data.frame") {
-  is_pkg_installed("lwgeom")
+  rlang::check_installed("lwgeom")
 
   if (!is_line(x)) {
     x <- as_line(x)

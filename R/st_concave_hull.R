@@ -17,7 +17,7 @@ st_concave_hull <- function(x,
                             centroid = FALSE,
                             concavity = 2,
                             length_threshold = 0) {
-  is_pkg_installed("concaveman")
+  rlang::check_installed("concaveman")
 
   check_sf(x)
 

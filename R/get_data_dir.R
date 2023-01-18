@@ -22,7 +22,7 @@ get_data_dir <- function(path = NULL,
                          pkg = "sfext",
                          null.ok = TRUE) {
   if (cache) {
-    is_pkg_installed("rappdirs")
+    rlang::check_installed("rappdirs")
     path <- path %||% rappdirs::user_cache_dir(pkg)
   }
 
@@ -64,7 +64,6 @@ get_data_dir <- function(path = NULL,
 #' @param n Max number of unique file types to return. Returns warning and n
 #'   most common file types if path has more than n unique file types.
 #' @noRd
-#' @importFrom stringr str_extract
 get_path_filetype <- function(path, filetype = NULL, n = 1) {
   if (!is.null(filetype)) {
     return(filetype)
@@ -82,7 +81,7 @@ get_path_filetype <- function(path, filetype = NULL, n = 1) {
     )
   }
 
-  filetype <- filenamr::str_extract_fileext(file_list)
+  filetype <- str_extract_fileext(file_list)
 
   if (length(unique(filetype)) <= n) {
     return(unique(filetype))
