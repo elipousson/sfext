@@ -147,6 +147,7 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
   )
 
   x_names <- names(x)
+  # FIXME: could this be replaced with tolower?
   x <- janitor::clean_names(x)
 
   x_coords <- NULL
@@ -221,8 +222,7 @@ format_coords <- function(x,
   if (has_missing_coords && !keep_missing) {
     # Exclude rows with missing coordinates
     cli_inform(
-      "Removing {.val {n_missing_coords}} row{?s} with
-      missing coordinates from {.arg x}.",
+      "Removing {.val {n_missing_coords}} row{?s} with missing coordinates.",
       call = call
     )
 
