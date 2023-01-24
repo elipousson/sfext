@@ -21,8 +21,10 @@
 is_sf <- function(x, ext = FALSE, null.ok = FALSE, list.ok = FALSE) {
   classes <- "sf"
 
-  if (ext) {
+  if (isTRUE(ext)) {
     classes <- c(classes, "sfc", "bbox")
+  } else if (is.character(ext)) {
+    classes <- c(classes, ext)
   }
 
   if (!list.ok) {

@@ -182,12 +182,14 @@ check_sf <- function(x,
 
   sf <- "sf"
 
-  if (ext) {
+  if (isTRUE(ext)) {
     sf <- c(sf, "sfc", "bbox")
+  } else if (is.character(ext)) {
+    sf <- c(sf, ext)
   }
 
   cli_abort(
-    c("{.arg {arg}} must be {.cls {sf}}.",
+    c("{.arg {arg}} must be {.or {sf}} class.",
       "i" = "{.arg {arg}} is {.cls {class(x)}}."
     ),
     call = call,
