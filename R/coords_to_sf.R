@@ -158,8 +158,10 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
       all(has_name(x, coords)) ~ coords,
       has_name(x, "lon") ~ c("lon", "lat"),
       has_name(x, "long") ~ c("long", "lat"),
+      has_name(x, "lng") ~ c("lng", "lat"),
       has_name(x, "longitude") ~ c("longitude", "latitude"),
       has_name(x, "y") ~ c("y", "x"),
+      has_name(x, "geo_y") ~ c("geo_y", "geo_x"),
       has_name(x, "geo_longitude") ~ c("geo_longitude", "geo_latitude")
     )
 
