@@ -4,7 +4,7 @@
 #' function to provide some additional options including consistent file naming
 #' with [make_filename()] and features including:
 #'
-#' - If filetype is "csv", "xlsx", or "gsheet" the file is converted to a
+#' - If fileext is "csv", "xlsx", or "gsheet" the file is converted to a
 #' dataframe using [df_to_sf()]
 #' - If the data is not an `sf` object and none of these filenames are provided,
 #' the user is prompted to save the file as an rda file with [readr::write_rds()].
@@ -16,13 +16,15 @@
 #' list.
 #'
 #' @param data A `sf` object, data frame, or other object to write.
-#' @param filename,filetype File name and/or write. Both are optional if path
-#'   includes filename and type, e.g. "~/Documents/data.geojson". Filetype can
-#'   be provided as part of the filename, e.g. "data.geojson". If a filename
-#'   includes a filetype and a separate filetype is also provided, the separate
-#'   filetype parameter is used. Supported filetypes includes "csv", "xlsx",
-#'   "gsheet" (writes a Google Sheet), "rda", or any filetype supported by the
-#'   available drivers (use [sf::st_drivers()] to list drivers).
+#' @param filename,fileext,filetype File name and/or file extension to write.
+#'   filetype is superseded in favor of fileext. Both are optional if path
+#'   includes filename and type, e.g. "~/Documents/data.geojson". fileext can be
+#'   provided as part of the filename, e.g. "data.geojson". If a filename
+#'   includes a file extensions and a separate fileext is also provided, the
+#'   separate fileext parameter is used. Supported file extensions include
+#'   "csv", "xlsx", "gsheet" (writes a Google Sheet), "rda", or any fileext
+#'   supported by the available drivers (use [sf::st_drivers()] to list
+#'   drivers).
 #' @param data_dir cache data directory, defaults to [rappdirs::user_cache_dir()]
 #'   when data_dir is `NULL`. (only used for [write_sf_cache()]; default is used
 #'   when `cache = TRUE` for [write_sf_ext()])
@@ -32,9 +34,9 @@
 #'   defaults to `FALSE`.
 #' @inheritParams filenamr::make_filename
 #' @inheritParams write_sf_cache
-#' @param ... If data is an sf object and the filetype is "csv" or "xlsx", the
+#' @param ... If data is an sf object and the fileext is "csv" or "xlsx", the
 #'   ... parameters are passed to [sf_to_df()] or to [sf::write_sf()] otherwise. If
-#'   filetype is "rda" ... parameters are passed to [readr::write_rds()].
+#'   fileext is "rda" ... parameters are passed to [readr::write_rds()].
 #' @seealso
 #'  [sf::st_write()]
 #' @export
@@ -47,29 +49,31 @@ write_sf_ext <- function(data,
                          prefix = NULL,
                          postfix = NULL,
                          filename = NULL,
+                         fileext = NULL,
                          filetype = NULL,
+                         description = NULL,
                          path = NULL,
                          cache = FALSE,
                          pkg = "sfext",
                          overwrite = FALSE,
+                         onefile = FALSE,
                          ...) {
+  fileext <- fileext %||% filetype
   if (is_sf_list(data, named = TRUE)) {
-    purrr::walk(
+    write_sf_list(
       data,
-      ~ write_sf_ext(
-        data = .x,
-        name = names(.x),
-        label = label,
-        prefix = prefix,
-        postfix = postfix,
-        filetype = filetype,
-        path = path,
-        cache = cache,
-        overwrite = overwrite
-      )
+      label = label,
+      prefix = prefix,
+      postfix = postfix,
+      fileext = fileext,
+      path = path,
+      cache = cache,
+      overwrite = overwrite,
+      onefile = onefile,
+      ...
     )
 
-    return(invisible(NULL))
+    return(invisible())
   }
 
   # If data is sf object, write or cache it
@@ -77,7 +81,7 @@ write_sf_ext <- function(data,
     filenamr::make_filename(
       name = name,
       label = label,
-      fileext = filetype,
+      fileext = fileext,
       filename = filename,
       path = NULL,
       prefix = prefix,
@@ -87,22 +91,101 @@ write_sf_ext <- function(data,
   write_sf_types(
     data = data,
     filename = filename,
-    filetype = filetype,
+    fileext = fileext,
     path = path,
     overwrite = overwrite,
     ...
   )
 
-  if (!cache) {
-    return(invisible(NULL))
+  if (cache) {
+    write_sf_cache(
+      data = data,
+      filename = filename,
+      overwrite = overwrite,
+      pkg = pkg,
+      ...
+    )
+  }
+}
+
+#' @rdname write_sf_ext
+#' @name write_sf_list
+#' @param onefile If `TRUE` and the fileext if "gpkg" (directly or from
+#'   filename), save a sf list as a multilayer GeoPackage file where names for
+#'   list items are used as layer names.
+#' @export
+write_sf_list <- function(data,
+                          name = NULL,
+                          label = NULL,
+                          prefix = NULL,
+                          postfix = NULL,
+                          filename = NULL,
+                          fileext = NULL,
+                          filetype = NULL,
+                          path = NULL,
+                          overwrite = FALSE,
+                          onefile = FALSE,
+                          cache = FALSE,
+                          ...) {
+  fileext <- fileext %||% filetype
+  if (!onefile) {
+    purrr::walk(
+      data,
+      ~ write_sf_ext(
+        data = .x,
+        name = names(.x),
+        label = label,
+        prefix = prefix,
+        postfix = postfix,
+        fileext = fileext,
+        path = path,
+        cache = cache,
+        overwrite = overwrite
+      )
+    )
+
+    return(invisible())
   }
 
-  write_sf_cache(
-    data = data,
-    filename = filename,
-    overwrite = overwrite,
-    pkg = pkg,
-    ...
+  filename <-
+    make_filename(
+      name = name,
+      label = label,
+      prefix = prefix,
+      postfix = postfix,
+      fileext = fileext,
+      filename = filename,
+      path = path,
+      cache = cache
+    )
+
+  multilayer_fileext <- c("gpkg", "gdb")
+
+  if (!has_fileext(filename, multilayer_fileext)) {
+    cli::cli_abort(
+      "{.arg filext} must be {.or {multilayer_fileext}}
+      when {.code onefile = TRUE}"
+    )
+  }
+
+  purrr::walk2(
+    data,
+    names(data),
+    function(x, y)
+      {
+      layer_options <- NULL
+      if (has_fileext(filename, "gdb")) {
+        layer_options <- glue("LAYER_ALIAS={y}")
+        y <- NULL
+      }
+
+      sf::write_sf(
+      x,
+      dsn = filename,
+      layer = y,
+      layer_options = layer_options
+    )
+    }
   )
 }
 
@@ -124,11 +207,12 @@ write_sf_cache <- function(data,
                            overwrite = FALSE,
                            create = TRUE,
                            ...) {
+  fileext <- fileext %||% filetype
   filename <-
     filenamr::make_filename(
       name = name,
       label = label,
-      fileext = filetype,
+      fileext = fileext,
       filename = filename,
       prefix = prefix,
       postfix = postfix,
@@ -166,18 +250,20 @@ write_sf_gist <- function(data,
                           prefix = NULL,
                           postfix = NULL,
                           filename = NULL,
-                          filetype = "geojson",
+                          fileext = "geojson",
+                          filetype = NULL,
                           description = NULL,
                           public = TRUE,
                           browse = FALSE,
                           token = Sys.getenv("GITHUB_PAT")) {
+  fileext <- fileext %||% filetype
   rlang::check_installed("gistr")
 
   filename <-
     filenamr::make_filename(
       name = name,
       label = label,
-      fileext = filetype,
+      fileext = fileext,
       filename = filename,
       prefix = prefix,
       postfix = postfix,
@@ -187,7 +273,7 @@ write_sf_gist <- function(data,
   write_sf_types(
     data = data,
     filename = filename,
-    filetype = filetype,
+    fileext = fileext,
     path = tempdir(),
     overwrite = TRUE
   )
@@ -195,7 +281,7 @@ write_sf_gist <- function(data,
   gistr::gist_auth(app = token)
 
   description <-
-    description %||% glue("A {filetype} format spatial data file.")
+    description %||% glue("A {fileext} format spatial data file.")
 
   cli_inform(c("v" = "Creating gist for {.file filename}"))
 
@@ -273,17 +359,21 @@ write_sf_gsheet <- function(data,
 write_sf_types <- function(data,
                            filename = NULL,
                            path = NULL,
+                           fileext = NULL,
                            filetype = NULL,
+                           description = NULL,
                            overwrite = TRUE,
                            append = FALSE,
+                           layer_options = NULL,
                            ...) {
+  fileext <- fileext %||% filetype
   # Get working directory if path is NULL
   if (is.null(path)) {
     path <- getwd()
     cli_inform("Setting path to current working directory: {.file {path}}")
   }
 
-  # Set filename from path if ends with a filetype
+  # Set filename from path if ends with a fileext
   if (has_fileext(path)) {
     if (!is.null(filename)) {
       # FIXME: Is this just an internal error or can this be triggered by a
@@ -295,10 +385,10 @@ write_sf_types <- function(data,
     filename <- basename(path)
   }
 
-  # Get filetype from filename if filetype is NULL
-  filetype <- filetype %||% str_extract_fileext(filename)
-  # Add filetype to filename if it doesn't have a filename at the end
-  filename <- str_add_fileext(filename, filetype)
+  # Get fileext from filename if fileext is NULL
+  fileext <- fileext %||% str_extract_fileext(filename)
+  # Add fileext to filename if it doesn't have a filename at the end
+  filename <- str_add_fileext(filename, fileext)
 
   # Remove filename from path
   # FIXME: assumes that the user has not provided both a filename
@@ -320,15 +410,20 @@ write_sf_types <- function(data,
       dplyr::case_when(
         is_csv_fileext(filename) ~ "sf_csv",
         is_excel_fileext(filename) ~ "sf_excel",
-        any(filetype %in% "gsheet") ~ "sf_gsheet",
-        any(filetype %in% "svg") ~ "sf_svg",
-        !any(filetype %in% c("rda", "rds", "rdata")) ~ "sf_spatial",
+        any(fileext %in% "gsheet") ~ "sf_gsheet",
+        any(fileext %in% "svg") ~ "sf_svg",
+        !any(fileext %in% c("rda", "rds", "rdata")) ~ "sf_spatial",
         TRUE ~ "rda"
       )
 
-    if ("geojson" %in% filetype) {
+    if ("geojson" %in% fileext) {
       data <- st_transform_ext(data, 4326)
     }
+
+    if (has_fileext(filename, "gpkg") & !is.null(description)) {
+      layer_options <- glue("DESCRIPTION={description}")
+    }
+
   } else {
     type <-
       dplyr::case_when(
@@ -339,7 +434,7 @@ write_sf_types <- function(data,
   }
 
   if (type == "rda") {
-    if (!(filetype %in% c("rda", "rds", "RData"))) {
+    if (!(fileext %in% c("rda", "rds", "RData"))) {
       ask <-
         is_interactive() &&
           cli_yesno(
@@ -349,11 +444,11 @@ write_sf_types <- function(data,
           )
 
       if (!ask) {
-        return(invisible(NULL))
+        return(invisible())
       }
     }
 
-    path <- str_remove_fileext(path, filetype)
+    path <- str_remove_fileext(path, fileext)
     path <- str_add_fileext(path, "rda")
   }
 
@@ -376,7 +471,7 @@ write_sf_types <- function(data,
     "sf_csv" = readr::write_csv(x = data, file = path),
     "sf_excel" = openxlsx::write.xlsx(data, file = path),
     "sf_gsheet" = write_sf_gsheet(data = data, filename = filename, ...),
-    "sf_spatial" = sf::write_sf(obj = data, dsn = path, ...),
+    "sf_spatial" = sf::write_sf(obj = data, dsn = path, layer_options = layer_options, ...),
     "sf_svg" = write_sf_svg(data = data, filename = filename, path = path, ...),
     "df_csv" = readr::write_csv(x = data, file = path),
     "df_excel" = openxlsx::write.xlsx(data, file = path),
@@ -414,12 +509,12 @@ write_sf_svg <- function(data,
     filename <- basename(path)
   }
 
-  filetype <- str_extract_fileext(filename)
+  fileext <- str_extract_fileext(filename)
   path <- str_remove(path, paste0(filename, "$"))
 
   cli_abort_ifnot(
     "{.arg filename} or {.arg path} must include a {.val svg} file extension.",
-    condition = (filetype == "svg")
+    condition = (fileext == "svg")
   )
 
   if (is.null(mapping)) {

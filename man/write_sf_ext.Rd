@@ -2,6 +2,7 @@
 % Please edit documentation in R/write_sf_ext.R
 \name{write_sf_ext}
 \alias{write_sf_ext}
+\alias{write_sf_list}
 \alias{write_sf_cache}
 \alias{write_sf_gist}
 \alias{write_sf_gsheet}
@@ -14,11 +15,30 @@ write_sf_ext(
   prefix = NULL,
   postfix = NULL,
   filename = NULL,
+  fileext = NULL,
   filetype = NULL,
+  description = NULL,
   path = NULL,
   cache = FALSE,
   pkg = "sfext",
   overwrite = FALSE,
+  onefile = FALSE,
+  ...
+)
+
+write_sf_list(
+  data,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  fileext = NULL,
+  filetype = NULL,
+  path = NULL,
+  overwrite = FALSE,
+  onefile = FALSE,
+  cache = FALSE,
   ...
 )
 
@@ -44,7 +64,8 @@ write_sf_gist(
   prefix = NULL,
   postfix = NULL,
   filename = NULL,
-  filetype = "geojson",
+  fileext = "geojson",
+  filetype = NULL,
   description = NULL,
   public = TRUE,
   browse = FALSE,
@@ -80,13 +101,17 @@ date/time prefix; defaults to \code{NULL}.}
 
 \item{postfix}{File name postfix; defaults to \code{NULL}.}
 
-\item{filename, filetype}{File name and/or write. Both are optional if path
-includes filename and type, e.g. "~/Documents/data.geojson". Filetype can
-be provided as part of the filename, e.g. "data.geojson". If a filename
-includes a filetype and a separate filetype is also provided, the separate
-filetype parameter is used. Supported filetypes includes "csv", "xlsx",
-"gsheet" (writes a Google Sheet), "rda", or any filetype supported by the
-available drivers (use \code{\link[sf:st_drivers]{sf::st_drivers()}} to list drivers).}
+\item{filename, fileext, filetype}{File name and/or file extension to write.
+filetype is superseded in favor of fileext. Both are optional if path
+includes filename and type, e.g. "~/Documents/data.geojson". fileext can be
+provided as part of the filename, e.g. "data.geojson". If a filename
+includes a file extensions and a separate fileext is also provided, the
+separate fileext parameter is used. Supported file extensions include
+"csv", "xlsx", "gsheet" (writes a Google Sheet), "rda", or any fileext
+supported by the available drivers (use \code{\link[sf:st_drivers]{sf::st_drivers()}} to list
+drivers).}
+
+\item{description}{(character) Brief description of gist (optional)}
 
 \item{path}{Path to file or data directory.}
 
@@ -99,9 +124,13 @@ defaults to \code{FALSE}.}
 \item{overwrite}{Logical. Default \code{FALSE}. If \code{TRUE}, overwrite any existing
 cached files that use the same file name.}
 
-\item{...}{If data is an sf object and the filetype is "csv" or "xlsx", the
+\item{onefile}{If \code{TRUE} and the fileext if "gpkg" (directly or from
+filename), save a sf list as a multilayer GeoPackage file where names for
+list items are used as layer names.}
+
+\item{...}{If data is an sf object and the fileext is "csv" or "xlsx", the
 ... parameters are passed to \code{\link[=sf_to_df]{sf_to_df()}} or to \code{\link[sf:st_write]{sf::write_sf()}} otherwise. If
-filetype is "rda" ... parameters are passed to \code{\link[readr:read_rds]{readr::write_rds()}}.}
+fileext is "rda" ... parameters are passed to \code{\link[readr:read_rds]{readr::write_rds()}}.}
 
 \item{data_dir}{cache data directory, defaults to \code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}
 when data_dir is \code{NULL}. (only used for \code{\link[=write_sf_cache]{write_sf_cache()}}; default is used
@@ -111,8 +140,6 @@ when \code{cache = TRUE} for \code{\link[=write_sf_ext]{write_sf_ext()}})}
 If \code{TRUE} and \code{\link[rlang:is_interactive]{rlang::is_interactive()}} is \code{TRUE}, ask user if directory
 should be created. If the session not interactive and create is \code{TRUE}, a
 new directory will be created.}
-
-\item{description}{(character) Brief description of gist (optional)}
 
 \item{public}{(logical) Whether gist is public (default: TRUE)}
 
@@ -139,7 +166,7 @@ with \code{\link[=make_filename]{make_filename()}} and features including:
 }
 \details{
 \itemize{
-\item If filetype is "csv", "xlsx", or "gsheet" the file is converted to a
+\item If fileext is "csv", "xlsx", or "gsheet" the file is converted to a
 dataframe using \code{\link[=df_to_sf]{df_to_sf()}}
 \item If the data is not an \code{sf} object and none of these filenames are provided,
 the user is prompted to save the file as an rda file with \code{\link[readr:read_rds]{readr::write_rds()}}.
