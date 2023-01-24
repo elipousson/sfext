@@ -31,6 +31,24 @@ test_that("st_filter_ext works", {
 
   expect_s3_class(
     st_filter_ext(
+      as_sfc(nc),
+      nc,
+      trim = TRUE
+    ),
+    "sfc"
+  )
+
+  expect_identical(
+    nrow(st_filter_geom_type(nc, type = "POINT")),
+    0L
+  )
+  expect_identical(
+    length(st_filter_geom_type(nc$geometry, type = "POINT")),
+    0L
+  )
+
+  expect_s3_class(
+    st_filter_ext(
       nc,
       nc_county_bbox,
       erase = TRUE
