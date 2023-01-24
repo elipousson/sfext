@@ -68,6 +68,7 @@ across the bounding box) and to match the provided aspect ratio.</p>
 <span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  class <span class="op">=</span> <span class="st">"bbox"</span>,</span>
+<span>  nudge <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  null.ok <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  list.ok <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
@@ -115,6 +116,11 @@ to units matching GDAL units for x; defaults to "meter"</p></dd>
 
 <dt>class</dt>
 <dd><p>Class of object to return (<code>sf</code> or <code>bbox</code>); defaults to "bbox".</p></dd>
+
+
+<dt>nudge</dt>
+<dd><p>Passed as to parameter <code><a href="st_nudge.html">st_nudge()</a></code> when not <code>NULL</code>. Numeric
+vector or sf object.</p></dd>
 
 
 <dt>null.ok</dt>

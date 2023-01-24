@@ -67,11 +67,30 @@ with <code><a href="https://elipousson.github.io/filenamr/reference/make_filenam
 <span>  prefix <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  postfix <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fileext <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  filetype <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  description <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  pkg <span class="op">=</span> <span class="st">"sfext"</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  onefile <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">write_sf_list</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  prefix <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  postfix <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fileext <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  filetype <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  onefile <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -97,7 +116,8 @@ with <code><a href="https://elipousson.github.io/filenamr/reference/make_filenam
 <span>  prefix <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  postfix <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  filetype <span class="op">=</span> <span class="st">"geojson"</span>,</span>
+<span>  fileext <span class="op">=</span> <span class="st">"geojson"</span>,</span>
+<span>  filetype <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  description <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  public <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  browse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -145,14 +165,20 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 <dd><p>File name postfix; defaults to <code>NULL</code>.</p></dd>
 
 
-<dt>filename, filetype</dt>
-<dd><p>File name and/or write. Both are optional if path
-includes filename and type, e.g. "~/Documents/data.geojson". Filetype can
-be provided as part of the filename, e.g. "data.geojson". If a filename
-includes a filetype and a separate filetype is also provided, the separate
-filetype parameter is used. Supported filetypes includes "csv", "xlsx",
-"gsheet" (writes a Google Sheet), "rda", or any filetype supported by the
-available drivers (use <code><a href="https://r-spatial.github.io/sf/reference/st_drivers.html" class="external-link">sf::st_drivers()</a></code> to list drivers).</p></dd>
+<dt>filename, fileext, filetype</dt>
+<dd><p>File name and/or file extension to write.
+filetype is superseded in favor of fileext. Both are optional if path
+includes filename and type, e.g. "~/Documents/data.geojson". fileext can be
+provided as part of the filename, e.g. "data.geojson". If a filename
+includes a file extensions and a separate fileext is also provided, the
+separate fileext parameter is used. Supported file extensions include
+"csv", "xlsx", "gsheet" (writes a Google Sheet), "rda", or any fileext
+supported by the available drivers (use <code><a href="https://r-spatial.github.io/sf/reference/st_drivers.html" class="external-link">sf::st_drivers()</a></code> to list
+drivers).</p></dd>
+
+
+<dt>description</dt>
+<dd><p>(character) Brief description of gist (optional)</p></dd>
 
 
 <dt>path</dt>
@@ -174,10 +200,16 @@ write_sf_cache or write_sf_ext if <code>cache = TRUE</code>.</p></dd>
 cached files that use the same file name.</p></dd>
 
 
+<dt>onefile</dt>
+<dd><p>If <code>TRUE</code> and the fileext if "gpkg" (directly or from
+filename), save a sf list as a multilayer GeoPackage file where names for
+list items are used as layer names.</p></dd>
+
+
 <dt>...</dt>
-<dd><p>If data is an sf object and the filetype is "csv" or "xlsx", the
+<dd><p>If data is an sf object and the fileext is "csv" or "xlsx", the
 ... parameters are passed to <code><a href="sf_to_df.html">sf_to_df()</a></code> or to <code><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">sf::write_sf()</a></code> otherwise. If
-filetype is "rda" ... parameters are passed to <code><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">readr::write_rds()</a></code>.</p></dd>
+fileext is "rda" ... parameters are passed to <code><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">readr::write_rds()</a></code>.</p></dd>
 
 
 <dt>data_dir</dt>
@@ -191,10 +223,6 @@ when <code>cache = TRUE</code> for <code>write_sf_ext()</code>)</p></dd>
 If <code>TRUE</code> and <code><a href="https://rlang.r-lib.org/reference/is_interactive.html" class="external-link">rlang::is_interactive()</a></code> is <code>TRUE</code>, ask user if directory
 should be created. If the session not interactive and create is <code>TRUE</code>, a
 new directory will be created.</p></dd>
-
-
-<dt>description</dt>
-<dd><p>(character) Brief description of gist (optional)</p></dd>
 
 
 <dt>public</dt>
@@ -230,7 +258,7 @@ provided data.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     
-<ul><li><p>If filetype is "csv", "xlsx", or "gsheet" the file is converted to a
+<ul><li><p>If fileext is "csv", "xlsx", or "gsheet" the file is converted to a
 dataframe using <code><a href="sf_to_df.html">df_to_sf()</a></code></p></li>
 <li><p>If the data is not an <code>sf</code> object and none of these filenames are provided,
 the user is prompted to save the file as an rda file with <code><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">readr::write_rds()</a></code>.</p></li>

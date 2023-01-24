@@ -65,7 +65,7 @@
 sources</dd>
       </dl><dl><dt>
           
-          <code><a href="write_sf_ext.html">write_sf_ext()</a></code> <code><a href="write_sf_ext.html">write_sf_cache()</a></code> <code><a href="write_sf_ext.html">write_sf_gist()</a></code> <code><a href="write_sf_ext.html">write_sf_gsheet()</a></code> 
+          <code><a href="write_sf_ext.html">write_sf_ext()</a></code> <code><a href="write_sf_ext.html">write_sf_list()</a></code> <code><a href="write_sf_ext.html">write_sf_cache()</a></code> <code><a href="write_sf_ext.html">write_sf_gist()</a></code> <code><a href="write_sf_ext.html">write_sf_gsheet()</a></code> 
         </dt>
         <dd>Write or cache a simple feature object to a file</dd>
       </dl><dl><dt>
@@ -114,7 +114,8 @@ EXIF metadata to image files</dd>
           
           <code><a href="as_point.html">as_point()</a></code> <code><a href="as_point.html">as_points()</a></code> <code><a href="as_point.html">as_startpoint()</a></code> <code><a href="as_point.html">as_endpoint()</a></code> <code><a href="as_point.html">as_line()</a></code> <code><a href="as_point.html">as_lines()</a></code> <code><a href="as_point.html">as_polygons()</a></code> <code><a href="as_point.html">as_centroid()</a></code> 
         </dt>
-        <dd>Convert an sf, numeric, or other object to a POINT (sfg) or POINT, MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object</dd>
+        <dd>Convert an sf, numeric, or other object to a POINT (sfg) or POINT,
+MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object</dd>
       </dl><dl><dt>
           
           <code><a href="as_sf.html">as_sf()</a></code> <code><a href="as_sf.html">as_bbox()</a></code> <code><a href="as_sf.html">as_sfc()</a></code> <code><a href="as_sf.html">as_sf_list()</a></code> <code><a href="as_sf.html">as_sf_class()</a></code> 
@@ -200,7 +201,7 @@ to an sf object</dd>
         <dd>Complete a spatial join using a simple feature objects or an object and list</dd>
       </dl><dl><dt>
           
-          <code><a href="st_filter_ext.html">st_filter_ext()</a></code> 
+          <code><a href="st_filter_ext.html">st_filter_ext()</a></code> <code><a href="st_filter_ext.html">st_filter_geom_type()</a></code> 
         </dt>
         <dd>Filter, crop, trim, or erase a simple feature object or list</dd>
       </dl><dl><dt>
@@ -222,7 +223,8 @@ to an sf object</dd>
           
           <code><a href="st_cast_ext.html">st_cast_ext()</a></code> 
         </dt>
-        <dd>Cast geometry of a simple feature object or simple feature collection to another type</dd>
+        <dd>Cast geometry of a simple feature object or simple feature collection to
+another type</dd>
       </dl><dl><dt>
           
           <code><a href="st_make_grid_ext.html">st_make_grid_ext()</a></code> 
@@ -305,6 +307,11 @@ to an sf object</dd>
           <code><a href="sf_bbox_shift.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_shift.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_shift.html">sf_bbox_expand()</a></code> 
         </dt>
         <dd>Shift sides, contract, or expand a bounding box</dd>
+      </dl><dl><dt>
+          
+          <code><a href="cli_format.sf.html">cli_format(<i>&lt;sf&gt;</i>)</a></code> 
+        </dt>
+        <dd>cli_format style for sf objects</dd>
       </dl></div><div class="section level2">
       <h2 id="utility-functions-for-units-and-scales">Utility functions for units and scales<a class="anchor" aria-label="anchor" href="#utility-functions-for-units-and-scales"></a></h2>
       
