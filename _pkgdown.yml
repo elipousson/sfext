@@ -50,6 +50,7 @@ reference:
   - '`count_sf_ext`'
   - '`make_sf_grid_list`'
   - starts_with("sf_bbox")
+  - '`cli_format.sf`'
 - title: Utility functions for units and scales
   contents:
   - starts_with("is_dist")

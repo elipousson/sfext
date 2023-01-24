@@ -10,7 +10,7 @@
 #'   library(sf)
 #'   cliExtras::register_cli_format("sf", cli_format.sf)
 #'   nc <- st_read(system.file("shape/nc.shp", package = "sf"))
-#'   cli_text("`nc` is a {.val nc}")
+#'   cli_text("`nc` is a {.val {nc}}")
 #' }
 #' }
 #' @export

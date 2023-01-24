@@ -4,7 +4,7 @@
 \alias{sf_bbox_corners}
 \title{Get bounding box corner points from a bbox, sfc, or sf object}
 \usage{
-sf_bbox_corners(x, .id = "corner")
+sf_bbox_corners(x, .id = "corner", class = "sf")
 }
 \arguments{
 \item{x}{A \code{bbox}, length 1 \code{sfc} object, or a \code{sf} object with a single
@@ -12,9 +12,12 @@ feature}
 
 \item{.id}{A name to use for added column with cardinal position of points,
 Default: 'corner'}
+
+\item{class}{Class of object to return. Must be "sf" (default) or "sfc".}
 }
 \value{
-A \code{sf} with four features or a length 4 \code{sfc} object with POINT
+A \code{sf} with four features (duplicating input feature with new
+geometry derived from bounding box) or a length 4 \code{sfc} object with POINT
 geometry.
 }
 \description{
