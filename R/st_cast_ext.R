@@ -15,10 +15,7 @@
 #' @export
 #' @importFrom sf st_cast
 st_cast_ext <- function(x, to = "POINT", simplify = TRUE, ...) {
-  cli_abort_ifnot(
-    condition = is_sf(x) | is_sfc(x)
-  )
-
+  check_sf(x, ext = "sfc")
   geom_type <- is_geom_type(x, ext = FALSE)
 
   if (any(geom_type %in% c("MULTIPOLYGON", "POLYGON")) && simplify) {
