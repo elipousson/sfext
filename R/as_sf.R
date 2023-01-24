@@ -189,6 +189,8 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
         x <- dplyr::group_nest(x, keep = TRUE)
         x <- x$data
       }
+    } else if (is_bbox(x) | is_sfc(x)) {
+       x <- list(x)
     }
   }
 
@@ -203,6 +205,7 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
 
   if (is.null(names(x)) && !is.null(nm)) {
     if (clean_names) {
+      # FIXME: Consider removing this option or replacing it with vctrs
       nm <- janitor::make_clean_names(nm)
     }
 
