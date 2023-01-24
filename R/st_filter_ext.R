@@ -66,8 +66,10 @@ st_filter_ext <- function(x,
     condition = is_sf(x, ext = TRUE) && is_sf(y, ext = TRUE)
   )
 
-  if (is_bbox(x)) {
-    x <- sf_bbox_to_sfc(x)
+  class <- "sf"
+  if (!is_sf(x)) {
+    class <- "sfc"
+    x <- as_sf(x)
   }
 
   if (erase) {
@@ -108,6 +110,10 @@ st_filter_ext <- function(x,
     )
 
   x <- st_filter_geom_type(x, type)
+
+  if (class == "sfc") {
+    x <- as_sfc(x)
+  }
 
   transform_sf(x, crs = crs)
 }
