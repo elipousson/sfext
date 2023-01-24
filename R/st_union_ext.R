@@ -40,7 +40,7 @@ st_union_ext <- function(x,
   }
 
   if (!is.null(y)) {
-    return(sf::st_union(x, y, ...))
+    return(suppressWarnings(sf::st_union(x, y, ...)))
   }
 
   sfc <- sf::st_union(x, ...)
