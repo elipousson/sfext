@@ -19,9 +19,11 @@ st_concave_hull <- function(x,
                             length_threshold = 0) {
   rlang::check_installed("concaveman")
 
-  check_sf(x)
+  check_sf(x, ext = "sfc")
 
+  return_sfc <- FALSE
   if (!is_sf(x)) {
+    return_sfc <- TRUE
     x <- as_sf(x)
   }
 
@@ -61,6 +63,11 @@ st_concave_hull <- function(x,
       )
     )
 
+  geometry <- as_sfc(geometry, crs = x)
 
-  sf::st_set_geometry(x, as_sfc(geometry, crs = x))
+  if (return_sfc) {
+    return(geometry)
+  }
+
+  sf::st_set_geometry(x, geometry)
 }
