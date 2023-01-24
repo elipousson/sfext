@@ -64,7 +64,7 @@ number_features <- function(x,
       )
   }
 
-  x <- as_numbered_labels(x, labels = num_style, col = .id, start = num_start)
+  x <- as_numbered_labels(x, labels = num_style, cols = .id, start = num_start)
 
   x <- dplyr::relocate(x, dplyr::all_of(.id), .before = dplyr::everything())
 

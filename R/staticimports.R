@@ -102,9 +102,9 @@ as_numbered_labels <- function(x,
       x_col <- x[, cols[1]]
     }
 
-    x[num_col, ] <-
+    x[[num_col]] <-
       as_numbered_labels(
-        x_col, labels, start, suffix, base, col, pad, side, quiet, call
+        x_col, labels, start, suffix, base, cols, pad, side, quiet, call
       )
 
     return(x)
@@ -436,7 +436,7 @@ is_csv_fileext <- function(x, ignore.case = TRUE) {
 #' @rdname is_url
 #' @noRd
 is_esri_url <- function(x) {
-  is_url(x) && grepl("/MapServer|/FeatureServer", x)
+  is_url(x) & grepl("/MapServer|/FeatureServer", x)
 }
 
 #' [is_excel_fileext]: Does this text end with a XLS or XLSX file extension?
