@@ -42,10 +42,7 @@ get_coords <- function(x,
       error_call = call
     )
 
-  cli_abort_ifnot(
-    "{.arg x} must be a sf, sfc, or bbox object.",
-    condition = is_sf(x, ext = TRUE)
-  )
+  check_sf(x, ext = TRUE)
 
   if (all(is_point(x, by_geometry = TRUE))) {
     geometry <- "point"
@@ -102,9 +99,9 @@ get_coords <- function(x,
 #' @importFrom tibble enframe
 #' @importFrom sf st_drop_geometry
 get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
-  stopifnot(
-    is_sf(x, ext = TRUE)
-  )
+  check_sf(x, ext = TRUE)
+  x <- as_sf(x)
+
   col <- "minmax_row_num"
 
   x <- dplyr::mutate(
@@ -112,10 +109,14 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
     "{col}" := as.character(dplyr::row_number())
   )
 
+  x_list <- as_sf_list(x, col = col)
 
+  x <- dplyr::select(x, -dplyr::all_of(col))
+
+  # return(x_list)
   # Get bbox for each feature (col must be unique)
   x_bbox_list <-
-    st_bbox_ext(as_sf_list(x, col = col), crs = crs, class = "list")
+    st_bbox_ext(x_list, crs = crs)
 
   # Drop bbox class
   x_bbox_list <-
@@ -123,8 +124,6 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
       x_bbox_list,
       ~ as.numeric(.x)
     )
-
-  x <- dplyr::select(x, -.data[[col]])
 
   rlang::check_installed("tidyr")
 
@@ -137,7 +136,7 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
     )
 
   minmax_df <-
-    dplyr::select(minmax_df, -.data[[col]])
+    dplyr::select(minmax_df, -dplyr::all_of(col))
 
 
   if (!keep_all) {
