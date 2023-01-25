@@ -66,6 +66,10 @@ number_features <- function(x,
 
   x <- as_numbered_labels(x, labels = num_style, cols = .id, start = num_start)
 
+  if (tolower(num_style) == "arabic") {
+    x[[.id]] <- as.integer(x[[.id]])
+  }
+
   x <- dplyr::relocate(x, dplyr::all_of(.id), .before = dplyr::everything())
 
   x
