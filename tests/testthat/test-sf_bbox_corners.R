@@ -1,5 +1,5 @@
 test_that("sf_bbox_corners works", {
-  nc <- sf::read_sf(system.file("shape/nc.shp", package="sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   bbox_corners <- sf_bbox_corners(sf::st_bbox(nc[1, ]))
   sf_corners <- sf_bbox_corners(nc[1, ])
   sfc_corners <- sf_bbox_corners(nc[1, ], class = "sfc")
@@ -27,6 +27,3 @@ test_that("sf_bbox_corners errors", {
     sf_bbox_corners("ABC")
   )
 })
-
-
-

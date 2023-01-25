@@ -190,7 +190,7 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
         x <- x$data
       }
     } else if (is_bbox(x) | is_sfc(x)) {
-       x <- list(x)
+      x <- list(x)
     }
   }
 

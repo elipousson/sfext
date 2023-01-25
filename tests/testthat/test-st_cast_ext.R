@@ -1,5 +1,5 @@
 test_that("st_cast_ext works", {
-  nc <- sf::read_sf(system.file("shape/nc.shp", package="sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   expect_error(
     st_cast_ext(sf::st_bbox(nc))
   )

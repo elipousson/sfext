@@ -171,8 +171,7 @@ write_sf_list <- function(data,
   purrr::walk2(
     data,
     names(data),
-    function(x, y)
-      {
+    function(x, y) {
       layer_options <- NULL
       if (has_fileext(filename, "gdb")) {
         layer_options <- glue("LAYER_ALIAS={y}")
@@ -180,11 +179,11 @@ write_sf_list <- function(data,
       }
 
       sf::write_sf(
-      x,
-      dsn = filename,
-      layer = y,
-      layer_options = layer_options
-    )
+        x,
+        dsn = filename,
+        layer = y,
+        layer_options = layer_options
+      )
     }
   )
 }
@@ -424,7 +423,6 @@ write_sf_types <- function(data,
     if (has_fileext(filename, "gpkg") & !is.null(description)) {
       layer_options <- glue("DESCRIPTION={description}")
     }
-
   } else {
     type <-
       dplyr::case_when(
