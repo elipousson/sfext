@@ -57,6 +57,45 @@ get_data_dir <- function(path = NULL,
   }
 }
 
+
+#' @name list_data_files
+#' @param fileext If pattern is NULL, fileext is used to set the pattern and
+#'   filter listed files to those matching the file extension.
+#' @inheritParams base::list.files
+#' @param ... Additional parameters passed to [list.files()]
+#' @rdname get_data_dir
+#' @export
+list_data_files <- function(path = NULL,
+                            pkg = "sfext",
+                            cache = FALSE,
+                            fileext = NULL,
+                            pattern = NULL,
+                            full.names = TRUE,
+                            ignore.case = TRUE,
+                            ...) {
+  path <-
+    get_data_dir(
+      path = path,
+      cache = cache,
+      pkg = pkg,
+      null.ok = FALSE,
+      create = FALSE
+    )
+
+  if (!is.null(fileext)) {
+    pattern <- pattern %||% paste0(fileext, "$")
+  }
+
+  list.files(
+    path,
+    pattern = pattern,
+    full.names = full.names,
+    ignore.case = ignore.case,
+    ...
+  )
+}
+
+
 #' Get file types from a path
 #'
 #' @param path A valid directory or file path.
