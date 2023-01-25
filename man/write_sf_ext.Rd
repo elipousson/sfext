@@ -49,6 +49,7 @@ write_sf_cache(
   prefix = NULL,
   postfix = NULL,
   filename = NULL,
+  fileext = NULL,
   filetype = NULL,
   data_dir = NULL,
   pkg = "sfext",

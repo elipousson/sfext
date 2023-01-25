@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_data_dir.R
 \name{get_data_dir}
 \alias{get_data_dir}
+\alias{list_data_files}
 \title{Check if data directory exists and create a new directory if needed}
 \usage{
 get_data_dir(
@@ -10,6 +11,17 @@ get_data_dir(
   create = TRUE,
   pkg = "sfext",
   null.ok = TRUE
+)
+
+list_data_files(
+  path = NULL,
+  pkg = "sfext",
+  cache = FALSE,
+  fileext = NULL,
+  pattern = NULL,
+  full.names = TRUE,
+  ignore.case = TRUE,
+  ...
 )
 }
 \arguments{
@@ -28,6 +40,20 @@ new directory will be created.}
 
 \item{null.ok}{If \code{TRUE}, path is \code{NULL}, cache is \code{FALSE}, return the \code{NULL}
 path value; defaults to \code{TRUE}.}
+
+\item{fileext}{If pattern is NULL, fileext is used to set the pattern and
+filter listed files to those matching the file extension.}
+
+\item{pattern}{an optional \link[base]{regular expression}.  Only file names
+    which match the regular expression will be returned.}
+
+\item{full.names}{a logical value.  If \code{TRUE}, the directory
+    path is prepended to the file names to give a relative file path.
+    If \code{FALSE}, the file names (rather than paths) are returned.}
+
+\item{ignore.case}{logical.  Should pattern-matching be case-insensitive?}
+
+\item{...}{Additional parameters passed to \code{\link[=list.files]{list.files()}}}
 }
 \description{
 Get the path for a package-specific cache directory with
