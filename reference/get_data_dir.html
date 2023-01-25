@@ -66,6 +66,17 @@ optionally create a new directory at the provided path location.</p>
 <span>  create <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  pkg <span class="op">=</span> <span class="st">"sfext"</span>,</span>
 <span>  null.ok <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">list_data_files</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pkg <span class="op">=</span> <span class="st">"sfext"</span>,</span>
+<span>  cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fileext <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  full.names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ignore.case <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -95,6 +106,30 @@ new directory will be created.</p></dd>
 <dt>null.ok</dt>
 <dd><p>If <code>TRUE</code>, path is <code>NULL</code>, cache is <code>FALSE</code>, return the <code>NULL</code>
 path value; defaults to <code>TRUE</code>.</p></dd>
+
+
+<dt>fileext</dt>
+<dd><p>If pattern is NULL, fileext is used to set the pattern and
+filter listed files to those matching the file extension.</p></dd>
+
+
+<dt>pattern</dt>
+<dd><p>an optional <a href="https://rdrr.io/r/base/regex.html" class="external-link">regular expression</a>.  Only file names
+    which match the regular expression will be returned.</p></dd>
+
+
+<dt>full.names</dt>
+<dd><p>a logical value.  If <code>TRUE</code>, the directory
+    path is prepended to the file names to give a relative file path.
+    If <code>FALSE</code>, the file names (rather than paths) are returned.</p></dd>
+
+
+<dt>ignore.case</dt>
+<dd><p>logical.  Should pattern-matching be case-insensitive?</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Additional parameters passed to <code><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files()</a></code></p></dd>
 
 </dl></div>
 
