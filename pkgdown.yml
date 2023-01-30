@@ -3,7 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   introduction: introduction.html
-last_built: 2023-01-25T16:06Z
+last_built: 2023-01-30T15:31Z
 urls:
   reference: https://elipousson.github.io/sfext/reference
   article: https://elipousson.github.io/sfext/articles
