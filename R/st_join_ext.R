@@ -106,11 +106,14 @@ set_join_by_geom_type <- function(x, join = NULL) {
         is_multipolygon(x, by_geometry = TRUE) |
           is_polygon(x, by_geometry = TRUE)
       )
-  } else if (is_sf_list(x)) {
+  }
+
+  if (is_sf_list(x)) {
+    # FIXME: Replace these sapply calls w/ vapply
     x_is_poly <-
       all(
-        sapply(x, is_polygon, by_geometry = TRUE) |
-          sapply(x, is_multipolygon, by_geometry = TRUE)
+        sapply(x, is_polygon, by_geometry = FALSE) |
+          sapply(x, is_multipolygon, by_geometry = FALSE)
       )
   }
 
