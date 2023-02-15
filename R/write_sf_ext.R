@@ -148,7 +148,7 @@ write_sf_list <- function(data,
   }
 
   filename <-
-    make_filename(
+    filenamr::make_filename(
       name = name,
       label = label,
       prefix = prefix,
@@ -208,6 +208,7 @@ write_sf_cache <- function(data,
                            create = TRUE,
                            ...) {
   fileext <- fileext %||% filetype
+
   filename <-
     filenamr::make_filename(
       name = name,
