@@ -14,8 +14,8 @@
 #'   the input `sf` object.
 #' @param ... Additional parameters passed to [sf::st_join()]
 #' @export
-#' @importFrom dplyr rename select
 #' @importFrom sf st_join
+#' @importFrom dplyr rename select all_of group_by summarize
 st_join_ext <- function(x,
                         y,
                         col = NULL,
@@ -56,7 +56,7 @@ st_join_ext <- function(x,
       y <-
         dplyr::rename(
           dplyr::select(y_list[[nm]], dplyr::all_of(.id)),
-          "{nm}" := .data[[.id]]
+          "{nm}" := dplyr::all_of(.id)
         )
 
       x <- has_same_name_col(x, col = nm, drop = FALSE)
