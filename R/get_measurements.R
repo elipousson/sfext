@@ -76,7 +76,7 @@ get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "le
     condition = is_sf(x) | is_sfc(x)
   )
 
-  if (is_point(x) | is_multipoint(x)) {
+  if (is_point(x) || is_multipoint(x)) {
     convert_geom_type_alert(x, to = "LINE", with = "as_lines")
     x <- as_lines(x)
   }
@@ -84,7 +84,7 @@ get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "le
   longlat <- FALSE
 
   if (is_polygon(x)) {
-    is_pkg_installed("lwgeom")
+    rlang::check_installed("lwgeom")
     cli_inform("For objects with POLYGON geometry, {.fun get_length} uses {.fun lwgeom::st_perimeter} to return the object perimeter.")
     .id <- "perimeter"
 
@@ -102,7 +102,7 @@ get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "le
     condition = !is_multipolygon(x)
   )
 
-  if (is_line(x) | is_multiline(x)) {
+  if (is_line(x) || is_multiline(x)) {
     x_len <- sf::st_length(x)
   }
 
@@ -137,7 +137,14 @@ st_length_ext <- get_length
 #' @family dist
 #' @export
 #' @importFrom sf st_crs st_distance
-get_dist <- function(x, to, by_element = TRUE, units = NULL, drop = FALSE, keep_all = TRUE, .id = "dist", ...) {
+get_dist <- function(x,
+                     to,
+                     by_element = TRUE,
+                     units = NULL,
+                     drop = FALSE,
+                     keep_all = TRUE,
+                     .id = "dist",
+                     ...) {
   stopifnot(
     is_sf(x, ext = TRUE),
     is_sf(to, ext = TRUE) || is.character(to)
@@ -145,10 +152,14 @@ get_dist <- function(x, to, by_element = TRUE, units = NULL, drop = FALSE, keep_
 
   crs <- sf::st_crs(x)
 
+  if (!is_sf(x)) {
+    x <- as_sf(x)
+  }
+
+  from <- x
+
   if (!is_point(x)) {
-    from <- st_center(x, ext = TRUE)$sf
-  } else {
-    from <- x
+    from <- suppressWarnings(sf::st_centroid(x))
   }
 
   if (is.character(to)) {
@@ -161,14 +172,23 @@ get_dist <- function(x, to, by_element = TRUE, units = NULL, drop = FALSE, keep_
 
     to <- sf_bbox_point(as_bbox(x), point = to)
     to <- as_sf(to, crs = crs)
+    by_element <- FALSE
+  }
+
+  if (!is_sf(to)) {
+    to <- as_sf(to)
   }
 
   if (!is_point(to)) {
-    to <- st_center(to, ext = TRUE)$sf
+    to <- suppressWarnings(sf::st_centroid(to))
   }
 
-  x_dist <-
-    sf::st_distance(from, to, by_element = by_element, ...)
+  x_dist <- sf::st_distance(
+    x = from,
+    y = to,
+    by_element = by_element,
+    ...
+  )
 
   bind_units_col(
     x,

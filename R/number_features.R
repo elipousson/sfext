@@ -32,8 +32,7 @@
 #'   "number".
 #' @return A `sf` object with a number column ordered by sort values.
 #' @export
-#' @importFrom dplyr mutate row_number everything
-#' @importFrom utils as.roman
+#' @importFrom dplyr relocate all_of everything
 number_features <- function(x,
                             col = NULL,
                             sort = "dist_xmin_ymax",
@@ -103,9 +102,11 @@ sort_features <- function(x,
   minmax_opts <- c("xmin", "ymin", "xmax", "ymax")
 
   if (any(sort %in% c(latlon_opts, minmax_opts))) {
-    sort <- arg_match(sort, c(latlon_opts, minmax_opts), multiple = TRUE)
+    sort <- match.arg(sort, c(latlon_opts, minmax_opts), several.ok = TRUE)
 
-    if ((sort %in% latlon_opts) && !all(has_name(x, sort))) {
+    missing_sort_names <- !all(has_name(x, sort)) & !is.null(sort)
+
+    if (all(c(sort %in% latlon_opts, missing_sort_names))) {
       x <-
         get_coords(
           x,
@@ -114,7 +115,7 @@ sort_features <- function(x,
           keep_all = TRUE,
           drop = FALSE
         )
-    } else if ((sort %in% minmax_opts) && !all(has_name(x, sort))) {
+    } else if (all(c(sort %in% minmax_opts, missing_sort_names))) {
       x <-
         get_minmax(
           x,
@@ -134,15 +135,16 @@ sort_features <- function(x,
       "dist_xmid_ymid"
     )
 
-  if (any(sort %in% c(dist_opts)) || !is.null(to)) {
-    if (is.null(to)) {
-      # FIXME: Shouldn't this split the sort string first and then match to the options?
-      sort <- arg_match(sort, dist_opts, multiple = FALSE)
-      to <- strsplit(sort, "_")[[1]][2:3]
-    } else if (any(sort %in% c(dist_opts))) {
-      cli_warn(
-        "If {.arg sort} and {.arg to} are both provided, the value of {.arg sort} ({.val {sort}}) is ignored."
+  if (any(c(sort %in% c(dist_opts), !is.null(to)))) {
+    if (!is.null(sort)) {
+      sort <- match.arg(sort, dist_opts)
+
+      cli_warn_ifnot(
+        "{.arg sort} is ignored when {.arg sort} and {.arg to}
+        are both provided." = is.null(to)
       )
+
+      to <- strsplit(sort, "_")[[1]][2:3]
     }
 
     x <-
