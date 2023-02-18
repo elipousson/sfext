@@ -4,14 +4,25 @@
 \alias{as_xy}
 \title{Convert data to a data frame with X/Y coordinate pairs}
 \usage{
-as_xy(x, data = NULL, crs = NULL, nm = c("x", "y"), ...)
+as_xy(x, bbox = NULL, crs = NULL, nm = c("x", "y"), ...)
 }
 \arguments{
 \item{x}{A length 2 character string or numeric coordinate pair or a \code{sf},
 \code{sfc}, or a \code{bbox} object. If x is a character string (e.g. c("xmin",
 "ymax")), a sf, sfc, or bbox object must be provided to data argument.}
 
+\item{bbox}{A bbox object or object that can be converted with \code{\link[=as_bbox]{as_bbox()}}
+that is passed as bbox to \code{\link[=sf_bbox_point]{sf_bbox_point()}} when x is passed to the point
+parameter.}
+
+\item{crs}{A character or numeric reference to a coordinate reference system
+supported by \code{\link[sf:st_crs]{sf::st_crs()}} or another  \code{sf}, \code{sfc}, or \code{bbox} object that
+is used to provide crs.}
+
 \item{nm}{Column names to use for X and Y columns.}
+
+\item{...}{Additional parameters passed to \code{\link[=sf_bbox_point]{sf_bbox_point()}}, \code{\link[=as_points]{as_points()}},
+or \code{\link[=as_sfc]{as_sfc()}}.}
 }
 \description{
 Wraps \code{\link[=as_points]{as_points()}}, \code{\link[=as_sfc]{as_sfc()}}, and \code{\link[=sf_bbox_point]{sf_bbox_point()}} to allow the

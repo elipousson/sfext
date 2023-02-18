@@ -295,27 +295,33 @@ as_sf_class <- function(x, class = NULL, null.ok = TRUE, call = caller_env(), ..
 #' @param x  A length 2 character string or numeric coordinate pair or a `sf`,
 #'   `sfc`, or a `bbox` object. If x is a character string (e.g. c("xmin",
 #'   "ymax")), a sf, sfc, or bbox object must be provided to data argument.
+#' @param bbox A bbox object or object that can be converted with [as_bbox()]
+#'   that is passed as bbox to [sf_bbox_point()] when x is passed to the point
+#'   parameter.
+#' @inheritParams st_transform_ext
 #' @param nm Column names to use for X and Y columns.
+#' @param ... Additional parameters passed to [sf_bbox_point()], [as_points()],
+#'   or [as_sfc()].
 #' @name as_xy
 #' @export
 #' @importFrom dplyr case_when
 #' @importFrom sf st_coordinates
 #' @importFrom rlang set_names
 as_xy <- function(x,
-                  data = NULL,
+                  bbox = NULL,
                   crs = NULL,
                   nm = c("x", "y"),
                   ...) {
   type <-
     dplyr::case_when(
-      is.character(x) && is_sf(data, ext = TRUE) ~ "sf_bbox_point",
+      is.character(x) && is_sf(bbox, ext = TRUE) ~ "sf_bbox_point",
       is.numeric(x) | is_sf(x, ext = TRUE) ~ "as_point",
       is_point(x) ~ "point"
     )
 
   x <-
     switch(type,
-      "sf_bbox_point" = sf_bbox_point(as_bbox(data),
+      "sf_bbox_point" = sf_bbox_point(as_bbox(bbox),
         point = x, crs = crs, ...
       ),
       "as_point" = as_points(x, crs = crs, ...),
