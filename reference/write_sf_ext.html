@@ -148,13 +148,15 @@ with <code><a href="https://elipousson.github.io/filenamr/reference/make_filenam
 <dt>name</dt>
 <dd><p>Name to make file name converted to snake case with
 <code><a href="https://sfirke.github.io/janitor/reference/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code>, e.g. "Residential zoning map" becomes
-"residential_zoning_map"</p></dd>
+"residential_zoning_map". If the name includes a file extension it is
+assumed that the filename has been provided as the name parameter.</p></dd>
 
 
 <dt>label</dt>
 <dd><p>Label to combine with name converted to snake case with
 <code><a href="https://sfirke.github.io/janitor/reference/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code>. The label is designed to identify the area
-or other shared characteristics across multiple data files, maps, or plots.</p></dd>
+or other shared characteristics across multiple data files, maps, or plots.
+label is ignored if name is NULL or if name includes a file extension.</p></dd>
 
 
 <dt>prefix</dt>

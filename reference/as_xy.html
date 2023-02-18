@@ -60,7 +60,7 @@ columns matching the provided nm parameter.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_xy</span><span class="op">(</span><span class="va">x</span>, data <span class="op">=</span> <span class="cn">NULL</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, nm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_xy</span><span class="op">(</span><span class="va">x</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, nm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -71,8 +71,25 @@ columns matching the provided nm parameter.</p>
 "ymax")), a sf, sfc, or bbox object must be provided to data argument.</p></dd>
 
 
+<dt>bbox</dt>
+<dd><p>A bbox object or object that can be converted with <code><a href="as_sf.html">as_bbox()</a></code>
+that is passed as bbox to <code><a href="sf_bbox_misc.html">sf_bbox_point()</a></code> when x is passed to the point
+parameter.</p></dd>
+
+
+<dt>crs</dt>
+<dd><p>A character or numeric reference to a coordinate reference system
+supported by <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs()</a></code> or another  <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object that
+is used to provide crs.</p></dd>
+
+
 <dt>nm</dt>
 <dd><p>Column names to use for X and Y columns.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Additional parameters passed to <code><a href="sf_bbox_misc.html">sf_bbox_point()</a></code>, <code><a href="as_point.html">as_points()</a></code>,
+or <code><a href="as_sf.html">as_sfc()</a></code>.</p></dd>
 
 </dl></div>
 

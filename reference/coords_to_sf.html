@@ -164,6 +164,11 @@ after converting a data frame to simple feature object; defaults to
 provided data frame.</p></dd>
 
 
+<dt>call</dt>
+<dd><p>call used to improve error messages when used internally.
+Defaults to <code><a href="https://rlang.r-lib.org/reference/stack.html" class="external-link">rlang::caller_env()</a></code></p></dd>
+
+
 <dt>default</dt>
 <dd><p>Default coordinate values; defaults to <code>c("lon", "lat")</code>.</p></dd>
 
@@ -180,6 +185,11 @@ reversed.</p></dd>
 <dt>value</dt>
 <dd><p>If <code>TRUE</code>, return the value of the coordinate column names. Used
 by <code>has_coords()</code>.</p></dd>
+
+
+<dt>keep_missing</dt>
+<dd><p>If <code>TRUE</code>, keep rows with missing coordinate values.
+Defaults to <code>FALSE</code> which filters out rows with missing coordinates.</p></dd>
 
 </dl></div>
 
