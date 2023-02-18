@@ -63,6 +63,9 @@ after converting a data frame to simple feature object; defaults to
 \item{crs}{Coordinate reference system used by the coordinates in the
 provided data frame.}
 
+\item{call}{call used to improve error messages when used internally.
+Defaults to \code{\link[rlang:stack]{rlang::caller_env()}}}
+
 \item{default}{Default coordinate values; defaults to \code{c("lon", "lat")}.}
 
 \item{pattern}{Pattern passed to \code{\link[=grepl]{grepl()}} used to match vectors that are
@@ -72,6 +75,9 @@ reversed.}
 
 \item{value}{If \code{TRUE}, return the value of the coordinate column names. Used
 by \code{\link[=has_coords]{has_coords()}}.}
+
+\item{keep_missing}{If \code{TRUE}, keep rows with missing coordinate values.
+Defaults to \code{FALSE} which filters out rows with missing coordinates.}
 }
 \description{
 \itemize{

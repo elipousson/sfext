@@ -22,6 +22,8 @@
 #'   `FALSE`.
 #' @param crs Coordinate reference system used by the coordinates in the
 #'   provided data frame.
+#' @param call call used to improve error messages when used internally.
+#'   Defaults to [rlang::caller_env()]
 #' @export
 #' @importFrom sf st_as_sf
 #' @importFrom rlang caller_env has_length
@@ -183,6 +185,8 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
 
 #' @rdname coords_to_sf
 #' @name format_coords
+#' @param keep_missing If `TRUE`, keep rows with missing coordinate values.
+#'   Defaults to `FALSE` which filters out rows with missing coordinates.
 #' @export
 #' @importFrom cli cli_inform
 format_coords <- function(x,
