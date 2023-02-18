@@ -208,11 +208,15 @@ fmt_exif_direction <- function(data, .after = "img_direction") {
 #'   working), Default: `NULL`.
 #' @param keywords Keyword(s) added to file metadata with with exiftoolr,
 #'   Default: `NULL`.
+#' @param description description to add to ImageDescription EXIF tag, XMP-dc
+#'   Description tag, and IPTC Caption-Abstract tag.
 #' @param args Alternate arguments passed to [exiftoolr::exif_call()]. If args
 #'   is not `NULL`, title, author, date, and keywords are ignored; defaults to
 #'   `NULL`.
 #' @param overwrite If `TRUE`, overwrite any existing EXIF metadata present in the
 #'   provided fields; defaults to `TRUE`
+#' @param append_keywords If `TRUE`, append keywords to existing keywords. If
+#'   `FALSE` (default), replace existing keywords with the provided values.
 #' @export
 #' @importFrom cliExtras cli_paths
 write_exif <- function(path,

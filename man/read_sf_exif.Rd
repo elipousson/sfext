@@ -71,12 +71,18 @@ working), Default: \code{NULL}.}
 \item{keywords}{Keyword(s) added to file metadata with with exiftoolr,
 Default: \code{NULL}.}
 
+\item{description}{description to add to ImageDescription EXIF tag, XMP-dc
+Description tag, and IPTC Caption-Abstract tag.}
+
 \item{args}{Alternate arguments passed to \code{\link[exiftoolr:exif_call]{exiftoolr::exif_call()}}. If args
 is not \code{NULL}, title, author, date, and keywords are ignored; defaults to
 \code{NULL}.}
 
 \item{overwrite}{If \code{TRUE}, overwrite any existing EXIF metadata present in the
 provided fields; defaults to \code{TRUE}}
+
+\item{append_keywords}{If \code{TRUE}, append keywords to existing keywords. If
+\code{FALSE} (default), replace existing keywords with the provided values.}
 
 \item{from}{A sf object or list of sf objects where each object has a column
 with a name matching the .id parameter. The attribute value in this column
