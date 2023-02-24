@@ -76,7 +76,12 @@ get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "le
     condition = is_sf(x) | is_sfc(x)
   )
 
-  if (is_point(x) || is_multipoint(x)) {
+  cli_abort_ifnot(
+    "{.fn get_length} can't work with a {.val MULTIPOLYGON} input for {.arg x}.",
+    condition = !is_multipolygon(x)
+  )
+
+  if (is_point(x) | is_multipoint(x)) {
     convert_geom_type_alert(x, to = "LINE", with = "as_lines")
     x <- as_lines(x)
   }
@@ -97,12 +102,7 @@ get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "le
     x_len <- lwgeom::st_perimeter(x)
   }
 
-  cli_abort_ifnot(
-    "{.fn get_length} can't work with a {.val MULTIPOLYGON} input for {.arg x}.",
-    condition = !is_multipolygon(x)
-  )
-
-  if (is_line(x) || is_multiline(x)) {
+  if (is_line(x) | is_multiline(x)) {
     x_len <- sf::st_length(x)
   }
 
@@ -147,7 +147,7 @@ get_dist <- function(x,
                      ...) {
   stopifnot(
     is_sf(x, ext = TRUE),
-    is_sf(to, ext = TRUE) || is.character(to)
+    is_sf(to, ext = TRUE) | is.character(to)
   )
 
   crs <- sf::st_crs(x)
