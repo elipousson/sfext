@@ -45,6 +45,18 @@
   "softwareSuggestions": [
     {
       "@type": "SoftwareApplication",
+      "identifier": "concaveman",
+      "name": "concaveman",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=concaveman"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "covr",
       "name": "covr",
       "provider": {
@@ -184,6 +196,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "osmdata",
+      "name": "osmdata",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=osmdata"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "rappdirs",
       "name": "rappdirs",
       "provider": {
@@ -254,6 +278,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=tidygeocoder"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "tidyr",
+      "name": "tidyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyr"
     }
   ],
   "softwareRequirements": {
@@ -277,6 +313,13 @@
     },
     "3": {
       "@type": "SoftwareApplication",
+      "identifier": "cliExtras",
+      "name": "cliExtras",
+      "version": ">= 0.1.0",
+      "sameAs": "https://github.com/elipousson/cliExtras"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
       "provider": {
@@ -287,7 +330,14 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
-    "4": {
+    "5": {
+      "@type": "SoftwareApplication",
+      "identifier": "filenamr",
+      "name": "filenamr",
+      "version": ">= 0.1.0",
+      "sameAs": "https://github.com/elipousson/filenamr"
+    },
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "glue",
       "name": "glue",
@@ -299,7 +349,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=glue"
     },
-    "5": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "janitor",
       "name": "janitor",
@@ -311,7 +361,19 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=janitor"
     },
-    "6": {
+    "8": {
+      "@type": "SoftwareApplication",
+      "identifier": "lifecycle",
+      "name": "lifecycle",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lifecycle"
+    },
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "purrr",
       "name": "purrr",
@@ -323,7 +385,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=purrr"
     },
-    "7": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
       "name": "rlang",
@@ -335,7 +397,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
-    "8": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "sf",
       "name": "sf",
@@ -347,19 +409,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sf"
     },
-    "9": {
-      "@type": "SoftwareApplication",
-      "identifier": "stringr",
-      "name": "stringr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=stringr"
-    },
-    "10": {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -371,19 +421,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "11": {
-      "@type": "SoftwareApplication",
-      "identifier": "tidyr",
-      "name": "tidyr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=tidyr"
-    },
-    "12": {
+    "13": {
       "@type": "SoftwareApplication",
       "identifier": "units",
       "name": "units",
@@ -395,9 +433,21 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=units"
     },
+    "14": {
+      "@type": "SoftwareApplication",
+      "identifier": "vctrs",
+      "name": "vctrs",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=vctrs"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "437.682KB",
+  "fileSize": "572.099KB",
   "readme": "https://github.com/elipousson/sfext/blob/main/README.md",
   "contIntegration": "https://app.codecov.io/gh/elipousson/sfext?branch=main",
   "developmentStatus": ["https://lifecycle.r-lib.org/articles/stages.html#experimental", "https://www.repostatus.org/#active"],
