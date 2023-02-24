@@ -22,6 +22,7 @@ Imports:
     filenamr (>= 0.1.0),
     glue,
     janitor,
+    lifecycle,
     purrr,
     rlang,
     sf,
