@@ -14,23 +14,37 @@
 #'   or south of New Zealand.
 #' @param quiet If `TRUE`, suppress alert messages when converting a lat/lon
 #'   coordinate pair to a lon/lat pair. Defaults to `FALSE`.
+#' @param call Passed to [cli::cli_abort()] to improve error messages.
 #' @inheritDotParams sf::st_sfc -crs
+#' @seealso [is_geo_coords()]
 #' @export
 #' @importFrom cli cli_alert_warning cli_alert_success
 #' @importFrom sf st_point st_sfc
 lonlat_to_sfc <- function(x,
                           range = getOption("sfext.coord_range", c("xmin" = -180, "ymin" = -50, "xmax" = 180, "ymax" = 60)),
                           quiet = FALSE,
+                          call = parent.frame(),
                           ...) {
-  likely_latlon <-
-    !is_lonlat_in_range(x, range) && is_lonlat_in_range(x, range, rev = TRUE)
+  if (!is_geo_coords(x)) {
+    cli::cli_abort("{.arg x} must be geodetic coordinates.", call = call)
+  }
+  rev_latlon <- FALSE
 
-  rev_latlon <- any(
-    c(
-      likely_latlon,
-      max(abs(x[[2]])) > 90
+  if (!is.null(range)) {
+    if (is_bbox(range)) {
+      range <- rlang::set_names(as.numeric(sf_bbox_transform(range, crs = 4326)), names(range))
+    }
+
+    likely_latlon <-
+      !is_lonlat_in_range(x, range) && is_lonlat_in_range(x, range, rev = TRUE)
+
+    rev_latlon <- any(
+      c(
+        likely_latlon,
+        max(abs(x[[2]])) > 90
+      )
     )
-  )
+  }
 
   if (isTRUE(rev_latlon)) {
     if (isFALSE(quiet)) {
@@ -65,13 +79,18 @@ check_range <- function(range = NULL, nm = c("xmin", "ymin", "xmax", "ymax")) {
 
 #' @keywords internal
 #' @noRd
-is_lonlat_in_range <- function(x, range = NULL, rev = FALSE, null.ok = TRUE) {
+is_lonlat_in_range <- function(x,
+                               range = NULL,
+                               rev = FALSE,
+                               null.ok = TRUE,
+                               call = parent.frame()) {
   if (is.null(range) & null.ok) {
     return(TRUE)
   }
 
   cli_abort_ifnot(
-    "{.arg x} must be a length 2 vector." = (length(x) == 2)
+    "{.arg x} must be a length 2 vector." = (length(x) == 2),
+    call = call
   )
 
   check_range(range)

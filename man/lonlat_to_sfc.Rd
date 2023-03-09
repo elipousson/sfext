@@ -9,6 +9,7 @@ lonlat_to_sfc(
   range = getOption("sfext.coord_range", c(xmin = -180, ymin = -50, xmax = 180, ymax =
     60)),
   quiet = FALSE,
+  call = parent.frame(),
   ...
 )
 }
@@ -29,6 +30,8 @@ or south of New Zealand.}
 \item{quiet}{If \code{TRUE}, suppress alert messages when converting a lat/lon
 coordinate pair to a lon/lat pair. Defaults to \code{FALSE}.}
 
+\item{call}{Passed to \code{\link[cli:cli_abort]{cli::cli_abort()}} to improve error messages.}
+
 \item{...}{
   Arguments passed on to \code{\link[sf:sfc]{sf::st_sfc}}
   \describe{
@@ -40,4 +43,7 @@ coordinate pair to a lon/lat pair. Defaults to \code{FALSE}.}
 }
 \description{
 Convert a lon/lat or lat/lon coordinate pair to an sfc object
+}
+\seealso{
+\code{\link[=is_geo_coords]{is_geo_coords()}}
 }
