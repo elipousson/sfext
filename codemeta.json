@@ -447,7 +447,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "572.099KB",
+  "fileSize": "584.863KB",
   "readme": "https://github.com/elipousson/sfext/blob/main/README.md",
   "contIntegration": "https://app.codecov.io/gh/elipousson/sfext?branch=main",
   "developmentStatus": ["https://lifecycle.r-lib.org/articles/stages.html#experimental", "https://www.repostatus.org/#active"],
