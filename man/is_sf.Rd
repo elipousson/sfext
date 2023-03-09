@@ -8,6 +8,8 @@
 \alias{is_sf_list}
 \alias{is_raster}
 \alias{is_sp}
+\alias{is_coords}
+\alias{is_geo_coords}
 \alias{is_same_crs}
 \title{What is the class or spatial attributes of this feature?}
 \usage{
@@ -24,6 +26,8 @@ is_sf_list(x, named = FALSE, ext = FALSE, null.ok = FALSE)
 is_raster(x, null.ok = FALSE)
 
 is_sp(x, null.ok = FALSE)
+
+is_geo_coords(x, null.ok = FALSE)
 
 is_same_crs(x, y)
 }
@@ -53,6 +57,7 @@ What is the class or spatial attributes of this feature?
 \item \link{is_sf_list}: is x is a list of \code{sf} class objects (with or without names)?
 \item \link{is_raster}: is x a \code{Raster} class object?
 \item \link{is_sp}: is x a \code{Spatial} class object of any type?
+\item \link{is_geo_coords}: is x likely a geodetic coordinate pair (a length 2 numeric vector, with a max absolute value less than or equal to 180)?
 \item \link{is_same_crs}: do x and y have the same coordinate reference system?
 }
 }
