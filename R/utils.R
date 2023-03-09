@@ -10,8 +10,6 @@
 #  str_remove_fileext str_extract_fileext
 
 .onLoad <- function(lib, pkg) {
-  rlang::run_on_load()
-
   utils::data(
     list = c(
       "dist_units",
