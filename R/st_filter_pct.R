@@ -1,4 +1,3 @@
-
 #' Filter by share of length or area of one geometry overlapping with a second
 #' geometry
 #'

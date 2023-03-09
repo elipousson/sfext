@@ -1,4 +1,3 @@
-
 #' Get standard paper and image sizes
 #'
 #' Use the "paper" parameter (matching name from [paper_sizes]), standard

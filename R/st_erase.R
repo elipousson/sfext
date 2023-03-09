@@ -1,4 +1,3 @@
-
 #' Erase an area of a simple feature object
 #'
 #' This function extends [sf::st_difference()] by unioning the second parameter
