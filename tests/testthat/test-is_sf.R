@@ -42,4 +42,13 @@ test_that("is_sf and as_sf functions work", {
 
   expect_true(is_same_crs(nc, nc))
   expect_true(is_same_crs(nc, bbox))
+
+  expect_true(is_geo_coords(c(-81.47276, 36.23436)))
+
+  null_test <- NULL
+
+  expect_true(is_sf(null_test, null.ok = TRUE))
+  expect_true(is_sf_list(null_test, null.ok = TRUE))
+  expect_true(is_sp(null_test, null.ok = TRUE))
+  expect_true(is_geo_coords(null_test, null.ok = TRUE))
 })
