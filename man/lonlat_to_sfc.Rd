@@ -18,14 +18,13 @@ lonlat_to_sfc(
 \href{https://epsg.org/crs_4326/WGS-84.html}{EPSG:4326} coordinate reference
 system.}
 
-\item{range}{For \code{\link[=lonlat_to_sfc]{lonlat_to_sfc()}}, a \code{bbox} object or a length 4 vector with
-names xmin, xmax, ymin, and ymax. If a coordinate pair falls outside the
-latitude/longitude range defined by the vector but inside the range if
-reversed, the coordinates are assumed to be in lat/lon order and are
-switched to lon/lat order before being converted to a point. Defaults to
-\code{c("xmin" = -180, "ymin" = -50, "xmax" = 180, "ymax" = 60)}. Note that this
-default setting will reverse valid coordinates north of Anchorage, Alaska
-or south of New Zealand.}
+\item{range}{For \code{\link[=lonlat_to_sfc]{lonlat_to_sfc()}}, an object that is coercible to a \code{bbox}
+object or a length 4 vector with names xmin, xmax, ymin, and ymax. If a
+coordinate pair falls outside the latitude/longitude range defined by the
+vector but inside the range if reversed, the coordinates are assumed to be
+in lat/lon order and are switched to lon/lat order before being converted
+to a point. Defaults to \code{c("xmin" = -180, "ymin" = -50, "xmax" = 180, "ymax" = 60)}. Note that this default setting will reverse valid
+coordinates north of Anchorage, Alaska or south of New Zealand.}
 
 \item{quiet}{If \code{TRUE}, suppress alert messages when converting a lat/lon
 coordinate pair to a lon/lat pair. Defaults to \code{FALSE}.}

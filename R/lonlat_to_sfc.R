@@ -4,14 +4,14 @@
 #' @param x A length 2 numeric vector with geodetic coordinates in a
 #'   [EPSG:4326](https://epsg.org/crs_4326/WGS-84.html) coordinate reference
 #'   system.
-#' @param range For [lonlat_to_sfc()], a `bbox` object or a length 4 vector with
-#'   names xmin, xmax, ymin, and ymax. If a coordinate pair falls outside the
-#'   latitude/longitude range defined by the vector but inside the range if
-#'   reversed, the coordinates are assumed to be in lat/lon order and are
-#'   switched to lon/lat order before being converted to a point. Defaults to
-#'   `c("xmin" = -180, "ymin" = -50, "xmax" = 180, "ymax" = 60)`. Note that this
-#'   default setting will reverse valid coordinates north of Anchorage, Alaska
-#'   or south of New Zealand.
+#' @param range For [lonlat_to_sfc()], an object that is coercible to a `bbox`
+#'   object or a length 4 vector with names xmin, xmax, ymin, and ymax. If a
+#'   coordinate pair falls outside the latitude/longitude range defined by the
+#'   vector but inside the range if reversed, the coordinates are assumed to be
+#'   in lat/lon order and are switched to lon/lat order before being converted
+#'   to a point. Defaults to `c("xmin" = -180, "ymin" = -50, "xmax" = 180,
+#'   "ymax" = 60)`. Note that this default setting will reverse valid
+#'   coordinates north of Anchorage, Alaska or south of New Zealand.
 #' @param quiet If `TRUE`, suppress alert messages when converting a lat/lon
 #'   coordinate pair to a lon/lat pair. Defaults to `FALSE`.
 #' @param call Passed to [cli::cli_abort()] to improve error messages.
@@ -31,8 +31,9 @@ lonlat_to_sfc <- function(x,
   rev_latlon <- FALSE
 
   if (!is.null(range)) {
-    if (is_bbox(range)) {
-      range <- rlang::set_names(as.numeric(sf_bbox_transform(range, crs = 4326)), names(range))
+    if (is_sf(range, ext = TRUE)) {
+      range <- as_bbox(range, crs = 4326)
+      range <- rlang::set_names(as.numeric(range), names(range))
     }
 
     likely_latlon <-
