@@ -26,7 +26,7 @@ check_coords(
   x = NULL,
   coords = NULL,
   default = c("lon", "lat"),
-  rev = "auto",
+  rev = FALSE,
   call = caller_env()
 )
 
@@ -116,11 +116,8 @@ coordinates from a data.frame
 the column names for a provided data.frame
 \item \code{\link[=rev_coords]{rev_coords()}}: Reverse a vector of coordinate names if the text "lat" or
 "y" appears in the first position
-\item \code{\link[=geo_coords_to_sfc]{geo_coords_to_sfc()}}:
 }
 }
 \seealso{
 \code{\link[=is_geo_coords]{is_geo_coords()}}
-
-\code{\link[=rev_latlon]{rev_latlon()}}
 }
