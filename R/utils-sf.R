@@ -29,16 +29,18 @@ NULL
 #' @export
 #' @importFrom sf st_crs st_set_crs st_transform
 transform_sf <- function(x, crs = NULL, null.ok = TRUE, ...) {
-  if (any(c((is.null(crs) && null.ok), is_same_crs(x, crs)))) {
+  if (is.null(crs) && null.ok) {
+    return(x)
+  }
+
+  crs <- as_crs(crs, check = TRUE)
+
+  if (is_same_crs(x, crs)) {
     return(x)
   }
 
   if (is_sfg(x)) {
     x <- as_sfc(x)
-  }
-
-  if (is_sf(crs, ext = TRUE)) {
-    crs <- sf::st_crs(crs)
   }
 
   if (is.na(sf::st_crs(x))) {

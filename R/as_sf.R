@@ -12,14 +12,14 @@
 #'   [as_sf_list()] only supports sf objects or a data frames with a sf list
 #'   column named "data" (typically created by using [dplyr::group_nest()] on an
 #'   sf object.
+#' @param crs Coordinate reference system for `sf`, `bbox`, `sfc` or `sf` list
+#'   object to return.
+#' @param sf_col A column name to use for the geometry column created by
+#'   [as_sf]; defaults to "geometry".
 #' @param ext If `TRUE`, [as_sf] will convert a data frame or character vector
 #'   of addresses to an sf object using [df_to_sf] or [address_to_sf]. If
 #'   `FALSE`, only spatial objects (bbox, sfg, sfc, sf list, raster, or sp
 #'   objects) can be converted. Defaults to `TRUE`.
-#' @param sf_col A column name to use for the geometry column created by
-#'   [as_sf]; defaults to "geometry".
-#' @param crs Coordinate reference system for `sf`, `bbox`, `sfc` or `sf` list
-#'   object to return.
 #' @param call Passed as the call parameter for [cli::cli_abort] or
 #'   [rlang::arg_match] to improve error messages when function is used
 #'   internally.
@@ -29,7 +29,11 @@
 #' @export
 #' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf st_geometry
 #' @importFrom dplyr bind_rows rename
-as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
+as_sf <- function(x,
+                  crs = NULL,
+                  sf_col = "geometry",
+                  ext = TRUE,
+                  ...) {
   if (is_sf(x)) {
     return(transform_sf(x, crs = crs))
   }
@@ -41,11 +45,12 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
       is_sfg(x) ~ "sfg",
       is_sfc(x) ~ "sfc",
       is_sf_list(x) ~ "sf_list",
-      is_raster(x) ~ "raster",
-      is_sp(x) ~ "sp",
+      is_geo_coords(x) ~ "geo_coords",
       ext && is.data.frame(x) ~ "data.frame",
       # FIXME: Is there any better way of testing an address than just confirming it is a character?
-      ext && is.character(x) ~ "address"
+      ext && is.character(x) ~ "address",
+      is_raster(x) ~ "raster",
+      is_sp(x) ~ "sp"
     )
 
   # FIXME: When is x_is more than length 1?
@@ -59,10 +64,11 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...) {
       "sfg" = sf::st_sf(sf::st_sfc(x), ...),
       "sfc" = sf::st_sf(x, ...),
       "sf_list" = dplyr::bind_rows(x),
-      "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
-      "sp" = sf::st_as_sf(x, ...),
+      "geo_coords" = sf::st_sf(lonlat_to_sfc(x), ...),
       "data.frame" = df_to_sf(x, ...),
-      "address" = address_to_sf(x, ...)
+      "address" = address_to_sf(x, ...),
+      "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
+      "sp" = sf::st_as_sf(x, ...)
     )
 
   if (!is.null(sf_col)) {
@@ -135,6 +141,7 @@ as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
       # is.list(x) && is_all(x, is_sfc) ~ "sfc_list",
       is_sfg(x) ~ "sfg",
       is.data.frame(x) ~ "df",
+      is_geo_coords(x) ~ "geo_coords",
       TRUE ~ "other"
     )
 
@@ -144,6 +151,7 @@ as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
       "sfg" = sf::st_sfc(x, ...),
       # "sfc_list" =
       "df" = sf::st_geometry(as_sf(x, ext = ext, ...)),
+      "geo_coords" = lonlat_to_sfc(x, ...),
       "other" = sf::st_as_sfc(x, ...)
     )
 
@@ -285,6 +293,23 @@ as_sf_class <- function(x, class = NULL, null.ok = TRUE, call = caller_env(), ..
   )
 }
 
+#' @name as_crs
+#' @rdname as_sf
+#' @export
+as_crs <- function(crs = NULL, check = FALSE, call = parent.frame()) {
+  rlang::try_fetch(
+    sf::st_crs(crs),
+    error = function(cnd) {
+      msg <- "{.arg crs} {.val {crs}} can't be used."
+      if (isFALSE(check)) {
+        cli::cli_alert_warning(msg)
+        NA_crs_
+      } else {
+        cli::cli_abort(msg, parent = cnd, call = call)
+      }
+    }
+  )
+}
 
 #' Convert data to a data frame with X/Y coordinate pairs
 #'
@@ -370,12 +395,11 @@ as_start_end_points <- function(x, crs = 4326, class = "data.frame") {
 #' Create a LINESTRING based on start and end points
 #'
 #' @noRd
-#' @importFrom purrr map2
 #' @importFrom sf st_cast st_combine
 get_start_end_line <- function(x) {
   pts <- as_start_end_points(x, class = NULL)
   # FIXME: What does as_lines do with similar geometry?
-  purrr::map2(
+  map2(
     pts$start,
     pts$end,
     ~ sf::st_cast(sf::st_combine(

@@ -6,6 +6,7 @@
 \alias{as_sfc}
 \alias{as_sf_list}
 \alias{as_sf_class}
+\alias{as_crs}
 \title{Convert an object to a simple feature or bounding box object}
 \usage{
 as_sf(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...)
@@ -17,6 +18,8 @@ as_sfc(x, crs = NULL, ext = TRUE, ...)
 as_sf_list(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE)
 
 as_sf_class(x, class = NULL, null.ok = TRUE, call = caller_env(), ...)
+
+as_crs(crs = NULL, check = FALSE, call = parent.frame())
 }
 \arguments{
 \item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that can

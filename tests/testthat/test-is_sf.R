@@ -2,6 +2,7 @@ test_that("is_sf and as_sf functions work", {
   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
   sfc <- nc$geometry
   bbox <- sf::st_bbox(nc)
+  nc_geo_coords <- c(-81.47276, 36.23436)
 
   expect_true(is_bbox(bbox))
   expect_true(is_sf(nc))
@@ -17,7 +18,10 @@ test_that("is_sf and as_sf functions work", {
   expect_false(is_sf_list(list(nc), named = TRUE))
   expect_true(is_sf_list(list("nc" = nc), named = TRUE))
 
+  expect_true(is_geo_coords(nc_geo_coords))
+
   expect_s3_class(as_sf(nc), "sf")
+  expect_s3_class(as_sf(nc_geo_coords), "sf")
   expect_s3_class(as_sf(sfc), "sf")
   expect_s3_class(as_sf(bbox), "sf")
 
@@ -42,8 +46,6 @@ test_that("is_sf and as_sf functions work", {
 
   expect_true(is_same_crs(nc, nc))
   expect_true(is_same_crs(nc, bbox))
-
-  expect_true(is_geo_coords(c(-81.47276, 36.23436)))
 
   null_test <- NULL
 
