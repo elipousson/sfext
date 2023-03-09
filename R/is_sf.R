@@ -14,6 +14,7 @@
 #' - [is_sf_list]: is x is a list of `sf` class objects (with or without names)?
 #' - [is_raster]: is x a `Raster` class object?
 #' - [is_sp]: is x a `Spatial` class object of any type?
+#' - [is_geo_coords]: is x likely a geodetic coordinate pair (a length 2 numeric vector, with a max absolute value less than or equal to 180)?
 #' - [is_same_crs]: do x and y have the same coordinate reference system?
 #'
 #' @export
@@ -102,6 +103,17 @@ is_sp <- function(x, null.ok = FALSE) {
   }
 
   any(grepl("Spatial", class(x)))
+}
+
+#' @name is_coords
+#' @rdname is_sf
+#' @export
+is_geo_coords <- function(x, null.ok = FALSE) {
+  if (is.null(x) && null.ok) {
+    return(TRUE)
+  }
+
+  is.numeric(x) && (length(x) == 2) && (max(abs(x)) <= 180)
 }
 
 #' @name is_same_crs
