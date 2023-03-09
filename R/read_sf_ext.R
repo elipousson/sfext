@@ -1014,7 +1014,7 @@ make_sf_query <- function(dsn = NULL,
     table %||%
     str_extract(
       basename(dsn),
-      regex("[[:graph:]]+(?=\\.)")
+      regex("[[:graph:]]+(?=\\.)", TRUE)
     )
 
   table <-
