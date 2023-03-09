@@ -124,7 +124,6 @@ read_sf_ext <- function(...) {
 #' Modify function parameters
 #'
 #' @noRd
-#' @importFrom purrr discard
 #' @importFrom utils modifyList
 modify_fn_fmls <- function(params,
                            fn,
@@ -134,7 +133,7 @@ modify_fn_fmls <- function(params,
   fmls <- fn_fmls(fn)
 
   if (!keep_missing) {
-    fmls <- purrr::discard(fmls, is_missing)
+    fmls <- discard(fmls, is_missing)
   }
 
   params <- c(list2(...), params)
@@ -323,7 +322,7 @@ read_sf_query <- function(path,
 #' @inheritParams readxl::read_excel
 #' @export
 
-#' @importFrom purrr map
+#' @importFrom purrr map_dfr
 read_sf_excel <- function(path,
                           sheet = NULL,
                           combine_sheets = FALSE,
@@ -342,7 +341,7 @@ read_sf_excel <- function(path,
   if ((length(sheet) > 1)) {
     params <- list2(...)
 
-    map_fn <- purrr::map
+    map_fn <- map
 
     if (combine_sheets) {
       map_fn <- purrr::map_dfr
@@ -730,7 +729,7 @@ read_sf_gmap <- function(url,
     } else {
       data <-
         rlang::set_names(
-          purrr::map(
+          map(
             cli_progress_layers,
             ~ map_gmap_layers(layer[.x])
           ),
@@ -767,7 +766,7 @@ read_sf_gmap <- function(url,
 get_gmap_id <- function(url) {
   str_extract(
     url,
-    regex("(?<=mid=)([[:alnum:]]|_)+((?=&)|(?=/$)|$)")
+    regex("(?<=mid=)([[:alnum:]]|_)+((?=&)|(?=/$)|$)", TRUE)
   )
 }
 

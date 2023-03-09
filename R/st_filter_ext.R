@@ -43,7 +43,7 @@ st_filter_ext <- function(x,
 
   if (is_sf_list(x, ext = TRUE) && list.ok) {
     x <-
-      purrr::map(
+      map(
         x,
         ~ st_filter_ext(
           x = .x,

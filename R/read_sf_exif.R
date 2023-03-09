@@ -315,7 +315,7 @@ write_exif <- function(path,
 #' @export
 #' @importFrom rlang has_name
 #' @importFrom dplyr pull select all_of summarize group_by
-#' @importFrom purrr map_dfr map2
+#' @importFrom purrr map_dfr
 #' @importFrom sf st_drop_geometry st_join
 #' @importFrom cli cli_bullets
 write_exif_from <- function(path,
@@ -368,7 +368,7 @@ write_exif_from <- function(path,
 
   if (!is.null(existing_vals)) {
     replacement_vals <-
-      purrr::map2(
+      map2(
         existing_vals,
         append_vals,
         ~ unique(append(.x, .y))

@@ -42,7 +42,7 @@ st_bbox_ext <- function(x = NULL,
 
   if (is_sf_list(x, ext = TRUE) && list.ok) {
     bbox_list <-
-      purrr::map(
+      map(
         x,
         ~ st_bbox_ext(
           x = .x,
@@ -94,7 +94,7 @@ st_bbox_asp <- function(x = NULL,
                         list.ok = TRUE) {
   if (is_sf_list(x, ext = TRUE) && list.ok) {
     return(
-      purrr::map(
+      map(
         x,
         ~ st_bbox_asp(
           .x,

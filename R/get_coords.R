@@ -120,7 +120,7 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
 
   # Drop bbox class
   x_bbox_list <-
-    purrr::map(
+    map(
       x_bbox_list,
       ~ as.numeric(.x)
     )

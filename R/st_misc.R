@@ -1,8 +1,9 @@
 #' Helper to discard geometry with no dimensions
 #'
 #' @noRd
+#' @importFrom sf st_dimension
 discard_na_geom <- function(x) {
-  purrr::discard(x, ~ is.na(sf::st_dimension(.x)))
+  discard(x, ~ is.na(sf::st_dimension(.x)))
 }
 
 #' Modify the geometry of a simple feature or bounding box object
@@ -138,7 +139,7 @@ st_square <- function(x,
 
   if (inscribed) {
     geom <- sf::st_inscribed_circle(as_sfc(x, crs = crs), nQuadSegs = 1)
-    geom <- purrr::discard(geom, ~ is.na(sf::st_dimension(.x)))
+    geom <- discard(geom, ~ is.na(sf::st_dimension(.x)))
     rotate <- rotate + 45
   } else {
     geom <-
@@ -212,7 +213,7 @@ st_circle <- function(x,
     x <- as_sf_list(x, col = "st_circle_id")
 
     x <-
-      purrr::map(
+      map(
         x,
         ~ st_circle(
           x = .x,
@@ -319,7 +320,7 @@ st_donut <- function(x,
     x_list <- as_sf_list(x, col = "st_donut_id")
 
     x_list <-
-      purrr::map(
+      map(
         x_list,
         ~ st_erase(
           st_circle(
