@@ -106,6 +106,9 @@
     <loc>https://elipousson.github.io/sfext/reference/is_sf.html</loc>
   </url>
   <url>
+    <loc>https://elipousson.github.io/sfext/reference/lonlat_to_sfc.html</loc>
+  </url>
+  <url>
     <loc>https://elipousson.github.io/sfext/reference/make_sf_grid_list.html</loc>
   </url>
   <url>
@@ -164,6 +167,9 @@
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/st_filter_ext.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/sfext/reference/st_filter_pct.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/st_join_ext.html</loc>

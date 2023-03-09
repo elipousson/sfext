@@ -97,7 +97,7 @@ EXIF metadata to image files</dd>
 
       <dl><dt>
           
-          <code><a href="is_sf.html">is_sf()</a></code> <code><a href="is_sf.html">is_sfg()</a></code> <code><a href="is_sf.html">is_sfc()</a></code> <code><a href="is_sf.html">is_bbox()</a></code> <code><a href="is_sf.html">is_sf_list()</a></code> <code><a href="is_sf.html">is_raster()</a></code> <code><a href="is_sf.html">is_sp()</a></code> <code><a href="is_sf.html">is_same_crs()</a></code> 
+          <code><a href="is_sf.html">is_sf()</a></code> <code><a href="is_sf.html">is_sfg()</a></code> <code><a href="is_sf.html">is_sfc()</a></code> <code><a href="is_sf.html">is_bbox()</a></code> <code><a href="is_sf.html">is_sf_list()</a></code> <code><a href="is_sf.html">is_raster()</a></code> <code><a href="is_sf.html">is_sp()</a></code> <code><a href="is_sf.html">is_geo_coords()</a></code> <code><a href="is_sf.html">is_same_crs()</a></code> 
         </dt>
         <dd>What is the class or spatial attributes of this feature?</dd>
       </dl><dl><dt>
@@ -118,7 +118,7 @@ EXIF metadata to image files</dd>
 MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object</dd>
       </dl><dl><dt>
           
-          <code><a href="as_sf.html">as_sf()</a></code> <code><a href="as_sf.html">as_bbox()</a></code> <code><a href="as_sf.html">as_sfc()</a></code> <code><a href="as_sf.html">as_sf_list()</a></code> <code><a href="as_sf.html">as_sf_class()</a></code> 
+          <code><a href="as_sf.html">as_sf()</a></code> <code><a href="as_sf.html">as_bbox()</a></code> <code><a href="as_sf.html">as_sfc()</a></code> <code><a href="as_sf.html">as_sf_list()</a></code> <code><a href="as_sf.html">as_sf_class()</a></code> <code><a href="as_sf.html">as_crs()</a></code> 
         </dt>
         <dd>Convert an object to a simple feature or bounding box object</dd>
       </dl><dl><dt>
@@ -152,7 +152,12 @@ to an sf object</dd>
           
           <code><a href="coords_to_sf.html">coords_to_sf()</a></code> <code><a href="coords_to_sf.html">check_coords()</a></code> <code><a href="coords_to_sf.html">rev_coords()</a></code> <code><a href="coords_to_sf.html">has_coords()</a></code> <code><a href="coords_to_sf.html">format_coords()</a></code> <code><a href="coords_to_sf.html">separate_coords()</a></code> 
         </dt>
-        <dd>Convert a data frame with one or more coordinate columns to an sf object</dd>
+        <dd>Convert a data.frame with one or more coordinate columns to an sf object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="lonlat_to_sfc.html">lonlat_to_sfc()</a></code> 
+        </dt>
+        <dd>Convert a lon/lat or lat/lon coordinate pair to an sfc object</dd>
       </dl></div><div class="section level2">
       <h2 id="modify-sf-sfc-and-bbox-objects">Modify sf, sfc, and bbox objects<a class="anchor" aria-label="anchor" href="#modify-sf-sfc-and-bbox-objects"></a></h2>
       
@@ -204,6 +209,12 @@ to an sf object</dd>
           <code><a href="st_filter_ext.html">st_filter_ext()</a></code> <code><a href="st_filter_ext.html">st_filter_geom_type()</a></code> 
         </dt>
         <dd>Filter, crop, trim, or erase a simple feature object or list</dd>
+      </dl><dl><dt>
+          
+          <code><a href="st_filter_pct.html">st_filter_pct()</a></code> <code><a href="st_filter_pct.html">st_filter_pct_area()</a></code> <code><a href="st_filter_pct.html">st_filter_pct_length()</a></code> 
+        </dt>
+        <dd>Filter by share of length or area of one geometry overlapping with a second
+geometry</dd>
       </dl><dl><dt>
           
           <code><a href="st_misc.html">st_scale_rotate()</a></code> <code><a href="st_misc.html">st_center()</a></code> <code><a href="st_misc.html">st_square()</a></code> <code><a href="st_misc.html">st_inscribed_square()</a></code> <code><a href="st_misc.html">st_circle()</a></code> <code><a href="st_misc.html">st_circumscribed_circle()</a></code> <code><a href="st_misc.html">st_donut()</a></code> 

@@ -74,7 +74,9 @@ bounding box.</p>
 <span></span>
 <span><span class="fu">as_sf_list</span><span class="op">(</span><span class="va">x</span>, nm <span class="op">=</span> <span class="st">"data"</span>, col <span class="op">=</span> <span class="cn">NULL</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, clean_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">as_sf_class</span><span class="op">(</span><span class="va">x</span>, class <span class="op">=</span> <span class="cn">NULL</span>, null.ok <span class="op">=</span> <span class="cn">TRUE</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">as_sf_class</span><span class="op">(</span><span class="va">x</span>, class <span class="op">=</span> <span class="cn">NULL</span>, null.ok <span class="op">=</span> <span class="cn">TRUE</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">as_crs</span><span class="op">(</span>crs <span class="op">=</span> <span class="cn">NULL</span>, check <span class="op">=</span> <span class="cn">FALSE</span>, call <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -140,6 +142,11 @@ return x without any class conversion or checks. Defaults to <code>TRUE</code>.<
 <dd><p>Passed as the call parameter for <a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_abort</a> or
 <a href="https://rlang.r-lib.org/reference/arg_match.html" class="external-link">rlang::arg_match</a> to improve error messages when function is used
 internally.</p></dd>
+
+
+<dt>check</dt>
+<dd><p>For <code>as_crs()</code>, if <code>TRUE</code>, error if crs cannot be converted to a
+valid coordinate reference system. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt>data</dt>

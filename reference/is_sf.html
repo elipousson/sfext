@@ -68,6 +68,8 @@
 <span></span>
 <span><span class="fu">is_sp</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">is_geo_coords</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">is_same_crs</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -108,6 +110,7 @@ not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 <li><p>is_sf_list: is x is a list of <code>sf</code> class objects (with or without names)?</p></li>
 <li><p>is_raster: is x a <code>Raster</code> class object?</p></li>
 <li><p>is_sp: is x a <code>Spatial</code> class object of any type?</p></li>
+<li><p>is_geo_coords: is x likely a geodetic coordinate pair (a length 2 numeric vector, with a max absolute value less than or equal to 180)?</p></li>
 <li><p>is_same_crs: do x and y have the same coordinate reference system?</p></li>
 </ul></div>
 
