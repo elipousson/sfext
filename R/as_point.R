@@ -52,7 +52,7 @@ as_point <- function(..., to = "POINT") {
 
   if (is_any(params, is_bbox)) {
     params[["crs"]] <- NA_character_
-    return(exec(sf_bbox_point, !!!params))
+    return(rlang::exec(sf_bbox_point, !!!params))
   }
 
   params <- sf::st_point(params)
@@ -158,6 +158,7 @@ as_endpoint <- function(x) {
 #' @export
 #' @importFrom sf st_crs st_combine st_cast
 #' @importFrom purrr map_dfr
+#' @importFrom rlang caller_env list2 arg_match has_name exec
 as_line <- function(..., to = "LINESTRING", call = caller_env()) {
   params <- list2(...)
   to <- arg_match(to, c("LINESTRING", "MULTILINESTRING"), error_call = call)
@@ -177,7 +178,7 @@ as_line <- function(..., to = "LINESTRING", call = caller_env()) {
   params <- pluck_len1(params)
 
   if (!any(c(is_point(params), is_multipoint(params)))) {
-    params <- exec(as_points, !!!params, crs = crs)
+    params <- rlang::exec(as_points, !!!params, crs = crs)
   }
 
   if (is_point(params)) {

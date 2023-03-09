@@ -2,23 +2,22 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#'
 #' @import rlang
-#' @importFrom rlang .data
-#' @importFrom rlang .env
-#' @importFrom rlang caller_env
-#' @importFrom rlang has_length
-#' @importFrom rlang is_interactive
-#' @importFrom rlang check_installed
 #' @importFrom cli cli_abort
-#' @importFrom cli cli_warn
 #' @importFrom cli cli_inform
+#' @importFrom cli cli_warn
 #' @importFrom cliExtras cli_abort_ifnot
 #' @importFrom cliExtras cli_warn_ifnot
 #' @importFrom cliExtras cli_yesno
+#' @importFrom filenamr make_filename
 #' @importFrom glue glue
 #' @importFrom glue glue_collapse
-#' @importFrom filenamr make_filename
+#' @importFrom lifecycle deprecated
+#' @importFrom rlang .data .env `%||%` caller_env has_length is_interactive
+#'   check_installed exec
+#' @importFrom sf NA_crs_
 #' @importFrom sf st_bbox
 #' @importFrom sf st_crs
-#' @importFrom sf NA_crs_
 ## usethis namespace: end
+NULL

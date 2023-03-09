@@ -117,20 +117,22 @@ read_sf_ext <- function(...) {
       keep_missing = TRUE
     )
 
-  exec(read_sf_fn, !!!args)
+  rlang::exec(read_sf_fn, !!!args)
 }
 
 
 #' Modify function parameters
 #'
+#' @keywords internal
 #' @noRd
 #' @importFrom utils modifyList
+#' @importFrom rlang fn_fmls list2
 modify_fn_fmls <- function(params,
                            fn,
                            keep_missing = FALSE,
                            keep.null = FALSE,
                            ...) {
-  fmls <- fn_fmls(fn)
+  fmls <- rlang::fn_fmls(fn)
 
   if (!keep_missing) {
     fmls <- discard(fmls, is_missing)

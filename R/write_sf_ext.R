@@ -41,7 +41,7 @@
 #'  [sf::st_write()]
 #' @export
 #' @md
-#' @importFrom purrr discard walk
+#' @importFrom purrr walk walk2
 #' @importFrom sf write_sf
 write_sf_ext <- function(data,
                          name = NULL,
