@@ -32,6 +32,7 @@ reference:
   - '`st_union_ext`'
   - '`st_join_ext`'
   - '`st_filter_ext`'
+  - '`st_filter_pct`'
   - '`st_misc`'
   - '`st_nudge`'
   - '`st_transform_ext`'
