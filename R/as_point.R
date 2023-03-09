@@ -1,4 +1,3 @@
-
 #' Convert an sf, numeric, or other object to a POINT (sfg) or POINT,
 #' MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object
 #'
@@ -76,13 +75,13 @@ as_points <- function(..., to = "POINT", call = caller_env()) {
 
   crs <- NULL
   if (has_name(params, "crs")) {
-    crs <- sf::st_crs(params$crs)
+    crs <- as_crs(params$crs, check = TRUE, call = call)
     params <- params[names(params) != "crs"]
   } else if (is_sf(params[[1]], ext = TRUE)) {
     crs <- sf::st_crs(params[[1]])
   }
   pts <-
-    purrr::map(
+    map(
       params,
       ~ as_point(.x)
     )
@@ -196,7 +195,7 @@ as_line <- function(..., to = "LINESTRING", call = caller_env()) {
 #' @rdname as_point
 #' @export
 #' @importFrom sf st_crs st_cast
-#' @importFrom purrr map_lgl map_dfr
+#' @importFrom purrr map_dfr
 as_lines <- function(..., to = "LINESTRING") {
   params <- list2(...)
   crs <- NULL
@@ -207,7 +206,7 @@ as_lines <- function(..., to = "LINESTRING") {
     crs <- sf::st_crs(params[[1]])
   }
 
-  if (all(purrr::map_lgl(params, ~ is_line(.x) | is_multiline(.x)))) {
+  if (all(map_lgl(params, ~ is_line(.x) | is_multiline(.x)))) {
     return(purrr::map_dfr(params, ~ as_sf(.x)))
   }
 
