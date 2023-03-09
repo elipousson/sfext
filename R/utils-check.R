@@ -164,6 +164,7 @@ check_logical <- function(x = NULL,
 #' @inheritDotParams cli::cli_abort
 #' @export
 #' @importFrom rlang check_required
+#' @importFrom cliExtras cls_vec
 check_sf <- function(x,
                      arg = caller_arg(x),
                      null.ok = FALSE,
@@ -189,7 +190,7 @@ check_sf <- function(x,
   }
 
   cli_abort(
-    c("{.arg {arg}} must be {.or {sf}} class.",
+    c("{.arg {arg}} must be {cliExtras::cls_vec(sf)} class.",
       "i" = "{.arg {arg}} is {.cls {class(x)}}."
     ),
     call = call,
@@ -220,7 +221,7 @@ check_df_paper <- function(x,
   }
 
   cli_abort(
-    c("A {.arg paper} data.frame must have columns named {.val {paper_names}}.",
+    c("A {.arg paper} {.cls data.frame} must have columns named {.val {paper_names}}.",
       "i" = "The provided {.arg paper} is missing {.val {names[!is_valid_paper]}}."
     )
   )
