@@ -36,25 +36,15 @@ st_transform_ext <- function(x,
                              rotate = 0,
                              null.ok = FALSE,
                              list.ok = TRUE) {
-  if (is.data.frame(x) && !is_sf(x)) {
-    return(x)
-  }
-
-  skip_transform <- is.null(crs) | is_same_crs(x, crs)
-
-  if (skip_transform && is.null(class)) {
+  if (any(c(is.data.frame(x) && !is_sf(x), is.null(x) && null.ok))) {
     return(x)
   }
 
   check_sf(x, ext = TRUE, null.ok = null.ok, list.ok = list.ok)
 
-  if (is.null(x)) {
-    return(x)
-  }
-
   type <-
     dplyr::case_when(
-      skip_transform && !is.null(class) ~ "as_class",
+      is.null(crs) ~ "as_class",
       is_sf_list(x, ext = TRUE) ~ "list",
       rotate != 0 ~ "omerc",
       is_bbox(x) ~ "bbox",
@@ -63,11 +53,11 @@ st_transform_ext <- function(x,
 
   x <-
     switch(type,
-      "as_class" = x,
-      "list" = purrr::map(x, ~ st_transform_ext(.x, crs, class, rotate)),
+      "list" = map(x, ~ st_transform_ext(.x, crs, class, rotate)),
       "bbox" = sf_bbox_transform(x, crs = crs),
       "omerc" = st_omerc(x, rotate = rotate),
-      "sf" = transform_sf(x, crs = crs)
+      "sf" = transform_sf(x, crs = crs),
+      x
     )
 
   as_sf_class(x, class = class)
@@ -77,11 +67,9 @@ st_transform_ext <- function(x,
 #' @rdname st_transform_ext
 #' @export
 #' @importFrom dplyr between
-#' @importFrom sf st_transform
+#' @importFrom sf st_union st_transform
 st_omerc <- function(x, rotate = 0) {
-  cli_abort_ifnot(
-    condition = is_sf(x) | is_sfc(x)
-  )
+  check_sf(x, ext = "sfc")
 
   cli_warn_ifnot(
     "{.fn st_omerc} may return an error when {.arg rotate} is
