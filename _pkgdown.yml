@@ -22,6 +22,7 @@ reference:
   - '`sf_to_df`'
   - '`address_to_sf`'
   - '`coords_to_sf`'
+  - '`lonlat_to_sfc`'
 - title: Modify sf, sfc, and bbox objects
   contents:
   - '`st_bbox_ext`'
