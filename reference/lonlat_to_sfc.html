@@ -73,14 +73,13 @@ system.</p></dd>
 
 
 <dt>range</dt>
-<dd><p>For <code>lonlat_to_sfc()</code>, a <code>bbox</code> object or a length 4 vector with
-names xmin, xmax, ymin, and ymax. If a coordinate pair falls outside the
-latitude/longitude range defined by the vector but inside the range if
-reversed, the coordinates are assumed to be in lat/lon order and are
-switched to lon/lat order before being converted to a point. Defaults to
-<code>c("xmin" = -180, "ymin" = -50, "xmax" = 180, "ymax" = 60)</code>. Note that this
-default setting will reverse valid coordinates north of Anchorage, Alaska
-or south of New Zealand.</p></dd>
+<dd><p>For <code>lonlat_to_sfc()</code>, an object that is coercible to a <code>bbox</code>
+object or a length 4 vector with names xmin, xmax, ymin, and ymax. If a
+coordinate pair falls outside the latitude/longitude range defined by the
+vector but inside the range if reversed, the coordinates are assumed to be
+in lat/lon order and are switched to lon/lat order before being converted
+to a point. Defaults to <code>c("xmin" = -180, "ymin" = -50, "xmax" = 180, "ymax" = 60)</code>. Note that this default setting will reverse valid
+coordinates north of Anchorage, Alaska or south of New Zealand.</p></dd>
 
 
 <dt>quiet</dt>
