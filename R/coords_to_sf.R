@@ -1,4 +1,4 @@
-#' Convert a data frame with one or more coordinate columns to an sf object
+#' Convert a data.frame with one or more coordinate columns to an sf object
 #'
 #' @description
 #' - [coords_to_sf()]: Convert a data frame with coordinates into a simple
@@ -8,11 +8,11 @@
 #' - [separate_coords()]: Separate coordinates from a single combined column
 #' into two columns
 #' - [format_coords()]: Format coordinates as numeric values and remove missing
-#' coordinates from data frame
+#' coordinates from a data.frame
 #' - [has_coords()]: Suggests a coordinate pair by comparing common values to
-#' the column names for a provided data frame
-#' - [rev_coords()]: Reverse a vector with coordinate column names if latitude
-#' or y appear first
+#' the column names for a provided data.frame
+#' - [rev_coords()]: Reverse a vector of coordinate names if the text "lat" or
+#' "y" appears in the first position
 #'
 #' @rdname coords_to_sf
 #' @param coords Coordinate columns for input data.frame or output sf object (if
@@ -24,6 +24,7 @@
 #'   provided data frame.
 #' @param call call used to improve error messages when used internally.
 #'   Defaults to [rlang::caller_env()]
+#' @seealso [is_geo_coords()]
 #' @export
 #' @importFrom sf st_as_sf
 #' @importFrom rlang caller_env has_length
@@ -35,7 +36,7 @@ coords_to_sf <- function(x,
                          remove_coords = FALSE,
                          crs = 4326,
                          call = caller_env()) {
-  if (has_length(coords, 1) && has_length(into, 2)) {
+  if (!is.null(into) && has_length(into, 2) && has_length(coords, 1)) {
     x <- separate_coords(x = x, coords = coords, into = into, sep = sep)
     coords <- into
   } else {
@@ -110,7 +111,7 @@ check_coords <- function(x = NULL,
     call = call
   )
 
-  if (rev) {
+  if (isTRUE(rev)) {
     coords <- rev_coords(coords)
   }
 
@@ -119,8 +120,8 @@ check_coords <- function(x = NULL,
 
 #' @rdname coords_to_sf
 #' @name rev_coords
-#' @param pattern Pattern passed to [grepl()] used to match vectors that are
-#'   reversed.
+#' @param pattern Pattern passed by [rev_coords()] to [grepl()] used to match
+#'   vectors that are reversed. Defaults to `c("lat", "^y")`.
 #' @param ignore.case If `TRUE`, pattern matching is not case sensitive.
 #' @export
 rev_coords <- function(coords, pattern = c("lat", "^y"), ignore.case = TRUE) {
