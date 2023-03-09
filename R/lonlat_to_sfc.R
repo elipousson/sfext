@@ -1,5 +1,6 @@
-#' @rdname coords_to_sf
-#' @name geo_coords_to_sfc
+#' Convert a lon/lat or lat/lon coordinate pair to an sfc object
+#'
+#' @name lonlat_to_sfc
 #' @param x A length 2 numeric vector with geodetic coordinates in a
 #'   [EPSG:4326](https://epsg.org/crs_4326/WGS-84.html) coordinate reference
 #'   system.
@@ -11,6 +12,9 @@
 #'   `c("xmin" = -180, "ymin" = -50, "xmax" = 180, "ymax" = 60)`. Note that this
 #'   default setting will reverse valid coordinates north of Anchorage, Alaska
 #'   or south of New Zealand.
+#' @param quiet If `TRUE`, suppress alert messages when converting a lat/lon
+#'   coordinate pair to a lon/lat pair. Defaults to `FALSE`.
+#' @inheritDotParams sf::st_sfc -crs
 #' @export
 #' @importFrom cli cli_alert_warning cli_alert_success
 #' @importFrom sf st_point st_sfc

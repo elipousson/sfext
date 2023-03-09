@@ -7,6 +7,8 @@
 \method{cli_format}{sf}(x, style = NULL, ...)
 }
 \arguments{
+\item{x}{A sf object to format with the cli_format.sf method.}
+
 \item{style}{Not in use for the 'sf' class method.}
 
 \item{...}{Not in use for the 'sf' class method.}

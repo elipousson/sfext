@@ -14,7 +14,9 @@
 #' - [rev_coords()]: Reverse a vector of coordinate names if the text "lat" or
 #' "y" appears in the first position
 #'
-#' @rdname coords_to_sf
+#' @param x A data.frame with one or more coordinate columns. If coordinates are
+#'   contained within a single column, coord must be length 1 and a length 2
+#'   into parameter must be provided.
 #' @param coords Coordinate columns for input data.frame or output sf object (if
 #'   geometry is 'centroid' or 'point') Default: c("lon", "lat").
 #' @param remove_coords For [df_to_sf()], if `TRUE`, remove the coordinate columns

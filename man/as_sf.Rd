@@ -63,6 +63,9 @@ return x without any class conversion or checks. Defaults to \code{TRUE}.}
 \link[rlang:arg_match]{rlang::arg_match} to improve error messages when function is used
 internally.}
 
+\item{check}{For \code{as_crs()}, if \code{TRUE}, error if crs cannot be converted to a
+valid coordinate reference system. Defaults to \code{FALSE}.}
+
 \item{data}{Data that can be converted to sf, sfc, bbox or a sf list object.}
 }
 \description{

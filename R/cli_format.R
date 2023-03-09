@@ -1,5 +1,6 @@
 #' cli_format style for sf objects
 #'
+#' @param x A sf object to format with the cli_format.sf method.
 #' @param style Not in use for the 'sf' class method.
 #' @param ... Not in use for the 'sf' class method.
 #' @seealso [cliExtras::register_cli_format()]

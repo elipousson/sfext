@@ -295,6 +295,8 @@ as_sf_class <- function(x, class = NULL, null.ok = TRUE, call = caller_env(), ..
 
 #' @name as_crs
 #' @rdname as_sf
+#' @param check For `as_crs()`, if `TRUE`, error if crs cannot be converted to a
+#'   valid coordinate reference system. Defaults to `FALSE`.
 #' @export
 as_crs <- function(crs = NULL, check = FALSE, call = parent.frame()) {
   rlang::try_fetch(
