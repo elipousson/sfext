@@ -50,7 +50,7 @@ st_filter_pct_area <- function(x, y, pct = NULL) {
   x <-
     dplyr::select(
       x,
-      -c(trim_join_id, trim_area, init_area)
+      -dplyr::all_of(c("trim_join_id", "trim_area", "init_area"))
     )
 
   if (!is.null(pct)) {
