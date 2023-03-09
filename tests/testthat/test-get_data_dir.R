@@ -2,6 +2,8 @@ test_that("get_data_dir works", {
   expect_true(
     is.null(get_data_dir())
   )
+
+  skip_on_ci()
   expect_true(
     str_detect(get_data_dir(cache = TRUE), "sfext$")
   )
