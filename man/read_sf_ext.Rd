@@ -219,8 +219,8 @@ a sf object for each layer or sheet as a separate item. If \code{TRUE}, use
 \code{\link[purrr:map_dfr]{purrr::map_dfr()}} to combine layers or sheets into a single sf object
 using the layer or sheet name as an additional column.}
 
-\item{filename}{File name; if file name is \code{NULL}, name and file type are
-both required.}
+\item{filename}{File name; if filename is \code{NULL} and path does not include a
+file extension, name and file extension are both required.}
 
 \item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
 date/time prefix; defaults to \code{NULL}.}

@@ -73,10 +73,10 @@ of y have the same x, y, or diagonal distance?
 \item \code{\link[=is_same_area]{is_same_area()}}: do x and y have the same area?
 \item \code{\link[=is_same_units]{is_same_units()}}: are x and y character strings that represent the same
 units or objects that use the same units?
-There are two additional functions that support these utility functions:
 }
 }
 \details{
+There are two additional functions that support these utility functions:
 \itemize{
 \item \code{\link[=get_dist_units]{get_dist_units()}}: Get the distance units from x (if x is a sf or units
 objects or a character string from \link{dist_unit_options})

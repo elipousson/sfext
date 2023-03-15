@@ -116,7 +116,11 @@ drivers).}
 
 \item{description}{(character) Brief description of gist (optional)}
 
-\item{path}{Path to file or data directory.}
+\item{path}{Path to file or data directory. Optional. If path includes a file
+extension and filename and fileext are both \code{NULL}, the filename and
+extension included with path will be used instead. If multiple file
+extensions are provided to filename, path, or fileext, \code{make_filename()}
+will abort.}
 
 \item{cache}{If \code{TRUE}, write \code{sf} object to file in cache directory;
 defaults to \code{FALSE}.}
