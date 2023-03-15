@@ -19,7 +19,7 @@ Imports:
     cli,
     cliExtras (>= 0.1.0),
     dplyr,
-    filenamr (>= 0.1.0),
+    filenamr (>= 0.1.0.9000),
     glue,
     janitor,
     lifecycle,
@@ -50,13 +50,14 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     tidygeocoder,
-    tidyr
+    tidyr,
+    withr
 VignetteBuilder: 
     knitr
 Remotes: 
+    elipousson/cliExtras,
     elipousson/esri2sf,
-    elipousson/filenamr,
-    elipousson/cliExtras
+    elipousson/filenamr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8
