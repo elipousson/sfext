@@ -185,7 +185,11 @@ drivers).</p></dd>
 
 
 <dt>path</dt>
-<dd><p>Path to file or data directory.</p></dd>
+<dd><p>Path to file or data directory. Optional. If path includes a file
+extension and filename and fileext are both <code>NULL</code>, the filename and
+extension included with path will be used instead. If multiple file
+extensions are provided to filename, path, or fileext, <code><a href="https://elipousson.github.io/filenamr/reference/make_filename.html" class="external-link">make_filename()</a></code>
+will abort.</p></dd>
 
 
 <dt>cache</dt>
