@@ -76,6 +76,11 @@ write_sf_ext <- function(data,
     return(invisible())
   }
 
+  if (has_fileext(path) && is.null(name) && is.null(filename)) {
+    filename <- basename(path)
+    path <- dirname(path)
+  }
+
   # If data is sf object, write or cache it
   filename <-
     filenamr::make_filename(
@@ -369,10 +374,10 @@ write_sf_types <- function(data,
                            ...) {
   fileext <- fileext %||% filetype
   # Get working directory if path is NULL
-  if (is.null(path)) {
-    path <- getwd()
-    cli_inform("Setting path to current working directory: {.file {path}}")
-  }
+  # if (is.null(path)) {
+  #   path <- getwd()
+  #   cli_inform("Setting path to current working directory: {.file {path}}")
+  # }
 
   # Set filename from path if ends with a fileext
   if (has_fileext(path)) {
@@ -384,6 +389,7 @@ write_sf_types <- function(data,
     }
 
     filename <- basename(path)
+    path <- dirname(path)
   }
 
   # Get fileext from filename if fileext is NULL
@@ -394,17 +400,19 @@ write_sf_types <- function(data,
   # Remove filename from path
   # FIXME: assumes that the user has not provided both a filename
   # and a path ending in a filename - add a check to confirm
-  folder_path <- str_remove(path, glue("{filename}$"))
-
   # Check if overwrite is needed and possible
   filenamr::check_file_overwrite(
     filename = filename,
-    path = folder_path,
+    path = path,
     overwrite = overwrite
   )
 
-  # Put path and filename back together
-  path <- file.path(folder_path, filename)
+  if (!is.null(path)) {
+    # Put path and filename back together
+    path <- file.path(path, filename)
+  } else {
+    path <- filename
+  }
 
   if (is_sf(data)) {
     type <-
@@ -472,7 +480,7 @@ write_sf_types <- function(data,
     "sf_excel" = openxlsx::write.xlsx(data, file = path),
     "sf_gsheet" = write_sf_gsheet(data = data, filename = filename, ...),
     "sf_spatial" = sf::write_sf(obj = data, dsn = path, layer_options = layer_options, ...),
-    "sf_svg" = write_sf_svg(data = data, filename = filename, path = path, ...),
+    "sf_svg" = write_sf_svg(data = data, filename = path, ...),
     "df_csv" = readr::write_csv(x = data, file = path),
     "df_excel" = openxlsx::write.xlsx(data, file = path),
     "rda" = readr::write_rds(x = data, file = path, ...)
@@ -493,6 +501,7 @@ write_sf_types <- function(data,
 #' @inheritDotParams ggplot2::geom_sf
 #' @inheritParams ggplot2::ggsave
 #' @export
+#' @importFrom rlang check_installed check_required
 write_sf_svg <- function(data,
                          filename = NULL,
                          path = NULL,
@@ -504,17 +513,16 @@ write_sf_svg <- function(data,
                          units = c("in", "cm", "mm", "px"),
                          dpi = 300) {
   rlang::check_installed("ggplot2")
+  rlang::check_required(data)
 
-  if (is.null(filename) && !is.null(path)) {
+  if (is.null(filename) && has_fileext(path)) {
     filename <- basename(path)
+    path <- dirname(path)
   }
-
-  fileext <- str_extract_fileext(filename)
-  path <- str_remove(path, paste0(filename, "$"))
 
   cli_abort_ifnot(
     "{.arg filename} or {.arg path} must include a {.val svg} file extension.",
-    condition = (fileext == "svg")
+    condition = (str_extract_fileext(filename) == "svg")
   )
 
   if (is.null(mapping)) {
