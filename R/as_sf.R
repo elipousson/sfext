@@ -172,8 +172,7 @@ as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
 #' @importFrom janitor make_clean_names
 as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE) {
   check_null(x)
-  check_character(col, null.ok = TRUE)
-  check_len(col, len = 1, null.ok = TRUE)
+  check_string(col, allow_null = TRUE)
 
   if (!is_sf_list(x, ext = TRUE)) {
     # data frame with nested list column named data
@@ -239,6 +238,7 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
 #' @inheritParams st_make_grid_ext
 #' @inheritParams as_sf_list
 #' @export
+#' @importFrom dplyr mutate
 make_sf_grid_list <- function(x, style = "rect", ncol = 2, nrow = 2, .id = "grid_id", crs = NULL, ...) {
   grid <- st_make_grid_ext(x, style = style, ncol = ncol, nrow = nrow, .id = .id, ...)
 
@@ -298,6 +298,9 @@ as_sf_class <- function(x, class = NULL, null.ok = TRUE, call = caller_env(), ..
 #' @param check For `as_crs()`, if `TRUE`, error if crs cannot be converted to a
 #'   valid coordinate reference system. Defaults to `FALSE`.
 #' @export
+#' @importFrom rlang try_fetch
+#' @importFrom sf st_crs
+#' @importFrom cli cli_alert_warning cli_abort
 as_crs <- function(crs = NULL, check = FALSE, call = parent.frame()) {
   rlang::try_fetch(
     sf::st_crs(crs),
