@@ -21,28 +21,6 @@ check_null <- function(x = NULL,
   return(invisible(TRUE))
 }
 
-#' Check if x is a character vector
-#'
-#' @noRd
-check_character <- function(x = NULL,
-                            arg = caller_arg(x),
-                            null.ok = FALSE,
-                            ...) {
-  check_null(x, arg, null.ok)
-  null.ok <- is.null(x) && null.ok
-
-  if (is.character(x) || null.ok) {
-    return(invisible(TRUE))
-  }
-
-  cli_abort(
-    c("{.arg {arg}} must be {.cls character}.",
-      "i" = "{.arg {arg}}has class {.cls {class(x)}}."
-    ),
-    ...
-  )
-}
-
 #' Check if x is between a min and max length
 #'
 #' @noRd
@@ -106,7 +84,7 @@ check_starts_with <- function(x = NULL,
                               perl = FALSE,
                               message = NULL,
                               ...) {
-  check_character(x, arg, null.ok)
+  check_character(x, allow_null = null.ok, arg = arg)
   null.ok <- is.null(x) && null.ok
 
   starts_with <-
@@ -124,31 +102,6 @@ check_starts_with <- function(x = NULL,
     )
 
   cli_abort(message = message, ...)
-}
-
-#' Check if x is logical
-#'
-#' @noRd
-check_logical <- function(x = NULL,
-                          null.ok = FALSE,
-                          n = NULL,
-                          arg = caller_arg(x),
-                          call = caller_env(),
-                          ...) {
-  check_null(x, arg, null.ok, FALSE, call)
-  null.ok <- is.null(x) && null.ok
-
-  if (is_logical(x, n = n) || null.ok) {
-    return(invisible(TRUE))
-  }
-
-  cli_abort(
-    c("{.arg {arg}} must be {.cls logical}.",
-      "i" = "{.arg {arg}} has class {.cls {class(x)}}."
-    ),
-    call = call,
-    ...
-  )
 }
 
 #' Check if x is an sf object
