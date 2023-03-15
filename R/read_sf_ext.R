@@ -69,7 +69,7 @@
 #' @name read_sf_ext
 #' @family read_write
 #' @export
-#' @importFrom rlang list2 is_named
+#' @importFrom rlang list2 is_named exec
 #' @importFrom dplyr case_when
 read_sf_ext <- function(...) {
   params <- list2(...)
@@ -157,14 +157,16 @@ read_sf_pkg <- function(data,
                         package = NULL,
                         filetype = "gpkg",
                         ...) {
-  check_null(package)
-
+  check_string(package, allow_empty = FALSE)
   rlang::check_installed(package)
-
-  cli_abort_ifnot(
-    "{.arg data} must be a length 1 character vector with
-    the name or filename of the package data.",
-    condition = is.character(data)
+  check_string(
+    data,
+    allow_empty = FALSE,
+    message = cli::cli_text(
+      "{.arg data} must be a string with the name or filename of data from the
+      package {.pkg {package}}."
+    ),
+    use_cli_format = TRUE
   )
 
   # Read package data
