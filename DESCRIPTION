@@ -24,7 +24,7 @@ Imports:
     janitor,
     lifecycle,
     purrr,
-    rlang,
+    rlang (>= 1.1.0),
     sf,
     tibble,
     units,
