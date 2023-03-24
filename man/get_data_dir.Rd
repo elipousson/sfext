@@ -56,7 +56,8 @@ filter listed files to those matching the file extension.}
 \item{...}{Additional parameters passed to \code{\link[=list.files]{list.files()}}}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 Get the path for a package-specific cache directory with
-\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}, check for the existence of a data directory,
+\code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}, check for the existence of a data directory,
 optionally create a new directory at the provided path location.
 }

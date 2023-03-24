@@ -142,8 +142,8 @@ provided, only returns features intersecting the bounding box.}
 
 \item{package}{Package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
 
-\item{fileext}{If pattern is NULL, fileext is used to set the pattern and
-filter listed files to those matching the file extension.}
+\item{fileext}{File type or extension. Optional if filename or path include a
+file extension.}
 
 \item{filetype}{File type supported by \code{\link[sf:st_read]{sf::read_sf()}}; Default: 'gpkg'; used
 by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data is in the package

@@ -1,7 +1,8 @@
 #' Check if data directory exists and create a new directory if needed
 #'
+#' `r lifecycle::badge('superseded')`
 #' Get the path for a package-specific cache directory with
-#' [rappdirs::user_cache_dir], check for the existence of a data directory,
+#' [rappdirs::user_cache_dir()], check for the existence of a data directory,
 #' optionally create a new directory at the provided path location.
 #'
 #' @param path Path to directory for use as data directory.
@@ -21,6 +22,8 @@ get_data_dir <- function(path = NULL,
                          create = TRUE,
                          pkg = "sfext",
                          allow_null = TRUE) {
+  lifecycle::signal_stage("superseded", "get_data_dir()", "filenamr::get_data_dir()")
+
   if (cache) {
     rlang::check_installed("rappdirs")
     path <- path %||% rappdirs::user_cache_dir(pkg)
@@ -74,7 +77,7 @@ list_data_files <- function(path = NULL,
                             ignore.case = TRUE,
                             ...) {
   path <-
-    get_data_dir(
+    filenamr::get_data_dir(
       path = path,
       cache = cache,
       pkg = pkg,
@@ -104,6 +107,8 @@ list_data_files <- function(path = NULL,
 #'   most common file types if path has more than n unique file types.
 #' @noRd
 get_path_filetype <- function(path, filetype = NULL, n = 1) {
+  lifecycle::signal_stage("superseded", "get_path_filetype()", "filenamr::get_path_fileext()")
+
   if (!is.null(filetype)) {
     return(filetype)
   }

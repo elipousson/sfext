@@ -190,7 +190,7 @@ read_sf_pkg <- function(data,
       ),
       # If data is in the cache directory
       is_pkg_cachedata(filename, package) ~ file.path(
-        get_data_dir(cache = TRUE, create = FALSE, pkg = package),
+        filenamr::get_data_dir(cache = TRUE, create = FALSE, pkg = package),
         filename
       )
     )
@@ -799,12 +799,12 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
 #' @param unzip If `TRUE`, url must be a zip file that is downloaded to a cache
 #'   folder, unzipped into a temporary directory (created with [tempdir()]), and
 #'   then read to a file using the specified file type.
-#' @inheritParams get_data_dir
+#' @inheritParams filenamr::get_data_dir
 #' @inheritParams filenamr::make_filename
 #' @export
 #' @importFrom sf st_crs
 #' @importFrom utils download.file unzip
-#' @importFrom filenamr make_filename
+#' @importFrom filenamr make_filename get_data_dir
 read_sf_download <-
   function(url,
            filename,
@@ -816,7 +816,7 @@ read_sf_download <-
            unzip = FALSE,
            .name_repair = "check_unique",
            ...) {
-    path <- get_data_dir(path = path, cache = TRUE)
+    path <- filenamr::get_data_dir(path = path, cache = TRUE)
 
     destfile <-
       filenamr::make_filename(

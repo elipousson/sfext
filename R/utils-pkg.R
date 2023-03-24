@@ -53,7 +53,7 @@ is_pkg_extdata <- function(x, pkg, call = caller_env()) {
 #'
 #' @noRd
 ls_pkg_cachedata <- function(pkg, call = caller_env()) {
-  path <- get_data_dir(cache = TRUE, create = FALSE, pkg = pkg)
+  path <- filenamr::get_data_dir(cache = TRUE, create = FALSE, pkg = pkg)
 
   if (is.null(path)) {
     return(invisible(path))

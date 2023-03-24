@@ -226,7 +226,7 @@ write_sf_cache <- function(data,
     )
 
   path <-
-    get_data_dir(
+    filenamr::get_data_dir(
       path = data_dir,
       cache = TRUE,
       create = create,
