@@ -14,10 +14,18 @@
 #' @importFrom glue glue
 #' @importFrom glue glue_collapse
 #' @importFrom lifecycle deprecated
-#' @importFrom rlang .data .env `%||%` caller_env has_length is_interactive
-#'   check_installed exec
+#' @importFrom rlang .data
+#' @importFrom rlang .env
+#' @importFrom rlang `%||%`
+#' @importFrom rlang caller_env
+#' @importFrom rlang has_length
+#' @importFrom rlang is_interactive
+#' @importFrom rlang check_installed
+#' @importFrom rlang exec
+#' @importFrom rlang env_get_list
 #' @importFrom sf NA_crs_
 #' @importFrom sf st_bbox
 #' @importFrom sf st_crs
 ## usethis namespace: end
 NULL
+
