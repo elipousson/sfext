@@ -28,7 +28,8 @@ utils::globalVariables(
     "source_file", "asp", "block_height", "block_width", "col_width", "gutter",
     "height", "row_height", "width", "img_cardinal_dir", "img_direction",
     "path", "x_nudge", "y_nudge", "trim_area", "init_area", "pct_area",
-    "trim_length", "init_length", "trim_join_id", "pct_length"
+    "trim_length", "init_length", "trim_join_id", "pct_length",
+    "ffi_standalone_check_number_1.0.7", "ffi_standalone_is_bool_1.0.7"
   )
 )
 
@@ -67,6 +68,8 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
     return(x)
   }
 
+  cli_quiet(quiet)
+
   if (drop) {
     return(dplyr::select(x, -dplyr::all_of(col)))
   }
@@ -80,11 +83,9 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
     }
   }
 
-  if (!quiet) {
-    cli_inform(
-      c("v" = "The existing column '{col}' to '{new_col}' to avoid overwriting any existing values.")
-    )
-  }
+  cli::cli_alert_success(
+    "The existing column '{col}' to '{new_col}' to avoid overwriting any existing values."
+  )
 
   dplyr::rename(x, "{new_col}" := col)
 }

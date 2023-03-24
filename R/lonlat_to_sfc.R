@@ -28,6 +28,8 @@ lonlat_to_sfc <- function(x,
   if (!is_geo_coords(x)) {
     cli::cli_abort("{.arg x} must be geodetic coordinates.", call = call)
   }
+  cli_quiet(quiet)
+
   rev_latlon <- FALSE
 
   if (!is.null(range)) {
@@ -48,18 +50,16 @@ lonlat_to_sfc <- function(x,
   }
 
   if (isTRUE(rev_latlon)) {
-    if (isFALSE(quiet)) {
-      if (isTRUE(likely_latlon)) {
-        cli::cli_alert_warning(
-          "Supplied coordinates appear to be in lat/lon order based on {.arg range}."
-        )
-      }
-
-      cli::cli_alert_success(
-        "Reversing lat/lon coordinates to lon/lat order:
-        {.val {x}} {cli::symbol$arrow_right} {.val {rev(x)}}"
+    if (isTRUE(likely_latlon)) {
+      cli::cli_alert_warning(
+        "Supplied coordinates appear to be in lat/lon order based on {.arg range}."
       )
     }
+
+    cli::cli_alert_success(
+      "Reversing lat/lon coordinates to lon/lat order:
+        {.val {x}} {cli::symbol$arrow_right} {.val {rev(x)}}"
+    )
 
     x <- rev(x)
   }
