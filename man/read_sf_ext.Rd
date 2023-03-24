@@ -19,7 +19,14 @@ sources}
 \usage{
 read_sf_ext(...)
 
-read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
+read_sf_pkg(
+  data,
+  bbox = NULL,
+  package = NULL,
+  fileext = "gpkg",
+  filetype = NULL,
+  ...
+)
 
 read_sf_path(path, bbox = NULL, ...)
 
@@ -134,6 +141,9 @@ read_sf_gsheet(
 provided, only returns features intersecting the bounding box.}
 
 \item{package}{Package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
+
+\item{fileext}{If pattern is NULL, fileext is used to set the pattern and
+filter listed files to those matching the file extension.}
 
 \item{filetype}{File type supported by \code{\link[sf:st_read]{sf::read_sf()}}; Default: 'gpkg'; used
 by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data is in the package

@@ -155,8 +155,10 @@ modify_fn_fmls <- function(params,
 read_sf_pkg <- function(data,
                         bbox = NULL,
                         package = NULL,
-                        filetype = "gpkg",
+                        fileext = "gpkg",
+                        filetype = NULL,
                         ...) {
+  fileext <- fileext %||% filetype
   check_string(package, allow_empty = FALSE)
   rlang::check_installed(package)
   check_string(
