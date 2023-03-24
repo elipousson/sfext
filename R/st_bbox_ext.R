@@ -19,7 +19,7 @@
 #' @param crs Coordinate reference system of bounding box to return; defaults to
 #'   `NULL` which maintains the crs of the input object.
 #' @param class Class of object to return (`sf` or `bbox`); defaults to "bbox".
-#' @param null.ok If `TRUE` and x is `NULL`, return `NULL`.
+#' @param allow_null If `TRUE` and x is `NULL`, return `NULL`.
 #' @return A `bbox` object converted to match the class of the class parameter.
 #' @aliases st_bbox_adj
 #' @name st_bbox_ext
@@ -34,9 +34,9 @@ st_bbox_ext <- function(x = NULL,
                         crs = NULL,
                         class = "bbox",
                         nudge = NULL,
-                        null.ok = TRUE,
+                        allow_null = TRUE,
                         list.ok = TRUE) {
-  if (is.null(x) && null.ok) {
+  if (is.null(x) && allow_null) {
     return(x)
   }
 

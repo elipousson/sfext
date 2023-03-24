@@ -231,7 +231,7 @@ write_sf_cache <- function(data,
       cache = TRUE,
       create = create,
       pkg = pkg,
-      null.ok = FALSE
+      allow_null = FALSE
     )
 
   write_sf_types(

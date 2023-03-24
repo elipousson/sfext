@@ -3,14 +3,14 @@
 #' @noRd
 check_null <- function(x = NULL,
                        arg = caller_arg(x),
-                       null.ok = FALSE,
+                       allow_null = FALSE,
                        null.req = FALSE,
                        ...) {
   if (null.req) {
-    null.ok <- null.req
+    allow_null <- null.req
   }
 
-  if (is.null(x) && !null.ok) {
+  if (is.null(x) && !allow_null) {
     cli_abort("{.arg {arg}} must not be NULL.", ...)
   }
 
@@ -27,12 +27,12 @@ check_null <- function(x = NULL,
 check_len <- function(x = NULL,
                       len = 1,
                       arg = caller_arg(x),
-                      null.ok = FALSE,
+                      allow_null = FALSE,
                       ...) {
-  check_null(x, arg, null.ok)
-  null.ok <- is.null(x) && null.ok
+  check_null(x, arg, allow_null)
+  allow_null <- is.null(x) && allow_null
 
-  if (((length(x) >= min(len)) && (length(x) <= max(len))) || null.ok) {
+  if (((length(x) >= min(len)) && (length(x) <= max(len))) || allow_null) {
     return(invisible(TRUE))
   }
 
@@ -54,16 +54,16 @@ check_len <- function(x = NULL,
 check_grepl <- function(x = NULL,
                         pattern = NULL,
                         arg = caller_arg(x),
-                        null.ok = FALSE,
+                        allow_null = FALSE,
                         ignore.case = FALSE,
                         perl = FALSE,
                         message = NULL,
                         ...) {
-  check_null(x, arg, null.ok)
-  null.ok <- is.null(x) && null.ok
+  check_null(x, arg, allow_null)
+  allow_null <- is.null(x) && allow_null
 
   # FIXME: This will error if x is longer than 1
-  if (grepl(pattern, x, ignore.case = ignore.case, perl = perl) || null.ok) {
+  if (grepl(pattern, x, ignore.case = ignore.case, perl = perl) || allow_null) {
     return(invisible(TRUE))
   }
 
@@ -79,20 +79,20 @@ check_grepl <- function(x = NULL,
 check_starts_with <- function(x = NULL,
                               string = NULL,
                               arg = caller_arg(x),
-                              null.ok = FALSE,
+                              allow_null = FALSE,
                               ignore.case = FALSE,
                               perl = FALSE,
                               message = NULL,
                               ...) {
-  check_character(x, allow_null = null.ok, arg = arg)
-  null.ok <- is.null(x) && null.ok
+  check_character(x, allow_null = allow_null, arg = arg)
+  allow_null <- is.null(x) && allow_null
 
   starts_with <-
     grepl(paste0("^", string), x,
       ignore.case = ignore.case, perl = perl
     )
 
-  if (all(starts_with) || null.ok) {
+  if (all(starts_with) || allow_null) {
     return(invisible(TRUE))
   }
 
@@ -120,17 +120,17 @@ check_starts_with <- function(x = NULL,
 #' @importFrom cliExtras cls_vec
 check_sf <- function(x,
                      arg = caller_arg(x),
-                     null.ok = FALSE,
+                     allow_null = FALSE,
                      list.ok = FALSE,
                      ext = FALSE,
                      call = caller_env(),
                      ...) {
   rlang::check_required(x, arg = arg, call = call)
-  check_null(x, arg, null.ok)
+  check_null(x, arg, allow_null)
 
-  list.ok <- list.ok && is_sf_list(x, named = FALSE, ext, null.ok)
+  list.ok <- list.ok && is_sf_list(x, named = FALSE, ext, allow_null)
 
-  if (is_sf(x, ext, null.ok) || list.ok) {
+  if (is_sf(x, ext, allow_null) || list.ok) {
     return(invisible(TRUE))
   }
 

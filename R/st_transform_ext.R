@@ -4,7 +4,7 @@
 #' objects and, using the [as_sf_class()] function, returns a wider range of
 #' objects. Typically, takes a `sf`, `sfc`, or `bbox` object and transform to
 #' coordinate reference system to match the value of crs or the object provided
-#' to crs. If `x` is a data.frame or if `x` is `NULL` and `null.ok` is `TRUE`
+#' to crs. If `x` is a data.frame or if `x` is `NULL` and `allow_null` is `TRUE`
 #' (defaults to `FALSE`) it is returned as is.
 #'
 #' @param x An `sf`, `sfc`, or `bbox` object, a list of sf objects, or a
@@ -19,8 +19,8 @@
 #'   [st_omerc()] and returns an object with the Oblique Mercator projection
 #'   passing the value of rotate to the gamma parameter of the projection.
 #'   rotate must be between -45 and 45 degrees.
-#' @param null.ok If `TRUE` and x is `NULL` return x without an error. Defaults
-#'   to `FALSE`.
+#' @param allow_null If `TRUE` and x is `NULL` return x without an error.
+#'   Defaults to `FALSE`.
 #' @param list.ok If `TRUE`, x can be a list of `sf`, `sfc`, or `bbox` objects.
 #'   If `FALSE`, only `sf`, `sfc`, or `bbox` objects are supported. Defaults to
 #'   `TRUE`.
@@ -34,13 +34,13 @@ st_transform_ext <- function(x,
                              crs = NULL,
                              class = NULL,
                              rotate = 0,
-                             null.ok = FALSE,
+                             allow_null = FALSE,
                              list.ok = TRUE) {
-  if (any(c(is.data.frame(x) && !is_sf(x), is.null(x) && null.ok))) {
+  if (any(c(is.data.frame(x) && !is_sf(x), is.null(x) && allow_null))) {
     return(x)
   }
 
-  check_sf(x, ext = TRUE, null.ok = null.ok, list.ok = list.ok)
+  check_sf(x, ext = TRUE, allow_null = allow_null, list.ok = list.ok)
 
   type <-
     dplyr::case_when(

@@ -8,6 +8,7 @@
 #' - [is_same_area()]: do x and y have the same area?
 #' - [is_same_units()]: are x and y character strings that represent the same
 #' units or objects that use the same units?
+#'
 #' There are two additional functions that support these utility functions:
 #'
 #' - [get_dist_units()]: Get the distance units from x (if x is a sf or units
@@ -103,8 +104,8 @@ is_shorter <- function(x, y) {
 
 #' @name get_dist_units
 #' @rdname is_dist_units
-#' @param null.ok If null.ok is `TRUE`, allow x to return a `NULL` value; if
-#'   `FALSE`, error on `NULL` values.
+#' @param allow_null If allow_null is `TRUE`, allow x to return a `NULL` value;
+#'   if `FALSE`, error on `NULL` values.
 #' @param multiple If `TRUE` and x is a character vector with distance/area
 #'   units, [get_dist_units] may return multiple units. Passed to [rlang::arg_match].
 #' @param quiet If `TRUE`, suppress warning messages.
@@ -112,8 +113,8 @@ is_shorter <- function(x, y) {
 #' @importFrom sf st_crs
 #' @importFrom rlang arg_match
 #' @importFrom cliExtras cli_warn_ifnot cli_abort_ifnot
-get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
-  if (is.null(x) && null.ok) {
+get_dist_units <- function(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE) {
+  if (is.null(x) && allow_null) {
     return(x)
   }
 
@@ -175,11 +176,11 @@ get_dist_units <- function(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE) {
 #' @importFrom cliExtras cli_yesno
 as_dist_units <- function(x,
                           units = NULL,
-                          null.ok = FALSE,
+                          allow_null = FALSE,
                           call = caller_env()) {
-  units <- get_dist_units(units, null.ok = null.ok)
+  units <- get_dist_units(units, allow_null = allow_null)
 
-  if (is.null(units) && null.ok) {
+  if (is.null(units) && allow_null) {
     return(x)
   }
 

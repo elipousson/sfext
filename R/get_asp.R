@@ -5,7 +5,7 @@
 #'   without modification.
 #' @param block_asp If `TRUE`, and margin is not `NULL`, return the aspect ratio
 #'   of the text or content block inside the page margins.
-#' @param null.ok If `TRUE` and asp and paper are both `NULL`, return `NULL`
+#' @param allow_null If `TRUE` and asp and paper are both `NULL`, return `NULL`
 #'   without an error.
 #' @return A numeric aspect ratio.
 #' @rdname get_asp
@@ -18,11 +18,11 @@ get_asp <- function(asp = NULL,
                     bbox = NULL,
                     margin = NULL,
                     block_asp = FALSE,
-                    null.ok = TRUE,
+                    allow_null = TRUE,
                     ...) {
   type <-
     dplyr::case_when(
-      is.null(asp) && is.null(paper) && null.ok ~ "null",
+      is.null(asp) && is.null(paper) && allow_null ~ "null",
       is.numeric(asp) ~ "num",
       is.character(asp) && grepl(":", asp) ~ "char",
       !is.null(paper) && is.null(asp) && !block_asp ~ "paper",

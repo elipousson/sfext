@@ -9,7 +9,7 @@ test_that("is_sf and as_sf functions work", {
   expect_false(is_sf(bbox))
   expect_true(is_sf(bbox, ext = TRUE))
 
-  expect_true(is_sf(NULL, ext = TRUE, null.ok = TRUE))
+  expect_true(is_sf(NULL, ext = TRUE, allow_null = TRUE))
 
   expect_true(is_sfc(sfc))
   expect_true(is_sf(sfc, ext = TRUE))
@@ -49,8 +49,8 @@ test_that("is_sf and as_sf functions work", {
 
   null_test <- NULL
 
-  expect_true(is_sf(null_test, null.ok = TRUE))
-  expect_true(is_sf_list(null_test, null.ok = TRUE))
-  expect_true(is_sp(null_test, null.ok = TRUE))
-  expect_true(is_geo_coords(null_test, null.ok = TRUE))
+  expect_true(is_sf(null_test, allow_null = TRUE))
+  expect_true(is_sf_list(null_test, allow_null = TRUE))
+  expect_true(is_sp(null_test, allow_null = TRUE))
+  expect_true(is_geo_coords(null_test, allow_null = TRUE))
 })

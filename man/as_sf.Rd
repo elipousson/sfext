@@ -17,7 +17,7 @@ as_sfc(x, crs = NULL, ext = TRUE, ...)
 
 as_sf_list(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE)
 
-as_sf_class(x, class = NULL, null.ok = TRUE, call = caller_env(), ...)
+as_sf_class(x, class = NULL, allow_null = TRUE, call = caller_env(), ...)
 
 as_crs(crs = NULL, check = FALSE, call = parent.frame())
 }
@@ -56,7 +56,7 @@ provided.}
 \item{class}{A class to convert data to; defaults to NULL (which returns
 "sf")}
 
-\item{null.ok}{For \link{as_sf_class}, if class is \code{NULL} and null.ok is \code{TRUE},
+\item{allow_null}{For \link{as_sf_class}, if class is \code{NULL} and allow_null is \code{TRUE},
 return x without any class conversion or checks. Defaults to \code{TRUE}.}
 
 \item{call}{Passed as the call parameter for \link[cli:cli_abort]{cli::cli_abort} or

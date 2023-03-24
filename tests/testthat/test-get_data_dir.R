@@ -17,7 +17,7 @@ test_that("get_path_filetype works", {
 
 test_that("get_data_dir warns and errors", {
   expect_error(
-    get_data_dir(null.ok = FALSE)
+    get_data_dir(allow_null = FALSE)
   )
   expect_warning(
     get_data_dir(

@@ -15,7 +15,7 @@ st_bbox_ext(
   crs = NULL,
   class = "bbox",
   nudge = NULL,
-  null.ok = TRUE,
+  allow_null = TRUE,
   list.ok = TRUE
 )
 
@@ -51,7 +51,7 @@ to units matching GDAL units for x; defaults to "meter"}
 \item{nudge}{Passed as to parameter \code{\link[=st_nudge]{st_nudge()}} when not \code{NULL}. Numeric
 vector or sf object.}
 
-\item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{NULL}.}
+\item{allow_null}{If \code{TRUE} and x is \code{NULL}, return \code{NULL}.}
 
 \item{list.ok}{If \code{TRUE}, allow sf list objects as an input and use
 \code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the

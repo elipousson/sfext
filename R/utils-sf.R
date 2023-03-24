@@ -25,11 +25,11 @@ NULL
 #'   the provided value.
 #' @param crs A coordinate reference system identifier (numeric or character) or
 #'   a `sf`, `sfc`, `bbox`, or `crs` class object supported by [sf::st_crs()].
-#' @param null.ok If `TRUE` and crs is `NULL`, return x.
+#' @param allow_null If `TRUE` and crs is `NULL`, return x.
 #' @export
 #' @importFrom sf st_crs st_set_crs st_transform
-transform_sf <- function(x, crs = NULL, null.ok = TRUE, ...) {
-  if (is.null(crs) && null.ok) {
+transform_sf <- function(x, crs = NULL, allow_null = TRUE, ...) {
+  if (is.null(crs) && allow_null) {
     return(x)
   }
 

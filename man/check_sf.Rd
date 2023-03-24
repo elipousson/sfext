@@ -7,7 +7,7 @@
 check_sf(
   x,
   arg = caller_arg(x),
-  null.ok = FALSE,
+  allow_null = FALSE,
   list.ok = FALSE,
   ext = FALSE,
   call = caller_env(),
@@ -20,7 +20,7 @@ check_sf(
 \item{arg}{Used internally to create better error messages; defaults to
 \link[rlang:caller_arg]{rlang::caller_arg}.}
 
-\item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
+\item{allow_null}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
 
 \item{list.ok}{If \code{TRUE}, return \code{TRUE} if x is an sf list or, if ext is also
 \code{TRUE}, a list of sf, sfc, or bbox objects. Defaults to \code{FALSE}.}

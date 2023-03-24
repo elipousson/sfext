@@ -11,7 +11,7 @@ get_asp(
   bbox = NULL,
   margin = NULL,
   block_asp = FALSE,
-  null.ok = TRUE,
+  allow_null = TRUE,
   ...
 )
 }
@@ -32,7 +32,7 @@ without modification.}
 \item{block_asp}{If \code{TRUE}, and margin is not \code{NULL}, return the aspect ratio
 of the text or content block inside the page margins.}
 
-\item{null.ok}{If \code{TRUE} and asp and paper are both \code{NULL}, return \code{NULL}
+\item{allow_null}{If \code{TRUE} and asp and paper are both \code{NULL}, return \code{NULL}
 without an error.}
 
 \item{...}{

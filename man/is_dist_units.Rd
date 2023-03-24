@@ -24,9 +24,9 @@ is_longer(x, y)
 
 is_shorter(x, y)
 
-get_dist_units(x, null.ok = TRUE, multiple = TRUE, quiet = FALSE)
+get_dist_units(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE)
 
-as_dist_units(x, units = NULL, null.ok = FALSE, call = caller_env())
+as_dist_units(x, units = NULL, allow_null = FALSE, call = caller_env())
 
 is_diff_area(x, y, units = NULL, combine = TRUE)
 
@@ -51,8 +51,8 @@ improve error messages when function is used internally.}
 
 \item{...}{Additional parameters passed to all.equal}
 
-\item{null.ok}{If null.ok is \code{TRUE}, allow x to return a \code{NULL} value; if
-\code{FALSE}, error on \code{NULL} values.}
+\item{allow_null}{If allow_null is \code{TRUE}, allow x to return a \code{NULL} value;
+if \code{FALSE}, error on \code{NULL} values.}
 
 \item{multiple}{If \code{TRUE} and x is a character vector with distance/area
 units, \link{get_dist_units} may return multiple units. Passed to \link[rlang:arg_match]{rlang::arg_match}.}

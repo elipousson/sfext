@@ -83,9 +83,9 @@ check_range <- function(range = NULL, nm = c("xmin", "ymin", "xmax", "ymax")) {
 is_lonlat_in_range <- function(x,
                                range = NULL,
                                rev = FALSE,
-                               null.ok = TRUE,
+                               allow_null = TRUE,
                                call = parent.frame()) {
-  if (is.null(range) & null.ok) {
+  if (is.null(range) & allow_null) {
     return(TRUE)
   }
 

@@ -13,21 +13,21 @@
 \alias{is_same_crs}
 \title{What is the class or spatial attributes of this feature?}
 \usage{
-is_sf(x, ext = FALSE, null.ok = FALSE, list.ok = FALSE)
+is_sf(x, ext = FALSE, allow_null = FALSE, list.ok = FALSE)
 
-is_sfg(x, null.ok = FALSE)
+is_sfg(x, allow_null = FALSE)
 
-is_sfc(x, null.ok = FALSE)
+is_sfc(x, allow_null = FALSE)
 
-is_bbox(x, null.ok = FALSE)
+is_bbox(x, allow_null = FALSE)
 
-is_sf_list(x, named = FALSE, ext = FALSE, null.ok = FALSE)
+is_sf_list(x, named = FALSE, ext = FALSE, allow_null = FALSE)
 
-is_raster(x, null.ok = FALSE)
+is_raster(x, allow_null = FALSE)
 
-is_sp(x, null.ok = FALSE)
+is_sp(x, allow_null = FALSE)
 
-is_geo_coords(x, null.ok = FALSE)
+is_geo_coords(x, allow_null = FALSE)
 
 is_same_crs(x, y)
 }
@@ -37,7 +37,7 @@ is_same_crs(x, y)
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
 not; defaults to \code{FALSE}. (used by \link{is_sf})}
 
-\item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
+\item{allow_null}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
 
 \item{list.ok}{If \code{TRUE}, \link{is_sf} will return TRUE if x is a list of sf objects.}
 

@@ -5,7 +5,7 @@
 #'   [sf::st_crs] that can be compared to x. (used by [is_same_crs])
 #' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
 #'   not; defaults to `FALSE`. (used by [is_sf])
-#' @param null.ok If `TRUE` and x is `NULL`, return `TRUE`; defaults to `FALSE`.
+#' @param allow_null If `TRUE` and x is `NULL`, return `TRUE`; defaults to `FALSE`.
 #' @param list.ok If `TRUE`, [is_sf] will return TRUE if x is a list of sf objects.
 #' @details
 #' - [is_sf]: is x a `sf` class object?
@@ -19,7 +19,7 @@
 #'
 #' @export
 #' @md
-is_sf <- function(x, ext = FALSE, null.ok = FALSE, list.ok = FALSE) {
+is_sf <- function(x, ext = FALSE, allow_null = FALSE, list.ok = FALSE) {
   classes <- "sf"
 
   if (isTRUE(ext)) {
@@ -29,39 +29,39 @@ is_sf <- function(x, ext = FALSE, null.ok = FALSE, list.ok = FALSE) {
   }
 
   if (!list.ok) {
-    return(is_class(x, classes = classes, null.ok = null.ok))
+    return(is_class(x, classes = classes, allow_null = allow_null))
   }
 
-  is_class(x, classes = classes, null.ok = null.ok) | is_sf_list(x, ext = ext, null.ok = null.ok)
+  is_class(x, classes = classes, allow_null = allow_null) | is_sf_list(x, ext = ext, allow_null = allow_null)
 }
 
 #' @name is_sfg
 #' @rdname is_sf
 #' @export
-is_sfg <- function(x, null.ok = FALSE) {
-  is_class(x, classes = "sfg", null.ok = null.ok)
+is_sfg <- function(x, allow_null = FALSE) {
+  is_class(x, classes = "sfg", allow_null = allow_null)
 }
 
 #' @name is_sfc
 #' @rdname is_sf
 #' @export
-is_sfc <- function(x, null.ok = FALSE) {
-  is_class(x, classes = "sfc", null.ok = null.ok)
+is_sfc <- function(x, allow_null = FALSE) {
+  is_class(x, classes = "sfc", allow_null = allow_null)
 }
 
 #' @name is_bbox
 #' @rdname is_sf
 #' @export
-is_bbox <- function(x, null.ok = FALSE) {
-  is_class(x, classes = "bbox", null.ok = null.ok)
+is_bbox <- function(x, allow_null = FALSE) {
+  is_class(x, classes = "bbox", allow_null = allow_null)
 }
 
 #' @rdname is_sf
 #' @name is_sf_list
 #' @param named If `TRUE`, check if sf list is named; defaults `FALSE`.
 #' @export
-is_sf_list <- function(x, named = FALSE, ext = FALSE, null.ok = FALSE) {
-  if (is.null(x) && null.ok) {
+is_sf_list <- function(x, named = FALSE, ext = FALSE, allow_null = FALSE) {
+  if (is.null(x) && allow_null) {
     return(TRUE)
   }
 
@@ -74,7 +74,7 @@ is_sf_list <- function(x, named = FALSE, ext = FALSE, null.ok = FALSE) {
       vapply(
         x,
         function(x) {
-          is_sf(x, ext = ext, null.ok = null.ok)
+          is_sf(x, ext = ext, allow_null = allow_null)
         },
         TRUE
       )
@@ -90,15 +90,15 @@ is_sf_list <- function(x, named = FALSE, ext = FALSE, null.ok = FALSE) {
 #' @name is_raster
 #' @rdname is_sf
 #' @export
-is_raster <- function(x, null.ok = FALSE) {
-  is_class(x, classes = "RasterLayer", null.ok = null.ok)
+is_raster <- function(x, allow_null = FALSE) {
+  is_class(x, classes = "RasterLayer", allow_null = allow_null)
 }
 
 #' @name is_sp
 #' @rdname is_sf
 #' @export
-is_sp <- function(x, null.ok = FALSE) {
-  if (is.null(x) && null.ok) {
+is_sp <- function(x, allow_null = FALSE) {
+  if (is.null(x) && allow_null) {
     return(TRUE)
   }
 
@@ -108,8 +108,8 @@ is_sp <- function(x, null.ok = FALSE) {
 #' @name is_coords
 #' @rdname is_sf
 #' @export
-is_geo_coords <- function(x, null.ok = FALSE) {
-  if (is.null(x) && null.ok) {
+is_geo_coords <- function(x, allow_null = FALSE) {
+  if (is.null(x) && allow_null) {
     return(TRUE)
   }
 

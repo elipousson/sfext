@@ -32,7 +32,7 @@ count_features <- function(x = NULL,
                            name = NULL,
                            geometry = "y",
                            ...) {
-  if (!is_sf_list(y, null.ok = TRUE) && !is.null(nm)) {
+  if (!is_sf_list(y, allow_null = TRUE) && !is.null(nm)) {
     y <- as_sf_list(y, nm = nm, crs = x)
   }
 

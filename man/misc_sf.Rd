@@ -9,7 +9,7 @@
 \alias{get_sf_colnames}
 \title{Additional utility functions for sf objects}
 \usage{
-transform_sf(x, crs = NULL, null.ok = TRUE, ...)
+transform_sf(x, crs = NULL, allow_null = TRUE, ...)
 
 relocate_sf_col(x, .after = dplyr::everything())
 
@@ -26,7 +26,7 @@ the provided value.}
 \item{crs}{A coordinate reference system identifier (numeric or character) or
 a \code{sf}, \code{sfc}, \code{bbox}, or \code{crs} class object supported by \code{\link[sf:st_crs]{sf::st_crs()}}.}
 
-\item{null.ok}{If \code{TRUE} and crs is \code{NULL}, return x.}
+\item{allow_null}{If \code{TRUE} and crs is \code{NULL}, return x.}
 
 \item{...}{Additional parameters passed to \code{\link[sf:st_transform]{sf::st_transform()}} by
 \code{\link[=transform_sf]{transform_sf()}} or to \code{\link[sf:st_read]{sf::read_sf()}} by \code{\link[=get_sf_colnames]{get_sf_colnames()}} if x is not

@@ -11,7 +11,7 @@ st_transform_ext(
   crs = NULL,
   class = NULL,
   rotate = 0,
-  null.ok = FALSE,
+  allow_null = FALSE,
   list.ok = TRUE
 )
 
@@ -33,8 +33,8 @@ the returned object remains a list but may be converted to \code{bbox} if \code{
 passing the value of rotate to the gamma parameter of the projection.
 rotate must be between -45 and 45 degrees.}
 
-\item{null.ok}{If \code{TRUE} and x is \code{NULL} return x without an error. Defaults
-to \code{FALSE}.}
+\item{allow_null}{If \code{TRUE} and x is \code{NULL} return x without an error.
+Defaults to \code{FALSE}.}
 
 \item{list.ok}{If \code{TRUE}, x can be a list of \code{sf}, \code{sfc}, or \code{bbox} objects.
 If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supported. Defaults to
@@ -49,7 +49,7 @@ This function wraps \code{\link[sf:st_transform]{sf::st_transform()}} but suppor
 objects and, using the \code{\link[=as_sf_class]{as_sf_class()}} function, returns a wider range of
 objects. Typically, takes a \code{sf}, \code{sfc}, or \code{bbox} object and transform to
 coordinate reference system to match the value of crs or the object provided
-to crs. If \code{x} is a data.frame or if \code{x} is \code{NULL} and \code{null.ok} is \code{TRUE}
+to crs. If \code{x} is a data.frame or if \code{x} is \code{NULL} and \code{allow_null} is \code{TRUE}
 (defaults to \code{FALSE}) it is returned as is.
 }
 \seealso{

@@ -260,15 +260,15 @@ make_sf_grid_list <- function(x, style = "rect", ncol = 2, nrow = 2, .id = "grid
 #' @param data Data that can be converted to sf, sfc, bbox or a sf list object.
 #' @param class A class to convert data to; defaults to NULL (which returns
 #'   "sf")
-#' @param null.ok For [as_sf_class], if class is `NULL` and null.ok is `TRUE`,
+#' @param allow_null For [as_sf_class], if class is `NULL` and allow_null is `TRUE`,
 #'   return x without any class conversion or checks. Defaults to `TRUE`.
 #' @param ... Additional parameters passed to [as_sf], [as_sfc], [as_bbox], or
 #'   [as_sf_list]
 #' @name as_sf_class
 #' @rdname as_sf
 #' @export
-as_sf_class <- function(x, class = NULL, null.ok = TRUE, call = caller_env(), ...) {
-  if (is.null(class) && null.ok) {
+as_sf_class <- function(x, class = NULL, allow_null = TRUE, call = caller_env(), ...) {
+  if (is.null(class) && allow_null) {
     return(x)
   }
 

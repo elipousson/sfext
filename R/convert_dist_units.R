@@ -57,16 +57,16 @@ convert_dist_units <- function(dist,
 
 #' Set distance units
 #'
-#' @param null.ok If `FALSE`, error value; If `TRUE`, and value is `NULL` return
-#'   x without setting units.
+#' @param allow_null If `FALSE`, error value; If `TRUE`, and value is `NULL`
+#'   return x without setting units.
 #' @noRd
 #' @importFrom units set_units
 set_dist_units <- function(x = NULL,
                            value = NULL,
                            mode = "standard",
-                           null.ok = TRUE,
+                           allow_null = TRUE,
                            call = caller_env()) {
-  if (is.null(value) && null.ok) {
+  if (is.null(value) && allow_null) {
     return(x)
   }
 

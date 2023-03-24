@@ -5,7 +5,7 @@
 #'
 #' @param x A `sf`, `sfc`, or `bbox` object, Default: `NULL`. Required.
 #' @inheritParams st_bbox_ext
-#' @inheritDotParams st_bbox_ext -class -null.ok
+#' @inheritDotParams st_bbox_ext -class -allow_null
 #' @param ncol,nrow Used to set n if either are not `NULL`; defaults to `NULL`.
 #'   row and id are added as columns to the grid if they are provided.
 #' @param gutter Distance in units between each column cell; gutter effectively

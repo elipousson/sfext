@@ -13,14 +13,14 @@
 #'   should be created. If the session not interactive and create is `TRUE`, a
 #'   new directory will be created.
 #' @param pkg Package name; defaults to "sfext"
-#' @param null.ok If `TRUE`, path is `NULL`, cache is `FALSE`, return the `NULL`
+#' @param allow_null If `TRUE`, path is `NULL`, cache is `FALSE`, return the `NULL`
 #'   path value; defaults to `TRUE`.
 #' @export
 get_data_dir <- function(path = NULL,
                          cache = FALSE,
                          create = TRUE,
                          pkg = "sfext",
-                         null.ok = TRUE) {
+                         allow_null = TRUE) {
   if (cache) {
     rlang::check_installed("rappdirs")
     path <- path %||% rappdirs::user_cache_dir(pkg)
@@ -29,11 +29,11 @@ get_data_dir <- function(path = NULL,
   if (!is.null(path) && dir.exists(path)) {
     return(path)
   } else if (is.null(path)) {
-    if (null.ok) {
+    if (allow_null) {
       return(invisible(path))
     }
 
-    cli_abort("{.arg path} can't be {.val NULL} when {.code null.ok = FALSE}")
+    cli_abort("{.arg path} can't be {.val NULL} when {.code allow_null = FALSE}")
   }
 
   if (!create) {
@@ -78,7 +78,7 @@ list_data_files <- function(path = NULL,
       path = path,
       cache = cache,
       pkg = pkg,
-      null.ok = FALSE,
+      allow_null = FALSE,
       create = FALSE
     )
 

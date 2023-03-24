@@ -10,7 +10,7 @@ get_data_dir(
   cache = FALSE,
   create = TRUE,
   pkg = "sfext",
-  null.ok = TRUE
+  allow_null = TRUE
 )
 
 list_data_files(
@@ -38,7 +38,7 @@ new directory will be created.}
 
 \item{pkg}{Package name; defaults to "sfext"}
 
-\item{null.ok}{If \code{TRUE}, path is \code{NULL}, cache is \code{FALSE}, return the \code{NULL}
+\item{allow_null}{If \code{TRUE}, path is \code{NULL}, cache is \code{FALSE}, return the \code{NULL}
 path value; defaults to \code{TRUE}.}
 
 \item{fileext}{If pattern is NULL, fileext is used to set the pattern and
