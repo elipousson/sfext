@@ -155,10 +155,12 @@ modify_fn_fmls <- function(params,
 read_sf_pkg <- function(data,
                         bbox = NULL,
                         package = NULL,
+                        pkg = NULL,
                         fileext = "gpkg",
                         filetype = NULL,
                         ...) {
   fileext <- fileext %||% filetype
+  package <- package %||% pkg
   check_string(package, allow_empty = FALSE)
   rlang::check_installed(package)
   check_string(
@@ -177,8 +179,7 @@ read_sf_pkg <- function(data,
     return(use_eval_parse(data = data, package = package))
   }
 
-  # FIXME: This triggers an alert with lintr but works fine
-  filename <- str_add_fileext(data, fileext = filetype)
+  filename <- str_add_fileext(data, fileext = fileext)
 
   path <-
     dplyr::case_when(
