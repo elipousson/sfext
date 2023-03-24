@@ -168,7 +168,7 @@ write_sf_list <- function(data,
 
   if (!has_fileext(filename, multilayer_fileext)) {
     cli::cli_abort(
-      "{.arg filext} must be {.or {multilayer_fileext}}
+      "{.arg fileext} must be {.or {multilayer_fileext}}
       when {.code onefile = TRUE}"
     )
   }
