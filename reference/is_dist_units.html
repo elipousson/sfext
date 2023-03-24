@@ -97,9 +97,9 @@ units or objects that use the same units?</p></li>
 <span></span>
 <span><span class="fu">is_shorter</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">get_dist_units</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">TRUE</span>, multiple <span class="op">=</span> <span class="cn">TRUE</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">get_dist_units</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">TRUE</span>, multiple <span class="op">=</span> <span class="cn">TRUE</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">as_dist_units</span><span class="op">(</span><span class="va">x</span>, units <span class="op">=</span> <span class="cn">NULL</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">as_dist_units</span><span class="op">(</span><span class="va">x</span>, units <span class="op">=</span> <span class="cn">NULL</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">is_diff_area</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, units <span class="op">=</span> <span class="cn">NULL</span>, combine <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -138,9 +138,9 @@ improve error messages when function is used internally.</p></dd>
 <dd><p>Additional parameters passed to all.equal</p></dd>
 
 
-<dt>null.ok</dt>
-<dd><p>If null.ok is <code>TRUE</code>, allow x to return a <code>NULL</code> value; if
-<code>FALSE</code>, error on <code>NULL</code> values.</p></dd>
+<dt>allow_null</dt>
+<dd><p>If allow_null is <code>TRUE</code>, allow x to return a <code>NULL</code> value;
+if <code>FALSE</code>, error on <code>NULL</code> values.</p></dd>
 
 
 <dt>multiple</dt>

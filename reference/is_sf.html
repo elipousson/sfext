@@ -57,21 +57,21 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">is_sf</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="cn">FALSE</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span>, list.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">is_sf</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="cn">FALSE</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span>, list.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_sfg</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">is_sfg</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_sfc</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">is_sfc</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_bbox</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">is_bbox</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_sf_list</span><span class="op">(</span><span class="va">x</span>, named <span class="op">=</span> <span class="cn">FALSE</span>, ext <span class="op">=</span> <span class="cn">FALSE</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">is_sf_list</span><span class="op">(</span><span class="va">x</span>, named <span class="op">=</span> <span class="cn">FALSE</span>, ext <span class="op">=</span> <span class="cn">FALSE</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_raster</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">is_raster</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_sp</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">is_sp</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_geo_coords</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">is_geo_coords</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">is_same_crs</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -87,7 +87,7 @@
 not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 
 
-<dt>null.ok</dt>
+<dt>allow_null</dt>
 <dd><p>If <code>TRUE</code> and x is <code>NULL</code>, return <code>TRUE</code>; defaults to <code>FALSE</code>.</p></dd>
 
 
