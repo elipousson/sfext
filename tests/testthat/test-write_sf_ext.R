@@ -52,6 +52,7 @@ test_that("write_sf_ext works", {
       file.exists("nc.rda")
     )
 
+    skip_if_not_installed("ggplot2")
     write_sf_ext(
       nc,
       filename = "nc.svg"
