@@ -12,7 +12,7 @@ st_transform_ext(
   class = NULL,
   rotate = 0,
   allow_null = FALSE,
-  list.ok = TRUE
+  allow_list = TRUE
 )
 
 st_omerc(x, rotate = 0)
@@ -36,7 +36,7 @@ rotate must be between -45 and 45 degrees.}
 \item{allow_null}{If \code{TRUE} and x is \code{NULL} return x without an error.
 Defaults to \code{FALSE}.}
 
-\item{list.ok}{If \code{TRUE}, x can be a list of \code{sf}, \code{sfc}, or \code{bbox} objects.
+\item{allow_list}{If \code{TRUE}, x can be a list of \code{sf}, \code{sfc}, or \code{bbox} objects.
 If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supported. Defaults to
 \code{TRUE}.}
 }

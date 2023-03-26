@@ -23,6 +23,7 @@ read_sf_pkg(
   data,
   bbox = NULL,
   package = NULL,
+  pkg = NULL,
   fileext = "gpkg",
   filetype = NULL,
   ...
@@ -140,7 +141,8 @@ read_sf_gsheet(
 \item{bbox}{A bounding box object; defaults to \code{NULL}. If \code{"bbox"} is
 provided, only returns features intersecting the bounding box.}
 
-\item{package}{Package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
+\item{package, pkg}{Package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only. pkg is used if
+package is \code{NULL}.}
 
 \item{fileext}{File type or extension. Optional if filename or path include a
 file extension.}

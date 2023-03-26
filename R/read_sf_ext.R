@@ -50,7 +50,8 @@
 #' @param url A url for a spatial data file, tabular data with coordinates, or a
 #'   ArcGIS FeatureServer or MapServer to access with [esri2sf::esri2sf()]
 #' @param data Name of a package dataset; used by [read_sf_pkg()] only.
-#' @param package Package name; used by [read_sf_pkg()] only.
+#' @param package,pkg Package name; used by [read_sf_pkg()] only. pkg is used if
+#'   package is `NULL`.
 #' @param filetype File type supported by [sf::read_sf()]; Default: 'gpkg'; used
 #'   by [read_sf_pkg()] only and required only if the data is in the package
 #'   cache directory or extdata system files.

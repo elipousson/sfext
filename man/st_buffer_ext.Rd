@@ -14,7 +14,7 @@ st_buffer_ext(
   end_style = NULL,
   join_style = NULL,
   single_side = FALSE,
-  list.ok = TRUE,
+  allow_list = TRUE,
   ...
 )
 
@@ -49,7 +49,7 @@ joinStyle parameter of \code{\link[sf:geos_unary]{sf::st_buffer()}}.}
 geometries, in which case negative dist values give buffers on the
 right-hand side, positive on the left.}
 
-\item{list.ok}{If \code{TRUE}, allow sf list objects as an input and use
+\item{allow_list}{If \code{TRUE}, allow sf list objects as an input and use
 \code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the
 list to return as a new sf list object.}
 

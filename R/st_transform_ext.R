@@ -21,7 +21,7 @@
 #'   rotate must be between -45 and 45 degrees.
 #' @param allow_null If `TRUE` and x is `NULL` return x without an error.
 #'   Defaults to `FALSE`.
-#' @param list.ok If `TRUE`, x can be a list of `sf`, `sfc`, or `bbox` objects.
+#' @param allow_list If `TRUE`, x can be a list of `sf`, `sfc`, or `bbox` objects.
 #'   If `FALSE`, only `sf`, `sfc`, or `bbox` objects are supported. Defaults to
 #'   `TRUE`.
 #' @return An `sf`, `sfc`, or `bbox` object transformed to a new coordinate
@@ -35,12 +35,12 @@ st_transform_ext <- function(x,
                              class = NULL,
                              rotate = 0,
                              allow_null = FALSE,
-                             list.ok = TRUE) {
+                             allow_list = TRUE) {
   if (any(c(is.data.frame(x) && !is_sf(x), is.null(x) && allow_null))) {
     return(x)
   }
 
-  check_sf(x, ext = TRUE, allow_null = allow_null, list.ok = list.ok)
+  check_sf(x, ext = TRUE, allow_null = allow_null, allow_list = allow_list)
 
   type <-
     dplyr::case_when(

@@ -4,6 +4,18 @@
 ## usethis namespace: start
 #'
 #' @import rlang
+#' @importFrom rlang .data
+#' @importFrom rlang .env
+#' @importFrom rlang `%||%`
+#' @importFrom rlang caller_env
+#' @importFrom rlang has_length
+#' @importFrom rlang is_interactive
+#' @importFrom rlang check_installed
+#' @importFrom rlang exec
+#' @importFrom rlang env_get_list
+#' @importFrom rlang is_true
+#' @importFrom rlang is_false
+#' @importFrom rlang is_null
 #' @importFrom cli cli_abort
 #' @importFrom cli cli_inform
 #' @importFrom cli cli_warn
@@ -17,18 +29,8 @@
 #' @importFrom lifecycle deprecated
 #' @importFrom lifecycle badge
 #' @importFrom lifecycle signal_stage
-#' @importFrom rlang .data
-#' @importFrom rlang .env
-#' @importFrom rlang `%||%`
-#' @importFrom rlang caller_env
-#' @importFrom rlang has_length
-#' @importFrom rlang is_interactive
-#' @importFrom rlang check_installed
-#' @importFrom rlang exec
-#' @importFrom rlang env_get_list
 #' @importFrom sf NA_crs_
 #' @importFrom sf st_bbox
 #' @importFrom sf st_crs
 ## usethis namespace: end
 NULL
-

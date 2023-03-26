@@ -14,7 +14,7 @@ st_filter_ext(
   crs = NULL,
   .predicate = sf::st_intersects,
   type = NULL,
-  list.ok = TRUE,
+  allow_list = TRUE,
   ...
 )
 
@@ -38,7 +38,7 @@ ignored.}
 
 \item{type}{Geometry type.}
 
-\item{list.ok}{If \code{TRUE}, x can be a list of \code{sf}, \code{sfc}, or \code{bbox} objects.
+\item{allow_list}{If \code{TRUE}, x can be a list of \code{sf}, \code{sfc}, or \code{bbox} objects.
 If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supported. Defaults to
 \code{TRUE}.}
 

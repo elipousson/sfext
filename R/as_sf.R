@@ -268,7 +268,7 @@ make_sf_grid_list <- function(x, style = "rect", ncol = 2, nrow = 2, .id = "grid
 #' @rdname as_sf
 #' @export
 as_sf_class <- function(x, class = NULL, allow_null = TRUE, call = caller_env(), ...) {
-  if (is.null(class) && allow_null) {
+  if (is.null(class) && is_true(allow_null)) {
     return(x)
   }
 

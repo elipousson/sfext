@@ -16,10 +16,10 @@ st_bbox_ext(
   class = "bbox",
   nudge = NULL,
   allow_null = TRUE,
-  list.ok = TRUE
+  allow_list = TRUE
 )
 
-st_bbox_asp(x = NULL, asp = NULL, class = "bbox", list.ok = TRUE)
+st_bbox_asp(x = NULL, asp = NULL, class = "bbox", allow_list = TRUE)
 }
 \arguments{
 \item{x}{An object \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, or \code{sp} object or a
@@ -53,7 +53,7 @@ vector or sf object.}
 
 \item{allow_null}{If \code{TRUE} and x is \code{NULL}, return \code{NULL}.}
 
-\item{list.ok}{If \code{TRUE}, allow sf list objects as an input and use
+\item{allow_list}{If \code{TRUE}, allow sf list objects as an input and use
 \code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the
 list to return as a new sf list object.}
 }

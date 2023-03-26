@@ -25,7 +25,6 @@
 #' @name st_bbox_ext
 #' @export
 #' @importFrom sf st_bbox
-#' @importFrom purrr map
 st_bbox_ext <- function(x = NULL,
                         dist = NULL,
                         diag_ratio = NULL,
@@ -35,12 +34,18 @@ st_bbox_ext <- function(x = NULL,
                         class = "bbox",
                         nudge = NULL,
                         allow_null = TRUE,
-                        list.ok = TRUE) {
-  if (is.null(x) && allow_null) {
+                        allow_list = TRUE) {
+  check_sf(x,
+    allow_null = allow_null,
+    allow_list = allow_list,
+    ext = c("sf", "sfc", "bbox", "sfg", "Raster", "Extent", "numeric")
+  )
+
+  if (is.null(x) && is_true(allow_null)) {
     return(x)
   }
 
-  if (is_sf_list(x, ext = TRUE) && list.ok) {
+  if (is_sf_list(x, ext = TRUE) && is_true(allow_list)) {
     bbox_list <-
       map(
         x,
@@ -87,12 +92,11 @@ st_bbox_ext <- function(x = NULL,
 #' @rdname st_bbox_ext
 #' @name st_bbox_asp
 #' @export
-#' @importFrom purrr map
 st_bbox_asp <- function(x = NULL,
                         asp = NULL,
                         class = "bbox",
-                        list.ok = TRUE) {
-  if (is_sf_list(x, ext = TRUE) && list.ok) {
+                        allow_list = TRUE) {
+  if (is_sf_list(x, ext = TRUE) && is_true(allow_list)) {
     return(
       map(
         x,

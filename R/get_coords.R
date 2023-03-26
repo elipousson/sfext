@@ -95,7 +95,6 @@ get_coords <- function(x,
 #' @aliases st_coords_minmax
 #' @rdname get_coords
 #' @importFrom dplyr mutate row_number select bind_cols
-#' @importFrom purrr map
 #' @importFrom tibble enframe
 #' @importFrom sf st_drop_geometry
 get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {

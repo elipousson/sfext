@@ -6,7 +6,7 @@
 #' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
 #'   not; defaults to `FALSE`. (used by [is_sf])
 #' @param allow_null If `TRUE` and x is `NULL`, return `TRUE`; defaults to `FALSE`.
-#' @param list.ok If `TRUE`, [is_sf] will return TRUE if x is a list of sf objects.
+#' @param allow_list If `TRUE`, [is_sf] will return TRUE if x is a list of sf objects.
 #' @details
 #' - [is_sf]: is x a `sf` class object?
 #' - [is_sfc]: is x is a `sfc` class object?
@@ -19,7 +19,7 @@
 #'
 #' @export
 #' @md
-is_sf <- function(x, ext = FALSE, allow_null = FALSE, list.ok = FALSE) {
+is_sf <- function(x, ext = FALSE, allow_null = FALSE, allow_list = FALSE) {
   classes <- "sf"
 
   if (isTRUE(ext)) {
@@ -28,7 +28,7 @@ is_sf <- function(x, ext = FALSE, allow_null = FALSE, list.ok = FALSE) {
     classes <- c(classes, ext)
   }
 
-  if (!list.ok) {
+  if (isFALSE(allow_list)) {
     return(is_class(x, classes = classes, allow_null = allow_null))
   }
 
@@ -61,7 +61,7 @@ is_bbox <- function(x, allow_null = FALSE) {
 #' @param named If `TRUE`, check if sf list is named; defaults `FALSE`.
 #' @export
 is_sf_list <- function(x, named = FALSE, ext = FALSE, allow_null = FALSE) {
-  if (is.null(x) && allow_null) {
+  if (is.null(x) && isTRUE(allow_null)) {
     return(TRUE)
   }
 
@@ -80,11 +80,11 @@ is_sf_list <- function(x, named = FALSE, ext = FALSE, allow_null = FALSE) {
       )
     )
 
-  if (!named) {
+  if (isFALSE(named)) {
     return(is_sf_list)
   }
 
-  is_sf_list && is_named(x)
+  isTRUE(is_sf_list) && is_named(x)
 }
 
 #' @name is_raster
@@ -98,7 +98,7 @@ is_raster <- function(x, allow_null = FALSE) {
 #' @rdname is_sf
 #' @export
 is_sp <- function(x, allow_null = FALSE) {
-  if (is.null(x) && allow_null) {
+  if (is.null(x) && isTRUE(allow_null)) {
     return(TRUE)
   }
 
@@ -109,7 +109,7 @@ is_sp <- function(x, allow_null = FALSE) {
 #' @rdname is_sf
 #' @export
 is_geo_coords <- function(x, allow_null = FALSE) {
-  if (is.null(x) && allow_null) {
+  if (is.null(x) && isTRUE(allow_null)) {
     return(TRUE)
   }
 

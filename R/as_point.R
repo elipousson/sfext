@@ -15,7 +15,7 @@
 #' @details Using as_points:
 #'
 #' [as_points()] always returns an sfc object. The parameters are passed to
-#' as_point using [purrr::map] and then converted to sfc using
+#' as_point using [purrr::map()] and then converted to sfc using
 #' [sf::st_as_sfc()]. The ... parameters must include a crs, otherwise the crs
 #' will be NA for the resulting sfc object.
 #'
@@ -63,7 +63,6 @@ as_point <- function(..., to = "POINT") {
 #' @rdname as_point
 #' @name as_points
 #' @export
-#' @importFrom purrr map
 #' @importFrom sf st_as_sfc st_cast
 as_points <- function(..., to = "POINT", call = caller_env()) {
   params <- list2(...)
@@ -223,7 +222,7 @@ as_lines <- function(..., to = "LINESTRING") {
 #' @name as_polygons
 #' @rdname as_point
 #' @export
-#' @importFrom purrr map_dfr map_lgl
+#' @importFrom purrr map_dfr
 as_polygons <- function(..., to = "POLYGON") {
   params <- list2(...)
   crs <- NULL
@@ -234,7 +233,7 @@ as_polygons <- function(..., to = "POLYGON") {
     crs <- sf::st_crs(params[[1]])
   }
 
-  if (all(purrr::map_lgl(params, ~ is_polygon(.x)))) {
+  if (all(map_lgl(params, ~ is_polygon(.x)))) {
     return(purrr::map_dfr(params, ~ as_sf(.x)))
   }
 

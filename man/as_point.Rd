@@ -58,7 +58,7 @@ vector.
 Using as_points:
 
 \code{\link[=as_points]{as_points()}} always returns an sfc object. The parameters are passed to
-as_point using \link[purrr:map]{purrr::map} and then converted to sfc using
+as_point using \code{\link[purrr:map]{purrr::map()}} and then converted to sfc using
 \code{\link[sf:st_as_sfc]{sf::st_as_sfc()}}. The ... parameters must include a crs, otherwise the crs
 will be NA for the resulting sfc object.
 

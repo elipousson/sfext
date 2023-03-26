@@ -25,7 +25,7 @@ alpha_to_int <- function(x,
                          n = 1,
                          quiet = TRUE,
                          call = parent.frame()) {
-  check_nchar(x, n, call = call)
+  static_check_nchar(x, n, call = call)
   x[x %in% dict] <- seq_along(dict)[dict %in% x]
   as_integer(x, quiet)
 }
@@ -98,7 +98,7 @@ as_numbered_labels <- function(x,
 
     if (length(cols) == 2) {
       num_col <- cols[2]
-      check_name(x, cols[1])
+      static_check_name(x, cols[1])
       x_col <- x[, cols[1]]
     }
 
@@ -112,7 +112,7 @@ as_numbered_labels <- function(x,
 
   if (str_detect(labels, " ")) {
     start <- str_extract(labels, "(?<= ).+$")
-    check_nchar(start, n = 1)
+    static_check_nchar(start, n = 1)
     labels <- str_extract(labels, "^.+(?= )")
     labels <- tolower(labels)
     if (str_detect(start, "[A-Z]")) {
@@ -171,52 +171,6 @@ as_roman <- function(x, quiet = TRUE) {
   }
 
   utils::as.roman(x)
-}
-
-#' @noRd
-check_if <- function(condition, message = NULL, call = parent.frame()) {
-  if (isTRUE(condition)) {
-    return(invisible(NULL))
-  }
-
-  stop(
-    message,
-    call. = call
-  )
-}
-
-#' @noRd
-check_name <- function(x, name = NULL, call = parent.frame()) {
-  check_if(
-    condition = has_all_names(x, name),
-    message = paste0(
-      "`x` must have ", plural_words("name", length(name), after = " "), name,
-      ", but ", combine_words(name[!(name %in% names(x))]), " are all missing."
-    ),
-    call = call
-  )
-}
-
-#' @noRd
-check_nchar <- function(x, n = 1, ..., call = parent.frame()) {
-  num_char <- unique(nchar(x[!is.na(x)], ...))
-
-  message <- num_char
-
-  if (length(num_char) > 1) {
-    message <- paste("a range from", min(num_char), "to", max(num_char))
-  }
-
-  message <- paste0(
-    "All objects in `x` must have ", n, plural_words(" character", n),
-    ", not ", message, "."
-  )
-
-  check_if(
-    condition = is.null(n) | all(n == num_char),
-    message = message,
-    call = call
-  )
 }
 
 #' Combine multiple words into a single string
@@ -621,13 +575,64 @@ set_start_number <- function(x, start = NULL, labels = "arabic") {
   x + (start - 1)
 }
 
+#' @name static_check_if
+#' @rdname static_check
+#' @noRd
+static_check_if <- function(condition, message = NULL, call = parent.frame()) {
+  if (isTRUE(condition)) {
+    return(invisible(NULL))
+  }
+
+  stop(
+    message,
+    call. = call
+  )
+}
+
+#' @name static_check_name
+#' @rdname static_check
+#' @noRd
+static_check_name <- function(x, name = NULL, call = parent.frame()) {
+  static_check_if(
+    condition = has_all_names(x, name),
+    message = paste0(
+      "`x` must have ", plural_words("name", length(name), after = " "), name,
+      ", but ", combine_words(name[!(name %in% names(x))]), " are all missing."
+    ),
+    call = call
+  )
+}
+
+#' @name static_check_nchar
+#' @rdname static_check
+#' @noRd
+static_check_nchar <- function(x, n = 1, ..., call = parent.frame()) {
+  num_char <- unique(nchar(x[!is.na(x)], ...))
+
+  message <- num_char
+
+  if (length(num_char) > 1) {
+    message <- paste("a range from", min(num_char), "to", max(num_char))
+  }
+
+  message <- paste0(
+    "All objects in `x` must have ", n, plural_words(" character", n),
+    ", not ", message, "."
+  )
+
+  static_check_if(
+    condition = is.null(n) | all(n == num_char),
+    message = message,
+    call = call
+  )
+}
+
 #'
 #' @name str_add_fileext
 #' @rdname str_fileext
-#' @param fileext File extension string
 #' @noRd
 str_add_fileext <- function(string, fileext = NULL) {
-  if (!is.null(fileext) & all(has_fileext(string, fileext))) {
+  if (is.null(fileext) || !is.null(fileext) && all(has_fileext(string, fileext))) {
     return(string)
   }
 
@@ -635,7 +640,55 @@ str_add_fileext <- function(string, fileext = NULL) {
     string <- str_remove_fileext(string)
   }
 
-  paste0(string, ".", fileext)
+  str_c(string, ".", fileext)
+}
+
+#' Join multiple strings into a single string
+#'
+#' Dependency-free drop-in alternative for `stringr::str_c()`.
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param ... One or more character vectors.
+#'   Zero length arguments are removed.
+#'   Short arguments are recycled to the length of the longest.
+#'
+#'   Like most other R functions, missing values are "infectious":
+#'   whenever a missing value is combined with another string
+#'   the result will always be missing.
+#'   Use `str_replace_na()` to convert `NA` to "NA"
+#'
+#' @param sep String to insert between input vectors.
+#'
+#' @param collapse
+#'   Optional string used to combine input vectors into single string.
+#'
+#' @return If `collapse = NULL` (the default) a character vector
+#'   with length equal to the longest input string.
+#'   If collapse is non-`NULL`, a character vector of length 1.
+#' @noRd
+str_c <- function(..., sep = "", collapse = NULL) {
+  stopifnot(
+    "`sep` must be a single string, not a character vector." = length(sep) == 1,
+    "`collapse` must be a single string or `NULL`, not a character vector." =
+      length(collapse) == 1 || is.null(collapse)
+  )
+
+  strings <- Filter(function(x) !is.null(x), list(...))
+
+  if (length(strings) == 0 || any(lengths(strings) == 0)) {
+    if (length(collapse) == 0) return(character(0))
+    return("")
+  }
+
+  max_length <- max(lengths(strings))
+
+  result <- lapply(strings, rep_len, length.out = max_length)
+  result <- do.call(cbind, result)
+  result <- apply(result, 1, paste, collapse = sep)
+  result <- paste(result, collapse = collapse)
+
+  result
 }
 
 #' Detect the presence or absence of a pattern in a string
@@ -661,17 +714,13 @@ str_add_fileext <- function(string, fileext = NULL) {
 #' @return A logical vector.
 #' @noRd
 str_detect <- function(string, pattern, negate = FALSE) {
-  is_fixed <- inherits(pattern, "fixed")
-  ignore.case <- isTRUE(attr(pattern, "options")$case_insensitive)
+  if (length(string) == 0 || length(pattern) == 0) return(logical(0))
 
-  if (length(string) == 0 || length(pattern) == 0) {
-    return(logical(0))
-  }
+  is_fixed <- inherits(pattern, "stringr_fixed")
 
   indices <- Vectorize(grep, c("pattern", "x"), USE.NAMES = FALSE)(
     pattern,
     x = string,
-    ignore.case = ignore.case,
     perl = !is_fixed,
     fixed = is_fixed,
     invert = negate
@@ -705,32 +754,22 @@ str_detect <- function(string, pattern, negate = FALSE) {
 #'   followed by one column for each capture group.
 #' @noRd
 str_extract <- function(string, pattern) {
-  ignore.case <- isTRUE(attr(pattern, "options")$case_insensitive)
-  is_fixed <- !ignore.case && inherits(pattern, "fixed")
+  if (length(string) == 0 || length(pattern) == 0) return(character(0))
 
-  if (length(string) == 0 || length(pattern) == 0) {
-    return(character(0))
-  }
+  is_fixed <- inherits(pattern, "stringr_fixed")
 
   result <- Map(
     function(string, pattern) {
-      if (is.na(string) || is.na(pattern)) {
-        return(NA_character_)
-      }
+      if (is.na(string) || is.na(pattern)) return(NA_character_)
 
       regmatches(
         x = string,
         m = regexpr(
-          pattern = pattern,
-          text = string,
-          ignore.case = ignore.case,
-          perl = !is_fixed,
-          fixed = is_fixed
+          pattern = pattern, text = string, perl = !is_fixed, fixed = is_fixed
         )
       )
     },
-    string, pattern,
-    USE.NAMES = FALSE
+    string, pattern, USE.NAMES = FALSE
   )
 
   result[lengths(result) == 0] <- NA_character_
@@ -744,10 +783,8 @@ str_extract_fileext <- function(string, fileext = NULL) {
   if (is.null(fileext)) {
     fileext <- "[a-zA-Z0-9]+"
   }
-  regmatches(
-    string,
-    regexpr(paste0("(?<=\\.)", fileext, "$(?!\\.)"), string, perl = TRUE)
-    )
+
+  str_extract(string, paste0("(?<=\\.)", fileext, "$(?!\\.)"))
 }
 
 #' Duplicate and concatenate strings within a character vector
@@ -773,7 +810,9 @@ str_extract_fileext <- function(string, fileext = NULL) {
 #'
 #' @return A character vector.
 #' @noRd
-str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE) {
+str_pad <- function(
+    string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE
+) {
   if (!is.numeric(width)) {
     return(string[NA])
   }
@@ -789,7 +828,8 @@ str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ",
   pad_width <- width - string_width
   pad_width[pad_width < 0] <- 0
 
-  switch(side,
+  switch(
+    side,
     "left" = paste0(strrep(pad, pad_width), string),
     "right" = paste0(string, strrep(pad, pad_width)),
     "both" = paste0(
@@ -821,18 +861,10 @@ str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ",
 #' @return A character vector.
 #' @noRd
 str_remove <- function(string, pattern) {
-  ignore.case <- isTRUE(attr(pattern, "options")$case_insensitive)
-  is_fixed <- !ignore.case && inherits(pattern, "fixed")
-
-  sub <- Vectorize(sub, c("pattern", "x"), USE.NAMES = FALSE)
-
-  sub(
-    pattern,
-    replacement = "",
-    x = string,
-    ignore.case = ignore.case,
-    perl = !is_fixed,
-    fixed = is_fixed
+  if (length(string) == 0 || length(pattern) == 0) return(character(0))
+  is_fixed <- inherits(pattern, "stringr_fixed")
+  Vectorize(sub, c("pattern", "x"), USE.NAMES = FALSE)(
+    pattern, replacement = "", x = string, perl = !is_fixed, fixed = is_fixed
   )
 }
 
@@ -864,6 +896,24 @@ tosentence <- function(x) {
 # Imported from pkg:stringstatic
 # ======================================================================
 
+#' Control regex matching behavior
+#'
+#' Dependency-free drop-in alternative for `stringr::regex()`.
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param pattern Pattern to modify behavior.
+#' @param ignore_case Should case differences be ignored in the match?
+#' @param multiline
+#'   If `TRUE`, `$` and `^` match the beginning and end of each line.
+#'   If `FALSE`, the default, only match the start and end of the input.
+#' @param comments
+#'   If `TRUE`, white space and comments beginning with `#` are ignored.
+#'   Escape literal spaces with `\\`.
+#' @param dotall If `TRUE`, `.` will also match line terminators.
+#'
+#' @return An integer vector.
+#' @noRd
 regex <- function(
 	pattern,
 	ignore_case = FALSE,
@@ -890,6 +940,28 @@ regex <- function(
 	structure(pattern, class = c("stringr_regex", "stringr_pattern", "character"))
 }
 
+#' Detect the presence or absence of a pattern in a string
+#'
+#' Dependency-free drop-in alternative for `stringr::str_detect()`.
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param string Input vector.
+#'   Either a character vector, or something coercible to one.
+#'
+#' @param pattern Pattern to look for.
+#'
+#'   The default interpretation is a regular expression,
+#'   as described in [base::regex].
+#'   Control options with [regex()].
+#'
+#'   Match a fixed string (i.e. by comparing only bytes), using [fixed()].
+#'   This is fast, but approximate.
+#'
+#' @param negate If `TRUE`, return non-matching elements.
+#'
+#' @return A logical vector.
+#' @noRd
 str_detect <- function(string, pattern, negate = FALSE) {
 	if (length(string) == 0 || length(pattern) == 0) return(logical(0))
 
@@ -908,6 +980,28 @@ str_detect <- function(string, pattern, negate = FALSE) {
 	result
 }
 
+#' Extract matching patterns from a string
+#'
+#' Dependency-free drop-in alternative for `stringr::str_extract()`.
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param string Input vector.
+#'   Either a character vector, or something coercible to one.
+#'
+#' @param pattern Pattern to look for.
+#'
+#'   The default interpretation is a regular expression,
+#'   as described in [base::regex].
+#'   Control options with [regex()].
+#'
+#'   Match a fixed string (i.e. by comparing only bytes), using [fixed()].
+#'   This is fast, but approximate.
+#'
+#' @return A character matrix.
+#'   The first column is the complete match,
+#'   followed by one column for each capture group.
+#' @noRd
 str_extract <- function(string, pattern) {
 	if (length(string) == 0 || length(pattern) == 0) return(character(0))
 
@@ -931,15 +1025,71 @@ str_extract <- function(string, pattern) {
 	unlist(result)
 }
 
+#' Remove matched patterns in a string
+#'
+#' Dependency-free drop-in alternative for `stringr::str_remove()`.
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param string Input vector.
+#'   Either a character vector, or something coercible to one.
+#'
+#' @param pattern Pattern to look for.
+#'
+#'   The default interpretation is a regular expression,
+#'   as described in [base::regex].
+#'   Control options with [regex()].
+#'
+#'   Match a fixed string (i.e. by comparing only bytes), using [fixed()].
+#'   This is fast, but approximate.
+#'
+#' @return A character vector.
+#' @noRd
 str_remove <- function(string, pattern) {
+	if (length(string) == 0 || length(pattern) == 0) return(character(0))
 	is_fixed <- inherits(pattern, "stringr_fixed")
 	Vectorize(sub, c("pattern", "x"), USE.NAMES = FALSE)(
 		pattern, replacement = "", x = string, perl = !is_fixed, fixed = is_fixed
 	)
 }
 
+#' Replace matched patterns in a string
+#'
+#' Dependency-free drop-in alternative for `stringr::str_replace()`.
+#'
+#' @source Adapted from the [stringr](https://stringr.tidyverse.org/) package.
+#'
+#' @param string Input vector.
+#'   Either a character vector, or something coercible to one.
+#'
+#' @param pattern Pattern to look for.
+#'
+#'   The default interpretation is a regular expression,
+#'   as described in [base::regex].
+#'   Control options with [regex()].
+#'
+#'   Match a fixed string (i.e. by comparing only bytes), using [fixed()].
+#'   This is fast, but approximate.
+#'
+#' @param replacement A character vector of replacements.
+#'   Should be either length one, or the same length as `string` or `pattern`.
+#'   References of the form `\1`, `\2`, etc. will be replaced with the contents
+#'   of the respective matched group (created by `()`).
+#'
+#'   To replace the complete string with `NA`,
+#'   use `replacement = NA_character_`.
+#'
+#'   Using a function for `replacement` is not yet supported.
+#'
+#' @return A character vector.
+#' @noRd
 str_replace <- function(string, pattern, replacement) {
+	if (length(string) == 0 || length(pattern) == 0 || length(replacement) == 0) {
+		return(character(0))
+	}
+
 	is_fixed <- inherits(pattern, "stringr_fixed")
+
 	Vectorize(sub, c("pattern", "replacement", "x"), USE.NAMES = FALSE)(
 		pattern, replacement, x = string, perl = !is_fixed, fixed = is_fixed
 	)

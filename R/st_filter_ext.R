@@ -15,7 +15,7 @@
 #'   [sf::st_intersects()]; see details for [sf::st_filter()] for more options.
 #' @param type Character string passed to type argument of [sf::st_is()]
 #'   to filter features to only those matching the specified geometry type.
-#' @param list.ok If `TRUE`, x can be a list of `sf`, `sfc`, or `bbox` objects.
+#' @param allow_list If `TRUE`, x can be a list of `sf`, `sfc`, or `bbox` objects.
 #'   If `FALSE`, only `sf`, `sfc`, or `bbox` objects are supported. Defaults to
 #'   `TRUE`.
 #' @inheritDotParams sf::st_filter -x -y
@@ -32,16 +32,16 @@ st_filter_ext <- function(x,
                           crs = NULL,
                           .predicate = sf::st_intersects,
                           type = NULL,
-                          list.ok = TRUE,
+                          allow_list = TRUE,
                           ...) {
-  if (is.null(y)) {
+  if (is_null(y)) {
     if (!is.null(type)) {
       return(st_filter_geom_type(transform_sf(x, crs = crs), type = type))
     }
     return(transform_sf(x, crs = crs))
   }
 
-  if (is_sf_list(x, ext = TRUE) && list.ok) {
+  if (is_sf_list(x, ext = TRUE) && is_true(allow_list)) {
     x <-
       map(
         x,
@@ -54,7 +54,7 @@ st_filter_ext <- function(x,
           crs = crs,
           .predicate = sf::st_intersects,
           type = type,
-          list.ok = list.ok
+          allow_list = allow_list
         )
       )
 

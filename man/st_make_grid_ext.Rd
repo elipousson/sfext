@@ -35,7 +35,7 @@ vector or sf object.}
 buffer distance. e.g. if the diagonal distance is 3000 meters and the
 "diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
 provided.}
-    \item{\code{list.ok}}{If \code{TRUE}, allow sf list objects as an input and use
+    \item{\code{allow_list}}{If \code{TRUE}, allow sf list objects as an input and use
 \code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the
 list to return as a new sf list object.}
     \item{\code{asp}}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or

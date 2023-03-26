@@ -109,7 +109,7 @@ check_starts_with <- function(x = NULL,
 #' If x is an `sf` object invisibly return TRUE. If not, return an error with [cli::cli_abort]
 #'
 #' @inheritParams is_sf
-#' @param list.ok If `TRUE`, return `TRUE` if x is an sf list or, if ext is also
+#' @param allow_list If `TRUE`, return `TRUE` if x is an sf list or, if ext is also
 #'   `TRUE`, a list of sf, sfc, or bbox objects. Defaults to `FALSE`.
 #' @param arg Used internally to create better error messages; defaults to
 #'   [rlang::caller_arg].
@@ -121,24 +121,23 @@ check_starts_with <- function(x = NULL,
 check_sf <- function(x,
                      arg = caller_arg(x),
                      allow_null = FALSE,
-                     list.ok = FALSE,
+                     allow_list = FALSE,
                      ext = FALSE,
                      call = caller_env(),
                      ...) {
   rlang::check_required(x, arg = arg, call = call)
   check_null(x, arg, allow_null)
 
-  list.ok <- list.ok && is_sf_list(x, named = FALSE, ext, allow_null)
+  allow_list <- is_true(allow_list) && is_sf_list(x, named = FALSE, ext, allow_null)
 
-  if (is_sf(x, ext, allow_null) || list.ok) {
+  if (is_sf(x, ext, allow_null) || is_true(allow_list)) {
     return(invisible(TRUE))
   }
 
   sf <- "sf"
-
-  if (isTRUE(ext)) {
+  if (is_true(ext)) {
     sf <- c(sf, "sfc", "bbox")
-  } else if (is.character(ext)) {
+  } else if (is_character(ext)) {
     sf <- c(sf, ext)
   }
 

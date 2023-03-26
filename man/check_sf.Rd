@@ -8,7 +8,7 @@ check_sf(
   x,
   arg = caller_arg(x),
   allow_null = FALSE,
-  list.ok = FALSE,
+  allow_list = FALSE,
   ext = FALSE,
   call = caller_env(),
   ...
@@ -22,7 +22,7 @@ check_sf(
 
 \item{allow_null}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
 
-\item{list.ok}{If \code{TRUE}, return \code{TRUE} if x is an sf list or, if ext is also
+\item{allow_list}{If \code{TRUE}, return \code{TRUE} if x is an sf list or, if ext is also
 \code{TRUE}, a list of sf, sfc, or bbox objects. Defaults to \code{FALSE}.}
 
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or

@@ -112,7 +112,6 @@ st_center <- function(x,
 #' @export
 #' @importFrom sf st_is_longlat st_inscribed_circle st_geometry st_dimension
 #'   st_set_geometry
-#' @importFrom purrr discard
 st_square <- function(x,
                       scale = 1,
                       rotate = 0,

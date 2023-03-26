@@ -30,12 +30,11 @@
 #' @param single_side If `TRUE`, single-sided buffers are returned for linear
 #'   geometries, in which case negative dist values give buffers on the
 #'   right-hand side, positive on the left.
-#' @param list.ok If `TRUE`, allow sf list objects as an input and use
+#' @param allow_list If `TRUE`, allow sf list objects as an input and use
 #'   [purrr::map()] to apply the provided parameters to each object within the
 #'   list to return as a new sf list object.
 #' @param ... additional parameters passed to [sf::st_buffer()]
 #' @export
-#' @importFrom purrr map
 #' @importFrom sf st_is_longlat st_crs st_transform st_bbox st_buffer
 #' @importFrom units set_units drop_units
 st_buffer_ext <- function(x,
@@ -46,9 +45,9 @@ st_buffer_ext <- function(x,
                           end_style = NULL,
                           join_style = NULL,
                           single_side = FALSE,
-                          list.ok = TRUE,
+                          allow_list = TRUE,
                           ...) {
-  if (is_sf_list(x, ext = TRUE) && list.ok) {
+  if (is_sf_list(x, ext = TRUE) && is_true(allow_list)) {
     x <-
       map(
         x,
@@ -62,8 +61,6 @@ st_buffer_ext <- function(x,
     return(x)
   }
 
-  # check_sf(x, ext = TRUE)
-
   # If bbox, convert to sfc
   if (is_bbox(x)) {
     x <- sf_bbox_to_sfc(x)
@@ -74,6 +71,8 @@ st_buffer_ext <- function(x,
   if (is.null(dist) && is.null(diag_ratio)) {
     return(x)
   }
+
+  check_sf(x, ext = "sfc")
 
   # If longlat, save crs and transform to suggested crs
   is_lonlat <- sf::st_is_longlat(x)

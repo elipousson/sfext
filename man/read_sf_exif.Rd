@@ -2,14 +2,12 @@
 % Please edit documentation in R/read_sf_exif.R
 \name{read_sf_exif}
 \alias{read_sf_exif}
-\alias{write_exif}
-\alias{write_exif_from}
-\alias{write_exif_keywords}
 \title{Read EXIF metadata to create a simple feature object or write
 EXIF metadata to image files}
 \usage{
 read_sf_exif(
   path = NULL,
+  fileext = NULL,
   filetype = NULL,
   bbox = NULL,
   sort = NULL,
@@ -17,38 +15,14 @@ read_sf_exif(
   geometry = TRUE,
   ...
 )
-
-write_exif(
-  path,
-  filetype = NULL,
-  title = NULL,
-  author = NULL,
-  date = NULL,
-  keywords = NULL,
-  description = NULL,
-  args = NULL,
-  overwrite = TRUE,
-  append_keywords = FALSE
-)
-
-write_exif_from(
-  path,
-  filetype = NULL,
-  from,
-  .id = "name",
-  tag = "keywords",
-  join = NULL,
-  overwrite = TRUE
-)
 }
 \arguments{
 \item{path}{A path to folder or file.}
 
-\item{filetype}{The file extension or file type; defaults to \code{NULL}.}
+\item{fileext, filetype}{File extension or file type. filetype is used if
+fileext is \code{NULL}.}
 
-\item{bbox}{Optional bounding box to crop returned file (excluding images
-with location data outside the bounding box). If bbox is provided the
-returned data will match the crs of the bbox.}
+\item{bbox}{Bounding box to filter by.}
 
 \item{sort}{Column name for variable to sort by passed to \code{\link[=sort_features]{sort_features()}}.
 Currently supports "lon", "lat", or "filename". Defaults to \code{NULL}.}
@@ -56,48 +30,10 @@ Currently supports "lon", "lat", or "filename". Defaults to \code{NULL}.}
 \item{tags}{Optional list of EXIF tags to read from files. Must include GPS
 tags to create an \code{sf} object.}
 
-\item{geometry}{If \code{TRUE} (defualt), return a simple feature object. If
+\item{geometry}{If \code{TRUE} (default), return a simple feature object. If
 \code{FALSE}, return a data.frame.}
 
-\item{...}{Additional EXIF tags to pass to \link[exiftoolr:exif_read]{exiftoolr::exif_read}}
-
-\item{title}{Title to add to file metadata with exiftoolr, Default: \code{NULL}.}
-
-\item{author}{Author to add to file metadata with exiftoolr, Default: \code{NULL}.}
-
-\item{date}{Date to add to file metadata with exiftoolr (not currently
-working), Default: \code{NULL}.}
-
-\item{keywords}{Keyword(s) added to file metadata with with exiftoolr,
-Default: \code{NULL}.}
-
-\item{description}{description to add to ImageDescription EXIF tag, XMP-dc
-Description tag, and IPTC Caption-Abstract tag.}
-
-\item{args}{Alternate arguments passed to \code{\link[exiftoolr:exif_call]{exiftoolr::exif_call()}}. If args
-is not \code{NULL}, title, author, date, and keywords are ignored; defaults to
-\code{NULL}.}
-
-\item{overwrite}{If \code{TRUE}, overwrite any existing EXIF metadata present in the
-provided fields; defaults to \code{TRUE}}
-
-\item{append_keywords}{If \code{TRUE}, append keywords to existing keywords. If
-\code{FALSE} (default), replace existing keywords with the provided values.}
-
-\item{from}{A sf object or list of sf objects where each object has a column
-with a name matching the .id parameter. The attribute value in this column
-are used to assign the tag parameter to the file at the provided path based
-on the spatial relationship set by join. For example, from may be boundary
-data used to assign keywords based on photo locations.}
-
-\item{.id}{Column name in from with the values to use for tag values.}
-
-\item{tag}{EXIF tag to update, supported options include "keywords", "title",
-or "description".}
-
-\item{join}{geometry predicate function; defaults to \code{NULL}, set to
-\link[sf:geos_binary_pred]{sf::st_intersects} if from contains only POLYGON or MULTIPOLYGON objects
-or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if from contains other types.}
+\item{...}{Additional EXIF tags to pass to \code{\link[exiftoolr:exif_read]{exiftoolr::exif_read()}}}
 }
 \description{
 \code{read_sf_exif()} read EXIF data from folder of files and, geometry is \code{TRUE}
