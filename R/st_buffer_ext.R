@@ -229,6 +229,7 @@ dist_unit_lab <- function(x, to = NULL) {
 
 #' @rdname st_buffer_ext
 #' @name st_edge
+#' @export
 #' @importFrom sf st_difference
 st_edge <- function(x,
                     dist = NULL,

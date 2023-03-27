@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
-The goal of sfext is to extend existing functions from the {sf} package and offer a range of additional options for working with simple feature objects, bounding boxes, and data frame objects with coordinates or other spatial information.
+The goal of sfext is to extend existing functions from the [{sf} package](https://r-spatial.github.io/sf/) and offer a range of additional options for working with simple feature objects, bounding boxes, and data frame objects with coordinates or other spatial information.
 
 ## Installation
 
@@ -33,40 +33,56 @@ You can install the development version of sfext like so:
 # pak::pkg_install("elipousson/sfext")
 ```
 
-## Examples
+## Usage
 
 ```{r setup}
-library(ggplot2)
 library(sfext)
-
-theme_set(theme_void())
 ```
 
-Get data with read_sf_ext and related functions:
+### Extending existing {sf} functions
+
+`{sfext}` is built around existing sf functions but designed to offer greater flexibility around both inputs and outputs. For example, `read_sf_ext()` is a wrapper for `sf::read_sf()` and offers a similar functionality:
 
 ```{r}
-nc <- read_sf_ext(path = system.file("shape/nc.shp", package = "sf"))
+nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
 ```
 
-Combine data with st_union_ext:
+However, `read_sf_ext()` also supports URLs for Google Sheets, FeatureLayers, data included with an installed package, and a variety of other sources. The function also supports an optional bounding box filter.
+
+
+```{r}
+read_sf_ext("https://carto.nationalmap.gov/arcgis/rest/services/govunits/MapServer/29", bbox = as_bbox(nc))
+```
+
+`st_union_ext()` is nearly identical to `sf::st_union()` but optionally preserve a name column (collapsing the values of that column into a single string): 
 
 ```{r}
 random_id <- sample(nrow(nc), size = 8)
+
 nc_union <- st_union_ext(nc[random_id, ], name_col = "NAME")
 
-ggplot() +
-  geom_sf(data = nc_union, aes(fill = NAME), alpha = 0.2) +
-  geom_sf_label(data = nc[random_id, ], aes(label = NAME), size = 2) +
-  theme(legend.position = "bottom")
+plot(
+  nc_union
+)
 ```
-Make grids set rows, columns, and aspect ratios using st_make_grid_ext:   
+
+`st_buffer_ext()` wraps `sf::st_buffer()` but accepts bounding box objects as an input, allows you to set the units for the buffer distance using a character string (automatically converts the buffer distance units to match the units of the input object):
+
+```{r}
+# Apply a 20 mile buffer to the unioned geometry
+plot(
+  st_buffer_ext(nc_union, dist = 20, unit = "mi")
+)
+```
+
+`st_make_grid_ext()` wraps `sf::st_make_grid()` but makes it easy to set the dimensions of the grid using rows, columns, and an overall aspect ratio:
 
 ```{r}
 # Make a 5 by 5 grid with a 8.5 by 11 aspect ratio filtered to x
 plot(
   st_make_grid_ext(
-    x = nc[24, ],
-    asp = 8.5 / 11,
+    x = nc,
+    asp = 11 / 8.5,
     ncol = 5,
     nrow = 5,
     filter = TRUE
@@ -74,3 +90,79 @@ plot(
 )
 ```
 
+Most functions that include a `crs` parameter can convert the coordinate reference system of the output (using `transform_sf()` or `sf_bbox_transform()`). The crs parameter also supports sf, sfc, or bbox inputs. Functions that include a `class` parameter can convert the class of an object using `as_sf_class()`. There are a set of functions for class conversion that typically wrap multiple sf functions with more limited input options.
+
+```{r}
+nc_bbox <- as_bbox(nc, crs = 4326)
+
+nc_bbox
+
+as_sfc(nc[1, ], crs = 3857)
+
+as_sf(nc_bbox, crs = nc)
+```
+Please note this flexibility make `{sfext}` easy to use (especially in an interactive context) but likely *not* appropriate for reproducible research. The package is being actively developed and the API may change.
+
+### Additional helper functions for `sf` objects
+
+sfext also includes several helper functions that add new features by combining functions from the {sf} package, using [affine geometry](https://r-spatial.github.io/sf/articles/sf3.html#affine-transformations), or adding features from other packages.
+
+For example, `st_edge()` combines `sf::st_buffer()` and `sf::st_difference()` to get the "edges" of any geometry.
+
+```{r}
+plot(
+  st_edge(nc, dist = 10, unit = "mi"),
+  max.plot = 1
+)
+```
+
+`st_nudge()` allows you to shift the position of an `sf` object to a new location:
+
+```{r}
+nc_nudge <- st_nudge(nc, to = nc[1, ])
+
+plot(
+  st_union_ext(
+    nc,
+    nc_nudge
+  ),
+  max.plot = 1
+)
+```
+
+`st_donut()` allows you to create donuts around existing features:
+
+```{r}
+plot(
+  st_donut(nc[c(1, 2, 3), ])
+)
+```
+
+Lastly, the package has a whole group of helper functions for bbox objects. For example, `sf_bbox_corners()` creates a sf object with POINT geometry based on the corners of a bounding box:
+
+```{r}
+plot(
+  sf_bbox_corners(
+    as_bbox(nc)
+  )
+)
+```
+
+## Related projects
+
+`{sfext}` *depends* on two other development packages:
+
+- [{papersize}](https://elipousson.github.io/papersize/): A collection of convenience functions extending grid, ggplot2, and patchwork to help in sizing plots and files for printing to paper, postcards, playing cards, and other physical media.
+- [{filenamr}](https://elipousson.github.io/filenamr/): A package to help create and modify file names and paths (that also supports reading and writing EXIF metadata).
+
+It is also *used* extensively by two other development packages:
+
+- [{getdata}](https://elipousson.github.io/getdata/): A package to make the experience of getting location data easier and more consistent across a wide variety of sources.
+- [{maplayer}](https://elipousson.github.io/maplayer/): A consistent set of functions for creating map layers for [{ggplot2}](https://ggplot2.tidyverse.org/) using simple feature data.
+
+There are *many* packages that build on sf for a variety of specialized use cases. A few worth noting include:
+
+- [{sfdep}](https://github.com/JosiahParry/sfdep): A sf and tidyverse friendly interface to the spdep package for spatial dependence.
+- [{sfnetworks}](https://github.com/luukvdmeer/sfnetworks):  Tidy Geospatial Networks in R.
+- [{sfhotspot}](https://github.com/mpjashby/sfhotspot): A set of functions to identify and understand clusters of points (typically representing the locations of places or events).
+- [{sfx}](https://seasmith.github.io/packages/sfx/): Extra ‘sf’ Simple Features manipulations.
