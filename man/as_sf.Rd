@@ -7,6 +7,7 @@
 \alias{as_sf_list}
 \alias{as_sf_class}
 \alias{as_crs}
+\alias{as_wgs84}
 \title{Convert an object to a simple feature or bounding box object}
 \usage{
 as_sf(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...)
@@ -20,6 +21,8 @@ as_sf_list(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE)
 as_sf_class(x, class = NULL, allow_null = TRUE, call = caller_env(), ...)
 
 as_crs(crs = NULL, check = FALSE, call = parent.frame())
+
+as_wgs84(x)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that can
@@ -74,4 +77,18 @@ POINT or MULTIPOINT object is passed to \code{\link[=as_bbox]{as_bbox()}} a 0.00
 is applied. If a character object is passed to \code{\link[=as_bbox]{as_bbox()}} it is passed to
 \code{\link[osmdata:getbb]{osmdata::getbb()}} using \code{format_out = "matrix"} which is converted into a
 bounding box.
+}
+\examples{
+nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
+nc[["category"]] <- sample(c("A", "B", "C", "D", "E"), nrow(nc), replace = TRUE)
+
+as_sf(nc$geometry)
+
+as_bbox(nc)
+
+as_sf_list(nc, col = "category")
+
+as_crs(nc)
+
+as_xy(nc[1,])
 }

@@ -10,6 +10,7 @@
 \alias{is_sp}
 \alias{is_coords}
 \alias{is_geo_coords}
+\alias{is_wgs84}
 \alias{is_same_crs}
 \title{What is the class or spatial attributes of this feature?}
 \usage{
@@ -28,6 +29,8 @@ is_raster(x, allow_null = FALSE)
 is_sp(x, allow_null = FALSE)
 
 is_geo_coords(x, allow_null = FALSE)
+
+is_wgs84(x)
 
 is_same_crs(x, y)
 }
@@ -58,6 +61,22 @@ What is the class or spatial attributes of this feature?
 \item \link{is_raster}: is x a \code{Raster} class object?
 \item \link{is_sp}: is x a \code{Spatial} class object of any type?
 \item \link{is_geo_coords}: is x likely a geodetic coordinate pair (a length 2 numeric vector, with a max absolute value less than or equal to 180)?
+\item \link{is_wgs84}: is x using the \href{https://en.wikipedia.org/wiki/World_Geodetic_System}{WSG84} coordinate reference system?
 \item \link{is_same_crs}: do x and y have the same coordinate reference system?
 }
+}
+\examples{
+nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
+
+is_sf(nc)
+
+is_sfc(nc$geometry)
+
+is_sf_list(list(nc[1, ], nc[2, ]))
+
+is_bbox(sf::st_bbox(nc))
+
+is_wgs84(sf::st_transform(nc, 4326))
+
+is_same_crs(nc, 4267)
 }

@@ -15,10 +15,11 @@
 #' - [is_raster]: is x a `Raster` class object?
 #' - [is_sp]: is x a `Spatial` class object of any type?
 #' - [is_geo_coords]: is x likely a geodetic coordinate pair (a length 2 numeric vector, with a max absolute value less than or equal to 180)?
+#' - [is_wgs84]: is x using the [WSG84](https://en.wikipedia.org/wiki/World_Geodetic_System) coordinate reference system?
 #' - [is_same_crs]: do x and y have the same coordinate reference system?
 #'
+#' @example examples/is_sf.R
 #' @export
-#' @md
 is_sf <- function(x, ext = FALSE, allow_null = FALSE, allow_list = FALSE) {
   classes <- "sf"
 
@@ -116,10 +117,19 @@ is_geo_coords <- function(x, allow_null = FALSE) {
   is.numeric(x) && (length(x) == 2) && (max(abs(x)) <= 180)
 }
 
+#' @name is_wgs84
+#' @rdname  is_sf
+#' @export
+is_wgs84 <- function(x) {
+  is_same_crs(x, 4326)
+}
+
 #' @name is_same_crs
 #' @rdname  is_sf
 #' @importFrom sf st_crs
 #' @export
 is_same_crs <- function(x, y) {
-  sf::st_crs(x) == sf::st_crs(y)
+  crs_x <- sf::st_crs(x)
+  crs_y <- sf::st_crs(y)
+  (crs_x == crs_y) || (crs_x$input == crs_y$input)
 }

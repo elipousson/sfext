@@ -26,9 +26,10 @@
 #' @param ... Additional parameters passed to [sf::st_bbox()] when calling
 #'   [as_bbox()] or passed to [sf::st_sf()], [sf::st_as_sf()], or [df_to_sf()]
 #'   for [as_sf()] (depending on class of x)
+#' @example examples/as_sf.R
 #' @export
-#' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf st_geometry
-#' @importFrom dplyr bind_rows rename
+#' @importFrom dplyr case_when bind_rows
+#' @importFrom sf st_sf st_sfc st_as_sfc st_bbox st_as_sf st_geometry
 as_sf <- function(x,
                   crs = NULL,
                   sf_col = "geometry",
@@ -129,7 +130,8 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
 #' @name as_sfc
 #' @rdname as_sf
 #' @export
-#' @importFrom sf st_geometry st_as_sfc
+#' @importFrom dplyr case_when
+#' @importFrom sf st_geometry st_sfc st_as_sfc
 as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
   if (is_sfc(x)) {
     return(transform_sf(x, crs = crs))
@@ -170,7 +172,11 @@ as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
 #' @export
 #' @importFrom dplyr summarize group_keys group_nest
 #' @importFrom janitor make_clean_names
-as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE) {
+as_sf_list <- function(x,
+                       nm = "data",
+                       col = NULL,
+                       crs = NULL,
+                       clean_names = TRUE) {
   check_null(x)
   check_string(col, allow_null = TRUE)
 
@@ -239,7 +245,13 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
 #' @inheritParams as_sf_list
 #' @export
 #' @importFrom dplyr mutate
-make_sf_grid_list <- function(x, style = "rect", ncol = 2, nrow = 2, .id = "grid_id", crs = NULL, ...) {
+make_sf_grid_list <- function(x,
+                              style = "rect",
+                              ncol = 2,
+                              nrow = 2,
+                              .id = "grid_id",
+                              crs = NULL,
+                              ...) {
   grid <- st_make_grid_ext(x, style = style, ncol = ncol, nrow = nrow, .id = .id, ...)
 
   x <- st_join_ext(x, grid, largest = TRUE)
@@ -267,7 +279,11 @@ make_sf_grid_list <- function(x, style = "rect", ncol = 2, nrow = 2, .id = "grid
 #' @name as_sf_class
 #' @rdname as_sf
 #' @export
-as_sf_class <- function(x, class = NULL, allow_null = TRUE, call = caller_env(), ...) {
+as_sf_class <- function(x,
+                        class = NULL,
+                        allow_null = TRUE,
+                        call = caller_env(),
+                        ...) {
   if (is.null(class) && is_true(allow_null)) {
     return(x)
   }
@@ -315,6 +331,18 @@ as_crs <- function(crs = NULL, check = FALSE, call = parent.frame()) {
     }
   )
 }
+
+#' @name as_crs
+#' @rdname as_sf
+#' @export
+as_wgs84 <- function(x) {
+  if (is_wgs84(x)) {
+    return(x)
+  }
+
+  st_transform_ext(x, 4326)
+}
+
 
 #' Convert data to a data frame with X/Y coordinate pairs
 #'
