@@ -332,7 +332,7 @@ as_crs <- function(crs = NULL, check = FALSE, call = parent.frame()) {
   )
 }
 
-#' @name as_crs
+#' @name as_wgs84
 #' @rdname as_sf
 #' @export
 as_wgs84 <- function(x) {
