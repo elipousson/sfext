@@ -8,6 +8,7 @@ reference:
   - '`write_sf_ext`'
   - '`write_sf_svg`'
   - '`read_sf_exif`'
+  - '`write_exif_from`'
   - '`get_data_dir`'
 - title: Check and convert sf, sfc, and bbox objects
   contents:
