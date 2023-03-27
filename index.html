@@ -87,7 +87,7 @@
 </div>
 <!-- badges: start -->
 
-<p>The goal of sfext is to extend existing functions from the {sf} package and offer a range of additional options for working with simple feature objects, bounding boxes, and data frame objects with coordinates or other spatial information.</p>
+<p>The goal of sfext is to extend existing functions from the <a href="https://r-spatial.github.io/sf/" class="external-link">{sf} package</a> and offer a range of additional options for working with simple feature objects, bounding boxes, and data frame objects with coordinates or other spatial information.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -96,40 +96,222 @@
 <code class="sourceCode R"><span><span class="co"># pak::pkg_install("elipousson/sfext")</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/elipousson/sfext" class="external-link">sfext</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_void</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Get data with read_sf_ext and related functions:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/elipousson/sfext" class="external-link">sfext</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="extending-existing-sf-functions">Extending existing {sf} functions<a class="anchor" aria-label="anchor" href="#extending-existing-sf-functions"></a>
+</h3>
+<p><a href="https://github.com/elipousson/sfext" class="external-link">sfext</a> is built around existing sf functions but designed to offer greater flexibility around both inputs and outputs. For example, <code><a href="reference/read_sf_ext.html">read_sf_ext()</a></code> is a wrapper for <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf()</a></code> and offers a similar functionality:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Combine data with st_union_ext:</p>
+<code class="sourceCode R"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>However, <code><a href="reference/read_sf_ext.html">read_sf_ext()</a></code> also supports URLs for Google Sheets, FeatureLayers, data included with an installed package, and a variety of other sources. The function also supports an optional bounding box filter.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span><span class="st">"https://carto.nationalmap.gov/arcgis/rest/services/govunits/MapServer/29"</span>, bbox <span class="op">=</span> <span class="fu"><a href="reference/as_sf.html">as_bbox</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ── Downloading "National Park" from &lt;]8;;https://carto.nationalmap.gov/arcgis/rest/services/govunits/MapServer/29https://carto.nationalmap.gov/arcgis/rest/s]8;;</span></span>
+<span><span class="co">#&gt; Layer type: "Feature Layer"</span></span>
+<span><span class="co">#&gt; Geometry type: "esriGeometryPolygon"</span></span>
+<span><span class="co">#&gt; Service CRS: "EPSG:3857"</span></span>
+<span><span class="co">#&gt; Output CRS: "EPSG:3857"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Simple feature collection with 11 features and 19 fields</span></span>
+<span><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -13326920 ymin: 4005420 xmax: -7672089 ymax: 5887098</span></span>
+<span><span class="co">#&gt; Projected CRS: WGS 84 / Pseudo-Mercator</span></span>
+<span><span class="co">#&gt; First 10 features:</span></span>
+<span><span class="co">#&gt;    OBJECTID                 PERMANENT_IDENTIFIER SOURCE_FEATUREID</span></span>
+<span><span class="co">#&gt; 1      6533 2216d26b-da64-4b83-b316-449f9b44b1d0             MAPR</span></span>
+<span><span class="co">#&gt; 2      6564 7086b7cc-08b6-4a4b-8faa-5b9d94d97f4a             KIMO</span></span>
+<span><span class="co">#&gt; 3      6669 f135ee2b-e71d-4bce-8cc2-be7cfb7bbcd4             WRBR</span></span>
+<span><span class="co">#&gt; 4      6706 d9eec3c0-ae13-4ef9-a17b-dc4858cd39d4             CALO</span></span>
+<span><span class="co">#&gt; 5      6755 c248d769-1a64-4b77-a215-d4d58f361cbc             BLRI</span></span>
+<span><span class="co">#&gt; 6      6796 643dde5f-5633-4af5-b0b8-f61540ddbf61             CAHA</span></span>
+<span><span class="co">#&gt; 7      6804 bc97c677-3de2-478b-9d41-6da7ce83f29e             GRSM</span></span>
+<span><span class="co">#&gt; 8      7571 adf43046-fa1b-4bdc-8341-031e00ed799a             CUGA</span></span>
+<span><span class="co">#&gt; 9      7574 8aa2a0c5-aec3-4b30-8795-14d18265a8b8             CHAT</span></span>
+<span><span class="co">#&gt; 10     7583 7cc31c7a-dda3-4b97-9fac-006c34c5c8b1             GUCO</span></span>
+<span><span class="co">#&gt;                          SOURCE_DATASETID                 SOURCE_DATADESC</span></span>
+<span><span class="co">#&gt; 1  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020</span></span>
+<span><span class="co">#&gt; 2  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020</span></span>
+<span><span class="co">#&gt; 3  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020</span></span>
+<span><span class="co">#&gt; 4  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020</span></span>
+<span><span class="co">#&gt; 5  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020</span></span>
+<span><span class="co">#&gt; 6  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020</span></span>
+<span><span class="co">#&gt; 7  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020</span></span>
+<span><span class="co">#&gt; 8  {02A04210-8E12-46EA-89C7-B48F91616971} National Park Boundaries 9/2020</span></span>
+<span><span class="co">#&gt; 9  {02A04210-8E12-46EA-89C7-B48F91616971} National Park Boundaries 9/2020</span></span>
+<span><span class="co">#&gt; 10 {02A04210-8E12-46EA-89C7-B48F91616971} National Park Boundaries 9/2020</span></span>
+<span><span class="co">#&gt;        SOURCE_ORIGINATOR DATA_SECURITY DISTRIBUTION_POLICY     LOADDATE GNIS_ID</span></span>
+<span><span class="co">#&gt; 1  National Park Service             5                  E4 1.586355e+12 2775864</span></span>
+<span><span class="co">#&gt; 2  National Park Service             5                  E4 1.586355e+12 1223739</span></span>
+<span><span class="co">#&gt; 3  National Park Service             5                  E4 1.586355e+12 1027483</span></span>
+<span><span class="co">#&gt; 4  National Park Service             5                  E4 1.586355e+12 1000889</span></span>
+<span><span class="co">#&gt; 5  National Park Service             5                  E4 1.586355e+12 1009494</span></span>
+<span><span class="co">#&gt; 6  National Park Service             5                  E4 1.586355e+12  982628</span></span>
+<span><span class="co">#&gt; 7  National Park Service             5                  E4 1.586355e+12 1018241</span></span>
+<span><span class="co">#&gt; 8  National Park Service             5                  E4 1.602058e+12  490476</span></span>
+<span><span class="co">#&gt; 9  National Park Service             5                  E4 1.602058e+12 1688073</span></span>
+<span><span class="co">#&gt; 10 National Park Service             5                  E4 1.602058e+12  986193</span></span>
+<span><span class="co">#&gt;                                            NAME     AREASQKM FTYPE FCODE</span></span>
+<span><span class="co">#&gt; 1    Manhattan Project National Historical Park    0.4598436   674 67400</span></span>
+<span><span class="co">#&gt; 2         Kings Mountain National Military Park   15.9040186   674 67400</span></span>
+<span><span class="co">#&gt; 3             Wright Brothers National Memorial    1.7347265   674 67400</span></span>
+<span><span class="co">#&gt; 4                Cape Lookout National Seashore  115.0050251   674 67400</span></span>
+<span><span class="co">#&gt; 5                            Blue Ridge Parkway  384.0079655   674 67400</span></span>
+<span><span class="co">#&gt; 6               Cape Hatteras National Seashore  125.9856098   674 67400</span></span>
+<span><span class="co">#&gt; 7           Great Smoky Mountains National Park 2096.4740275   674 67400</span></span>
+<span><span class="co">#&gt; 8       Cumberland Gap National Historical Park   98.4687290   674 67400</span></span>
+<span><span class="co">#&gt; 9  Chattahoochee River National Recreation Area   48.0789992   674 67400</span></span>
+<span><span class="co">#&gt; 10   Guilford Courthouse National Military Park    0.9179617   674 67400</span></span>
+<span><span class="co">#&gt;    ADMINTYPE OWNERORMANAGINGAGENCY SHAPE_Length   SHAPE_Area</span></span>
+<span><span class="co">#&gt; 1          1                    13     14168.45     776550.8</span></span>
+<span><span class="co">#&gt; 2          1                    13     22120.44   23836721.4</span></span>
+<span><span class="co">#&gt; 3          1                    13      9434.39    2657056.5</span></span>
+<span><span class="co">#&gt; 4          1                    13    233295.32  171056451.0</span></span>
+<span><span class="co">#&gt; 5          1                    13   2202935.37  596234809.6</span></span>
+<span><span class="co">#&gt; 6          1                    13    345532.78  190369152.0</span></span>
+<span><span class="co">#&gt; 7          1                    13    808754.04 3178103336.6</span></span>
+<span><span class="co">#&gt; 8          1                    13    164570.70  153181997.9</span></span>
+<span><span class="co">#&gt; 9          1                    13    326590.96   70142647.4</span></span>
+<span><span class="co">#&gt; 10         1                    13     10228.17    1410140.4</span></span>
+<span><span class="co">#&gt;                                       GNIS_NAME                          geoms</span></span>
+<span><span class="co">#&gt; 1    Manhattan Project National Historical Park MULTIPOLYGON (((-9394763 42...</span></span>
+<span><span class="co">#&gt; 2         Kings Mountain National Military Park MULTIPOLYGON (((-9062982 41...</span></span>
+<span><span class="co">#&gt; 3             Wright Brothers National Memorial MULTIPOLYGON (((-8423490 43...</span></span>
+<span><span class="co">#&gt; 4                Cape Lookout National Seashore MULTIPOLYGON (((-8468201 41...</span></span>
+<span><span class="co">#&gt; 5                            Blue Ridge Parkway MULTIPOLYGON (((-9271423 42...</span></span>
+<span><span class="co">#&gt; 6               Cape Hatteras National Seashore MULTIPOLYGON (((-8415559 42...</span></span>
+<span><span class="co">#&gt; 7           Great Smoky Mountains National Park MULTIPOLYGON (((-9267417 42...</span></span>
+<span><span class="co">#&gt; 8       Cumberland Gap National Historical Park MULTIPOLYGON (((-9313282 43...</span></span>
+<span><span class="co">#&gt; 9  Chattahoochee River National Recreation Area MULTIPOLYGON (((-9359559 40...</span></span>
+<span><span class="co">#&gt; 10   Guilford Courthouse National Military Park MULTIPOLYGON (((-8886905 43...</span></span></code></pre></div>
+<p><code><a href="reference/st_union_ext.html">st_union_ext()</a></code> is nearly identical to <code><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">sf::st_union()</a></code> but optionally preserve a name column (collapsing the values of that column into a single string):</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">random_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">nc_union</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/st_union_ext.html">st_union_ext</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="va">random_id</span>, <span class="op">]</span>, name_col <span class="op">=</span> <span class="st">"NAME"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nc_union</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">NAME</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf_label</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="va">random_id</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">NAME</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not</span></span>
-<span><span class="co">#&gt; give correct results for longitude/latitude data</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"> Make grids set rows, columns, and aspect ratios using st_make_grid_ext:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">nc_union</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
+<p><code><a href="reference/st_buffer_ext.html">st_buffer_ext()</a></code> wraps <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer()</a></code> but accepts bounding box objects as an input, allows you to set the units for the buffer distance using a character string (automatically converts the buffer distance units to match the units of the input object):</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Apply a 20 mile buffer to the unioned geometry</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="reference/st_buffer_ext.html">st_buffer_ext</a></span><span class="op">(</span><span class="va">nc_union</span>, dist <span class="op">=</span> <span class="fl">20</span>, unit <span class="op">=</span> <span class="st">"mi"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
+<p><code><a href="reference/st_make_grid_ext.html">st_make_grid_ext()</a></code> wraps <code><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">sf::st_make_grid()</a></code> but makes it easy to set the dimensions of the grid using rows, columns, and an overall aspect ratio:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make a 5 by 5 grid with a 8.5 by 11 aspect ratio filtered to x</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="reference/st_make_grid_ext.html">st_make_grid_ext</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="fl">24</span>, <span class="op">]</span>,</span>
-<span>    asp <span class="op">=</span> <span class="fl">8.5</span> <span class="op">/</span> <span class="fl">11</span>,</span>
+<span>    x <span class="op">=</span> <span class="va">nc</span>,</span>
+<span>    asp <span class="op">=</span> <span class="fl">11</span> <span class="op">/</span> <span class="fl">8.5</span>,</span>
 <span>    ncol <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>    nrow <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>    filter <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
+<p>Most functions that include a <code>crs</code> parameter can convert the coordinate reference system of the output (using <code><a href="reference/misc_sf.html">transform_sf()</a></code> or <code><a href="reference/sf_bbox_misc.html">sf_bbox_transform()</a></code>). The crs parameter also supports sf, sfc, or bbox inputs. Functions that include a <code>class</code> parameter can convert the class of an object using <code><a href="reference/as_sf.html">as_sf_class()</a></code>. There are a set of functions for class conversion that typically wrap multiple sf functions with more limited input options.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nc_bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_sf.html">as_bbox</a></span><span class="op">(</span><span class="va">nc</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">nc_bbox</span></span>
+<span><span class="co">#&gt;      xmin      ymin      xmax      ymax </span></span>
+<span><span class="co">#&gt; -84.32377  33.88212 -75.45662  36.58973</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/as_sf.html">as_sfc</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, crs <span class="op">=</span> <span class="fl">3857</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Geometry set for 1 feature </span></span>
+<span><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -9099356 ymin: 4332928 xmax: -9043563 ymax: 4382074</span></span>
+<span><span class="co">#&gt; Projected CRS: WGS 84 / Pseudo-Mercator</span></span>
+<span><span class="co">#&gt; MULTIPOLYGON (((-9069486 4332928, -9077065 4338...</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/as_sf.html">as_sf</a></span><span class="op">(</span><span class="va">nc_bbox</span>, crs <span class="op">=</span> <span class="va">nc</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Simple feature collection with 1 feature and 0 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -84.32386 ymin: 33.88198 xmax: -75.45697 ymax: 36.58967</span></span>
+<span><span class="co">#&gt; Geodetic CRS:  NAD27</span></span>
+<span><span class="co">#&gt;                         geometry</span></span>
+<span><span class="co">#&gt; 1 POLYGON ((-84.32385 33.8819...</span></span></code></pre></div>
+<p>Please note this flexibility make <a href="https://github.com/elipousson/sfext" class="external-link">sfext</a> easy to use (especially in an interactive context) but likely <em>not</em> appropriate for reproducible research. The package is being actively developed and the API may change.</p>
+</div>
+<div class="section level3">
+<h3 id="additional-helper-functions-for-sf-objects">Additional helper functions for <code>sf</code> objects<a class="anchor" aria-label="anchor" href="#additional-helper-functions-for-sf-objects"></a>
+</h3>
+<p>sfext also includes several helper functions that add new features by combining functions from the {sf} package, using <a href="https://r-spatial.github.io/sf/articles/sf3.html#affine-transformations" class="external-link">affine geometry</a>, or adding features from other packages.</p>
+<p>For example, <code><a href="reference/st_buffer_ext.html">st_edge()</a></code> combines <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer()</a></code> and <code><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">sf::st_difference()</a></code> to get the “edges” of any geometry.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="reference/st_buffer_ext.html">st_edge</a></span><span class="op">(</span><span class="va">nc</span>, dist <span class="op">=</span> <span class="fl">10</span>, unit <span class="op">=</span> <span class="st">"mi"</span><span class="op">)</span>,</span>
+<span>  max.plot <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="100%"></p>
+<p><code><a href="reference/st_nudge.html">st_nudge()</a></code> allows you to shift the position of an <code>sf</code> object to a new location:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nc_nudge</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/st_nudge.html">st_nudge</a></span><span class="op">(</span><span class="va">nc</span>, to <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="reference/st_union_ext.html">st_union_ext</a></span><span class="op">(</span></span>
+<span>    <span class="va">nc</span>,</span>
+<span>    <span class="va">nc_nudge</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  max.plot <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="100%"></p>
+<p><code><a href="reference/st_misc.html">st_donut()</a></code> allows you to create donuts around existing features:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="reference/st_misc.html">st_donut</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: plotting the first 9 out of 15 attributes; use max.plot = 15 to plot</span></span>
+<span><span class="co">#&gt; all</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
+<p>Lastly, the package has a whole group of helper functions for bbox objects. For example, <code><a href="reference/sf_bbox_corners.html">sf_bbox_corners()</a></code> creates a sf object with POINT geometry based on the corners of a bounding box:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="reference/sf_bbox_corners.html">sf_bbox_corners</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/as_sf.html">as_bbox</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="100%"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="related-projects">Related projects<a class="anchor" aria-label="anchor" href="#related-projects"></a>
+</h2>
+<p><a href="https://github.com/elipousson/sfext" class="external-link">sfext</a> <em>depends</em> on two other development packages:</p>
+<ul>
+<li>
+<a href="https://elipousson.github.io/papersize/" class="external-link">{papersize}</a>: A collection of convenience functions extending grid, ggplot2, and patchwork to help in sizing plots and files for printing to paper, postcards, playing cards, and other physical media.</li>
+<li>
+<a href="https://elipousson.github.io/filenamr/" class="external-link">{filenamr}</a>: A package to help create and modify file names and paths (that also supports reading and writing EXIF metadata).</li>
+</ul>
+<p>It is also <em>used</em> extensively by two other development packages:</p>
+<ul>
+<li>
+<a href="https://elipousson.github.io/getdata/" class="external-link">{getdata}</a>: A package to make the experience of getting location data easier and more consistent across a wide variety of sources.</li>
+<li>
+<a href="https://elipousson.github.io/maplayer/" class="external-link">{maplayer}</a>: A consistent set of functions for creating map layers for <a href="https://ggplot2.tidyverse.org/" class="external-link">{ggplot2}</a> using simple feature data.</li>
+</ul>
+<p>There are <em>many</em> packages that build on sf for a variety of specialized use cases. A few worth noting include:</p>
+<ul>
+<li>
+<a href="https://github.com/JosiahParry/sfdep" class="external-link">{sfdep}</a>: A sf and tidyverse friendly interface to the spdep package for spatial dependence.</li>
+<li>
+<a href="https://github.com/luukvdmeer/sfnetworks" class="external-link">{sfnetworks}</a>: Tidy Geospatial Networks in R.</li>
+<li>
+<a href="https://github.com/mpjashby/sfhotspot" class="external-link">{sfhotspot}</a>: A set of functions to identify and understand clusters of points (typically representing the locations of places or events).</li>
+<li>
+<a href="https://seasmith.github.io/packages/sfx/" class="external-link">{sfx}</a>: Extra ‘sf’ Simple Features manipulations.</li>
+</ul>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

@@ -75,6 +75,7 @@ filtered before download or reading into memory where possible).</p>
 <span>  <span class="va">data</span>,</span>
 <span>  bbox <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  package <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pkg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fileext <span class="op">=</span> <span class="st">"gpkg"</span>,</span>
 <span>  filetype <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -200,8 +201,9 @@ filtered before download or reading into memory where possible).</p>
 provided, only returns features intersecting the bounding box.</p></dd>
 
 
-<dt>package</dt>
-<dd><p>Package name; used by <code>read_sf_pkg()</code> only.</p></dd>
+<dt>package, pkg</dt>
+<dd><p>Package name; used by <code>read_sf_pkg()</code> only. pkg is used if
+package is <code>NULL</code>.</p></dd>
 
 
 <dt>fileext</dt>

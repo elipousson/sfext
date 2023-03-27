@@ -61,7 +61,7 @@
 <span>  <span class="va">x</span>,</span>
 <span>  arg <span class="op">=</span> <span class="fu">caller_arg</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  allow_null <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  list.ok <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  allow_list <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ext <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -83,7 +83,7 @@
 <dd><p>If <code>TRUE</code> and x is <code>NULL</code>, return <code>TRUE</code>; defaults to <code>FALSE</code>.</p></dd>
 
 
-<dt>list.ok</dt>
+<dt>allow_list</dt>
 <dd><p>If <code>TRUE</code>, return <code>TRUE</code> if x is an sf list or, if ext is also
 <code>TRUE</code>, a list of sf, sfc, or bbox objects. Defaults to <code>FALSE</code>.</p></dd>
 

@@ -111,7 +111,7 @@ requested point position, or <code><a href="https://r-spatial.github.io/sf/refer
 vector.</p>
 <p>Using as_points:</p>
 <p><code>as_points()</code> always returns an sfc object. The parameters are passed to
-as_point using <a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map</a> and then converted to sfc using
+as_point using <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code> and then converted to sfc using
 <code><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">sf::st_as_sfc()</a></code>. The ... parameters must include a crs, otherwise the crs
 will be NA for the resulting sfc object.</p>
 <p>Using as_startpoint and as_endpoint:</p>

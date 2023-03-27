@@ -75,7 +75,7 @@ transformed back into the original CRS after the buffer has been applied.</p>
 <span>  end_style <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  join_style <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  single_side <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  list.ok <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  allow_list <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -128,7 +128,7 @@ geometries, in which case negative dist values give buffers on the
 right-hand side, positive on the left.</p></dd>
 
 
-<dt>list.ok</dt>
+<dt>allow_list</dt>
 <dd><p>If <code>TRUE</code>, allow sf list objects as an input and use
 <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code> to apply the provided parameters to each object within the
 list to return as a new sf list object.</p></dd>

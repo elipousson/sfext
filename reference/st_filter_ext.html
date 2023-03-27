@@ -72,7 +72,7 @@ predicate function. Returns x transformed to match crs if y is <code>NULL</code>
 <span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .predicate <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="va"><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">st_intersects</a></span>,</span>
 <span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  list.ok <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  allow_list <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -112,7 +112,7 @@ ignored.</p></dd>
 <dd><p>Geometry type.</p></dd>
 
 
-<dt>list.ok</dt>
+<dt>allow_list</dt>
 <dd><p>If <code>TRUE</code>, x can be a list of <code>sf</code>, <code>sfc</code>, or <code>bbox</code> objects.
 If <code>FALSE</code>, only <code>sf</code>, <code>sfc</code>, or <code>bbox</code> objects are supported. Defaults to
 <code>TRUE</code>.</p></dd>
