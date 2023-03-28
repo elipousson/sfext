@@ -201,7 +201,8 @@ write_exif_from <- function(path,
 
   cliExtras::cli_list_files(
     path = path,
-    text = c("v" = "Updated EXIF tag {.val {tag}} for {length(path)} file{?s}:")
+    text = c("v" = "Updated EXIF tag {.val {tag}} for {length(path)} file{?s}:"),
+    .envir = current_env()
   )
   suppressMessages(
     walk2_write_exif(path, replacement_vals, tag)
