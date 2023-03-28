@@ -20,6 +20,7 @@
 #'   `TRUE`.
 #' @inheritDotParams sf::st_filter -x -y
 #' @name st_filter_ext
+#' @example examples/st_filter_ext.R
 #' @export
 #' @importFrom sf st_intersects st_bbox st_filter st_crop
 #' @importFrom purrr map

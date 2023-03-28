@@ -27,6 +27,7 @@
 #' @param call Passed as the call parameter for [cli::cli_abort] or
 #'   [rlang::arg_match] to improve error messages when function is used
 #'   internally.
+#' @example examples/as_point.R
 #' @export
 #' @importFrom sf st_union st_centroid st_point st_cast
 as_point <- function(..., to = "POINT") {

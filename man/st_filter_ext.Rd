@@ -53,3 +53,46 @@ Extend \code{\link[sf:st_join]{sf::st_filter()}} to filter a sf list or a \code{
 options to crop, trim or erase the geometry of the input object based on a
 predicate function. Returns x transformed to match crs if y is \code{NULL}.
 }
+\examples{
+nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
+
+plot(
+  st_filter_ext(
+    nc,
+    nc[c(1:10), ]
+  ),
+  max.plot = 1
+)
+
+plot(
+  st_filter_ext(
+    nc,
+    nc[c(1:10), ],
+    crop = TRUE
+  ),
+  max.plot = 1
+)
+
+
+plot(
+  st_filter_ext(
+    nc,
+    nc[c(1:10), ],
+    erase = TRUE
+  ),
+  max.plot = 1
+)
+
+plot(
+  st_filter_ext(
+    nc,
+    sf::st_union(nc[c(1:10), ]),
+    .predicate = sf::st_disjoint
+  ),
+  max.plot = 1
+)
+
+st_filter_geom_type(nc, "POINT")
+
+st_filter_geom_type(nc, "MULTIPOLYGON")
+}

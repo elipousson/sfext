@@ -131,5 +131,11 @@ is_wgs84 <- function(x) {
 is_same_crs <- function(x, y) {
   crs_x <- sf::st_crs(x)
   crs_y <- sf::st_crs(y)
-  (crs_x == crs_y) || (crs_x$input == crs_y$input)
+  (
+    crs_x == crs_y
+  ) || (
+    !is.na(crs_x$input) &&
+      !is.na(crs_y$input) &&
+      (crs_x$input == crs_y$input)
+  )
 }

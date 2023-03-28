@@ -85,7 +85,7 @@ Create a grid with an id column and optionally a set number of columns and
 rows. This documentation is incomplete the function may change.
 }
 \examples{
-nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
+nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
 
 # Make a 2 by 2 grid across a location with a 1000 meter gutter between each cell
 plot(
