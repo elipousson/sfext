@@ -132,6 +132,71 @@ system of the original object but this should be improved in the future.</p>
 the input object.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">as_point</span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-79.40065 35.55937)</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">as_point</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xmax"</span>, <span class="st">"ymax"</span><span class="op">)</span>, bbox <span class="op">=</span> <span class="fu"><a href="as_sf.html">as_bbox</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-75.45698 36.58965)</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">as_points</span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -79.40065 ymin: 35.55937 xmax: -79.40065 ymax: 35.55937</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-79.40065 35.55937)</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">as_points</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -81.49823 ymin: 36.4314 xmax: -81.12513 ymax: 36.49111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-81.49823 36.4314)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-81.12513 36.49111)</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">nc_line</span> <span class="op">&lt;-</span> <span class="fu">as_line</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">as_points</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span>, <span class="fu">as_points</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">10</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">as_startpoint</span><span class="op">(</span><span class="va">nc_line</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘sf’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:sfext’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     st_concave_hull</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -81.49823 ymin: 36.4314 xmax: -81.49823 ymax: 36.4314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-81.49823 36.4314)</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">as_endpoint</span><span class="op">(</span><span class="va">nc_line</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -80.23429 ymin: 36.40042 xmax: -80.23429 ymax: 36.40042</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-80.23429 36.40042)</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">as_centroid</span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 100 features </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.05986 ymin: 34.07671 xmax: -75.8095 ymax: 36.49111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First 5 geometries:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-81.49823 36.4314)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-81.12513 36.49111)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-80.68573 36.41252)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-76.02719 36.40714)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-77.41046 36.42236)</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
