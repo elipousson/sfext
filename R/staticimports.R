@@ -264,6 +264,13 @@ has_fileext <- function(string = NULL, fileext = NULL, ignore.case = FALSE) {
   is_fileext_path(string, fileext, ignore.case)
 }
 
+#' @name has_min_length
+#' @rdname has_len_between
+#' @noRd
+has_min_length <- function(x, min) {
+  length(x) >= min
+}
+
 #' Do two object have an identical length?
 #'
 #' @param x,y Two strings or character vectors to compare.

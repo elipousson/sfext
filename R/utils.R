@@ -7,7 +7,7 @@
 #  is_gist_url is_gmap_url is_unit is_rds_fileext is_rda_fileext
 #  is_rdata_fileext is_excel_fileext is_csv_fileext is_geojson_fileext is_units
 #  has_fileext int_to_alpha as_numbered_labels str_add_fileext
-#  str_remove_fileext str_extract_fileext
+#  str_remove_fileext str_extract_fileext has_min_length
 
 .onLoad <- function(lib, pkg) {
   utils::data(
@@ -57,13 +57,26 @@ group_by_col <- function(data, col = NULL) {
   }
 }
 
+#' @name list_rbind
+#' @noRd
+#' @importFrom rlang zap current_env
+#' @importFrom vctrs vec_rbind
+list_rbind <- function(x, ..., names_to = rlang::zap(), ptype = NULL) {
+  vctrs::vec_rbind(!!!x, .names_to = names_to, .ptype = ptype, .error_call = current_env())
+}
+
 #' Does the data frame has a column with the same name?
 #'
 #' @name has_same_name_col
 #' @noRd
 #' @importFrom dplyr select all_of rename
 #' @importFrom cliExtras cli_yesno
-has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet = FALSE, drop = TRUE) {
+has_same_name_col <- function(x,
+                              col = NULL,
+                              prefix = "orig",
+                              ask = FALSE,
+                              quiet = FALSE,
+                              drop = TRUE) {
   if (!has_name(x, col)) {
     return(x)
   }
