@@ -62,12 +62,7 @@ exif_xwalk <-
 #' @family read_write
 #' @example examples/read_sf_exif.R
 #' @export
-#' @importFrom cli cli_abort cli_warn
-#' @importFrom purrr map_dfr
-#' @importFrom dplyr rename_with rename mutate case_when
-#' @importFrom janitor clean_names
-#' @importFrom rlang has_name
-#' @importFrom sf st_crs
+#' @importFrom filenamr read_exif
 read_sf_exif <- function(path = NULL,
                          fileext = NULL,
                          filetype = NULL,
@@ -78,7 +73,7 @@ read_sf_exif <- function(path = NULL,
                          ...) {
   geo_tags <- c("GPSLatitude", "GPSLongitude")
 
-  if (geometry && !all(geo_tags %in% tags)) {
+  if (is_true(geometry) && !all(geo_tags %in% tags)) {
     cli_bullets(
       c(
         "!" = "{.arg tags} must be include {.val {c('GPSLatitude', 'GPSLongitude')}}
@@ -97,11 +92,11 @@ read_sf_exif <- function(path = NULL,
       tags = tags
     )
 
-  if (geometry) {
+  if (is_true(geometry)) {
     data <- df_to_sf(data, from_crs = 4326, crs = bbox)
   }
 
-  if (!is.null(sort)) {
+  if (!is_null(sort)) {
     data <- sort_features(data, sort = sort)
   }
 
@@ -130,11 +125,11 @@ read_sf_exif <- function(path = NULL,
 #'   [sf::st_intersects] if from contains only POLYGON or MULTIPOLYGON objects
 #'   or [sf::st_nearest_feature] if from contains other types.
 #' @export
+#' @importFrom filenamr list_path_filenames
+#' @importFrom cliExtras cli_abort_ifnot cli_list_files
 #' @importFrom rlang has_name
-#' @importFrom dplyr pull select all_of summarize group_by
-#' @importFrom purrr map_dfr
 #' @importFrom sf st_drop_geometry st_join
-#' @importFrom cli cli_bullets
+#' @importFrom dplyr summarize group_by
 write_exif_from <- function(path,
                             fileext = NULL,
                             filetype = NULL,
@@ -144,22 +139,22 @@ write_exif_from <- function(path,
                             join = NULL,
                             overwrite = TRUE) {
   tag <- match.arg(tolower(tag), c("keywords", "title", "description"))
-
+  fileext <- fileext %||% filetype
   if (!is_sf(path)) {
     data <- read_sf_exif(
       path = path,
-      fileext = fileext,
-      filetype = filetype
+      fileext = fileext
     )
-    path <- get_path_files(path, filetype)
+    path <- filenamr::list_path_filenames(path, fileext)
   } else if (is.data.frame(path)) {
     data <- path
 
-    stopifnot(
-      rlang::has_name(data, "path")
+    cliExtras::cli_abort_ifnot(
+      "{.arg data} must have a column named {.val path}.",
+      condition = rlang::has_name(data, "path")
     )
 
-    path <- dplyr::pull(data, path)
+    path <- data[["path"]]
   }
 
   existing_vals <- data[[tag]]
@@ -171,16 +166,18 @@ write_exif_from <- function(path,
   join <- set_join_by_geom_type(from, join = join)
 
   data <-
-    purrr::map_dfr(
+    map(
       from,
       ~ sf::st_drop_geometry(
         sf::st_join(
           data,
-          dplyr::select(.x, dplyr::all_of(.id)),
+          .x[, .id],
           join = join
         )
       )
     )
+
+  data <- list_rbind(data)
 
   append_vals <-
     dplyr::summarize(
@@ -190,7 +187,7 @@ write_exif_from <- function(path,
 
   replacement_vals <- append_vals
 
-  if (!is.null(existing_vals)) {
+  if (!is_null(existing_vals)) {
     replacement_vals <-
       map2(
         existing_vals,
@@ -204,40 +201,38 @@ write_exif_from <- function(path,
     text = c("v" = "Updated EXIF tag {.val {tag}} for {length(path)} file{?s}:"),
     .envir = current_env()
   )
+
   suppressMessages(
-    walk2_write_exif(path, replacement_vals, tag)
+    walk_write_exif(path, replacement_vals, tag)
   )
 }
 
 #' Pass file path and replacement tag values to write_exif based on selected tag
 #'
 #' @noRd
-#' @importFrom purrr walk2
-walk2_write_exif <- function(path, replacement_vals, tag = "keywords") {
+walk_write_exif <- function(path, replacement_vals, tag = "keywords") {
+  path_seq <- seq_along(path)
   if (tag == "keywords") {
-    purrr::walk2(
-      path,
-      replacement_vals,
+    walk(
+      path_seq,
       ~ write_exif(
-        path = .x, keywords = .y,
+        path = path[[.x]], keywords = replacement_vals[[.x]],
         overwrite = TRUE, append_keywords = FALSE
       )
     )
   } else if (tag == "title") {
-    purrr::walk2(
-      path,
-      replacement_vals,
+    walk(
+      path_seq,
       ~ write_exif(
-        path = .x, title = .y,
+        path = path[[.x]], title = replacement_vals[[.x]],
         overwrite = TRUE
       )
     )
   } else if (tag == "description") {
-    purrr::walk2(
-      path,
-      replacement_vals,
+    walk(
+      path_seq,
       ~ write_exif(
-        path = .x, description = .y,
+        path = path[[.x]], description = replacement_vals[[.x]],
         overwrite = TRUE
       )
     )
