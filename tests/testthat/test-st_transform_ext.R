@@ -20,6 +20,18 @@ test_that("st_transform_ext works", {
     st_transform_ext(x = "A")
   )
 
+  expect_s3_class(
+    st_transform_ext(sf::st_drop_geometry(nc)),
+    "data.frame"
+  )
+
+  omerc <- st_omerc(nc, 30)
+
+  expect_identical(
+    sf::st_crs(omerc)$input,
+    "+proj=omerc +lat_0=35.559466717973 +lonc=-79.400416805857\n+datum=WGS84 +units=m +no_defs +gamma=30"
+  )
+
   # Check transform_sf helper
   expect_identical(
     transform_sf(nc, crs = NULL),

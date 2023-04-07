@@ -5,7 +5,7 @@ test_that("st_misc functions work", {
 
   expect_error(st_inscribed_square("x"))
 
-  skip_on_ci()
+  skip_if_not_installed("lwgeom")
   expect_s3_class(st_square(nc_6543), "sf")
   expect_s3_class(st_square(nc_latlon), "sf")
   expect_s3_class(st_square(nc_6543, inscribed = FALSE), "sf")
@@ -13,4 +13,5 @@ test_that("st_misc functions work", {
   expect_s3_class(st_circle(nc_6543, inscribed = TRUE), "sf")
   expect_s3_class(st_circle(nc_6543), "sf")
   expect_s3_class(st_circumscribed_circle(nc_6543), "sf")
+  expect_s3_class(st_donut(nc[ , 1]), "sf")
 })

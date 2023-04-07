@@ -9,6 +9,17 @@ test_that("st_union_ext works", {
     st_union_ext(nc, name_col = "NAME"),
     c("NAME", "geometry")
   )
+  expect_warning(
+    st_union_ext(nc, name_col = "NM")
+  )
+  expect_s3_class(
+    st_union_ext(sf::st_bbox(nc[, 1]), nc[, 2]$geometry),
+    "sfc"
+  )
+  expect_s3_class(
+    st_union_ext(nc[, 1], name_col = NULL),
+    "sf"
+  )
   expect_named(
     st_union_ext(nc, name_col = NULL, label = "NC"),
     c("label", "geometry")
