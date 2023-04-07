@@ -51,9 +51,14 @@ test_that("write_sf_ext works", {
     expect_true(
       file.exists("nc.rda")
     )
+  })
+})
 
-    skip_if_not_installed("ggplot2")
-    write_sf_ext(
+test_that("write_sf_svg works", {
+  skip_if_not_installed("ggplot2")
+
+  withr::with_tempdir({
+    write_sf_svg(
       nc,
       filename = "nc.svg"
     )
