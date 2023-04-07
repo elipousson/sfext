@@ -207,8 +207,8 @@ package is <code>NULL</code>.</p></dd>
 
 
 <dt>fileext</dt>
-<dd><p>File type or extension. Optional if filename or path include a
-file extension.</p></dd>
+<dd><p>File extension. If supplied to <code><a href="https://elipousson.github.io/filenamr/reference/get_data_dir.html" class="external-link">list_path_filenames()</a></code> and
+pattern is <code>NULL</code>, only return file names matching this extension.</p></dd>
 
 
 <dt>filetype</dt>
@@ -355,9 +355,10 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 
 <dt>method</dt>
 <dd><p>Method to be used for downloading files.  Current
-    download methods are <code>"internal"</code>, <code>"wininet"</code> (Windows
-    only) <code>"libcurl"</code>, <code>"wget"</code> and <code>"curl"</code>, and there
-    is a value <code>"auto"</code>: see ‘Details’ and ‘Note’.</p>
+    download methods are <code>"internal"</code>, <code>"libcurl"</code>,
+    <code>"wget"</code>, <code>"curl"</code> and <code>"wininet"</code> (Windows
+    only), and there is a value <code>"auto"</code>: see ‘Details’ and
+    ‘Note’.</p>
 <p>The method can also be set through the option
     <code>"download.file.method"</code>: see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a>()</code>.</p></dd>
 

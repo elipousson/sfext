@@ -114,7 +114,7 @@ a column with the same name as .id (defaults to "id").</p></dd>
 
 
 <dt>wt</dt>
-<dd><p>&lt;<code><a href="https://dplyr.tidyverse.org/reference/dplyr_data_masking.html" class="external-link">data-masking</a></code>&gt; Frequency weights.
+<dd><p>&lt;<code><a href="https://rlang.r-lib.org/reference/args_data_masking.html" class="external-link">data-masking</a></code>&gt; Frequency weights.
 Can be <code>NULL</code> or a variable:</p><ul><li><p>If <code>NULL</code> (the default), counts the number of rows in each group.</p></li>
 <li><p>If a variable, computes <code>sum(wt)</code> for each group.</p></li>
 </ul></dd>
@@ -198,7 +198,7 @@ instead of "kilometer") are also supported. Distance in units is converted
 to units matching GDAL units for x; defaults to "meter"</p></dd>
 
     <dt><code>cellsize</code></dt>
-<dd><p>target cellsize</p></dd>
+<dd><p>numeric of length 1 or 2 with target cellsize: for square or rectangular cells the width and height, for hexagonal cells the distance between opposite edges (edge length is cellsize/sqrt(3)). A length units object can be passed, or an area unit object with area size of the square or hexagonal cell.</p></dd>
 
     <dt><code>trim</code></dt>
 <dd><p>If <code>TRUE</code>, x is trimmed to y with <code><a href="st_erase.html">st_trim()</a></code>.</p></dd>
