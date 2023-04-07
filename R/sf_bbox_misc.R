@@ -81,6 +81,13 @@ sf_bbox_transform <- function(bbox, crs = NULL) {
 #' @importFrom rlang caller_env arg_match
 #' @importFrom sf st_crs st_point st_as_sfc
 sf_bbox_point <- function(bbox, point = NULL, crs = NULL, call = caller_env()) {
+  check_required(bbox)
+  # Get CRS from bbox (unless CRS is NA)
+  crs <- crs %||% sf::st_crs(bbox)
+
+  # Convert bbox to simple list
+  bbox <- as.list(bbox)
+
   point <-
     arg_match(
       point,
@@ -88,25 +95,20 @@ sf_bbox_point <- function(bbox, point = NULL, crs = NULL, call = caller_env()) {
       multiple = TRUE, error_call = call
     )
 
-  # Get CRS from bbox (unless CRS is NA)
-  crs <- crs %||% sf::st_crs(bbox)
-  # Convert bbox to simple list
-  bbox <- as.list(bbox)
-
   if (any(c("xmid", "ymid") %in% point)) {
     bbox <-
       c(
         bbox,
         list(
-          xmid = mean(c(bbox$xmax, bbox$xmin)),
-          ymid = mean(c(bbox$ymax, bbox$ymin))
+          xmid = mean(c(bbox[["xmax"]], bbox[["xmin"]])),
+          ymid = mean(c(bbox[["ymax"]], bbox[["ymin"]]))
         )
       )
   }
 
   stopifnot(
     # Check to make sure point is a pair
-    length(point) == 2,
+    has_length(point, 2),
     # Check to make sure an x,y pair is provided - not xx or yy
     sum(grepl("^x", point)) + sum(grepl("^y", point)) == 2
   )

@@ -197,10 +197,10 @@ as_sf_list <- function(x,
       if (is.null(col)) {
         x <- list(x) # coercible sf object in list length 1
       } else {
+        check_installed("tidyr")
         x <- group_by_col(data = x, col = col)
         nm <- dplyr::group_keys(x)[[col]]
-        x <- dplyr::group_nest(x, keep = TRUE)
-        x <- x$data
+        x <- tidyr::nest(x)[["data"]]
       }
     } else if (is_bbox(x) | is_sfc(x)) {
       x <- list(x)
@@ -222,15 +222,7 @@ as_sf_list <- function(x,
       nm <- janitor::make_clean_names(nm)
     }
 
-    cli_abort_ifnot(
-      c("{.arg x} and {.arg nm} must be the same length.",
-        "i" = "{.arg x} is length {.val {length(x)}}.",
-        "i" = "{.arg nm} is length {.val {length(nm)}}."
-      ),
-      condition = length(nm) == length(x)
-    )
-
-    names(x) <- nm
+    x <- rlang::set_names(x, nm)
   }
 
   st_transform_ext(x, crs = crs)

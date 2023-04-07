@@ -146,15 +146,19 @@ sf_bbox_asp <- function(bbox) {
 #'   [sf_bbox_orientation()] to describe an aspect ratio as landscape or
 #'   portrait; defaults to 0.1.
 #' @export
-#' @importFrom dplyr case_when
 sf_bbox_orientation <- function(bbox, tolerance = 0.1) {
   bbox_asp <- sf_bbox_asp(bbox)
+  check_number_decimal(tolerance)
 
-  dplyr::case_when(
-    bbox_asp > 1 + tolerance ~ "landscape",
-    bbox_asp < 1 - tolerance ~ "portrait",
-    TRUE ~ "square"
-  )
+  if (bbox_asp > (1 + tolerance)) {
+    return("landscape")
+  }
+
+  if (bbox_asp < (1 - tolerance)) {
+    return("portrait")
+  }
+
+  "square"
 }
 
 #' @name sf_bbox_check_fit
@@ -163,39 +167,30 @@ sf_bbox_orientation <- function(bbox, tolerance = 0.1) {
 #'   If dist is length 1 compare to bounding box diagonal distance. If dist is
 #'   length 2, compare to bounding box x and y distances. Return TRUE if dist
 #'   fits within bounding box or FALSE if dist exceeds bounding box limits.
+#' @export
 sf_bbox_check_fit <- function(bbox,
-                              units = NULL,
-                              dist = NULL) {
+                              dist) {
   units <- units %||% get_dist_units(bbox)
+  check_required(dist)
 
-  if (length(dist) == 2) {
-    fit_check <-
-      is_longer(
-        sf_bbox_xdist(bbox, units, drop = FALSE),
-        convert_dist_units(
-          dist = dist[[1]],
-          to = units
-        )
-      ) && is_longer(
-        sf_bbox_ydist(bbox, units, drop = FALSE),
-        convert_dist_units(
-          dist = dist[[2]],
-          to = units
-        )
-      )
-
-    return(fit_check)
+  if (has_min_length(dist, 3) || has_length(dist, 0)) {
+    cli::cli_abort(
+      "{.arg dist} must be length 1 (representing diagonal distance)
+      or 2 (with a vector of x and y distance)."
+    )
   }
 
-  stopifnot(
-    length(dist) == 1
-  )
+  dist <- convert_dist_units(dist, to = bbox, drop = FALSE)
 
-  is_longer(
-    sf_bbox_diagdist(bbox, units, drop = FALSE),
-    convert_dist_units(
-      dist = dist,
-      to = units
-    )
-  )
+  if (has_length(dist, 1)) {
+    bbox_diagdist <- sf_bbox_diagdist(bbox, drop = FALSE)
+    return(as.numeric(diff(c(dist, bbox_diagdist))) > 0)
+  }
+
+  bbox_xdist <- sf_bbox_xdist(bbox, drop = FALSE)
+  bbox_ydist <- sf_bbox_ydist(bbox, drop = FALSE)
+
+  longer_x <- as.numeric(diff(c(dist[[1]], bbox_xdist))) > 0
+  longer_y <- as.numeric(diff(c(dist[[2]], bbox_ydist))) > 0
+  longer_x && longer_y
 }

@@ -120,7 +120,7 @@ count_sf_ext <- function(data,
     )
 
   if (replace_na) {
-    rlang::check_installed("tidyr")
+    check_installed("tidyr")
     data_count <- tidyr::replace_na(data_count, rlang::set_names(list(0), name))
   } else if (!keep_na) {
     data_count <- dplyr::filter(data_count, !is.na(.data[[name]]))

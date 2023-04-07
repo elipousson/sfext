@@ -258,8 +258,7 @@ format_coords <- function(x,
 separate_coords <- function(x, coords, into = c("lon", "lat"), sep = ",") {
   into <- check_coords(x = NULL, coords = into)
 
-  rlang::check_installed("readr")
-  rlang::check_installed("tidyr")
+  check_installed(c("tidyr", "readr"))
 
   x <-
     tidyr::separate(
