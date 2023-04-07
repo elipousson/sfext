@@ -35,13 +35,19 @@ sf_bbox_dist <- function(bbox,
   check_required(from)
   check_required(to)
 
+  x <- sf_bbox_point(bbox, from, crs = NA)
+  y <- sf_bbox_point(bbox, to, crs = NA)
+
   dist <-
     sf::st_distance(
-      x = sf_bbox_point(bbox, from, crs = NA),
-      y = sf_bbox_point(bbox, to, crs = NA),
+      x = x,
+      y = y,
       by_element = by_element,
       ...
     )
+
+  # FIXME: Not sure why sf::st_distance is returning a named vector now.
+  names(dist) <- NULL
 
   units_gdal <- sf::st_crs(bbox)$units_gdal
   units <- units %||% units_gdal
@@ -59,7 +65,7 @@ sf_bbox_dist <- function(bbox,
       to = units
     )
 
-  if (is_units(dist) && drop) {
+  if (is_units(dist) && is_true(drop)) {
     return(units::drop_units(dist))
   }
 
@@ -166,17 +172,17 @@ sf_bbox_check_fit <- function(bbox,
     fit_check <-
       is_longer(
         sf_bbox_xdist(bbox, units, drop = FALSE),
-      convert_dist_units(
-        dist = dist[[1]],
-        to = units
+        convert_dist_units(
+          dist = dist[[1]],
+          to = units
+        )
+      ) && is_longer(
+        sf_bbox_ydist(bbox, units, drop = FALSE),
+        convert_dist_units(
+          dist = dist[[2]],
+          to = units
+        )
       )
-    ) && is_longer(
-      sf_bbox_ydist(bbox, units, drop = FALSE),
-      convert_dist_units(
-        dist = dist[[2]],
-        to = units
-      )
-    )
 
     return(fit_check)
   }
@@ -186,11 +192,10 @@ sf_bbox_check_fit <- function(bbox,
   )
 
   is_longer(
-      sf_bbox_diagdist(bbox, units, drop = FALSE),
-      convert_dist_units(
-        dist = dist,
-        to = units
-      )
+    sf_bbox_diagdist(bbox, units, drop = FALSE),
+    convert_dist_units(
+      dist = dist,
+      to = units
     )
+  )
 }
-
