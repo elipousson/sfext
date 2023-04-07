@@ -64,7 +64,7 @@ nc_basemap +
   geom_sf(data = nc_in_bbox, fill = "red")
 ```
 
-The second, `read_sf_url()`, that supports reading url that are already supported by `sf::read_sf` but also supports ArcGIS Feature Layers (using the [{esri2sf}](https://github.com/yonghah/esri2sf) package) and URLs for tabular data (including both CSV files and Google Sheets). Several functions also support queries based on a name and name_col value (generating a simple SQL query) based on the provided values.
+The second, `read_sf_url()`, that supports reading url that are already supported by `sf::read_sf` but also supports ArcGIS Feature Layers (using the [{esri2sf}](https://github.com/elipousson/esri2sf) package) and URLs for tabular data (including both CSV files and Google Sheets). Several functions also support queries based on a name and name_col value (generating a simple SQL query) based on the provided values.
 
 ```{r}
 sample_esri_url <- "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0"
@@ -107,13 +107,7 @@ filenamr::make_filename(
 )
 ```
 
-`write_sf_ext()` also supports the automatic creation of destination folders and the use of a package-specific cache folder created by `rappdirs::user_cache_dir()`.
-
-```{r}
-filenamr::get_data_dir(path = "example_path/to_folder", create = FALSE)
-
-filenamr::get_data_dir(cache = TRUE)
-```
+`write_sf_ext()` also supports the automatic creation of destination folders and the use of a package-specific cache folder created by `rappdirs::user_cache_dir()`. These functions are now in the `filenamr` package.
 
 ## Converting sf objects
 
@@ -187,7 +181,8 @@ glimpse(df_wkt)
 df_example_map +
   geom_sf(data = df_to_sf(df_wkt), color = "orange", fill = NA)
 ```
-The {tidygeocoder} package is also used to support conversion of address vectors or data frames.
+
+The [tidygeocoder](https://jessecambon.github.io/tidygeocoder/) package is also used to support conversion of address vectors or data frames.
 
 ```{r}
 address_to_sf(x = c("350 Fifth Avenue, New York, NY 10118"))
@@ -219,7 +214,7 @@ Other notable functions in this category include:
 
 There are also several functions that return information about the geometry of input objects. Typically, these functions bind the information as a new column to an existing sf input (and convert sfc input objects to sf results).
 
-The `get_length()` function wraps `sf::st_length` and (for POLYGON geometries only) `lwgeom::st_perimeter`:
+The `get_length()` function wraps `sf::st_length()` and (for POLYGON geometries only) `lwgeom::st_perimeter()`:
 
 ```{r}
 example_line <- as_line(as_point(nc[1, ]), as_point(nc[2, ]), crs = 4326)
@@ -227,7 +222,7 @@ example_line <- as_line(as_point(nc[1, ]), as_point(nc[2, ]), crs = 4326)
 glimpse(get_length(example_line))
 ```
 
-The `get_area()` function wraps `sf::st_area`:
+The `get_area()` function wraps `sf::st_area()`:
 
 ```{r}
 glimpse(get_area(nc[1:3, ], unit = "mi^2"))
@@ -235,7 +230,7 @@ glimpse(get_area(nc[1:3, ], unit = "mi^2"))
 
 `get_dist()` supports a more varied range of options including using the "to" parameter to define a corner or center of the input sf object bounding box.
 
-```{r, eval=FALSE}
+```{r}
 nc <- sf::st_transform(nc, 3857)
 
 # use drop = TRUE, to drop the units class and return a numeric column
