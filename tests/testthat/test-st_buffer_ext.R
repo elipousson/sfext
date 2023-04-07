@@ -27,13 +27,17 @@ test_that("st_buffer_ext works", {
   )
   # Use end_style values
   expect_s3_class(
-    st_buffer_ext(nc_line, dist = as_dist_units(4, "mile"), unit = "mile",
-                  end_style = "flat"),
+    st_buffer_ext(nc_line,
+      dist = as_dist_units(4, "mile"), unit = "mile",
+      end_style = "flat"
+    ),
     "sf"
   )
   expect_s3_class(
-    st_buffer_ext(nc_line, dist = as_dist_units(4, "mile"), unit = "mile",
-                  end_style = "flat"),
+    st_buffer_ext(nc_line,
+      dist = as_dist_units(4, "mile"), unit = "mile",
+      end_style = "flat"
+    ),
     "sf"
   )
 })

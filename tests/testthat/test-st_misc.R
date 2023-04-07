@@ -13,5 +13,5 @@ test_that("st_misc functions work", {
   expect_s3_class(st_circle(nc_6543, inscribed = TRUE), "sf")
   expect_s3_class(st_circle(nc_6543), "sf")
   expect_s3_class(st_circumscribed_circle(nc_6543), "sf")
-  expect_s3_class(st_donut(nc[ , 1]), "sf")
+  expect_s3_class(st_donut(nc[, 1]), "sf")
 })

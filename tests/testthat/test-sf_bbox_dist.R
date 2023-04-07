@@ -19,3 +19,27 @@ test_that("sf_bbox_dist functions work", {
   expect_equal(sf_bbox_asp(nc_bbox), 3.274741, tolerance = tol)
   expect_equal(sf_bbox_orientation(nc_bbox), "landscape")
 })
+
+test_that("sf_bbox_check_fit functions work", {
+  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc_bbox <- sf::st_bbox(nc)
+
+  expect_error(
+    sf_bbox_check_fit(nc_bbox)
+  )
+  expect_error(
+    sf_bbox_check_fit(nc_bbox, dist = c(1, 2, 3))
+  )
+  expect_true(
+    sf_bbox_check_fit(nc_bbox, dist = 9)
+  )
+  expect_false(
+    sf_bbox_check_fit(nc_bbox, dist = 10)
+  )
+  expect_true(
+    sf_bbox_check_fit(nc_bbox, dist = c(8, 2))
+  )
+  expect_false(
+    sf_bbox_check_fit(nc_bbox, dist = c(9, 2))
+  )
+})
