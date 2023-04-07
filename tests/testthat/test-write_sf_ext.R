@@ -56,6 +56,7 @@ test_that("write_sf_ext works", {
 
 test_that("write_sf_svg works", {
   skip_if_not_installed("ggplot2")
+  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
 
   withr::with_tempdir({
     write_sf_svg(
