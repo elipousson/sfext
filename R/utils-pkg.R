@@ -79,15 +79,10 @@ is_pkg_cachedata <- function(x, pkg, call = caller_env()) {
 #'
 #' @param pkg Name of a package.
 #' @param repo GitHub repository to use for the package.
-#' @importFrom rlang check_installed
 #' @noRd
-is_pkg_installed <- function(pkg, repo = NULL) {
-  if (requireNamespace(pkg, quietly = TRUE)) {
-    return(invisible(TRUE))
+#' @importFrom rlang check_installed
+check_dev_installed <- function(pkg = NULL, repo = NULL) {
+  if (!is.null(pkg) && !rlang::is_installed(pkg = pkg)) {
+    rlang::check_installed(pkg = repo %||% pkg)
   }
-  if (!is.null(repo)) {
-    pkg <- repo
-  }
-
-  check_installed(pkg = pkg)
 }

@@ -34,7 +34,7 @@ get_margin <- function(margin = NULL,
                        block_width = NULL,
                        header = 0,
                        footer = 0) {
-  is_pkg_installed("ggplot2")
+  check_installed("ggplot2")
 
   if (is.character(margin)) {
     margin <- margin %||% "none"

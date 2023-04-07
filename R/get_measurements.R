@@ -212,7 +212,7 @@ st_distance_ext <- get_dist
 #' @rdname get_measurements
 #' @export
 get_bearing <- function(x, dir = FALSE, keep_all = TRUE, .id = "bearing") {
-  is_pkg_installed("geosphere")
+  check_installed("geosphere")
 
   cli_abort_ifnot(
     "{.arg x} must be a {.cls sf} or {.cls sfc} object.",
