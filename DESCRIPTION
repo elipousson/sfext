@@ -19,7 +19,7 @@ Imports:
     cli,
     cliExtras (>= 0.1.0),
     dplyr,
-    filenamr (>= 0.1.0.9000),
+    filenamr (>= 0.1.0.9002),
     glue,
     janitor,
     lifecycle,
