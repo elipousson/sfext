@@ -66,7 +66,7 @@ the same number of features as x (if by_element is \code{TRUE}). If "to" is a
 character vector it must represent a valid xy pair using the following
 options: "xmin", "ymin", "xmax", "ymax", "xmid", "ymid".}
 
-\item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
+\item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc; an error is raised if \code{x} and \code{y} are not the same length. If \code{FALSE}, return the dense matrix with all pairwise distances.}
 
 \item{...}{passed on to \link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}}
 

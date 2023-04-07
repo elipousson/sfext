@@ -36,7 +36,7 @@ a column with the same name as .id (defaults to "id").}
 
 \item{largest}{logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578}
 
-\item{wt}{<\code{\link[dplyr:dplyr_data_masking]{data-masking}}> Frequency weights.
+\item{wt}{<\code{\link[rlang:args_data_masking]{data-masking}}> Frequency weights.
 Can be \code{NULL} or a variable:
 \itemize{
 \item If \code{NULL} (the default), counts the number of rows in each group.
@@ -91,7 +91,7 @@ using \link{st_filter_ext}}
 "kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
 instead of "kilometer") are also supported. Distance in units is converted
 to units matching GDAL units for x; defaults to "meter"}
-    \item{\code{cellsize}}{target cellsize}
+    \item{\code{cellsize}}{numeric of length 1 or 2 with target cellsize: for square or rectangular cells the width and height, for hexagonal cells the distance between opposite edges (edge length is cellsize/sqrt(3)). A length units object can be passed, or an area unit object with area size of the square or hexagonal cell.}
     \item{\code{trim}}{If \code{TRUE}, x is trimmed to y with \code{\link[=st_trim]{st_trim()}}.}
   }}
 }

@@ -34,7 +34,7 @@ sf_bbox_asp(bbox)
 
 sf_bbox_orientation(bbox, tolerance = 0.1)
 
-sf_bbox_check_fit(bbox, units = NULL, dist = NULL)
+sf_bbox_check_fit(bbox, dist)
 }
 \arguments{
 \item{bbox}{A \code{bbox} object.}
@@ -47,7 +47,7 @@ sf_bbox_check_fit(bbox, units = NULL, dist = NULL)
 \item{drop}{If \code{FALSE}, distance functions return with units. If \code{FALSE}
 (default), distance functions return numeric values.}
 
-\item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
+\item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc; an error is raised if \code{x} and \code{y} are not the same length. If \code{FALSE}, return the dense matrix with all pairwise distances.}
 
 \item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match} to
 improve error messages when function is used internally.}

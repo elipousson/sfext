@@ -144,8 +144,8 @@ provided, only returns features intersecting the bounding box.}
 \item{package, pkg}{Package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only. pkg is used if
 package is \code{NULL}.}
 
-\item{fileext}{File type or extension. Optional if filename or path include a
-file extension.}
+\item{fileext}{File extension. If supplied to \code{\link[filenamr:list_path_filenames]{list_path_filenames()}} and
+pattern is \code{NULL}, only return file names matching this extension.}
 
 \item{filetype}{File type supported by \code{\link[sf:st_read]{sf::read_sf()}}; Default: 'gpkg'; used
 by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data is in the package
@@ -238,9 +238,10 @@ file extension, name and file extension are both required.}
 date/time prefix; defaults to \code{NULL}.}
 
 \item{method}{Method to be used for downloading files.  Current
-    download methods are \code{"internal"}, \code{"wininet"} (Windows
-    only) \code{"libcurl"}, \code{"wget"} and \code{"curl"}, and there
-    is a value \code{"auto"}: see \sQuote{Details} and \sQuote{Note}.
+    download methods are \code{"internal"}, \code{"libcurl"},
+    \code{"wget"}, \code{"curl"} and \code{"wininet"} (Windows
+    only), and there is a value \code{"auto"}: see \sQuote{Details} and
+    \sQuote{Note}.
 
     The method can also be set through the option
     \code{"download.file.method"}: see \code{\link{options}()}.
