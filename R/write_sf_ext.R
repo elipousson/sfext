@@ -41,7 +41,6 @@
 #'  [sf::st_write()]
 #' @export
 #' @md
-#' @importFrom purrr walk walk2
 #' @importFrom sf write_sf
 write_sf_ext <- function(data,
                          name = NULL,
@@ -134,7 +133,7 @@ write_sf_list <- function(data,
                           ...) {
   fileext <- fileext %||% filetype
   if (!onefile) {
-    purrr::walk(
+    walk(
       data,
       ~ write_sf_ext(
         data = .x,
@@ -173,18 +172,18 @@ write_sf_list <- function(data,
     )
   }
 
-  purrr::walk2(
-    data,
-    names(data),
-    function(x, y) {
+  walk(
+    seq_along(data),
+    function(i) {
       layer_options <- NULL
+      y <- names(data)[[i]]
       if (has_fileext(filename, "gdb")) {
         layer_options <- glue("LAYER_ALIAS={y}")
         y <- NULL
       }
 
       sf::write_sf(
-        x,
+        data[[i]],
         dsn = filename,
         layer = y,
         layer_options = layer_options

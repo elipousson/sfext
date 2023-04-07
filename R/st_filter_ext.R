@@ -23,7 +23,6 @@
 #' @example examples/st_filter_ext.R
 #' @export
 #' @importFrom sf st_intersects st_bbox st_filter st_crop
-#' @importFrom purrr map
 #' @importFrom dplyr case_when
 st_filter_ext <- function(x,
                           y = NULL,

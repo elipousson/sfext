@@ -325,7 +325,6 @@ read_sf_query <- function(path,
 #' @rdname read_sf_ext
 #' @inheritParams readxl::read_excel
 #' @export
-
 #' @importFrom purrr map_dfr
 read_sf_excel <- function(path,
                           sheet = NULL,
