@@ -182,7 +182,7 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
     return(x_has_coords)
   }
 
-  length(x_has_coords) == length(x_coords)
+  has_same_len(x_has_coords, x_coords)
 }
 
 
@@ -191,7 +191,6 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
 #' @param keep_missing If `TRUE`, keep rows with missing coordinate values.
 #'   Defaults to `FALSE` which filters out rows with missing coordinates.
 #' @export
-#' @importFrom cli cli_inform
 format_coords <- function(x,
                           coords = c("lon", "lat"),
                           keep_missing = FALSE,
@@ -204,7 +203,7 @@ format_coords <- function(x,
 
   cli_abort_ifnot(
     "{.arg x} must be a {.cls data.frame} with columns named {.val {coords}}.",
-    condition = is.data.frame(x) && all(rlang::has_name(x, coords)),
+    condition = is.data.frame(x) && all(has_name(x, coords)),
     call = call
   )
 
@@ -230,18 +229,16 @@ format_coords <- function(x,
 
   if (has_missing_coords && !keep_missing) {
     # Exclude rows with missing coordinates
-    cli_inform(
-      "Removing {.val {n_missing_coords}} row{?s} with missing coordinates.",
-      call = call
+    cli_alert_info(
+      "Removing {.val {n_missing_coords}} row{?s} with missing coordinates."
     )
 
     return(x[!missing_coords, ])
   }
 
   if (has_missing_coords) {
-    cli_inform(
-      "{.arg x} has {.val {n_missing_coords}} row{?s} with missing coordinates.",
-      call = call
+    cli_alert_info(
+      "{.arg x} has {.val {n_missing_coords}} row{?s} with missing coordinates."
     )
   }
 
