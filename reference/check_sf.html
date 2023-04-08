@@ -59,12 +59,12 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_sf</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  arg <span class="op">=</span> <span class="fu">caller_arg</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
-<span>  allow_null <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  allow_list <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span>,</span>
 <span>  ext <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  allow_list <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  allow_null <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  arg <span class="op">=</span> <span class="fu">caller_arg</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -74,13 +74,9 @@
 <dd><p>An <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object.</p></dd>
 
 
-<dt>arg</dt>
-<dd><p>Used internally to create better error messages; defaults to
-<a href="https://rlang.r-lib.org/reference/caller_arg.html" class="external-link">rlang::caller_arg</a>.</p></dd>
-
-
-<dt>allow_null</dt>
-<dd><p>If <code>TRUE</code> and x is <code>NULL</code>, return <code>TRUE</code>; defaults to <code>FALSE</code>.</p></dd>
+<dt>ext</dt>
+<dd><p>If <code>TRUE</code>, check if x is a <code>sf</code>, <code>sfc</code>, or <code>bbox</code> class object or
+not; defaults to <code>FALSE</code>. (used by <a href="is_sf.html">is_sf</a>)</p></dd>
 
 
 <dt>allow_list</dt>
@@ -88,38 +84,21 @@
 <code>TRUE</code>, a list of sf, sfc, or bbox objects. Defaults to <code>FALSE</code>.</p></dd>
 
 
-<dt>ext</dt>
-<dd><p>If <code>TRUE</code>, check if x is a <code>sf</code>, <code>sfc</code>, or <code>bbox</code> class object or
-not; defaults to <code>FALSE</code>. (used by <a href="is_sf.html">is_sf</a>)</p></dd>
+<dt>allow_null</dt>
+<dd><p>If <code>TRUE</code> and x is <code>NULL</code>, return <code>TRUE</code>; defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt>arg</dt>
+<dd><p>An argument name as a string. This argument
+will be mentioned in error messages as the input that is at the
+origin of a problem.</p></dd>
 
 
 <dt>call</dt>
-<dd><p>The execution environment of a currently running
-function, e.g. <code>call = caller_env()</code>. The corresponding function
-call is retrieved and mentioned in error messages as the source
-of the error.</p>
-<p>You only need to supply <code>call</code> when throwing a condition from a
-helper function which wouldn't be relevant to mention in the
-message.</p>
-<p>Can also be <code>NULL</code> or a <a href="https://rlang.r-lib.org/reference/topic-defuse.html" class="external-link">defused function call</a> to
-respectively not display any call or hard-code a code to display.</p>
-<p>For more information about error calls, see <a href="https://rlang.r-lib.org/reference/topic-error-call.html" class="external-link">Including function calls in error messages</a>.</p></dd>
-
-
-<dt>...</dt>
-<dd><p>Arguments passed on to <code><a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_abort</a></code></p><dl><dt><code>message</code></dt>
-<dd><p>It is formatted via a call to <code><a href="https://cli.r-lib.org/reference/cli_bullets.html" class="external-link">cli_bullets()</a></code>.</p></dd>
-
-    <dt><code>.envir</code></dt>
-<dd><p>Environment to evaluate the glue expressions in.</p></dd>
-
-    <dt><code>.frame</code></dt>
-<dd><p>The throwing context. Used as default for
-<code>.trace_bottom</code>, and to determine the internal package to mention
-in internal errors when <code>.internal</code> is <code>TRUE</code>.</p></dd>
-
-  
-</dl></dd>
+<dd><p>The execution environment of a currently
+running function, e.g. <code>caller_env()</code>. The function will be
+mentioned in error messages as the source of the error. See the
+<code>call</code> argument of <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">abort()</a></code> for more information.</p></dd>
 
 </dl></div>
 

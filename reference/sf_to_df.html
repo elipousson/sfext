@@ -191,8 +191,10 @@ to <code>FALSE</code>.</p></dd>
 
 
 <dt>call</dt>
-<dd><p>Passed as the <a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_abort</a> to improve error messages when
-function is used internally.</p></dd>
+<dd><p>The execution environment of a currently
+running function, e.g. <code>caller_env()</code>. The function will be
+mentioned in error messages as the source of the error. See the
+<code>call</code> argument of <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">abort()</a></code> for more information.</p></dd>
 
 
 <dt>...</dt>
