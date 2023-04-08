@@ -17,6 +17,8 @@ check_sf(
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}
 
+\item{...}{Additional parameters passed to \code{\link[rlang:abort]{rlang::abort()}}.}
+
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
 not; defaults to \code{FALSE}. (used by \link{is_sf})}
 

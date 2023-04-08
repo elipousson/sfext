@@ -112,6 +112,7 @@ check_starts_with <- function(x = NULL,
 #' @param allow_list If `TRUE`, return `TRUE` if x is an sf list or, if ext is also
 #'   `TRUE`, a list of sf, sfc, or bbox objects. Defaults to `FALSE`.
 #' @inheritParams rlang::args_error_context
+#' @param ... Additional parameters passed to [rlang::abort()].
 #' @export
 check_sf <- function(x,
                      ...,
