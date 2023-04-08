@@ -1,3 +1,14 @@
+#' Is the class of this object any of the specified classes?
+#'
+#' @noRd
+is_class <- function(x, what = NULL, allow_null = FALSE) {
+  if (is.null(x) && isTRUE(allow_null)) {
+    return(TRUE)
+  }
+
+  inherits(x, what)
+}
+
 #' What is the class or spatial attributes of this feature?
 #'
 #' @param x An `sf`, `sfc`, or `bbox` object.
@@ -21,40 +32,34 @@
 #' @example examples/is_sf.R
 #' @export
 is_sf <- function(x, ext = FALSE, allow_null = FALSE, allow_list = FALSE) {
-  classes <- "sf"
-
-  if (isTRUE(ext)) {
-    classes <- c(classes, "sfc", "bbox")
-  } else if (is.character(ext)) {
-    classes <- c(classes, ext)
-  }
+  what <- .what_ext(ext)
 
   if (isFALSE(allow_list)) {
-    return(is_class(x, classes = classes, allow_null = allow_null))
+    return(is_class(x, what = what, allow_null = allow_null))
   }
 
-  is_class(x, classes = classes, allow_null = allow_null) | is_sf_list(x, ext = ext, allow_null = allow_null)
+  is_class(x, what = what, allow_null = allow_null) | is_sf_list(x, ext = ext, allow_null = allow_null)
 }
 
 #' @name is_sfg
 #' @rdname is_sf
 #' @export
 is_sfg <- function(x, allow_null = FALSE) {
-  is_class(x, classes = "sfg", allow_null = allow_null)
+  is_class(x, what = "sfg", allow_null = allow_null)
 }
 
 #' @name is_sfc
 #' @rdname is_sf
 #' @export
 is_sfc <- function(x, allow_null = FALSE) {
-  is_class(x, classes = "sfc", allow_null = allow_null)
+  is_class(x, what = "sfc", allow_null = allow_null)
 }
 
 #' @name is_bbox
 #' @rdname is_sf
 #' @export
 is_bbox <- function(x, allow_null = FALSE) {
-  is_class(x, classes = "bbox", allow_null = allow_null)
+  is_class(x, what = "bbox", allow_null = allow_null)
 }
 
 #' @rdname is_sf
@@ -92,7 +97,7 @@ is_sf_list <- function(x, named = FALSE, ext = FALSE, allow_null = FALSE) {
 #' @rdname is_sf
 #' @export
 is_raster <- function(x, allow_null = FALSE) {
-  is_class(x, classes = "RasterLayer", allow_null = allow_null)
+  is_class(x, what = "RasterLayer", allow_null = allow_null)
 }
 
 #' @name is_sp
