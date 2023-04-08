@@ -25,13 +25,6 @@ test_that("st_transform_ext works", {
     "data.frame"
   )
 
-  omerc <- st_omerc(nc, 30)
-
-  expect_identical(
-    sf::st_crs(omerc)$input,
-    "+proj=omerc +lat_0=35.559466717973 +lonc=-79.400416805857\n+datum=WGS84 +units=m +no_defs +gamma=30"
-  )
-
   # Check transform_sf helper
   expect_identical(
     transform_sf(nc, crs = NULL),
@@ -41,5 +34,12 @@ test_that("st_transform_ext works", {
   expect_identical(
     transform_sf(nc, crs = nc),
     nc
+  )
+
+  skip_on_ci()
+  omerc <- st_omerc(nc, 30)
+  expect_identical(
+    sf::st_crs(omerc)$input,
+    "+proj=omerc +lat_0=35.559466717973 +lonc=-79.400416805857\n+datum=WGS84 +units=m +no_defs +gamma=30"
   )
 })

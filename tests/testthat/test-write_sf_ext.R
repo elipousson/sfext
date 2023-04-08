@@ -48,13 +48,21 @@ test_that("write_sf_ext works", {
       filename = "nc.rda"
     )
 
+    write_sf_list(
+      list(
+        "Ashe" = nc[1, ],
+        "Alleghany" = nc[2, ]
+      ),
+      fileext = "geojson"
+    )
+
     expect_true(
-      file.exists("nc.rda")
+      file.exists("ashe.geojson") && file.exists("alleghany.geojson")
     )
   })
 })
 
-test_that("write_sf_svg works", {
+test_that("write_sf_ext works with df objects", {
   skip_if_not_installed("ggplot2")
   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
 
@@ -67,5 +75,33 @@ test_that("write_sf_svg works", {
     expect_true(
       file.exists("nc.svg")
     )
+  })
+})
+
+
+test_that("write_sf_svg works", {
+  skip_if_not_installed("ggplot2")
+  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc_df <- sf::st_drop_geometry(nc)
+
+  withr::with_tempdir({
+    write_sf_ext(
+      nc_df,
+      "nc_df.csv"
+    )
+
+    expect_true(
+      file.exists("nc_df.csv")
+    )
+
+    write_sf_ext(
+      nc_df,
+      "nc_df.xlsx"
+    )
+
+    expect_true(
+      file.exists("nc_df.xlsx")
+    )
+
   })
 })
