@@ -72,12 +72,15 @@ write_sf_ext <- function(data,
       ...
     )
 
-    return(invisible())
+    return(invisible(NULL))
   }
 
   if (has_fileext(path) && is.null(name) && is.null(filename)) {
     filename <- basename(path)
     path <- dirname(path)
+    if (path == ".") {
+      path <- NULL
+    }
   }
 
   # If data is sf object, write or cache it
@@ -134,10 +137,10 @@ write_sf_list <- function(data,
   fileext <- fileext %||% filetype
   if (!onefile) {
     walk(
-      data,
+      seq_along(data),
       ~ write_sf_ext(
-        data = .x,
-        name = names(.x),
+        data = data[[.x]],
+        name = names(data)[[.x]],
         label = label,
         prefix = prefix,
         postfix = postfix,
@@ -148,7 +151,7 @@ write_sf_list <- function(data,
       )
     )
 
-    return(invisible())
+    return(invisible(NULL))
   }
 
   filename <-
@@ -485,7 +488,6 @@ write_sf_types <- function(data,
     "rda" = readr::write_rds(x = data, file = path, ...)
   )
 }
-
 
 #' Write an sf object to an svg file
 #'
