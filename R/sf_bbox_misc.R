@@ -22,8 +22,7 @@
 #'   [sf_bbox_to_lonlat_query()] (defaults to 4326) or for resulting bounding
 #'   box ([sf_bbox_transform()]) or sfc object ([sf_bbox_point()]) (defaults to
 #'   `NULL`).
-#' @param call Passed as the error_call parameter for [rlang::arg_match] to
-#'   improve error messages when function is used internally.
+#' @inheritParams rlang::args_error_context
 #' @name sf_bbox_misc
 NULL
 

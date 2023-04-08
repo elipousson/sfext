@@ -14,8 +14,7 @@
 #'   expand the bbox by x_nudge and y_nudge. If dir is not `NULL`; absolute
 #'   values are used for x_nudge and y_nudge. Defaults to `NULL`. Optional
 #'   [sf_bbox_shift()].
-#' @param call Passed as the error_call parameter for [rlang::arg_match] to
-#'   improve error messages when function is used internally.
+#' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom rlang caller_env arg_match has_length
 sf_bbox_shift <- function(bbox,

@@ -14,8 +14,7 @@
 #'   named .id column.
 #' @param .id Name to use for vector of units provided to "y" parameter, when
 #'   "y" is bound to the "x" data frame or tibble as a new column.
-#' @param call Passed as the call parameter for [cli::cli_abort] to improve
-#'   error messages when function is used internally.
+#' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom dplyr bind_cols
 bind_units_col <- function(x,

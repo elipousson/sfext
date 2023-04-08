@@ -67,8 +67,10 @@ after converting a data frame to simple feature object; defaults to
 \item{crs}{Coordinate reference system used by the coordinates in the
 provided data frame.}
 
-\item{call}{call used to improve error messages when used internally.
-Defaults to \code{\link[rlang:stack]{rlang::caller_env()}}}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{default}{Default coordinate values; defaults to \code{c("lon", "lat")}.}
 

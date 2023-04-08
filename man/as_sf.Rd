@@ -62,9 +62,10 @@ provided.}
 \item{allow_null}{For \link{as_sf_class}, if class is \code{NULL} and allow_null is \code{TRUE},
 return x without any class conversion or checks. Defaults to \code{TRUE}.}
 
-\item{call}{Passed as the call parameter for \link[cli:cli_abort]{cli::cli_abort} or
-\link[rlang:arg_match]{rlang::arg_match} to improve error messages when function is used
-internally.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{check}{For \code{as_crs()}, if \code{TRUE}, error if crs cannot be converted to a
 valid coordinate reference system. Defaults to \code{FALSE}.}

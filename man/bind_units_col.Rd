@@ -32,8 +32,10 @@ named .id column.}
 \item{.id}{Name to use for vector of units provided to "y" parameter, when
 "y" is bound to the "x" data frame or tibble as a new column.}
 
-\item{call}{Passed as the call parameter for \link[cli:cli_abort]{cli::cli_abort} to improve
-error messages when function is used internally.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 Utility function supporting \link{get_area}, \link{get_dist}, and \link{get_bearing}.

@@ -64,8 +64,7 @@ sf_to_df <- function(x,
 #' @param y A sf object passed as y argument to [dplyr::left_join()].
 #' @param by A character vector of variables to join by passed to
 #'   [dplyr::left_join()].
-#' @param call Passed as the [cli::cli_abort] to improve error messages when
-#'   function is used internally.
+#' @inheritParams rlang::args_error_context
 #' @seealso
 #'  [ggspatial::df_spatial()]
 #'  [sf::st_as_sf()]

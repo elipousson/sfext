@@ -36,9 +36,10 @@ as_centroid(x, ...)
 \item{to}{The geometry type to return, either POINT or MULTIPOINT or
 LINESTRING or MULTILINESTRING.}
 
-\item{call}{Passed as the call parameter for \link[cli:cli_abort]{cli::cli_abort} or
-\link[rlang:arg_match]{rlang::arg_match} to improve error messages when function is used
-internally.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object.}
 }

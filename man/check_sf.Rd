@@ -6,51 +6,33 @@
 \usage{
 check_sf(
   x,
-  arg = caller_arg(x),
-  allow_null = FALSE,
-  allow_list = FALSE,
+  ...,
   ext = FALSE,
-  call = caller_env(),
-  ...
+  allow_list = FALSE,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
 )
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}
 
-\item{arg}{Used internally to create better error messages; defaults to
-\link[rlang:caller_arg]{rlang::caller_arg}.}
-
-\item{allow_null}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
+\item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
+not; defaults to \code{FALSE}. (used by \link{is_sf})}
 
 \item{allow_list}{If \code{TRUE}, return \code{TRUE} if x is an sf list or, if ext is also
 \code{TRUE}, a list of sf, sfc, or bbox objects. Defaults to \code{FALSE}.}
 
-\item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
-not; defaults to \code{FALSE}. (used by \link{is_sf})}
+\item{allow_null}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
 
-\item{call}{The execution environment of a currently running
-function, e.g. \code{call = caller_env()}. The corresponding function
-call is retrieved and mentioned in error messages as the source
-of the error.
+\item{arg}{An argument name as a string. This argument
+will be mentioned in error messages as the input that is at the
+origin of a problem.}
 
-You only need to supply \code{call} when throwing a condition from a
-helper function which wouldn't be relevant to mention in the
-message.
-
-Can also be \code{NULL} or a \link[rlang:topic-defuse]{defused function call} to
-respectively not display any call or hard-code a code to display.
-
-For more information about error calls, see \ifelse{html}{\link[rlang:topic-error-call]{Including function calls in error messages}}{\link[rlang:topic-error-call]{Including function calls in error messages}}.}
-
-\item{...}{
-  Arguments passed on to \code{\link[cli:cli_abort]{cli::cli_abort}}
-  \describe{
-    \item{\code{message}}{It is formatted via a call to \code{\link[cli:cli_bullets]{cli_bullets()}}.}
-    \item{\code{.envir}}{Environment to evaluate the glue expressions in.}
-    \item{\code{.frame}}{The throwing context. Used as default for
-\code{.trace_bottom}, and to determine the internal package to mention
-in internal errors when \code{.internal} is \code{TRUE}.}
-  }}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 If x is an \code{sf} object invisibly return TRUE. If not, return an error with \link[cli:cli_abort]{cli::cli_abort}

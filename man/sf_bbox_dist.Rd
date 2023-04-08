@@ -49,8 +49,10 @@ sf_bbox_check_fit(bbox, dist)
 
 \item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc; an error is raised if \code{x} and \code{y} are not the same length. If \code{FALSE}, return the dense matrix with all pairwise distances.}
 
-\item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match} to
-improve error messages when function is used internally.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{...}{passed on to \link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}}
 

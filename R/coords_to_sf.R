@@ -24,8 +24,7 @@
 #'   `FALSE`.
 #' @param crs Coordinate reference system used by the coordinates in the
 #'   provided data frame.
-#' @param call call used to improve error messages when used internally.
-#'   Defaults to [rlang::caller_env()]
+#' @inheritParams rlang::args_error_context
 #' @seealso [is_geo_coords()]
 #' @export
 #' @importFrom sf st_as_sf

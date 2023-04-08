@@ -14,7 +14,7 @@
 #'   coordinates north of Anchorage, Alaska or south of New Zealand.
 #' @param quiet If `TRUE`, suppress alert messages when converting a lat/lon
 #'   coordinate pair to a lon/lat pair. Defaults to `FALSE`.
-#' @param call Passed to [cli::cli_abort()] to improve error messages.
+#' @inheritParams rlang::args_error_context
 #' @inheritDotParams sf::st_sfc -crs
 #' @seealso [is_geo_coords()]
 #' @export

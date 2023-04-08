@@ -38,8 +38,10 @@ box (\code{\link[=sf_bbox_transform]{sf_bbox_transform()}}) or sfc object (\code
 
 \item{point}{point to find npc coords for center}
 
-\item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match} to
-improve error messages when function is used internally.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{coords}{Column names with coordinates for query. e.g. \code{c("X", "Y")} or
 \code{c("longitude", "latitude")} (default). Used by \code{\link[=sf_bbox_to_lonlat_query]{sf_bbox_to_lonlat_query()}}

@@ -46,10 +46,12 @@ objects; "diagdist", "xdist", "ydist". defaults to \code{NULL}.}
 \item{diff}{If \code{TRUE}, return results from \link{is_diff_dist} or \link{is_diff_area};
 if \code{FALSE}, return logical indicator; defaults to \code{FALSE}}
 
-\item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match} to
-improve error messages when function is used internally.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
-\item{...}{Additional parameters passed to all.equal}
+\item{...}{Additional parameters passed to \code{\link[=all.equal]{all.equal()}}}
 
 \item{allow_null}{If allow_null is \code{TRUE}, allow x to return a \code{NULL} value;
 if \code{FALSE}, error on \code{NULL} values.}

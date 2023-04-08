@@ -17,8 +17,7 @@
 #' @param drop If `FALSE`, distance functions return with units. If `FALSE`
 #'   (default), distance functions return numeric values.
 #' @inheritParams sf::st_distance
-#' @param call Passed as the error_call parameter for [rlang::arg_match] to
-#'   improve error messages when function is used internally.
+#' @inheritParams rlang::args_error_context
 #' @family dist
 #' @export
 #' @importFrom sf st_distance st_crs

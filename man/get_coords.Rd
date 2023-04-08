@@ -37,8 +37,10 @@ object x; defaults to \code{TRUE}.}
 \item{drop}{If \code{TRUE} and x is an sf object, drop the geometry Default:
 \code{TRUE}.}
 
-\item{call}{Passed as the call parameter for \code{\link[rlang:arg_match]{rlang::arg_match()}} to improve
-error messages when function is used internally.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 An extended version of \code{\link[sf:st_coordinates]{sf::st_coordinates()}} that supports binding

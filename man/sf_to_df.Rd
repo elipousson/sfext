@@ -75,8 +75,10 @@ to \code{FALSE}.}
 \item{by}{A character vector of variables to join by passed to
 \code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.}
 
-\item{call}{Passed as the \link[cli:cli_abort]{cli::cli_abort} to improve error messages when
-function is used internally.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{...}{Other parameters passed onto methods.}
 }

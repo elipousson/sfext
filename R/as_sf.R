@@ -20,9 +20,7 @@
 #'   of addresses to an sf object using [df_to_sf] or [address_to_sf]. If
 #'   `FALSE`, only spatial objects (bbox, sfg, sfc, sf list, raster, or sp
 #'   objects) can be converted. Defaults to `TRUE`.
-#' @param call Passed as the call parameter for [cli::cli_abort] or
-#'   [rlang::arg_match] to improve error messages when function is used
-#'   internally.
+#' @inheritParams rlang::args_error_context
 #' @param ... Additional parameters passed to [sf::st_bbox()] when calling
 #'   [as_bbox()] or passed to [sf::st_sf()], [sf::st_as_sf()], or [df_to_sf()]
 #'   for [as_sf()] (depending on class of x)
@@ -390,7 +388,7 @@ pluck_len1 <- function(x) {
     return(x[[1]])
   }
 
-  return(x)
+  x
 }
 
 #' Get a list of start and end points for an object
@@ -414,7 +412,7 @@ as_start_end_points <- function(x, crs = 4326, class = "data.frame") {
     pts$end <- sf_to_df(pts$end, crs = crs)
   }
 
-  return(pts)
+  pts
 }
 
 #' Create a LINESTRING based on start and end points

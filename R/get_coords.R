@@ -20,8 +20,7 @@
 #'   `NULL`.
 #' @param drop If `TRUE` and x is an sf object, drop the geometry Default:
 #'   `TRUE`.
-#' @param call Passed as the call parameter for [rlang::arg_match()] to improve
-#'   error messages when function is used internally.
+#' @inheritParams rlang::args_error_context
 #' @rdname get_coords
 #' @aliases st_coords
 #' @export

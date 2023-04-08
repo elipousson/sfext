@@ -33,8 +33,10 @@ expand the bbox by x_nudge and y_nudge. If dir is not \code{NULL}; absolute
 values are used for x_nudge and y_nudge. Defaults to \code{NULL}. Optional
 \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
 
-\item{call}{Passed as the error_call parameter for \link[rlang:arg_match]{rlang::arg_match} to
-improve error messages when function is used internally.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 \itemize{
