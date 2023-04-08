@@ -111,43 +111,69 @@ check_starts_with <- function(x = NULL,
 #' @inheritParams is_sf
 #' @param allow_list If `TRUE`, return `TRUE` if x is an sf list or, if ext is also
 #'   `TRUE`, a list of sf, sfc, or bbox objects. Defaults to `FALSE`.
-#' @param arg Used internally to create better error messages; defaults to
-#'   [rlang::caller_arg].
-#' @inheritParams cli::cli_abort
-#' @inheritDotParams cli::cli_abort
+#' @inheritParams rlang::args_error_context
 #' @export
-#' @importFrom rlang check_required
-#' @importFrom cliExtras cls_vec
 check_sf <- function(x,
-                     arg = caller_arg(x),
-                     allow_null = FALSE,
-                     allow_list = FALSE,
+                     ...,
                      ext = FALSE,
-                     call = caller_env(),
-                     ...) {
-  rlang::check_required(x, arg = arg, call = call)
-  check_null(x, arg, allow_null)
-
-  allow_list <- is_true(allow_list) && is_sf_list(x, named = FALSE, ext, allow_null)
-
-  if (is_sf(x, ext, allow_null) || is_true(allow_list)) {
-    return(invisible(TRUE))
+                     allow_list = FALSE,
+                     allow_null = FALSE,
+                     arg = caller_arg(x),
+                     call = caller_env()) {
+  if (!missing(x)) {
+    is_sf_obj <- .check_is_sf_ext(
+      x,
+      ext = ext,
+      allow_list = allow_list,
+      allow_null = allow_null
+    )
+    if (is_sf_obj) {
+      return(invisible(NULL))
+    }
   }
 
-  sf <- "sf"
-  if (is_true(ext)) {
-    sf <- c(sf, "sfc", "bbox")
-  } else if (is_character(ext)) {
-    sf <- c(sf, ext)
-  }
+  what <- .what_ext(ext)
 
-  cli_abort(
-    c("{.arg {arg}} must be {cliExtras::cls_vec(sf)} class.",
-      "i" = "{.arg {arg}} is {.cls {class(x)}}."
-    ),
-    call = call,
-    ...
+  stop_input_type(
+    x,
+    what = glue("a {oxford_comma(what)} object"),
+    ...,
+    allow_null = allow_null,
+    arg = arg,
+    call = call
   )
+}
+
+#' @noRd
+.what_ext <- function(ext = FALSE) {
+  what <- "sf"
+  if (is_true(ext)) {
+    c(what, "sfc", "bbox")
+  } else if (is_character(ext)) {
+    c(what, ext)
+  } else {
+    what
+  }
+}
+
+#' @noRd
+.check_is_sf_ext <- function(x,
+                             ext,
+                             allow_list,
+                             allow_null) {
+  if (is_sf(x, ext = ext)) {
+    return(TRUE)
+  }
+
+  if (allow_list && is_sf_list(x, ext = ext)) {
+    return(TRUE)
+  }
+
+  if (allow_null && is_null(x)) {
+    return(TRUE)
+  }
+
+  FALSE
 }
 
 #' Check if the data.frame object has the required paper columns
