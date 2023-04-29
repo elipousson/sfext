@@ -1,5 +1,7 @@
 #' Get standard paper and image sizes
 #'
+#' `r lifecycle::badge('superseded')`
+#'
 #' Use the "paper" parameter (matching name from [paper_sizes]), standard
 #' (optionally including series and size) parameter, or width, height and units.
 #' May return multiple paper sizes depending on parameters.
@@ -51,6 +53,7 @@ get_paper <- function(paper = "letter",
                       bbox = NULL,
                       margin = NULL,
                       ...) {
+  lifecycle::signal_stage("superseded", "sfext::get_paper()", "papersize::get_page_size()")
   type <-
     dplyr::case_when(
       is.data.frame(paper) && check_df_paper(paper, ext = FALSE) ~ "paper",
@@ -208,6 +211,8 @@ get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
 #' @rdname get_social_image
 #' @export
 get_social_image <- function(image = NULL, platform = NULL, format = NULL, orientation = NULL) {
+  lifecycle::signal_stage("superseded", "sfext::get_social_image()", "papersize::get_social_size()")
+
   image_sizes <- paper_sizes[paper_sizes$type == "social", ]
 
   if (!is.null(platform)) {

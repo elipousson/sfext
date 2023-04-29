@@ -59,11 +59,13 @@ passed in these parameters if paper has only a single row. margin is returned as
 Data frame with one or more paper/image sizes.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+}
+\details{
 Use the "paper" parameter (matching name from \link{paper_sizes}), standard
 (optionally including series and size) parameter, or width, height and units.
 May return multiple paper sizes depending on parameters.
-}
-\details{
+
 If margin is provided, a block_width, block_height, and block_asp are
 calculated and included as columns in the returned data frame.
 
