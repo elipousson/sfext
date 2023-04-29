@@ -4,21 +4,18 @@
 #' @param by Column name to use for grouping and combining geometry, Default:
 #'   `NULL`
 #' @param centroid If `TRUE`, use centroids for geometry of x, Default: `FALSE`
-#' @inheritParams concaveman::concaveman
-#' @seealso
-#'  \code{\link[concaveman]{concaveman}}
-#' @rdname st_concave_hull
+#' @inheritParams sf::st_concave_hull
+#' @rdname st_concave_hull_ext
 #' @export
-#' @importFrom sf st_centroid st_combine st_cast st_make_valid st_set_geometry
+#' @importFrom sf st_centroid st_combine st_cast st_make_valid st_concave_hull
+#'   st_set_geometry
 #' @importFrom dplyr summarise
 #' @importFrom purrr map_dfr
-st_concave_hull <- function(x,
-                            by = NULL,
-                            centroid = FALSE,
-                            concavity = 2,
-                            length_threshold = 0) {
-  rlang::check_installed("concaveman")
-
+st_concave_hull_ext <- function(x,
+                                by = NULL,
+                                centroid = FALSE,
+                                ratio = 0.5,
+                                allow_holes = FALSE) {
   check_sf(x, ext = "sfc")
 
   return_sfc <- FALSE
@@ -55,10 +52,10 @@ st_concave_hull <- function(x,
     purrr::map_dfr(
       as_sfc(x),
       ~ sf::st_make_valid(
-        concaveman::concaveman(
-          points = as_sf(.x),
-          concavity = concavity,
-          length_threshold = length_threshold
+        sf::st_concave_hull(
+          x = as_sf(.x),
+          ratio = ratio,
+          allow_holes = allow_holes
         )
       )
     )

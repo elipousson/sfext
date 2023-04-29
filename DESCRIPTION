@@ -30,7 +30,6 @@ Imports:
     units,
     vctrs
 Suggests: 
-    concaveman,
     covr,
     esri2sf (>= 0.1.1),
     exiftoolr,

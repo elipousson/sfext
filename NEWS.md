@@ -1,5 +1,9 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# sfext development
+
+* Replace st_concave_hull with `st_concave_hull_ext()`
+
 # sfext 0.1.1 (2023-03-28)
 
 * Add `is_wgs84()` + `as_wgs84()` functions.
