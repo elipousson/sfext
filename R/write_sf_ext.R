@@ -499,7 +499,8 @@ write_sf_types <- function(data,
 #' @inheritParams grDevices::svg
 #' @inheritDotParams grDevices::svg
 #' @export
-#' @importFrom rlang check_required
+#' @importFrom grDevices svg dev.off
+#' @importFrom sf st_geometry
 write_sf_svg <- function(data,
                          filename = NULL,
                          path = NULL,
@@ -528,12 +529,12 @@ write_sf_svg <- function(data,
     height = height,
     antialias = "none",
     ...
-    )
+  )
 
   # Code of the plot
   plot(sf::st_geometry(data))
 
-  dev.off()
+  grDevices::dev.off()
 
   invisible(data)
 }

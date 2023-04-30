@@ -262,18 +262,10 @@ is_same_units <- function(x, y = NULL) {
   x <- as_units_attr(x)
   y <- as_units_attr(y)
 
-  in_opts <- c("in", "inch", "inches", "international_inch", "international_inches")
-  ft_opts <- c("ft", "foot", "feet", "international_foot", "international_feet")
-  yd_opts <- c("yd", "yard", "yards", "international_yard", "international_yards")
+  nums <- c(x$numerator, y$numerator)
+  dens <- c(x$denominator, y$denominator)
 
-  nums <- c(x[["numerator"]], y[["numerator"]])
-  dens <- c(x[["denominator"]], y[["denominator"]])
-
-  if (any(
-    c(all(nums %in% in_opts), all(nums %in% ft_opts), all(nums %in% yd_opts))
-  ) && (
-    all(dens == character(0)) | (dens[1] == dens[2])
-  )) {
+  if (all(dens == character(0)) || (dens[1] == dens[2])) {
     return(TRUE)
   }
 
