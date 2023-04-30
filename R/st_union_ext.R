@@ -83,9 +83,8 @@ st_union_ext <- function(x,
     )
   } else {
     as_sf(
-      dplyr::tibble(
-        "{.sf_col}" := sfc
-      )
+      sfc,
+      sf_col = .sf_col %||% "geometry"
     )
   }
 }
@@ -104,9 +103,7 @@ st_union_by <- function(x, ..., .sf_col = NULL) {
         sf::st_make_valid(x),
         ...
       ),
-      "{.sf_col}" := {
-        .sf_col
-      }
+      "{.sf_col}" := {.sf_col}
     )
 
   sf::st_make_valid(x)
