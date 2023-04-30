@@ -40,7 +40,6 @@
 #' @seealso
 #'  [sf::st_write()]
 #' @export
-#' @md
 #' @importFrom sf write_sf
 write_sf_ext <- function(data,
                          name = NULL,
@@ -58,7 +57,7 @@ write_sf_ext <- function(data,
                          onefile = FALSE,
                          ...) {
   fileext <- fileext %||% filetype
-  if (is_sf_list(data, named = TRUE)) {
+  if (is_sf_list(data) && is_named(data)) {
     write_sf_list(
       data,
       label = label,
@@ -75,7 +74,7 @@ write_sf_ext <- function(data,
     return(invisible(NULL))
   }
 
-  if (has_fileext(path) && is.null(name) && is.null(filename)) {
+  if (has_fileext(path) && is_null(name) && is_null(filename)) {
     filename <- basename(path)
     path <- dirname(path)
     if (path == ".") {
@@ -169,7 +168,7 @@ write_sf_list <- function(data,
   multilayer_fileext <- c("gpkg", "gdb")
 
   if (!has_fileext(filename, multilayer_fileext)) {
-    cli::cli_abort(
+    cli_abort(
       "{.arg fileext} must be {.or {multilayer_fileext}}
       when {.code onefile = TRUE}"
     )
@@ -265,7 +264,7 @@ write_sf_gist <- function(data,
                           browse = FALSE,
                           token = Sys.getenv("GITHUB_PAT")) {
   fileext <- fileext %||% filetype
-  rlang::check_installed("gistr")
+  check_installed("gistr")
 
   filename <-
     filenamr::make_filename(
@@ -291,7 +290,7 @@ write_sf_gist <- function(data,
   description <-
     description %||% glue("A {fileext} format spatial data file.")
 
-  cli_inform(c("v" = "Creating gist for {.file filename}"))
+  cli_alert_success("Creating gist for {.file filename}")
 
   suppressWarnings(
     gistr::gist_create(
@@ -324,9 +323,9 @@ write_sf_gsheet <- function(data,
                             ask = FALSE,
                             key = NULL,
                             ...) {
-  rlang::check_installed("googlesheets4")
+  check_installed("googlesheets4")
 
-  if (!is.null(filename)) {
+  if (!is_null(filename)) {
     filename <- str_remove_fileext(filename, fileext = "gsheet")
   }
 
@@ -376,14 +375,14 @@ write_sf_types <- function(data,
                            ...) {
   fileext <- fileext %||% filetype
   # Get working directory if path is NULL
-  # if (is.null(path)) {
+  # if (is_null(path)) {
   #   path <- getwd()
   #   cli_inform("Setting path to current working directory: {.file {path}}")
   # }
 
   # Set filename from path if ends with a fileext
   if (has_fileext(path)) {
-    if (!is.null(filename)) {
+    if (!is_null(filename)) {
       # FIXME: Is this just an internal error or can this be triggered by a
       # user?
       cli_abort("A {.arg filename} *or* {.arg path} with a filename must be
@@ -409,7 +408,7 @@ write_sf_types <- function(data,
     overwrite = overwrite
   )
 
-  if (!is.null(path)) {
+  if (!is_null(path)) {
     # Put path and filename back together
     path <- file.path(path, filename)
   } else {
@@ -431,7 +430,7 @@ write_sf_types <- function(data,
       data <- st_transform_ext(data, 4326)
     }
 
-    if (has_fileext(filename, "gpkg") & !is.null(description)) {
+    if (has_fileext(filename, "gpkg") & !is_null(description)) {
       layer_options <- glue("DESCRIPTION={description}")
     }
   } else {
@@ -464,9 +463,9 @@ write_sf_types <- function(data,
 
   # Check if readr is installed
   if (type %in% c("sf_csv", "df_csv", "rda")) {
-    rlang::check_installed("readr")
+    check_installed("readr")
   } else if (type %in% c("sf_excel", "df_excel")) {
-    rlang::check_installed("openxlsx")
+    check_installed("openxlsx")
     path <- str_add_fileext(path, "xlsx")
   }
 
@@ -491,118 +490,50 @@ write_sf_types <- function(data,
 
 #' Write an sf object to an svg file
 #'
-#' [write_sf_svg()] uses [ggplot2::geom_sf()] and [ggplot2::theme_void()] to
-#' create a simple plot of an sf object and then save the plot as an svg file
-#' using [ggplot2::ggsave()]. This function is convenient for working with
-#' designers or other collaborators interested in using spatial data outside of
-#' R or a desktop GIS application.
+#' [write_sf_svg()] uses [plot()] and [svg()] to create a simple plot of an sf
+#' object geometry. This function is convenient for working with designers or
+#' other collaborators interested in using spatial data outside of R or a
+#' desktop GIS application.
 #'
 #' @name write_sf_svg
-#' @inheritParams ggplot2::geom_sf
-#' @inheritDotParams ggplot2::geom_sf
-#' @inheritParams ggplot2::ggsave
+#' @inheritParams grDevices::svg
+#' @inheritDotParams grDevices::svg
 #' @export
-#' @importFrom rlang check_installed check_required
+#' @importFrom rlang check_required
 write_sf_svg <- function(data,
                          filename = NULL,
                          path = NULL,
-                         mapping = NULL,
                          ...,
-                         scale = 1,
-                         width = NA,
-                         height = NA,
-                         units = c("in", "cm", "mm", "px"),
-                         dpi = 300) {
-  rlang::check_installed("ggplot2")
-  rlang::check_required(data)
+                         width = 10,
+                         height = 10) {
+  check_required(data)
 
-  if (is.null(filename) && has_fileext(path)) {
+  if (is_null(filename) && has_fileext(path)) {
     filename <- basename(path)
     path <- dirname(path)
   }
 
+  if (!is_null(path)) {
+    filename <- file.path(path, filename)
+  }
+
   cli_abort_ifnot(
     "{.arg filename} or {.arg path} must include a {.val svg} file extension.",
-    condition = (str_extract_fileext(filename) == "svg")
+    condition = has_fileext(filename, "svg")
   )
 
-  if (is.null(mapping)) {
-    mapping <- ggplot2::aes()
-  }
-
-  plot <- ggplot2::ggplot(data = data) +
-    ggplot2::geom_sf(mapping = mapping, ...) +
-    ggplot2::theme_void()
-
-  ggplot2::ggsave(
+  grDevices::svg(
     filename = filename,
-    plot = plot,
-    device = "svg",
-    path = path,
-    scale = scale,
     width = width,
     height = height,
-    units = units,
-    dpi = dpi
-  )
-}
-
-
-
-#' Check if a file exists and remove file or error
-#'
-#' @noRd
-#' @importFrom rlang caller_env is_interactive
-check_file_overwrite <- function(filename = NULL,
-                                 path = NULL,
-                                 overwrite = TRUE,
-                                 ask = TRUE,
-                                 call = caller_env()) {
-  filename <- filename %||% basename(path)
-  filepath <- filename
-
-  if (!is.null(path)) {
-    if (has_fileext(path) && is.null(filename)) {
-      filepath <- path
-      path <- dirname(path)
-    } else {
-      filepath <- file.path(path, filename)
-    }
-  }
-
-  cli_abort_ifnot(
-    "{.arg filename} or {.arg path} must include a valid file type.",
-    condition = has_fileext(filepath),
-    call = call
-  )
-
-  if (file.exists(filepath)) {
-    if (!overwrite && ask && rlang::is_interactive()) {
-      overwrite <-
-        cli_yesno(
-          c(
-            "i" = "A file with the same name exists in {.path {path}}",
-            ">" = "Do you want to overwrite {.val {filename}}?"
-          )
-        )
-    }
-
-    cli_abort_ifnot(
-      c(
-        "!" = "{.file {filename}} can't be saved.",
-        "i" = "A file with the same name already exists.
-        Set {.code overwrite = TRUE} to remove."
-      ),
-      condition = overwrite,
-      call = call
+    antialias = "none",
+    ...
     )
 
-    cli_inform(
-      c("v" = "Removing {.path {filepath}}")
-    )
+  # Code of the plot
+  plot(sf::st_geometry(data))
 
-    file.remove(filepath)
-  }
+  dev.off()
 
-  invisible(NULL)
+  invisible(data)
 }
