@@ -30,7 +30,7 @@ st_join_ext <- function(x,
 
   join <- set_join_by_geom_type(y, join = join)
 
-  if (!is_sf_list(y) && !is.null(col)) {
+  if (!is_sf_list(y) && !is_null(col)) {
     y <- as_sf_list(y, crs = x, col = col)
   }
 
@@ -40,7 +40,7 @@ st_join_ext <- function(x,
     return(relocate_sf_col(sf::st_join(x, y, join = join, ...)))
   }
 
-  if (is_sf_list(y) && !is.null(.id)) {
+  if (is_sf_list(y) && !is_null(.id)) {
     y <- st_transform_ext(y, crs = x)
 
     condition <- all(sapply(y, has_name, .id))
@@ -96,7 +96,7 @@ st_join_ext <- function(x,
 #' @importFrom sf st_intersects st_nearest_feature
 #' @noRd
 set_join_by_geom_type <- function(x, join = NULL) {
-  if (!is.null(join)) {
+  if (!is_null(join)) {
     return(join)
   }
 

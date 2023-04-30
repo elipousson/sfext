@@ -32,13 +32,13 @@ count_features <- function(x = NULL,
                            name = NULL,
                            geometry = "y",
                            ...) {
-  if (!is_sf_list(y, allow_null = TRUE) && !is.null(nm)) {
+  if (!is_sf_list(y, allow_null = TRUE) && !is_null(nm)) {
     y <- as_sf_list(y, nm = nm, crs = x)
   }
 
   cli_abort_ifnot(
     "{.arg y} must be an sf object (if {.arg nm} is provided), an sf list, or NULL (if {.arg count} is provided).",
-    condition = is_sf_list(y) | !is.null(count)
+    condition = is_sf_list(y) | !is_null(count)
   )
 
   if (is_sf(x) && is_sf_list(y)) {
@@ -83,7 +83,7 @@ count_features <- function(x = NULL,
     return(x)
   }
 
-  if (is.null(by)) {
+  if (is_null(by)) {
     y <- dplyr::rename(y, "{count}" := .id)
     by <- count
   }

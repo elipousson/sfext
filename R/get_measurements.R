@@ -45,7 +45,7 @@ get_area <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "area
   }
 
   if (!is_polygon(x_poly) && !is_multipolygon(x_poly)) {
-    cli::cli_abort("{as.character(is_geom_type(x, ext = FALSE))} type objects are not supported by this function.")
+    cli_abort("{as.character(is_geom_type(x, ext = FALSE))} type objects are not supported by this function.")
   }
 
   x_area <- sf::st_area(x_poly)
@@ -89,7 +89,7 @@ get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "le
   longlat <- FALSE
 
   if (is_polygon(x)) {
-    rlang::check_installed("lwgeom")
+    check_installed("lwgeom")
     cli_inform("For objects with POLYGON geometry, {.fun get_length} uses {.fun lwgeom::st_perimeter} to return the object perimeter.")
     .id <- "perimeter"
 

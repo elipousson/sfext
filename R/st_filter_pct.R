@@ -53,7 +53,7 @@ st_filter_pct_area <- function(x, y, pct = NULL) {
       -dplyr::all_of(c("trim_join_id", "trim_area", "init_area"))
     )
 
-  if (!is.null(pct)) {
+  if (!is_null(pct)) {
     cliExtras::cli_abort_ifnot(
       "{.arg pct} must be a {.cls numeric} value of 1 or less." = is.numeric(pct) & (pct <= 1)
     )
@@ -96,7 +96,7 @@ st_filter_pct_length <- function(x, y, pct = NULL) {
       -c(trim_join_id, trim_length, init_length)
     )
 
-  if (!is.null(pct)) {
+  if (!is_null(pct)) {
     cliExtras::cli_abort_ifnot(
       "{.arg pct} must be a {.cls numeric} value of 1 or less." = is.numeric(pct) & (pct <= 1)
     )

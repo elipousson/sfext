@@ -24,7 +24,7 @@ convert_dist_units <- function(dist,
   if (is_units(dist)) {
     dist_from <- get_dist_units(dist)
 
-    if (!is.null(from) && !is_same_units(from, dist_from)) {
+    if (!is_null(from) && !is_same_units(from, dist_from)) {
       cli::cli_warn(
         c("{.arg dist} is class {.cls units} and is using different units
             than {.arg from}.",
@@ -37,13 +37,13 @@ convert_dist_units <- function(dist,
     dist <- units::drop_units(dist)
   }
 
-  if (!is.null(from)) {
+  if (!is_null(from)) {
     dist <- set_dist_units(dist, value = get_dist_units(from))
   }
 
   dist <- set_dist_units(dist, value = get_dist_units(to))
 
-  if (!is.null(digits)) {
+  if (!is_null(digits)) {
     dist <- round(dist, digits = digits)
   }
 
@@ -66,7 +66,7 @@ set_dist_units <- function(x = NULL,
                            mode = "standard",
                            allow_null = TRUE,
                            call = caller_env()) {
-  if (is.null(value) && allow_null) {
+  if (allow_null && is_null(value)) {
     return(x)
   }
 

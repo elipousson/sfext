@@ -29,7 +29,7 @@ NULL
 #' @export
 #' @importFrom sf st_crs st_set_crs st_transform
 transform_sf <- function(x, crs = NULL, allow_null = TRUE, ...) {
-  if (is.null(crs) && allow_null) {
+  if (allow_null && is_null(crs)) {
     return(x)
   }
 
@@ -92,7 +92,7 @@ get_sf_col <- function(x = NULL) {
 #' @importFrom sf st_layers read_sf
 get_sf_colnames <- function(x = NULL, dsn = NULL, layer = NULL, ...) {
   # Based on https://mastodon.sdf.org/@caleb/109286477381437051
-  if (is.null(x) && !is.null(dsn)) {
+  if (is_null(x) && !is_null(dsn)) {
     layer <- match.arg(layer, sf::st_layers(dsn)[["name"]])
     x <-
       sf::read_sf(

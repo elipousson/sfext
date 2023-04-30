@@ -26,16 +26,16 @@ lonlat_to_sfc <- function(x,
                           call = parent.frame(),
                           ...) {
   if (!is_geo_coords(x)) {
-    cli::cli_abort("{.arg x} must be geodetic coordinates.", call = call)
+    cli_abort("{.arg x} must be geodetic coordinates.", call = call)
   }
   cli_quiet(quiet)
 
   rev_latlon <- FALSE
 
-  if (!is.null(range)) {
+  if (!is_null(range)) {
     if (is_sf(range, ext = TRUE)) {
       range <- as_bbox(range, crs = 4326)
-      range <- rlang::set_names(as.numeric(range), names(range))
+      range <- set_names(as.numeric(range), names(range))
     }
 
     likely_latlon <-
@@ -71,8 +71,8 @@ lonlat_to_sfc <- function(x,
 #' @keywords internal
 #' @noRd
 check_range <- function(range = NULL, nm = c("xmin", "ymin", "xmax", "ymax")) {
-  if (!is_vector(range, length(nm)) | !all(rlang::has_name(range, nm))) {
-    cli::cli_abort(
+  if (!is_vector(range, length(nm)) | !all(has_name(range, nm))) {
+    cli_abort(
       "{.arg range} must be a length {length(nm)} vector with names {.val {nm}}."
     )
   }
@@ -85,7 +85,7 @@ is_lonlat_in_range <- function(x,
                                rev = FALSE,
                                allow_null = TRUE,
                                call = parent.frame()) {
-  if (is.null(range) & allow_null) {
+  if (is_null(range) & allow_null) {
     return(TRUE)
   }
 

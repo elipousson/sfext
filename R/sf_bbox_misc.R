@@ -39,7 +39,7 @@ NULL
 sf_bbox_to_sf <- function(bbox, sf_col = "geometry") {
   bbox_sf <- sf::st_sf(sf_bbox_to_sfc(bbox))
 
-  if (!is.null(sf_col) && is_sf(bbox_sf)) {
+  if (!is_null(sf_col) && is_sf(bbox_sf)) {
     sf::st_geometry(bbox_sf) <- sf_col
   }
 
@@ -58,7 +58,7 @@ sf_bbox_to_sfc <- function(bbox) {
 #' @export
 #' @importFrom sf st_crs st_transform st_bbox
 sf_bbox_transform <- function(bbox, crs = NULL) {
-  if (is.null(crs)) {
+  if (is_null(crs)) {
     return(bbox)
   }
 

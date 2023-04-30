@@ -31,17 +31,17 @@ st_clip <- function(x,
   # If bbox, convert to sf
   x <- as_sf(x)
 
-  if (!is.null(dist) || !is.null(diag_ratio)) {
+  if (!is_null(dist) || !is_null(diag_ratio)) {
     x <-
       st_edge(x = x, dist = dist, diag_ratio = diag_ratio, unit = unit)
   }
 
-  if (!is.null(keep)) {
+  if (!is_null(keep)) {
     clip <- keep
     flip <- TRUE
   }
 
-  if (!is.null(clip)) {
+  if (!is_null(clip)) {
     clip <-
       make_clip(
         x = x,
@@ -90,7 +90,7 @@ make_clip <- function(x, clip, crs, style = NULL, call = caller_env()) {
     !(left && right)
   )
 
-  if (is.null(style)) {
+  if (is_null(style)) {
     if ((top || bottom) && (left || right)) {
       style <- "corner"
     } else {

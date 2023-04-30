@@ -22,12 +22,12 @@ get_asp <- function(asp = NULL,
                     ...) {
   type <-
     dplyr::case_when(
-      is.null(asp) && is.null(paper) && allow_null ~ "null",
+      allow_null && is_null(asp) && is_null(paper) ~ "null",
       is.numeric(asp) ~ "num",
       is.character(asp) && grepl(":", asp) ~ "char",
-      !is.null(paper) && is.null(asp) && !block_asp ~ "paper",
-      !is.null(paper) && is.null(asp) && block_asp ~ "block",
-      !is.null(bbox) ~ "bbox",
+      !is_null(paper) && is_null(asp) && !block_asp ~ "paper",
+      !is_null(paper) && is_null(asp) && block_asp ~ "block",
+      !is_null(bbox) ~ "bbox",
       TRUE ~ "abort"
     )
 
@@ -38,7 +38,7 @@ get_asp <- function(asp = NULL,
 
   cli_warn_ifnot(
     "{.arg margin} is ignored if {.arg block_asp} is {.val FALSE}.",
-    condition = !block_asp && is.null(margin)
+    condition = !block_asp && is_null(margin)
   )
 
   switch(type,

@@ -19,16 +19,16 @@ get_scale <- function(scale = NULL,
                       series = NULL) {
   select_scale <- standard_scales
 
-  if (!is.null(scale)) {
+  if (!is_null(scale)) {
     select_scale <- dplyr::filter(select_scale, .data$scale %in% {{ scale }})
   }
 
-  if (!is.null(standard)) {
+  if (!is_null(standard)) {
     standard <- arg_match(standard, c("USGS", "Engineering", "Architectural"), multiple = TRUE)
     select_scale <- dplyr::filter(select_scale, .data$standard %in% {{ standard }})
   }
 
-  if (!is.null(series)) {
+  if (!is_null(series)) {
     series <- arg_match(series, unique(standard_scales$series), multiple = TRUE)
     select_scale <- dplyr::filter(select_scale, .data$series %in% {{ series }})
   }

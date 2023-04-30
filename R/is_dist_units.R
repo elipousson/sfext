@@ -30,7 +30,7 @@ is_dist_units <- function(x) {
 #' @export
 #' @importFrom dplyr case_when
 is_diff_dist <- function(x, y, units = NULL) {
-  if (!is.null(units)) {
+  if (!is_null(units)) {
     x <- convert_dist_units(x, to = units)
     y <- convert_dist_units(y, to = units)
   } else if (is_units(x)) {
@@ -113,7 +113,7 @@ is_shorter <- function(x, y) {
 #' @importFrom rlang arg_match
 #' @importFrom cliExtras cli_warn_ifnot cli_abort_ifnot
 get_dist_units <- function(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE) {
-  if (is.null(x) && allow_null) {
+  if (allow_null && is_null(x)) {
     return(x)
   }
 
@@ -123,7 +123,7 @@ get_dist_units <- function(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE)
     x <- underscore(x)
 
     return(
-      rlang::arg_match(
+      arg_match(
         x,
         c(dist_unit_options, area_unit_options),
         multiple = multiple
@@ -179,12 +179,12 @@ as_dist_units <- function(x,
                           call = caller_env()) {
   units <- get_dist_units(units, allow_null = allow_null)
 
-  if (is.null(units) && allow_null) {
+  if (allow_null && is_null(units)) {
     return(x)
   }
 
   units <-
-    rlang::arg_match(
+    arg_match(
       units,
       c(dist_unit_options, area_unit_options),
       error_call = call
@@ -227,7 +227,12 @@ st_combined_area <- function(x) {
 #' @name is_same_area
 #' @rdname  is_dist_units
 #' @export
-is_same_area <- function(x, y, units = NULL, combine = TRUE, diff = FALSE, ...) {
+is_same_area <- function(x,
+                         y,
+                         units = NULL,
+                         combine = TRUE,
+                         diff = FALSE,
+                         ...) {
   if (diff) {
     return(is_diff_area(x, y, units = units, combine = combine))
   }
@@ -250,7 +255,7 @@ as_units_attr <- function(x) {
 #' @export
 #' @importFrom units as_units
 is_same_units <- function(x, y = NULL) {
-  if (any(is.null(c(x, y)))) {
+  if (any(is_null(c(x, y)))) {
     return(FALSE)
   }
 

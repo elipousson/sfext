@@ -24,7 +24,7 @@ bind_units_col <- function(x,
                            keep_all = TRUE,
                            .id = NULL,
                            call = caller_env()) {
-  if (!is.null(units)) {
+  if (!is_null(units)) {
     y <-
       convert_dist_units(
         dist = y,
@@ -49,7 +49,7 @@ bind_units_col <- function(x,
 
   cli_abort_ifnot(
     "A {.arg .id} or {.arg units} value must be provided.",
-    condition = !is.null(units) | !is.null(.id),
+    condition = !is_null(units) | !is_null(.id),
     call = call
   )
 

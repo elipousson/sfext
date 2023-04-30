@@ -35,7 +35,7 @@ st_filter_ext <- function(x,
                           allow_list = TRUE,
                           ...) {
   if (is_null(y)) {
-    if (!is.null(type)) {
+    if (!is_null(type)) {
       return(st_filter_geom_type(transform_sf(x, crs = crs), type = type))
     }
     return(transform_sf(x, crs = crs))
@@ -131,7 +131,7 @@ st_filter_geom_type <- function(x, type = NULL) {
     condition = is_sf(x) | is_sfc(x)
   )
 
-  if (is.null(type)) {
+  if (is_null(type)) {
     return(x)
   }
 

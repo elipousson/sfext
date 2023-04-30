@@ -96,7 +96,7 @@ df_to_sf <- function(x,
       has_name(x, "geometry") && !all(has_name(x, coords)) ~ "geometry_df",
       geo && has_name(x, address) && !all(has_name(x, coords)) ~ "address_df",
       has_name(x, "wkt") ~ "wkt_df",
-      !is.null(y) ~ "join_sf",
+      !is_null(y) ~ "join_sf",
       TRUE ~ "coords_df"
     )
 
@@ -175,7 +175,7 @@ address_to_sf <- function(x,
                           crs = NULL,
                           full_results = FALSE,
                           ...) {
-  rlang::check_installed("tidygeocoder")
+  check_installed("tidygeocoder")
 
   if (is.character(x)) {
     # Make vector into address column

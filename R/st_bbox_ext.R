@@ -41,7 +41,7 @@ st_bbox_ext <- function(x = NULL,
     ext = c("sf", "sfc", "bbox", "sfg", "Raster", "Extent", "numeric")
   )
 
-  if (is.null(x) && is_true(allow_null)) {
+  if (is_null(x) && is_true(allow_null)) {
     return(x)
   }
 
@@ -63,7 +63,7 @@ st_bbox_ext <- function(x = NULL,
     return(bbox_list)
   }
 
-  if (!is.null(nudge)) {
+  if (!is_null(nudge)) {
     x <- st_nudge(x, to = nudge)
   }
 
@@ -116,7 +116,7 @@ st_bbox_asp <- function(x = NULL,
     asp <- get_asp(asp = asp)
   }
 
-  if (!is.null(asp) && is.numeric(asp)) {
+  if (!is_null(asp) && is.numeric(asp)) {
     # Get width/height
     xdist <- sf_bbox_xdist(bbox) # Get width
     ydist <- sf_bbox_ydist(bbox) # Get height

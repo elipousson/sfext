@@ -37,7 +37,7 @@ coords_to_sf <- function(x,
                          remove_coords = FALSE,
                          crs = 4326,
                          call = caller_env()) {
-  if (!is.null(into) && has_length(into, 2) && has_length(coords, 1)) {
+  if (!is_null(into) && has_length(into, 2) && has_length(coords, 1)) {
     x <- separate_coords(x = x, coords = coords, into = into, sep = sep)
     coords <- into
   } else {
@@ -79,13 +79,13 @@ check_coords <- function(x = NULL,
                          rev = FALSE,
                          call = caller_env()) {
   # If x is a data frame
-  if (!is.null(x) && is.data.frame(x)) {
+  if (!is_null(x) && is.data.frame(x)) {
     x_has_coords <-
       has_coords(x, coords = coords, value = FALSE)
 
     if (x_has_coords) {
       coords <- has_coords(x, coords = coords, value = TRUE)
-    } else if (!is.null(coords) &&
+    } else if (!is_null(coords) &&
       !identical(has_coords(x, default), character(0))) {
       cli_warn(
         c(
@@ -147,7 +147,7 @@ rev_coords <- function(coords, pattern = c("lat", "^y"), ignore.case = TRUE) {
 #' @importFrom rlang has_name
 has_coords <- function(x, coords = NULL, value = TRUE) {
   stopifnot(
-    !is.null(x) && is.data.frame(x)
+    !is_null(x) && is.data.frame(x)
   )
 
   x_names <- names(x)
@@ -196,7 +196,7 @@ format_coords <- function(x,
                           call = caller_env()) {
   cli_abort_ifnot(
     "{.arg coords} can't be {.val NULL} or {.val character(0)}.",
-    condition = !is.null(coords) && !identical(coords, character(0)),
+    condition = !is_null(coords) && !identical(coords, character(0)),
     call = call
   )
 

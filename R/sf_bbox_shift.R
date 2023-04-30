@@ -41,7 +41,7 @@ sf_bbox_shift <- function(bbox,
   )
 
   if ((length(x_nudge) == 1) && (length(y_nudge) == 1)) {
-    if (is.null(dir)) {
+    if (is_null(dir)) {
       x_nudge <- as.list(rep(x_nudge, 2))
       y_nudge <- as.list(rep(y_nudge, 2))
     } else if (is.numeric(dir)) {
@@ -54,8 +54,8 @@ sf_bbox_shift <- function(bbox,
   }
 
   nm <- c("min", "max")
-  x_nudge <- rlang::set_names(x_nudge, nm)
-  y_nudge <- rlang::set_names(y_nudge, nm)
+  x_nudge <- set_names(x_nudge, nm)
+  y_nudge <- set_names(y_nudge, nm)
 
   check_side <- function(x, y) {
     is_any_in(c(x, "all"), y)

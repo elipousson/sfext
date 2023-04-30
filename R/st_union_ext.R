@@ -39,7 +39,7 @@ st_union_ext <- function(x,
     x <- sf_bbox_to_sfc(x)
   }
 
-  if (!is.null(y)) {
+  if (!is_null(y)) {
     return(suppressWarnings(sf::st_union(x, y, ...)))
   }
 
@@ -56,7 +56,7 @@ st_union_ext <- function(x,
 
   .sf_col <- .sf_col %||% get_sf_col(x)
 
-  if (!is.null(name_col)) {
+  if (!is_null(name_col)) {
     if (!has_name(x, name_col)) {
       cli_warn(
         c("{.arg name_col} {.val {name_col}} can't be found in {.arg x}",
@@ -74,7 +74,7 @@ st_union_ext <- function(x,
         "{.sf_col}" := sfc
       )
     )
-  } else if (!is.null(label)) {
+  } else if (!is_null(label)) {
     as_sf(
       dplyr::tibble(
         "label" = label,

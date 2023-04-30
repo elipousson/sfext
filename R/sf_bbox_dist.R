@@ -120,7 +120,7 @@ sf_bbox_diag_ratio_to_dist <- function(bbox,
                                        diag_ratio,
                                        units = NULL,
                                        drop = TRUE) {
-  if (is.null(diag_ratio) || is.null(bbox)) {
+  if (is_null(diag_ratio) || is_null(bbox)) {
     return(NULL)
   }
 
@@ -173,7 +173,7 @@ sf_bbox_check_fit <- function(bbox,
   check_required(dist)
 
   if (has_min_length(dist, 3) || has_length(dist, 0)) {
-    cli::cli_abort(
+    cli_abort(
       "{.arg dist} must be length 1 (representing diagonal distance)
       or 2 (with a vector of x and y distance)."
     )

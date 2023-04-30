@@ -36,7 +36,7 @@ st_transform_ext <- function(x,
                              rotate = 0,
                              allow_null = FALSE,
                              allow_list = TRUE) {
-  if (any(c(is.data.frame(x) && !is_sf(x), is.null(x) && allow_null))) {
+  if (any(c(is.data.frame(x) && !is_sf(x), allow_null && is_null(x)))) {
     return(x)
   }
 
@@ -44,7 +44,7 @@ st_transform_ext <- function(x,
 
   type <-
     dplyr::case_when(
-      is.null(crs) ~ "as_class",
+      is_null(crs) ~ "as_class",
       is_sf_list(x, ext = TRUE) ~ "list",
       rotate != 0 ~ "omerc",
       is_bbox(x) ~ "bbox",

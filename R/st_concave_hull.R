@@ -28,7 +28,7 @@ st_concave_hull_ext <- function(x,
     x <- suppressWarnings(sf::st_centroid(x))
   }
 
-  if (!is.null(by)) {
+  if (!is_null(by)) {
     sf_col <- get_sf_col(x)
     x <-
       dplyr::summarise(

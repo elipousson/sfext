@@ -62,7 +62,7 @@ count_sf_ext <- function(data,
                          ...) {
   data <- as_sf(data)
 
-  if (rlang::has_name(data, .id)) {
+  if (has_name(data, .id)) {
     data <- dplyr::select(data, -dplyr::all_of(.id))
   }
 
@@ -85,7 +85,7 @@ count_sf_ext <- function(data,
 
   cli_abort_ifnot(
     "{.arg y} must have a column with named {.val {(.id)}} to match the {.arg .id} parameter.",
-    condition = rlang::has_name(y, .id)
+    condition = has_name(y, .id)
   )
 
   sf_col <- get_sf_col(y)
@@ -121,12 +121,12 @@ count_sf_ext <- function(data,
 
   if (replace_na) {
     check_installed("tidyr")
-    data_count <- tidyr::replace_na(data_count, rlang::set_names(list(0), name))
+    data_count <- tidyr::replace_na(data_count, set_names(list(0), name))
   } else if (!keep_na) {
     data_count <- dplyr::filter(data_count, !is.na(.data[[name]]))
   }
 
-  if (!is.null(lims)) {
+  if (!is_null(lims)) {
     stopifnot(
       is.numeric(lims)
     )

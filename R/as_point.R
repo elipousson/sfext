@@ -51,7 +51,7 @@ as_point <- function(..., to = "POINT") {
 
   if (is_any(params, is_bbox)) {
     params[["crs"]] <- NA_character_
-    return(rlang::exec(sf_bbox_point, !!!params))
+    return(exec(sf_bbox_point, !!!params))
   }
 
   params <- sf::st_point(params)
@@ -84,7 +84,7 @@ as_points <- function(..., to = "POINT", call = caller_env()) {
       ~ as_point(.x)
     )
 
-  if (is.null(crs)) {
+  if (is_null(crs)) {
     x <- sf::st_as_sfc(pts)
   } else {
     x <- sf::st_as_sfc(pts, crs = crs)
@@ -105,7 +105,7 @@ as_points <- function(..., to = "POINT", call = caller_env()) {
 #' @rdname as_point
 #' @export
 as_startpoint <- function(x) {
-  rlang::check_installed("lwgeom")
+  check_installed("lwgeom")
 
   cliExtras::cli_abort_ifnot(
     "Must have LINESTRING or MULTILINESTRING geometry.",
@@ -124,7 +124,7 @@ as_startpoint <- function(x) {
 #' @rdname as_point
 #' @export
 as_endpoint <- function(x) {
-  rlang::check_installed("lwgeom")
+  check_installed("lwgeom")
 
   cliExtras::cli_abort_ifnot(
     "Must have LINESTRING or MULTILINESTRING geometry.",
@@ -176,7 +176,7 @@ as_line <- function(..., to = "LINESTRING", call = caller_env()) {
   params <- pluck_len1(params)
 
   if (!any(c(is_point(params), is_multipoint(params)))) {
-    params <- rlang::exec(as_points, !!!params, crs = crs)
+    params <- exec(as_points, !!!params, crs = crs)
   }
 
   if (is_point(params)) {

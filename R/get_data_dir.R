@@ -25,13 +25,13 @@ get_data_dir <- function(path = NULL,
   lifecycle::signal_stage("superseded", "get_data_dir()", "filenamr::get_data_dir()")
 
   if (cache) {
-    rlang::check_installed("rappdirs")
+    check_installed("rappdirs")
     path <- path %||% rappdirs::user_cache_dir(pkg)
   }
 
-  if (!is.null(path) && dir.exists(path)) {
+  if (!is_null(path) && dir.exists(path)) {
     return(path)
-  } else if (is.null(path)) {
+  } else if (is_null(path)) {
     if (allow_null) {
       return(invisible(path))
     }
@@ -85,7 +85,7 @@ list_data_files <- function(path = NULL,
       create = FALSE
     )
 
-  if (!is.null(fileext)) {
+  if (!is_null(fileext)) {
     pattern <- pattern %||% paste0(fileext, "$")
   }
 
@@ -109,7 +109,7 @@ list_data_files <- function(path = NULL,
 get_path_filetype <- function(path, filetype = NULL, n = 1) {
   lifecycle::signal_stage("superseded", "get_path_filetype()", "filenamr::get_path_fileext()")
 
-  if (!is.null(filetype)) {
+  if (!is_null(filetype)) {
     return(filetype)
   }
 
@@ -147,7 +147,7 @@ get_path_filetype <- function(path, filetype = NULL, n = 1) {
 #'
 #' @noRd
 get_path_files <- function(path, filetype = NULL, full.names = TRUE) {
-  if (is.data.frame(path) && rlang::has_name(path, "path")) {
+  if (is.data.frame(path) && has_name(path, "path")) {
     path <- path[["path"]]
   }
 

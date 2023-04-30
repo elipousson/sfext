@@ -58,8 +58,8 @@ get_paper <- function(paper = "letter",
     dplyr::case_when(
       is.data.frame(paper) && check_df_paper(paper, ext = FALSE) ~ "paper",
       is.character(paper) ~ "name",
-      !is.null(standard) ~ "standard",
-      !is.null(width) | !is.null(height) | !is.null(units) ~ "dims"
+      !is_null(standard) ~ "standard",
+      !is_null(width) | !is_null(height) | !is_null(units) ~ "dims"
     )
 
   paper <-
@@ -88,7 +88,7 @@ get_paper <- function(paper = "letter",
       .after = asp
     )
 
-  if (is.null(margin)) {
+  if (is_null(margin)) {
     return(paper)
   }
 
@@ -114,7 +114,7 @@ get_paper <- function(paper = "letter",
 #' @noRd
 #' @importFrom dplyr mutate
 set_paper_orientation <- function(paper, orientation = NULL, bbox = NULL) {
-  if (!is.null(bbox)) {
+  if (!is_null(bbox)) {
     orientation <- sf_bbox_orientation(bbox)
   } else {
     orientation <-
@@ -128,7 +128,7 @@ set_paper_orientation <- function(paper, orientation = NULL, bbox = NULL) {
   paper_orientation <- unique(paper$orientation)
 
   # Save width and height before checking orientation
-  if (!is.null(orientation) && (length(paper_orientation) == 1)) {
+  if (!is_null(orientation) && (length(paper_orientation) == 1)) {
     paper_width <- paper$width
     paper_height <- paper$height
 
@@ -166,12 +166,12 @@ get_paper_standard <- function(standard, series = NULL, size = NULL) {
   standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
   paper <- paper_sizes[paper_sizes[["standard"]] %in% standard, ]
 
-  if (!is.null(series)) {
+  if (!is_null(series)) {
     series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"), several.ok = TRUE)
     paper <- paper[paper[["series"]] %in% series, ]
   }
 
-  if (!is.null(size)) {
+  if (!is_null(size)) {
     paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"), several.ok = TRUE)
     paper <- paper[paper[["size"]] %in% size, ]
   }
@@ -187,11 +187,11 @@ get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
   units <- match.arg(tolower(units), c("in", "mm", "px"))
   paper <- paper_sizes[paper_sizes[["units"]] %in% units, ]
 
-  if (!is.null(width)) {
+  if (!is_null(width)) {
     paper <- paper[paper[["width"]] %in% width, ]
   }
 
-  if (!is.null(height)) {
+  if (!is_null(height)) {
     paper <- paper[paper[["height"]] %in% height, ]
   }
 
@@ -215,12 +215,12 @@ get_social_image <- function(image = NULL, platform = NULL, format = NULL, orien
 
   image_sizes <- paper_sizes[paper_sizes$type == "social", ]
 
-  if (!is.null(platform)) {
+  if (!is_null(platform)) {
     platform <- arg_match(platform, as.character(unique(image_sizes$standard)))
     image_sizes <- image_sizes[image_sizes$standard %in% platform, ]
   }
 
-  if (!is.null(format)) {
+  if (!is_null(format)) {
     format <- arg_match(format, as.character(unique(image_sizes$size)))
     image_sizes <- image_sizes[image_sizes$size %in% format, ]
   }

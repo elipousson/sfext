@@ -55,11 +55,11 @@ get_margin <- function(margin = NULL,
       )
     )
 
-  if (!is.null(paper)) {
-    if (!is.null(paper) && is.character(paper)) {
+  if (!is_null(paper)) {
+    if (!is_null(paper) && is.character(paper)) {
       paper <- get_paper(paper = paper, orientation = orientation)
 
-      if (!is.null(block_width)) {
+      if (!is_null(block_width)) {
         dist <- (paper$width - block_width) / 2
       }
     } else if (is.data.frame(paper)) {
@@ -67,13 +67,13 @@ get_margin <- function(margin = NULL,
 
       # FIXME: get_paper only passes to get_margin if margin is a character value
       # but the value of margin does not matter to set the dist if block_width is provided.
-      if (!is.null(block_width) && (nrow(paper) == 1)) {
+      if (!is_null(block_width) && (nrow(paper) == 1)) {
         dist <- (paper$width - block_width) / 2
       }
     }
   }
 
-  if (is.null(dist)) {
+  if (is_null(dist)) {
     if (is.character(margin) && (margin != "auto")) {
       margin <- get_margin_type(paper = paper, type = margin, unit = unit)
     } else if (margin == "auto") {
@@ -134,7 +134,7 @@ get_margin_type <- function(paper = NULL, type = "none", unit = "in") {
         "narrow" = ggplot2::margin(t = 20, r = 20, b = 20, l = 20, unit = unit),
         "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
       )
-  } else if (unit == "px" && !is.null(paper)) {
+  } else if (unit == "px" && !is_null(paper)) {
     px_to_npc_margins <-
       function(px) {
         list(

@@ -68,7 +68,7 @@ st_buffer_ext <- function(x,
 
   # If dist is NULL and diag_ratio is NULL return x (with bbox converted to sf
   # if no buffer applied)
-  if (is.null(dist) && is.null(diag_ratio)) {
+  if (is_null(dist) && is_null(diag_ratio)) {
     return(x)
   }
 
@@ -100,7 +100,7 @@ st_buffer_ext <- function(x,
     crs = crs
   )
 
-  if (!is.null(end_style)) {
+  if (!is_null(end_style)) {
     dist <- as.numeric(dist)
   }
 
@@ -138,7 +138,7 @@ limit_dist <- function(dist = NULL,
                        crs = NULL,
                        between.ok = FALSE,
                        call = caller_env()) {
-  if (is.null(dist_limits)) {
+  if (is_null(dist_limits)) {
     return(dist)
   }
 
@@ -217,7 +217,7 @@ limit_dist <- function(dist = NULL,
 
 #' @noRd
 dist_unit_lab <- function(x, to = NULL) {
-  if (!is.null(to)) {
+  if (!is_null(to)) {
     x <- convert_dist_units(x, to = to)
     unit_lab <- to
   } else {

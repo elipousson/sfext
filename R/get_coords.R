@@ -123,7 +123,7 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
       ~ as.numeric(.x)
     )
 
-  rlang::check_installed("tidyr")
+  check_installed("tidyr")
 
   minmax_df <-
     tidyr::unnest_wider(

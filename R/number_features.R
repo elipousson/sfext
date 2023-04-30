@@ -51,7 +51,7 @@ number_features <- function(x,
 
   x <- has_same_name_col(x, col = .id)
 
-  if (!is.null(sort)) {
+  if (!is_null(sort)) {
     x <-
       sort_features(
         x,
@@ -104,7 +104,7 @@ sort_features <- function(x,
   if (any(sort %in% c(latlon_opts, minmax_opts))) {
     sort <- match.arg(sort, c(latlon_opts, minmax_opts), several.ok = TRUE)
 
-    missing_sort_names <- !all(has_name(x, sort)) & !is.null(sort)
+    missing_sort_names <- !all(has_name(x, sort)) & !is_null(sort)
 
     if (all(c(sort %in% latlon_opts, missing_sort_names))) {
       x <-
@@ -135,13 +135,13 @@ sort_features <- function(x,
       "dist_xmid_ymid"
     )
 
-  if (any(c(sort %in% c(dist_opts), !is.null(to)))) {
-    if (!is.null(sort)) {
+  if (any(c(sort %in% c(dist_opts), !is_null(to)))) {
+    if (!is_null(sort)) {
       sort <- match.arg(sort, dist_opts)
 
       cli_warn_ifnot(
         "{.arg sort} is ignored when {.arg sort} and {.arg to}
-        are both provided." = is.null(to)
+        are both provided." = is_null(to)
       )
 
       to <- strsplit(sort, "_")[[1]][2:3]
@@ -165,7 +165,7 @@ sort_features <- function(x,
 
   by_group <- FALSE
 
-  if (!is.null(col)) {
+  if (!is_null(col)) {
     x <- group_by_col(x, col = col)
     # FIXME: Is there a reason to allow grouping by column even if not numbering by group
     by_group <- TRUE

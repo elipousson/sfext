@@ -29,7 +29,7 @@ is_geom_type <- function(x, type = NULL, by_geometry = FALSE, ext = TRUE) {
     return(FALSE)
   }
 
-  if (!is.null(type)) {
+  if (!is_null(type)) {
     return(st_is_ext(x, type, by_geometry))
   }
 
