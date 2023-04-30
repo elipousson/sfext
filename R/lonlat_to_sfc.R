@@ -1,4 +1,6 @@
-#' Convert a lon/lat or lat/lon coordinate pair to an sfc object
+#' Convert a lon/lat or lat/lon coordinate pair to a sfc object
+#'
+#' `r lifecycle::badge("experimental")`
 #'
 #' @name lonlat_to_sfc
 #' @param x A length 2 numeric vector with geodetic coordinates in a

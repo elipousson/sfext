@@ -2,7 +2,7 @@
 % Please edit documentation in R/lonlat_to_sfc.R
 \name{lonlat_to_sfc}
 \alias{lonlat_to_sfc}
-\title{Convert a lon/lat or lat/lon coordinate pair to an sfc object}
+\title{Convert a lon/lat or lat/lon coordinate pair to a sfc object}
 \usage{
 lonlat_to_sfc(
   x,
@@ -44,7 +44,7 @@ mentioned in error messages as the source of the error. See the
   }}
 }
 \description{
-Convert a lon/lat or lat/lon coordinate pair to an sfc object
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \seealso{
 \code{\link[=is_geo_coords]{is_geo_coords()}}
