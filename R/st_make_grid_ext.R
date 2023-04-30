@@ -52,7 +52,10 @@ st_make_grid_ext <- function(x,
     x <- as_sf(x)
   }
 
-  style <- arg_match(style, c("rect", "square", "hex", "flat_top_hex", "circle", "circle_offset"))
+  style <- arg_match0(
+    style,
+    c("rect", "square", "hex", "flat_top_hex", "circle", "circle_offset")
+  )
 
   lonlat_crs <- NULL
 
@@ -122,7 +125,7 @@ st_make_grid_ext <- function(x,
       )
   }
 
-  if (!is.null(gutter) && (gutter != 0)) {
+  if (!is_null(gutter) && (gutter != 0)) {
     grid <-
       st_buffer_ext(
         x = grid,
@@ -135,7 +138,7 @@ st_make_grid_ext <- function(x,
     grid <- st_filter_ext(grid, x, crop = FALSE, trim = trim)
   }
 
-  if (!is.null(lonlat_crs)) {
+  if (!is_null(lonlat_crs)) {
     grid <- st_transform_ext(grid, crs = lonlat_crs)
   }
 
@@ -162,44 +165,44 @@ get_grid_params <- function(bbox,
   what <- match.arg(what, c("polygons", "corners", "centers"))
   style <- match.arg(style, c("rect", "square", "hex", "flat_top_hex", "circle", "circle_offset"))
 
-  if (!is.null(cellsize)) {
-    if (rlang::has_length(n, 1)) {
+  if (!is_null(cellsize)) {
+    if (has_length(n, 1)) {
       cellsize <- rep(cellsize, 2)
     }
 
-    if (!is.null(ncol) && is_longer(ncol * cellsize[1], sf_bbox_xdist(bbox))) {
+    if (!is_null(ncol) && is_longer(ncol * cellsize[1], sf_bbox_xdist(bbox))) {
       cli::cli_warn("The cellsize will not fit within the width of the bounding box with the number of columns requested.")
     }
 
-    if (!is.null(nrow) && is_longer(nrow * cellsize[2], sf_bbox_ydist(bbox))) {
+    if (!is_null(nrow) && is_longer(nrow * cellsize[2], sf_bbox_ydist(bbox))) {
       cli::cli_warn("The specified cellsize will not fit within the height of the bounding box with the number of nrow requested.")
     }
   }
 
   bbox_asp <- sf_bbox_asp(bbox)
 
-  if (is.null(n) && is.null(ncol) && is.null(nrow)) {
+  if (is_null(n) && is_null(ncol) && is_null(nrow)) {
     ncol <- base
     nrow <- base
   }
 
-  if (is.null(n) && !is.null(cellsize)) {
+  if (is_null(n) && !is_null(cellsize)) {
     diff_bbox <- as.numeric(c(diff(bbox[c(1, 3)]), diff(bbox[c(2, 4)])))
     n <- diff_bbox / cellsize
   }
 
-  if (is.null(n) && is.null(cellsize)) {
+  if (is_null(n) && is_null(cellsize)) {
     n <-
       dplyr::case_when(
-        (!is.null(ncol) && (style == "square")) ~ c(ncol, ncol / bbox_asp),
-        (!is.null(ncol) && is.null(nrow)) ~ c(ncol, ncol),
-        (!is.null(ncol) && !is.null(nrow)) ~ c(ncol, nrow)
+        (!is_null(ncol) && (style == "square")) ~ c(ncol, ncol / bbox_asp),
+        (!is_null(ncol) && is_null(nrow)) ~ c(ncol, ncol),
+        (!is_null(ncol) && !is_null(nrow)) ~ c(ncol, nrow)
       )
 
     n <-
       dplyr::case_when(
-        (is.null(ncol) && !is.null(nrow) && (style == "square")) ~ c(nrow * bbox_asp, nrow),
-        (is.null(ncol) && !is.null(nrow)) ~ c(nrow, nrow),
+        (is_null(ncol) && !is_null(nrow) && (style == "square")) ~ c(nrow * bbox_asp, nrow),
+        (is_null(ncol) && !is_null(nrow)) ~ c(nrow, nrow),
         TRUE ~ n
       )
 
@@ -208,15 +211,15 @@ get_grid_params <- function(bbox,
       "The row and columns values for the output simple feature grid are inconsistent when style is {style}.",
       condition = !(style %in% c("hex", "flat_top_hex"))
     )
-  } else if (!is.null(n)) {
+  } else if (!is_null(n)) {
     n <-
       dplyr::case_when(
-        rlang::has_length(n, 1) && (style == "square") ~ c(n, n / bbox_asp),
-        rlang::has_length(n, 1) ~ c(n, n)
+        has_length(n, 1) && (style == "square") ~ c(n, n / bbox_asp),
+        has_length(n, 1) ~ c(n, n)
       )
   }
 
-  if (is.null(cellsize)) {
+  if (is_null(cellsize)) {
     diff_bbox <- as.numeric(c(diff(bbox[c(1, 3)]), diff(bbox[c(2, 4)])))
     cellsize <- diff_bbox / unique(n)
   }
@@ -245,4 +248,44 @@ get_grid_params <- function(bbox,
     what = what,
     flat_topped = flat_topped
   )
+}
+
+
+#' Make a sf list by grid position
+#'
+#' Create a grid with [st_make_grid_ext()] and
+#'
+#' @name make_sf_grid_list
+#' @inheritParams st_make_grid_ext
+#' @inheritParams as_sf_list
+#' @inheritDotParams st_make_grid_ext
+#' @export
+#' @importFrom dplyr mutate
+make_sf_grid_list <- function(x,
+                              style = "rect",
+                              ncol = 2,
+                              nrow = 2,
+                              .id = "grid_id",
+                              crs = NULL,
+                              ...) {
+  grid <- st_make_grid_ext(
+    x,
+    style = style,
+    ncol = ncol,
+    nrow = nrow,
+    .id = .id,
+    ...
+  )
+
+  x <- st_join_ext(x, grid, largest = TRUE)
+
+  x <-
+    relocate_sf_col(
+      dplyr::mutate(
+        x,
+        "{.id}_col_row" := as.character(glue("col_{col}_row_{row}"))
+      )
+    )
+
+  as_sf_list(x, col = paste0(.id, "_col_row"), crs = crs)
 }
