@@ -10,7 +10,6 @@
 #' @importFrom sf st_centroid st_combine st_cast st_make_valid st_concave_hull
 #'   st_set_geometry
 #' @importFrom dplyr summarise
-#' @importFrom purrr map_dfr
 st_concave_hull_ext <- function(x,
                                 by = NULL,
                                 centroid = FALSE,
@@ -19,6 +18,7 @@ st_concave_hull_ext <- function(x,
   check_sf(x, ext = "sfc")
 
   return_sfc <- FALSE
+
   if (!is_sf(x)) {
     return_sfc <- TRUE
     x <- as_sf(x)
@@ -29,12 +29,7 @@ st_concave_hull_ext <- function(x,
   }
 
   if (!is_null(by)) {
-    sf_col <- get_sf_col(x)
-    x <-
-      dplyr::summarise(
-        group_by(x, .data[[by]]),
-        "{sf_col}" := sf::st_combine(.data[[sf_col]])
-      )
+    x <- st_union_by(x, .data[[by]])
   }
 
   if (is_point(x)) {
@@ -44,12 +39,8 @@ st_concave_hull_ext <- function(x,
     )
   }
 
-  if (!is_multipoint(x)) {
-    x <- sf::st_cast(x, to = "MULTIPOINT", warn = FALSE, do_split = FALSE)
-  }
-
   geometry <-
-    purrr::map_dfr(
+    map(
       as_sfc(x),
       ~ sf::st_make_valid(
         sf::st_concave_hull(
@@ -60,7 +51,9 @@ st_concave_hull_ext <- function(x,
       )
     )
 
-  geometry <- as_sfc(geometry, crs = x)
+  goemetry <- sf::st_as_sf(list_rbind(geometry))
+
+  geometry <- as_sfc(goemetry, crs = x)
 
   if (return_sfc) {
     return(geometry)
