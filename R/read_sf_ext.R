@@ -112,7 +112,7 @@ read_sf_ext <- function(...) {
       keep_missing = TRUE
     )
 
-  rlang::exec(read_sf_fn, !!!args)
+  exec(read_sf_fn, !!!args)
 }
 
 
@@ -127,7 +127,7 @@ modify_fn_fmls <- function(params,
                            keep_missing = FALSE,
                            keep.null = FALSE,
                            ...) {
-  fmls <- rlang::fn_fmls(fn)
+  fmls <- fn_fmls(fn)
 
   if (is_false(keep_missing)) {
     fmls <- discard(fmls, is_missing)
@@ -157,7 +157,7 @@ read_sf_pkg <- function(data,
   fileext <- fileext %||% filetype
   package <- package %||% pkg
   check_string(package, allow_empty = FALSE)
-  rlang::check_installed(package)
+  check_installed(package)
   check_string(
     data,
     allow_empty = FALSE,
@@ -240,14 +240,14 @@ read_sf_rdata <- function(path,
     )
 
   if (type == "rds") {
-    rlang::check_installed("readr")
+    check_installed("readr")
     data <- readr::read_rds(file, refhook = refhook)
   } else {
     file_name <- load(file)
     data <- get(file_name)
   }
 
-  data <- use_name_repair(data, .name_repair = .name_repair)
+  data <- set_names_repair(data, .name_repair = .name_repair)
 
   if (is_sf(data)) {
     return(st_filter_ext(data, bbox))
@@ -312,7 +312,7 @@ read_sf_query <- function(path,
     )
 
   data <-
-    use_name_repair(data, .name_repair = .name_repair)
+    set_names_repair(data, .name_repair = .name_repair)
 
   if (is_false(zm_drop)) {
     return(data)
@@ -336,7 +336,7 @@ read_sf_excel <- function(path,
                           address = "address",
                           .name_repair = "check_unique",
                           ...) {
-  rlang::check_installed("readxl")
+  check_installed("readxl")
 
   # Convert XLS or XLSX file with coordinates to sf
   sheet <- sheet %||% readxl::excel_sheets(path)
@@ -417,7 +417,7 @@ read_sf_csv <- function(path,
   }
 
   if (is_true(show_col_types)) {
-    rlang::check_installed("readr")
+    check_installed("readr")
     data <-
       readr::read_csv(
         file = path,
@@ -437,9 +437,9 @@ read_sf_csv <- function(path,
       )
 
     data <-
-      use_name_repair(
+      set_names_repair(
         data,
-        .name_repair
+        .name_repair = .name_repair
       )
   }
 
@@ -665,7 +665,7 @@ read_sf_gist <- function(url,
                          bbox = NULL,
                          nth = 1,
                          ...) {
-  rlang::check_installed("gistr")
+  check_installed("gistr")
 
   if (!is_missing(url) && is_null(id)) {
     id <- url
@@ -731,7 +731,7 @@ read_sf_gmap <- function(url,
         )
     } else {
       data <-
-        rlang::set_names(
+        set_names(
           map(
             cli_progress_layers,
             ~ map_gmap_layers(layer[.x])
@@ -750,12 +750,12 @@ read_sf_gmap <- function(url,
     )
 
   if (has_name(data, "Description")) {
-    rlang::check_installed("naniar")
+    check_installed("naniar")
     data <- naniar::replace_with_na(data, replace = list("Description" = ""))
   }
 
   data <-
-    use_name_repair(data, .name_repair = .name_repair)
+    set_names_repair(data, .name_repair = .name_repair)
 
   if (zm_drop) {
     data <- sf::st_zm(data)
@@ -785,7 +785,7 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
   }
 
   if (format != "kml") {
-    cli::cli_abort("{.arg format} must be {.val kml}.")
+    cli_abort("{.arg format} must be {.val kml}.")
   }
 
   glue("https://www.google.com/maps/d/u/0/kml?forcekml=1&mid={mid}")
@@ -870,7 +870,7 @@ read_sf_gsheet <- function(url,
                            .name_repair = "check_unique",
                            ...) {
   # Convert Google Sheet with coordinates to sf
-  rlang::check_installed("googlesheets4")
+  check_installed("googlesheets4")
 
   if (is_true(ask)) {
     ss <-
@@ -941,21 +941,33 @@ join_sf_gsheet <- function(data,
   data
 }
 
-#' Use vctrs::vec_as_names function
+#' Set names from vctrs::vec_as_names
 #'
 #' @noRd
 #' @importFrom vctrs vec_as_names
-use_name_repair <- function(data = NULL,
-                            .name_repair = "check_unique",
-                            repair_arg = "name_repair") {
-  names(data) <-
-    vctrs::vec_as_names(
-      names(data),
+set_names_repair <- function(data = NULL,
+                             nm = NULL,
+                             .name_repair = "check_unique",
+                             repair_arg = ".name_repair",
+                             quiet = FALSE,
+                             call = caller_env()) {
+  check_character(nm, allow_null = TRUE, call = call)
+
+  nm <- nm %||% names(data)
+
+  if (is_null(nm)) {
+    return(data)
+  }
+
+  set_names(
+    data,
+    nm = vctrs::vec_as_names(
+      nm,
       repair = .name_repair,
+      quiet = quiet,
       repair_arg = repair_arg
     )
-
-  data
+  )
 }
 
 #' Make options parameter for read_sf_csv
