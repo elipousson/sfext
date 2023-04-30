@@ -10,11 +10,11 @@ check_null <- function(x = NULL,
     allow_null <- null.req
   }
 
-  if (is.null(x) && !allow_null) {
+  if (is_null(x) && !allow_null) {
     cli_abort("{.arg {arg}} must not be NULL.", ...)
   }
 
-  if (!is.null(x) && null.req) {
+  if (!is_null(x) && null.req) {
     cli_abort("{.arg {arg}} must be NULL.", ...)
   }
 
@@ -30,7 +30,7 @@ check_len <- function(x = NULL,
                       allow_null = FALSE,
                       ...) {
   check_null(x, arg, allow_null)
-  allow_null <- is.null(x) && allow_null
+  allow_null <- allow_null && is_null(x)
 
   if (((length(x) >= min(len)) && (length(x) <= max(len))) || allow_null) {
     return(invisible(TRUE))
@@ -60,7 +60,7 @@ check_grepl <- function(x = NULL,
                         message = NULL,
                         ...) {
   check_null(x, arg, allow_null)
-  allow_null <- is.null(x) && allow_null
+  allow_null <- allow_null && is_null(x)
 
   # FIXME: This will error if x is longer than 1
   if (grepl(pattern, x, ignore.case = ignore.case, perl = perl) || allow_null) {
@@ -85,7 +85,7 @@ check_starts_with <- function(x = NULL,
                               message = NULL,
                               ...) {
   check_character(x, allow_null = allow_null, arg = arg)
-  allow_null <- is.null(x) && allow_null
+  allow_null <- allow_null && is_null(x)
 
   starts_with <-
     grepl(paste0("^", string), x,
@@ -104,79 +104,6 @@ check_starts_with <- function(x = NULL,
   cli_abort(message = message, ...)
 }
 
-#' Check if x is an sf object
-#'
-#' If x is an `sf` object invisibly return TRUE. If not, return an error with [cli::cli_abort]
-#'
-#' @inheritParams is_sf
-#' @param allow_list If `TRUE`, return `TRUE` if x is an sf list or, if ext is also
-#'   `TRUE`, a list of sf, sfc, or bbox objects. Defaults to `FALSE`.
-#' @inheritParams rlang::args_error_context
-#' @param ... Additional parameters passed to [rlang::abort()].
-#' @export
-check_sf <- function(x,
-                     ...,
-                     ext = FALSE,
-                     allow_list = FALSE,
-                     allow_null = FALSE,
-                     arg = caller_arg(x),
-                     call = caller_env()) {
-  if (!missing(x)) {
-    is_sf_obj <- .check_is_sf_ext(
-      x,
-      ext = ext,
-      allow_list = allow_list,
-      allow_null = allow_null
-    )
-    if (is_sf_obj) {
-      return(invisible(NULL))
-    }
-  }
-
-  what <- .what_ext(ext)
-
-  stop_input_type(
-    x,
-    what = glue("a {oxford_comma(what)} object"),
-    ...,
-    allow_null = allow_null,
-    arg = arg,
-    call = call
-  )
-}
-
-#' @noRd
-.what_ext <- function(ext = FALSE) {
-  what <- "sf"
-  if (is_true(ext)) {
-    c(what, "sfc", "bbox")
-  } else if (is_character(ext)) {
-    c(what, ext)
-  } else {
-    what
-  }
-}
-
-#' @noRd
-.check_is_sf_ext <- function(x,
-                             ext,
-                             allow_list,
-                             allow_null) {
-  if (is_sf(x, ext = ext)) {
-    return(TRUE)
-  }
-
-  if (allow_list && is_sf_list(x, ext = ext)) {
-    return(TRUE)
-  }
-
-  if (allow_null && is_null(x)) {
-    return(TRUE)
-  }
-
-  FALSE
-}
-
 #' Check if the data.frame object has the required paper columns
 #'
 #' @noRd
@@ -184,7 +111,7 @@ check_df_paper <- function(x,
                            ext = FALSE,
                            arg = caller_arg(x),
                            call = caller_env()) {
-  rlang::check_required(x, arg = arg, call = call)
+  check_required(x, arg = arg, call = call)
 
   # FIXME: Add check to make sure input is a data frame
   paper_names <- c("width", "height", "orientation", "units")
@@ -193,15 +120,60 @@ check_df_paper <- function(x,
     paper_names <- c(paper_names, "asp", "ncol", "nrow")
   }
 
-  is_valid_paper <- has_name(x, paper_names)
+  check_has_name(x, paper_names, arg = arg, call = call)
+}
 
-  if (all(is_valid_paper)) {
-    return(TRUE)
+
+#' Check if x has names
+#'
+#' @noRd
+check_has_name <- function(x,
+                           nm,
+                           allow_any = FALSE,
+                           allow_null = FALSE,
+                           arg = caller_arg(x),
+                           ...,
+                           call = caller_env()) {
+  check_required(x, arg = arg, call = call)
+  check_character(nm, call = call)
+
+  has_nm <- has_name(x, nm)
+
+  if (all(has_nm)) {
+    return(invisible(NULL))
+  }
+
+  if (allow_any && any(has_nm)) {
+    return(invisible(NULL))
+  }
+
+  if (allow_null && is_null(x)) {
+    return(invisible(NULL))
+  }
+
+  name <- "name"
+  if (is.data.frame(x)) {
+    name <- "column name"
+  }
+
+  n_nm <- length(nm)
+
+  if (allow_any) {
+    nm <- cli::cli_vec(
+      nm,
+      style = c(cli::builtin_theme()$span.val, "vec-last" = " or ")
+    )
+    message <-
+      "{.arg {arg}} must have any of the {name}{qty(n_nm)}{?s} {nm}"
+  } else {
+    message <-
+      c("{.arg {arg}} must have all of the {name}{qty(n_nm)}{?s} {.val {nm}}",
+        "i" = "The {name}{qty(n_nm)}{?s} {.val {nm[!has_nm]}} are missing."
+      )
   }
 
   cli_abort(
-    c("A {.arg paper} {.cls data.frame} must have columns named {.val {paper_names}}.",
-      "i" = "The provided {.arg paper} is missing {.val {names[!is_valid_paper]}}."
-    )
+    message = message,
+    call = call
   )
 }
