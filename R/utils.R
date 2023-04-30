@@ -28,8 +28,7 @@ utils::globalVariables(
     "source_file", "asp", "block_height", "block_width", "col_width", "gutter",
     "height", "row_height", "width", "img_cardinal_dir", "img_direction",
     "path", "x_nudge", "y_nudge", "trim_area", "init_area", "pct_area",
-    "trim_length", "init_length", "trim_join_id", "pct_length",
-    "ffi_standalone_check_number_1.0.7", "ffi_standalone_is_bool_1.0.7"
+    "trim_length", "init_length", "trim_join_id", "pct_length"
   )
 )
 
@@ -47,22 +46,46 @@ use_eval_parse <- function(data, package = NULL) {
 #' @param col Column name/value
 #' @noRd
 #' @importFrom dplyr group_by
-group_by_col <- function(data, col = NULL) {
-  if (is.null(col) || is.null(data)) {
+group_by_col <- function(data, col = NULL, allow_null = TRUE, call = caller_env()) {
+  check_required(data, call = call)
+
+  if (allow_null && is_null(col)) {
     return(data)
   }
+
+  check_name(col, call = call)
+  check_data_frame(data, call = call)
 
   if ((has_length(col, 1)) && has_name(data, col)) {
     return(dplyr::group_by(data, .data[[col]]))
   }
 }
 
-#' @name list_rbind
-#' @noRd
+
+#' @keywords internal
 #' @importFrom rlang zap current_env
 #' @importFrom vctrs vec_rbind
-list_rbind <- function(x, ..., names_to = rlang::zap(), ptype = NULL) {
-  vctrs::vec_rbind(!!!x, .names_to = names_to, .ptype = ptype, .error_call = current_env())
+list_rbind <- function(x, names_to = zap(), ptype = NULL) {
+  vctrs::vec_rbind(
+    !!!x,
+    .names_to = names_to,
+    .ptype = ptype,
+    .error_call = current_env()
+  )
+}
+
+#' @keywords internal
+#' @importFrom rlang zap current_env
+#' @importFrom vctrs vec_cbind
+list_cbind <- function(x,
+                       name_repair = c("unique", "universal", "check_unique"),
+                       size = NULL) {
+  vctrs::vec_cbind(
+    !!!x,
+    .name_repair = name_repair,
+    .size = size,
+    .error_call = current_env()
+  )
 }
 
 #' Does the data frame has a column with the same name?
@@ -76,7 +99,8 @@ has_same_name_col <- function(x,
                               prefix = "orig",
                               ask = FALSE,
                               quiet = FALSE,
-                              drop = TRUE) {
+                              drop = TRUE,
+                              call = caller_env()) {
   if (!has_name(x, col)) {
     return(x)
   }
@@ -92,7 +116,7 @@ has_same_name_col <- function(x,
   if (ask && !quiet) {
     if (!cli_yesno("The provided data includes an existing column named '{col}'.
                    Do you want to proceed and rename this column to {new_col}?")) {
-      cli_abort("Please rename your column to use this function.")
+      cli_abort("Please rename your column to use this function.", call = call)
     }
   }
 
