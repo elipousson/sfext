@@ -21,5 +21,8 @@
 #' @importFrom sf NA_crs_
 #' @importFrom sf st_bbox
 #' @importFrom sf st_crs
+#' @importFrom tibble tibble
+#' @importFrom tibble as_tibble
+#' @importFrom tibble is_tibble
 ## usethis namespace: end
 NULL

@@ -83,8 +83,9 @@ df_to_sf <- function(x,
                      address = "address",
                      y = NULL,
                      by = NULL,
-                     call = caller_env(),
-                     ...) {
+                     ...,
+                     as_tibble = TRUE,
+                     call = caller_env()) {
   cli_abort_ifnot(
     "{.arg x} must be a {.cls data.frame}.",
     condition = is.data.frame(x),
@@ -110,7 +111,8 @@ df_to_sf <- function(x,
         coords = coords,
         crs = crs,
         remove_coords = remove_coords,
-        ...
+        ...,
+        call = call
       ),
       "wkt_df" = wkt_df_to_sf(x, crs = from_crs),
       "coords_df" = coords_to_sf(
@@ -124,6 +126,10 @@ df_to_sf <- function(x,
         call = call
       ),
     )
+
+  if (as_tibble && !is_tibble(x)) {
+    x <- sf::st_as_sf(as_tibble(x))
+  }
 
   st_transform_ext(x = x, crs = crs, class = "sf")
 }
@@ -162,6 +168,7 @@ wkt_df_to_sf <- function(x, crs = NULL) {
 #' @inheritParams tidygeocoder::geo
 #' @inheritParams df_to_sf
 #' @inheritDotParams tidygeocoder::geocode
+#' @inheritParams rlang::args_error_context
 #' @return A `sf` object with POINT geometry for all geocoded addresses with valid coordinates.
 #' @seealso
 #'  [tidygeocoder::geo()], [tidygeocoder::geocode()]
@@ -174,7 +181,8 @@ address_to_sf <- function(x,
                           remove_coords = FALSE,
                           crs = NULL,
                           full_results = FALSE,
-                          ...) {
+                          ...,
+                          call = caller_env()) {
   check_installed("tidygeocoder")
 
   if (is.character(x)) {
@@ -182,10 +190,7 @@ address_to_sf <- function(x,
     x <- tibble::as_tibble_col(x, address)
   }
 
-  cli_abort_ifnot(
-    "{.arg x} must be a data frame or a character vector with full addresses.",
-    condition = is.data.frame(x)
-  )
+  check_data_frame(x, call = call)
 
   x <- has_same_name_col(x, col = "lon")
   x <- has_same_name_col(x, col = "lat")
@@ -204,7 +209,8 @@ address_to_sf <- function(x,
 
   cli_abort_ifnot(
     "No addresses from {.arg x} could be geocoded.",
-    condition = (nrow(x) > 0)
+    condition = (nrow(x) > 0),
+    call = call
   )
 
   x <-

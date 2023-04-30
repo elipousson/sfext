@@ -26,8 +26,9 @@ df_to_sf(
   address = "address",
   y = NULL,
   by = NULL,
-  call = caller_env(),
-  ...
+  ...,
+  as_tibble = TRUE,
+  call = caller_env()
 )
 }
 \arguments{
@@ -75,12 +76,12 @@ to \code{FALSE}.}
 \item{by}{A character vector of variables to join by passed to
 \code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.}
 
+\item{...}{Other parameters passed onto methods.}
+
 \item{call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be
 mentioned in error messages as the source of the error. See the
 \code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
-
-\item{...}{Other parameters passed onto methods.}
 }
 \value{
 \code{\link[=sf_to_df]{sf_to_df()}} returns a data frame with geometry dropped or converted
