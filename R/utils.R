@@ -144,6 +144,12 @@ sf_to_sfc_list <- function(data) {
   )
 }
 
+#' @keywords internal
+#' @importFrom sf st_as_sf
+#' @importFrom tibble as_tibble
+as_sf_tibble <- function(x) {
+  sf::st_as_sf(tibble::as_tibble(x))
+}
 
 #' @keywords internal
 #' @importFrom rlang zap current_env

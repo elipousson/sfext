@@ -32,7 +32,9 @@ as_sf <- function(x,
                   crs = NULL,
                   sf_col = "geometry",
                   ext = TRUE,
-                  ...) {
+                  ...,
+                  as_tibble = TRUE,
+                  call = caller_env()) {
   if (is_sf(x)) {
     return(transform_sf(x, crs = crs))
   }
@@ -49,28 +51,36 @@ as_sf <- function(x,
       # FIXME: Is there any better way of testing an address than just confirming it is a character?
       ext && is.character(x) ~ "address",
       is_raster(x) ~ "raster",
-      is_sp(x) ~ "sp"
+      TRUE ~ "other"
     )
-
-  # FIXME: When is x_is more than length 1?
-  if (length(x_is) > 1) {
-    x_is <- unique(x_is)
-  }
 
   x <-
     switch(x_is,
       "bbox" = sf_bbox_to_sf(x, ...),
       "sfg" = sf::st_sf(sf::st_sfc(x), ...),
       "sfc" = sf::st_sf(x, ...),
-      "sf_list" = dplyr::bind_rows(x),
+      "sf_list" = list_rbind_as_sf(x),
       "geo_coords" = sf::st_sf(lonlat_to_sfc(x, ...)),
       "data.frame" = df_to_sf(x, ...),
       "address" = address_to_sf(x, ...),
       "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
-      "sp" = sf::st_as_sf(x, ...)
+      "other" = try_fetch(
+        sf::st_as_sf(x, ...),
+        error = function(cnd) {
+          cli_abort(
+            "{.arg x} can't be converted to a {.cls sf} object.",
+            parent = cnd,
+            call = call
+          )
+        }
+      )
     )
 
-  if (!is.null(sf_col)) {
+  if (as_tibble) {
+    x <- as_sf_tibble(x)
+  }
+
+  if (!is_null(sf_col)) {
     sf::st_geometry(x) <- sf_col
   }
 
@@ -87,13 +97,13 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
     return(sf_bbox_transform(bbox = x, crs = crs))
   }
 
-  if (is.character(x) && rlang::has_length(x, 1)) {
-    rlang::check_installed("osmdata")
-    x <- osmdata::getbb(x, format_out = "matrix", ...)
-    stopifnot(
-      !any(is.na(x))
+  if (is_character(x) && has_length(x, 1)) {
+    check_installed(
+      "osmdata",
+      reason = "{.pkg osmdata} must be installed to convert
+      {.arg x} to a {.cls bbox}."
     )
-    crs <- 4326
+    x <- osmdata::getbb(x, format_out = "sf_polygon")
   }
 
   # Convert objects to sf if needed
@@ -102,7 +112,6 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
       has_length(x, 4) && all(is.numeric(x)) ~ "num_bbox",
       is_geom_type(x, type = c("POINT", "MULTIPOINT")) ~ "sf_pt",
       is_sf(x, ext = TRUE) ~ "sf_or_sfc",
-      is.character(x) ~ "char",
       TRUE ~ "other"
     )
 
@@ -117,7 +126,6 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
         ),
         crs = crs, ...
       ),
-      "char" = osmdata::getbb(x, ...),
       "other" = sf::st_bbox(as_sf(x, ext = ext), ...)
     )
 
@@ -130,7 +138,7 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
 #' @export
 #' @importFrom dplyr case_when
 #' @importFrom sf st_geometry st_sfc st_as_sfc
-as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
+as_sfc <- function(x, crs = NULL, ext = TRUE, ..., call = caller_env()) {
   if (is_sfc(x)) {
     return(transform_sf(x, crs = crs))
   }
@@ -152,109 +160,19 @@ as_sfc <- function(x, crs = NULL, ext = TRUE, ...) {
       # "sfc_list" =
       "df" = sf::st_geometry(as_sf(x, ext = ext, ...)),
       "geo_coords" = lonlat_to_sfc(x, ...),
-      "other" = sf::st_as_sfc(x, ...)
+      "other" = try_fetch(
+        sf::st_as_sfc(x, ...),
+        error = function(cnd) {
+          cli_abort(
+            "{.arg x} can't be converted to a {.cls sfc} object.",
+            parent = cnd,
+            call = call
+          )
+        }
+      )
     )
 
   transform_sf(x, crs = crs)
-}
-
-#' @name as_sf_list
-#' @rdname as_sf
-#' @param nm For [as_sf_list], name(s) for sf list; defaults to "data". If col
-#'   is provided, the values of the grouping column are used as names.
-#' @param col For [as_sf_list], the name of the column used to group data if x
-#'   is a sf object or used to group and nest data before passing to x.
-#' @param clean_names If `TRUE`, clean names provided to nm or created based on
-#'   value of col using [janitor::clean_names]. If `FALSE`, use names as
-#'   provided.
-#' @export
-#' @importFrom dplyr summarize group_keys group_nest
-#' @importFrom janitor make_clean_names
-as_sf_list <- function(x,
-                       nm = "data",
-                       col = NULL,
-                       crs = NULL,
-                       clean_names = TRUE) {
-  check_null(x)
-  check_string(col, allow_null = TRUE)
-
-  if (!is_sf_list(x, ext = TRUE)) {
-    # data frame with nested list column named data
-    # produced by group_nest w/ keep_all = TRUE
-    if (is.data.frame(x) && (has_name(x, "data")) && is_sf_list(x$data)) {
-      if (nm == "data") {
-        nm <- NULL
-      }
-
-      if (is.character(col)) {
-        nm <- dplyr::summarize(x, .data[[col]])[[1]]
-      }
-
-      x <- x$data
-    } else if (is_sf(x)) {
-      if (is.null(col)) {
-        x <- list(x) # coercible sf object in list length 1
-      } else {
-        check_installed("tidyr")
-        x <- group_by_col(data = x, col = col)
-        nm <- dplyr::group_keys(x)[[col]]
-        x <- tidyr::nest(x)[["data"]]
-      }
-    } else if (is_bbox(x) | is_sfc(x)) {
-      x <- list(x)
-    }
-  }
-
-  if (!is_sf_list(x, ext = TRUE)) {
-    cli_abort(
-      c("{.arg x} must be a list of {.cls sf} objects or a {.cls sf} object that
-      can be converted to a list.",
-        "i" = "The provided {.arg x} is class {.cls {class(x)}}."
-      )
-    )
-  }
-
-  if (is.null(names(x)) && !is.null(nm)) {
-    if (clean_names) {
-      # FIXME: Consider removing this option or replacing it with vctrs
-      nm <- janitor::make_clean_names(nm)
-    }
-
-    x <- rlang::set_names(x, nm)
-  }
-
-  st_transform_ext(x, crs = crs)
-}
-
-#' Make a sf list by grid position
-#'
-#' Create a grid with [st_make_grid_ext()] and
-#'
-#' @name make_sf_grid_list
-#' @inheritParams st_make_grid_ext
-#' @inheritParams as_sf_list
-#' @export
-#' @importFrom dplyr mutate
-make_sf_grid_list <- function(x,
-                              style = "rect",
-                              ncol = 2,
-                              nrow = 2,
-                              .id = "grid_id",
-                              crs = NULL,
-                              ...) {
-  grid <- st_make_grid_ext(x, style = style, ncol = ncol, nrow = nrow, .id = .id, ...)
-
-  x <- st_join_ext(x, grid, largest = TRUE)
-
-  x <-
-    relocate_sf_col(
-      dplyr::mutate(
-        x,
-        "{.id}_col_row" := as.character(glue("col_{col}_row_{row}"))
-      )
-    )
-
-  as_sf_list(x, col = paste0(.id, "_col_row"), crs = crs)
 }
 
 #' Convert data to a different class
@@ -272,22 +190,27 @@ make_sf_grid_list <- function(x,
 as_sf_class <- function(x,
                         class = NULL,
                         allow_null = TRUE,
-                        call = caller_env(),
-                        ...) {
-  if (is.null(class) && is_true(allow_null)) {
+                        ...,
+                        call = caller_env()) {
+  if (allow_null && is_null(class)) {
     return(x)
   }
 
   class <-
-    arg_match(class, c("sf", "sfc", "bbox", "list", "data.frame"), error_call = call)
+    arg_match0(
+      class,
+      c("sf", "sfc", "bbox", "list", "data.frame"),
+      error_call = call
+    )
 
-  if (is_class(x, class)) {
+  if (is_what(x, class)) {
     return(x)
   }
 
   cli_abort_ifnot(
     "{.arg x} must be an {.arg sf} object if {.arg class} is {.val data.frame}.",
-    condition = (class != "data.frame") | (is_sf(x) && class == "data.frame")
+    condition = (class != "data.frame") | (is_sf(x) && class == "data.frame"),
+    call = call
   )
 
   switch(class,
@@ -307,16 +230,16 @@ as_sf_class <- function(x,
 #' @importFrom rlang try_fetch
 #' @importFrom sf st_crs
 #' @importFrom cli cli_alert_warning cli_abort
-as_crs <- function(crs = NULL, check = FALSE, call = parent.frame()) {
-  rlang::try_fetch(
+as_crs <- function(crs = NULL, check = FALSE, call = caller_env()) {
+  try_fetch(
     sf::st_crs(crs),
     error = function(cnd) {
       msg <- "{.arg crs} {.val {crs}} can't be used."
-      if (isFALSE(check)) {
+      if (check) {
+        cli_abort(msg, parent = cnd, call = call)
+      } else {
         cli::cli_alert_warning(msg)
         NA_crs_
-      } else {
-        cli::cli_abort(msg, parent = cnd, call = call)
       }
     }
   )
@@ -354,7 +277,6 @@ as_wgs84 <- function(x) {
 #' @export
 #' @importFrom dplyr case_when
 #' @importFrom sf st_coordinates
-#' @importFrom rlang set_names
 as_xy <- function(x,
                   bbox = NULL,
                   crs = NULL,
@@ -376,7 +298,7 @@ as_xy <- function(x,
       "point" = as_sfc(x, crs = crs, ...)
     )
 
-  rlang::set_names(
+  set_names(
     as.data.frame(sf::st_coordinates(x)),
     nm
   )
@@ -395,7 +317,7 @@ pluck_len1 <- function(x) {
 #'
 #' @noRd
 as_start_end_points <- function(x, crs = 4326, class = "data.frame") {
-  rlang::check_installed("lwgeom")
+  check_installed("lwgeom")
 
   if (!is_line(x)) {
     x <- as_line(x)
@@ -407,7 +329,7 @@ as_start_end_points <- function(x, crs = 4326, class = "data.frame") {
       end = as_sf(lwgeom::st_endpoint(x))
     )
 
-  if (!is.null(class) && class == "data.frame") {
+  if (!is_null(class) && class == "data.frame") {
     pts$start <- sf_to_df(pts$start, crs = crs)
     pts$end <- sf_to_df(pts$end, crs = crs)
   }
