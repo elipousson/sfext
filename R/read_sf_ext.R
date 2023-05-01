@@ -325,7 +325,6 @@ read_sf_query <- function(path,
 #' @rdname read_sf_ext
 #' @inheritParams readxl::read_excel
 #' @export
-#' @importFrom purrr map_dfr
 read_sf_excel <- function(path,
                           sheet = NULL,
                           combine_sheets = FALSE,
@@ -347,24 +346,24 @@ read_sf_excel <- function(path,
     map_fn <- map
 
     if (is_true(combine_sheets)) {
-      map_fn <- purrr::map_dfr
+      map_fn <- map_sf
     }
 
-    return(
-      map_fn(
-        sheet,
-        ~ read_sf_excel(
-          path = path,
-          sheet = .x,
-          bbox = bbox,
-          coords = coords,
-          geo = geo,
-          address = address,
-          col_types = params[["col_types"]],
-          .name_repair = .name_repair
-        )
+    data <- map_fn(
+      sheet,
+      ~ read_sf_excel(
+        path = path,
+        sheet = .x,
+        bbox = bbox,
+        coords = coords,
+        geo = geo,
+        address = address,
+        col_types = params[["col_types"]],
+        .name_repair = .name_repair
       )
     )
+
+    return(data)
   }
 
   data_df <-
@@ -690,7 +689,6 @@ read_sf_gist <- function(url,
 #' @rdname read_sf_ext
 #' @export
 #' @importFrom sf st_layers
-#' @importFrom purrr map_dfr
 #' @importFrom cli cli_progress_along
 read_sf_gmap <- function(url,
                          bbox = NULL,
@@ -725,7 +723,7 @@ read_sf_gmap <- function(url,
 
     if (combine_layers) {
       data <-
-        purrr::map_dfr(
+        map_sf(
           cli_progress_layers,
           ~ map_gmap_layers(layer[.x])
         )
@@ -939,35 +937,6 @@ join_sf_gsheet <- function(data,
   }
 
   data
-}
-
-#' Set names from vctrs::vec_as_names
-#'
-#' @noRd
-#' @importFrom vctrs vec_as_names
-set_names_repair <- function(data = NULL,
-                             nm = NULL,
-                             .name_repair = "check_unique",
-                             repair_arg = ".name_repair",
-                             quiet = FALSE,
-                             call = caller_env()) {
-  check_character(nm, allow_null = TRUE, call = call)
-
-  nm <- nm %||% names(data)
-
-  if (is_null(nm)) {
-    return(data)
-  }
-
-  set_names(
-    data,
-    nm = vctrs::vec_as_names(
-      nm,
-      repair = .name_repair,
-      quiet = quiet,
-      repair_arg = repair_arg
-    )
-  )
 }
 
 #' Make options parameter for read_sf_csv
