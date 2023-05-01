@@ -72,7 +72,6 @@ coords_to_sf <- function(x,
 #' @param rev If `TRUE`, reverse `c("lat", "lon")` coords to `c("lon", "lat")`.
 #'   [check_coords()] only.
 #' @export
-#' @importFrom janitor make_clean_names
 check_coords <- function(x = NULL,
                          coords = NULL,
                          default = c("lon", "lat"),
@@ -142,7 +141,6 @@ rev_coords <- function(coords, pattern = c("lat", "^y"), ignore.case = TRUE) {
 #' @param value If `TRUE`, return the value of the coordinate column names. Used
 #'   by [has_coords()].
 #' @export
-#' @importFrom janitor clean_names
 #' @importFrom dplyr case_when
 #' @importFrom rlang has_name
 has_coords <- function(x, coords = NULL, value = TRUE) {
@@ -151,8 +149,8 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
   )
 
   x_names <- names(x)
-  # FIXME: could this be replaced with tolower?
-  x <- janitor::clean_names(x)
+
+  x <- set_snakecaseish_names(x)
 
   x_coords <- NULL
 
@@ -183,7 +181,6 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
 
   has_same_len(x_has_coords, x_coords)
 }
-
 
 #' @rdname coords_to_sf
 #' @name format_coords
