@@ -206,11 +206,11 @@ as_lines <- function(..., to = "LINESTRING") {
   }
 
   if (all(map_lgl(params, ~ is_line(.x) | is_multiline(.x)))) {
-    return(purrr::map_dfr(params, ~ as_sf(.x)))
+    return(map_sf(params, ~ as_sf(.x)))
   }
 
   params <-
-    purrr::map_dfr(
+    map_sf(
       params,
       ~ as_sf(as_line(.x))
     )
@@ -233,10 +233,10 @@ as_polygons <- function(..., to = "POLYGON") {
   }
 
   if (all(map_lgl(params, ~ is_polygon(.x)))) {
-    return(purrr::map_dfr(params, ~ as_sf(.x)))
+    return(map_sf(params, ~ as_sf(.x)))
   }
 
-  params <- purrr::map_dfr(params, ~ as_sf(.x))
+  params <- map_sf(params, ~ as_sf(.x))
 
   suppressWarnings(
     as_sf(sf::st_cast(params, to = to), crs = crs)
