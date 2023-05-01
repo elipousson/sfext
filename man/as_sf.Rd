@@ -4,23 +4,28 @@
 \alias{as_sf}
 \alias{as_bbox}
 \alias{as_sfc}
-\alias{as_sf_list}
 \alias{as_sf_class}
 \alias{as_crs}
 \alias{as_wgs84}
 \title{Convert an object to a simple feature or bounding box object}
 \usage{
-as_sf(x, crs = NULL, sf_col = "geometry", ext = TRUE, ...)
+as_sf(
+  x,
+  crs = NULL,
+  sf_col = "geometry",
+  ext = TRUE,
+  ...,
+  as_tibble = TRUE,
+  call = caller_env()
+)
 
 as_bbox(x, crs = NULL, ext = TRUE, ...)
 
-as_sfc(x, crs = NULL, ext = TRUE, ...)
+as_sfc(x, crs = NULL, ext = TRUE, ..., call = caller_env())
 
-as_sf_list(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE)
+as_sf_class(x, class = NULL, allow_null = TRUE, ..., call = caller_env())
 
-as_sf_class(x, class = NULL, allow_null = TRUE, call = caller_env(), ...)
-
-as_crs(crs = NULL, check = FALSE, call = parent.frame())
+as_crs(crs = NULL, check = FALSE, call = caller_env())
 
 as_wgs84(x)
 }
@@ -46,26 +51,16 @@ objects) can be converted. Defaults to \code{TRUE}.}
 \item{...}{Additional parameters passed to \link{as_sf}, \link{as_sfc}, \link{as_bbox}, or
 \link{as_sf_list}}
 
-\item{nm}{For \link{as_sf_list}, name(s) for sf list; defaults to "data". If col
-is provided, the values of the grouping column are used as names.}
-
-\item{col}{For \link{as_sf_list}, the name of the column used to group data if x
-is a sf object or used to group and nest data before passing to x.}
-
-\item{clean_names}{If \code{TRUE}, clean names provided to nm or created based on
-value of col using \link[janitor:clean_names]{janitor::clean_names}. If \code{FALSE}, use names as
-provided.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{class}{A class to convert data to; defaults to NULL (which returns
 "sf")}
 
 \item{allow_null}{For \link{as_sf_class}, if class is \code{NULL} and allow_null is \code{TRUE},
 return x without any class conversion or checks. Defaults to \code{TRUE}.}
-
-\item{call}{The execution environment of a currently
-running function, e.g. \code{caller_env()}. The function will be
-mentioned in error messages as the source of the error. See the
-\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{check}{For \code{as_crs()}, if \code{TRUE}, error if crs cannot be converted to a
 valid coordinate reference system. Defaults to \code{FALSE}.}

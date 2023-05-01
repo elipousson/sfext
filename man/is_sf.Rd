@@ -5,7 +5,6 @@
 \alias{is_sfg}
 \alias{is_sfc}
 \alias{is_bbox}
-\alias{is_sf_list}
 \alias{is_raster}
 \alias{is_sp}
 \alias{is_coords}
@@ -21,8 +20,6 @@ is_sfg(x, allow_null = FALSE)
 is_sfc(x, allow_null = FALSE)
 
 is_bbox(x, allow_null = FALSE)
-
-is_sf_list(x, named = FALSE, ext = FALSE, allow_null = FALSE)
 
 is_raster(x, allow_null = FALSE)
 
@@ -43,8 +40,6 @@ not; defaults to \code{FALSE}. (used by \link{is_sf})}
 \item{allow_null}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
 
 \item{allow_list}{If \code{TRUE}, \link{is_sf} will return TRUE if x is a list of sf objects.}
-
-\item{named}{If \code{TRUE}, check if sf list is named; defaults \code{FALSE}.}
 
 \item{y}{An sf object or a character or numeric object supported by
 \link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{is_same_crs})}

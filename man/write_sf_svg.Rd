@@ -4,83 +4,45 @@
 \alias{write_sf_svg}
 \title{Write an sf object to an svg file}
 \usage{
-write_sf_svg(
-  data,
-  filename = NULL,
-  path = NULL,
-  mapping = NULL,
-  ...,
-  scale = 1,
-  width = NA,
-  height = NA,
-  units = c("in", "cm", "mm", "px"),
-  dpi = 300
-)
+write_sf_svg(data, filename = NULL, path = NULL, ..., width = 10, height = 10)
 }
 \arguments{
-\item{data}{The data to be displayed in this layer. There are three
-options:
-
-If \code{NULL}, the default, the data is inherited from the plot
-data as specified in the call to \code{\link[ggplot2:ggplot]{ggplot()}}.
-
-A \code{data.frame}, or other object, will override the plot
-data. All objects will be fortified to produce a data frame. See
-\code{\link[ggplot2:fortify]{fortify()}} for which variables will be created.
-
-A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame}, and
-will be used as the layer data. A \code{function} can be created
-from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
-
-\item{filename}{File name to create on disk.}
-
-\item{path}{Path of the directory to save plot to: \code{path} and \code{filename}
-are combined to create the fully qualified file name. Defaults to the
-working directory.}
-
-\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
-\code{inherit.aes = TRUE} (the default), it is combined with the default mapping
-at the top level of the plot. You must supply \code{mapping} if there is no plot
-mapping.}
+\item{filename}{the name of the output file.
+    The page number is substituted if a C integer format is included in
+    the character string, as in the default.  (The result must be less
+    than \code{PATH_MAX} characters long, and may be truncated if not.
+    See \code{\link[grDevices]{postscript}} for further details.)  Tilde expansion
+    is performed where supported by the platform.}
 
 \item{...}{
-  Arguments passed on to \code{\link[ggplot2:ggsf]{ggplot2::geom_sf}}
+  Arguments passed on to \code{\link[grDevices:cairo]{grDevices::svg}}
   \describe{
-    \item{\code{stat}}{The statistical transformation to use on the data for this
-layer, either as a \code{ggproto} \code{Geom} subclass or as a string naming the
-stat stripped of the \code{stat_} prefix (e.g. \code{"count"} rather than
-\code{"stat_count"})}
-    \item{\code{position}}{Position adjustment, either as a string naming the adjustment
-(e.g. \code{"jitter"} to use \code{position_jitter}), or the result of a call to a
-position adjustment function. Use the latter if you need to change the
-settings of the adjustment.}
-    \item{\code{na.rm}}{If \code{FALSE}, the default, missing values are removed with
-a warning. If \code{TRUE}, missing values are silently removed.}
-    \item{\code{show.legend}}{logical. Should this layer be included in the legends?
-\code{NA}, the default, includes if any aesthetics are mapped.
-\code{FALSE} never includes, and \code{TRUE} always includes.
+    \item{\code{pointsize}}{the default pointsize of plotted text (in big points).}
+    \item{\code{onefile}}{should all plots appear in one file or in separate files?}
+    \item{\code{family}}{one of the device-independent font families,
+    \code{"sans"}, \code{"serif"} and \code{"mono"}, or a character
+    string specify a font family to be searched for in a
+    system-dependent way.
 
-You can also set this to one of "polygon", "line", and "point" to
-override the default legend.}
-    \item{\code{inherit.aes}}{If \code{FALSE}, overrides the default aesthetics,
-rather than combining with them. This is most useful for helper functions
-that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
+    On unix-alikes (incl.\\ Mac), see
+    the \sQuote{Cairo fonts} section in the help for \code{\link[grDevices]{X11}}.
+  }
+    \item{\code{bg}}{the initial background colour: can be overridden by setting
+    par("bg").}
+    \item{\code{antialias}}{string, the type of anti-aliasing (if any) to be used;
+    defaults to \code{"default"}.}
+    \item{\code{symbolfamily}}{
+      a length-one character string that specifies the font family to
+      be used as the "symbol" font (e.g., for \link[grDevices]{plotmath} output).}
   }}
 
-\item{scale}{Multiplicative scaling factor.}
+\item{width}{the width of the device in inches.}
 
-\item{width, height, units}{Plot size in \code{units} ("in", "cm", "mm", or "px").
-If not supplied, uses the size of current graphics device.}
-
-\item{dpi}{Plot resolution. Also accepts a string input: "retina" (320),
-"print" (300), or "screen" (72). Applies only to raster output types.}
+\item{height}{the height of the device in inches.}
 }
 \description{
-\code{\link[=write_sf_svg]{write_sf_svg()}} uses \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}} and \code{\link[ggplot2:ggtheme]{ggplot2::theme_void()}} to
-create a simple plot of an sf object and then save the plot as an svg file
-using \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}. This function is convenient for working with
-designers or other collaborators interested in using spatial data outside of
-R or a desktop GIS application.
+\code{\link[=write_sf_svg]{write_sf_svg()}} uses \code{\link[=plot]{plot()}} and \code{\link[=svg]{svg()}} to create a simple plot of an sf
+object geometry. This function is convenient for working with designers or
+other collaborators interested in using spatial data outside of R or a
+desktop GIS application.
 }

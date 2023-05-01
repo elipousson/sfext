@@ -13,7 +13,8 @@ address_to_sf(
   remove_coords = FALSE,
   crs = NULL,
   full_results = FALSE,
-  ...
+  ...,
+  call = caller_env()
 )
 }
 \arguments{
@@ -83,6 +84,11 @@ and FALSE if \code{return_input} is TRUE. This argument is passed to the \code{g
     \item{\code{unique_only}}{if TRUE then only unique results will be returned and
 return_input will be set to FALSE.}
   }}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \value{
 A \code{sf} object with POINT geometry for all geocoded addresses with valid coordinates.
