@@ -977,8 +977,7 @@ make_sf_wkt_filter <- function(dsn = NULL,
       is_null(wkt_filter)
   )
 
-  dsn_layers <- sf::st_layers(dsn)
-  crs <- dsn_layers$crs[[1]]$input
+  crs <- sf::st_crs(peek_sf_feature(dsn))
 
   # Convert bbox to well known text
   sf_bbox_to_wkt(bbox = bbox, crs = crs)
