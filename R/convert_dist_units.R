@@ -87,10 +87,3 @@ set_dist_units <- function(x = NULL,
     mode = mode
   )
 }
-
-#' Replace spaces with underscores
-#'
-#' @noRd
-underscore <- function(x) {
-  gsub(" ", "_", x)
-}

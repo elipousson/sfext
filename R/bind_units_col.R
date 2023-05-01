@@ -53,10 +53,9 @@ bind_units_col <- function(x,
     call = call
   )
 
-  .id <- .id %||% janitor::make_clean_names(units)
+  .id <- .id %||% snakecaseish(units)
 
-  x <-
-    has_same_name_col(x, col = .id)
+  x <- has_same_name_col(x, col = .id)
 
   x <-
     dplyr::bind_cols(
