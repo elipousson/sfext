@@ -125,7 +125,8 @@ sf_bbox_point <- function(bbox, point = NULL, crs = NULL, call = caller_env()) {
 #' @rdname sf_bbox_misc
 #' @export
 #' @importFrom sf st_as_text
-sf_bbox_to_wkt <- function(bbox) {
+sf_bbox_to_wkt <- function(bbox, crs = NULL) {
+  bbox <- sf_bbox_transform(bbox, crs = crs)
   # Convert bbox to well known text
   sf::st_as_text(sf_bbox_to_sfc(bbox))
 }

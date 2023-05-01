@@ -299,6 +299,7 @@ read_sf_query <- function(path,
 
   wkt_filter <-
     make_sf_wkt_filter(
+      dsn = dsn,
       wkt_filter = wkt_filter,
       bbox = bbox
     )
@@ -964,7 +965,8 @@ make_sf_options <- function(options = NULL,
 #' Make a wkt_filter from a bbox for read_sf_query
 #'
 #' @noRd
-make_sf_wkt_filter <- function(wkt_filter = NULL,
+make_sf_wkt_filter <- function(dsn = NULL,
+                               wkt_filter = NULL,
                                bbox = NULL) {
   if (is_null(bbox)) {
     return(wkt_filter %||% character(0))
@@ -975,8 +977,10 @@ make_sf_wkt_filter <- function(wkt_filter = NULL,
       is_null(wkt_filter)
   )
 
+  crs <- sf::st_crs(peek_sf_feature(dsn))
+
   # Convert bbox to well known text
-  sf_bbox_to_wkt(bbox = bbox)
+  sf_bbox_to_wkt(bbox = bbox, crs = crs)
 }
 
 #' Make a query from a name and name_col value for read_sf_query

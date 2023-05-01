@@ -19,7 +19,7 @@ sf_bbox_transform(bbox, crs = NULL)
 
 sf_bbox_point(bbox, point = NULL, crs = NULL, call = caller_env())
 
-sf_bbox_to_wkt(bbox)
+sf_bbox_to_wkt(bbox, crs = NULL)
 
 sf_bbox_to_lonlat_query(bbox, coords = c("longitude", "latitude"), crs = 4326)
 

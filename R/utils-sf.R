@@ -91,15 +91,21 @@ get_sf_col <- function(x = NULL) {
 #' @export
 #' @importFrom sf st_layers read_sf
 get_sf_colnames <- function(x = NULL, dsn = NULL, layer = NULL, ...) {
-  # Based on https://mastodon.sdf.org/@caleb/109286477381437051
   if (is_null(x) && !is_null(dsn)) {
-    layer <- match.arg(layer, sf::st_layers(dsn)[["name"]])
-    x <-
-      sf::read_sf(
-        dsn,
-        query = paste("select * from", layer, "limit 1"),
-        ...
-      )
+    x <- peek_sf_feature(dsn, layer, ...)
   }
   colnames(x)
+}
+
+#' Read a single sf feature from a single layer
+#'
+#' @noRd
+peek_sf_feature <- function(dsn, layer = NULL, ...) {
+  layer <- match.arg(layer, sf::st_layers(dsn)[["name"]])
+  # Based on https://mastodon.sdf.org/@caleb/109286477381437051
+  sf::read_sf(
+    dsn,
+    query = paste("select * from", layer, "limit 1"),
+    ...
+  )
 }
