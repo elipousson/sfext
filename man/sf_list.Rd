@@ -41,6 +41,14 @@ is a sf object or used to group and nest data before passing to x.}
 value of col using \link[janitor:clean_names]{janitor::clean_names}. If \code{FALSE}, use names as
 provided.}
 
+\item{.name_repair}{One of "unique", "universal", or "check_unique". See
+\code{\link[vctrs:vec_as_names]{vctrs::vec_as_names()}} for the meaning of these options.}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
+
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
 not; defaults to \code{FALSE}. (used by \link{is_sf})}
 

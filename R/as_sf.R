@@ -24,6 +24,8 @@
 #' @param ... Additional parameters passed to [sf::st_bbox()] when calling
 #'   [as_bbox()] or passed to [sf::st_sf()], [sf::st_as_sf()], or [df_to_sf()]
 #'   for [as_sf()] (depending on class of x)
+#' @param as_tibble If `TRUE`, always return sf object as a tibble. If `FALSE`,
+#'   some conversions may still return a tibble object.
 #' @example examples/as_sf.R
 #' @export
 #' @importFrom dplyr case_when bind_rows

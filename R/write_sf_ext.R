@@ -496,6 +496,9 @@ write_sf_types <- function(data,
 #' desktop GIS application.
 #'
 #' @name write_sf_svg
+#' @param data A sf object to save as a svg file.
+#' @param path File path to combine with filename. Optional if filename is
+#'   provided. filename is optional if path includes a svg file extension.
 #' @inheritParams grDevices::svg
 #' @inheritDotParams grDevices::svg
 #' @export

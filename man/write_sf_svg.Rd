@@ -7,12 +7,17 @@
 write_sf_svg(data, filename = NULL, path = NULL, ..., width = 10, height = 10)
 }
 \arguments{
+\item{data}{A sf object to save as a svg file.}
+
 \item{filename}{the name of the output file.
     The page number is substituted if a C integer format is included in
     the character string, as in the default.  (The result must be less
     than \code{PATH_MAX} characters long, and may be truncated if not.
     See \code{\link[grDevices]{postscript}} for further details.)  Tilde expansion
     is performed where supported by the platform.}
+
+\item{path}{File path to combine with filename. Optional if filename is
+provided. filename is optional if path includes a svg file extension.}
 
 \item{...}{
   Arguments passed on to \code{\link[grDevices:cairo]{grDevices::svg}}

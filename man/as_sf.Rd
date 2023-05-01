@@ -51,6 +51,9 @@ objects) can be converted. Defaults to \code{TRUE}.}
 \item{...}{Additional parameters passed to \link{as_sf}, \link{as_sfc}, \link{as_bbox}, or
 \link{as_sf_list}}
 
+\item{as_tibble}{If \code{TRUE}, always return sf object as a tibble. If \code{FALSE},
+some conversions may still return a tibble object.}
+
 \item{call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be
 mentioned in error messages as the source of the error. See the

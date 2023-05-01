@@ -18,6 +18,9 @@ NULL
 #' @param clean_names If `TRUE`, clean names provided to nm or created based on
 #'   value of col using [janitor::clean_names]. If `FALSE`, use names as
 #'   provided.
+#' @param .name_repair One of "unique", "universal", or "check_unique". See
+#'   [vctrs::vec_as_names()] for the meaning of these options.
+#' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom dplyr summarize group_keys group_nest
 as_sf_list <- function(x,
