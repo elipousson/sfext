@@ -32,6 +32,71 @@ utils::globalVariables(
   )
 )
 
+#' Set names using vctrs::vec_as_names
+#'
+#' @noRd
+#' @importFrom vctrs vec_as_names
+set_names_repair <- function(data = NULL,
+                             nm = NULL,
+                             .name_repair = "check_unique",
+                             repair_arg = ".name_repair",
+                             quiet = FALSE,
+                             call = caller_env()) {
+  check_character(nm, allow_null = TRUE, call = call)
+
+  nm <- nm %||% names(data)
+
+  if (is_null(nm)) {
+    return(data)
+  }
+
+  if (!is_null(.name_repair)) {
+    nm <- vctrs::vec_as_names(
+      nm,
+      repair = .name_repair,
+      quiet = quiet,
+      repair_arg = repair_arg
+    )
+  }
+
+  set_names(data, nm = nm)
+}
+
+#' Set snakecase-ish names (simple stand-in for janitor::clean_names)
+#'
+#' @noRd
+set_snakecaseish_names <- function(x, .name_repair = NULL, ..., call = caller_env()) {
+  set_names_repair(x, snakecaseish(names(x)), .name_repair = .name_repair, call = call)
+}
+
+#'
+#' @noRd
+underscore <- function(x) {
+  gsub("[[:blank:]]", "_", x, perl = TRUE)
+}
+
+#' Make snakecase-ish names (simple stand-in for janitor::make_clean_names)
+#'
+#' @noRd
+snakecaseish <- function(x,
+                         replace_blank = "_",
+                         remove_punct = TRUE,
+                         lower = TRUE) {
+  if (!is.character(replace_blank)) {
+    x <- gsub("[[:blank:]]", replace_blank, x, perl = TRUE)
+  }
+
+  if (remove_punct) {
+    x <- gsub("[[:punct:]]", "", x, perl = TRUE)
+  }
+
+  if (lower) {
+    x <- tolower(x)
+  }
+
+  x
+}
+
 #' Eval and parse data
 #'
 #' @noRd
@@ -59,6 +124,24 @@ group_by_col <- function(data, col = NULL, allow_null = TRUE, call = caller_env(
   if ((has_length(col, 1)) && has_name(data, col)) {
     return(dplyr::group_by(data, .data[[col]]))
   }
+}
+
+#' @noRd
+sf_to_sfc_list <- function(data) {
+  lapply(
+    do.call(
+      "mapply",
+      c(
+        FUN = list,
+        data,
+        SIMPLIFY = FALSE,
+        USE.NAMES = FALSE
+      )
+    ),
+    function(x) {
+      sf::st_sfc(x$geometry, crs = sf::st_crs(data))
+    }
+  )
 }
 
 
@@ -105,10 +188,13 @@ has_same_name_col <- function(x,
     return(x)
   }
 
+  check_name(col, call = call)
+
   cli_quiet(quiet)
 
   if (drop) {
-    return(dplyr::select(x, -dplyr::all_of(col)))
+    x[[col]] <- NULL
+    return(x)
   }
 
   new_col <- paste0(prefix, "_", col)
