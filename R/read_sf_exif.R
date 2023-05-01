@@ -151,7 +151,7 @@ write_exif_from <- function(path,
 
     cliExtras::cli_abort_ifnot(
       "{.arg data} must have a column named {.val path}.",
-      condition = rlang::has_name(data, "path")
+      condition = has_name(data, "path")
     )
 
     path <- data[["path"]]

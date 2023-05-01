@@ -1,6 +1,6 @@
 test_that("get_data_dir works", {
   expect_true(
-    is.null(get_data_dir())
+    is_null(get_data_dir())
   )
 
   skip_on_ci()
