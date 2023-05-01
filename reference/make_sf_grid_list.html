@@ -47,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Make a sf list by grid position</h1>
-      <small class="dont-index">Source: <a href="https://github.com/elipousson/sfext/blob/HEAD/R/as_sf.R" class="external-link"><code>R/as_sf.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/sfext/blob/HEAD/R/st_make_grid_ext.R" class="external-link"><code>R/st_make_grid_ext.R</code></a></small>
       <div class="d-none name"><code>make_sf_grid_list.Rd</code></div>
     </div>
 
@@ -94,8 +94,46 @@ row and id are added as columns to the grid if they are provided.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Additional parameters passed to <a href="as_sf.html">as_sf</a>, <a href="as_sf.html">as_sfc</a>, <a href="as_sf.html">as_bbox</a>, or
-<a href="as_sf.html">as_sf_list</a></p></dd>
+<dd><p>Arguments passed on to <code><a href="st_make_grid_ext.html">st_make_grid_ext</a></code></p><dl><dt><code>ncol,nrow</code></dt>
+<dd><p>Used to set n if either are not <code>NULL</code>; defaults to <code>NULL</code>.
+row and id are added as columns to the grid if they are provided.</p></dd>
+
+    <dt><code>gutter</code></dt>
+<dd><p>Distance in units between each column cell; gutter effectively
+serves as a margin as the negative buffer is applied to all cells
+(including those at the edges of the grid).</p></dd>
+
+    <dt><code>desc</code></dt>
+<dd><p>If TRUE, reverse standard order of cell id numbering; defaults
+<code>FALSE</code></p></dd>
+
+    <dt><code>n</code></dt>
+<dd><p>If n is NULL and square is <code>TRUE</code>, the grid is set automatically to
+be 10 cells wide, Default: <code>NULL</code></p></dd>
+
+    <dt><code>what</code></dt>
+<dd><p>"polygons", "corners", "centers"; set to centers automatically if
+style is "circle", "circle_offset" but a buffer is applied to return
+circular polygons.</p></dd>
+
+    <dt><code>filter</code></dt>
+<dd><p>If <code>TRUE</code> (or if trim is <code>TRUE</code>) filter grid geometry by x
+using <a href="st_filter_ext.html">st_filter_ext</a></p></dd>
+
+    <dt><code>unit</code></dt>
+<dd><p>Units for buffer. Supported options include "meter", "foot",
+"kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
+instead of "kilometer") are also supported. Distance in units is converted
+to units matching GDAL units for x; defaults to "meter"</p></dd>
+
+    <dt><code>cellsize</code></dt>
+<dd><p>numeric of length 1 or 2 with target cellsize: for square or rectangular cells the width and height, for hexagonal cells the distance between opposite edges (edge length is cellsize/sqrt(3)). A length units object can be passed, or an area unit object with area size of the square or hexagonal cell.</p></dd>
+
+    <dt><code>trim</code></dt>
+<dd><p>If <code>TRUE</code>, x is trimmed to y with <code><a href="st_erase.html">st_trim()</a></code>.</p></dd>
+
+  
+</dl></dd>
 
 </dl></div>
 

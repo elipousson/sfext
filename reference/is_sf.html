@@ -65,8 +65,6 @@
 <span></span>
 <span><span class="fu">is_bbox</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_sf_list</span><span class="op">(</span><span class="va">x</span>, named <span class="op">=</span> <span class="cn">FALSE</span>, ext <span class="op">=</span> <span class="cn">FALSE</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
 <span><span class="fu">is_raster</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">is_sp</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -97,10 +95,6 @@ not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 <dd><p>If <code>TRUE</code>, is_sf will return TRUE if x is a list of sf objects.</p></dd>
 
 
-<dt>named</dt>
-<dd><p>If <code>TRUE</code>, check if sf list is named; defaults <code>FALSE</code>.</p></dd>
-
-
 <dt>y</dt>
 <dd><p>An sf object or a character or numeric object supported by
 <a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs</a> that can be compared to x. (used by is_same_crs)</p></dd>
@@ -112,7 +106,7 @@ not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 <ul><li><p>is_sf: is x a <code>sf</code> class object?</p></li>
 <li><p>is_sfc: is x is a <code>sfc</code> class object?</p></li>
 <li><p>is_bbox: is x is a <code>bbox</code> class object?</p></li>
-<li><p>is_sf_list: is x is a list of <code>sf</code> class objects (with or without names)?</p></li>
+<li><p><a href="sf_list.html">is_sf_list</a>: is x is a list of <code>sf</code> class objects (with or without names)?</p></li>
 <li><p>is_raster: is x a <code>Raster</code> class object?</p></li>
 <li><p>is_sp: is x a <code>Spatial</code> class object of any type?</p></li>
 <li><p>is_geo_coords: is x likely a geodetic coordinate pair (a length 2 numeric vector, with a max absolute value less than or equal to 180)?</p></li>
@@ -130,7 +124,7 @@ not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 <span class="r-in"><span><span class="fu">is_sfc</span><span class="op">(</span><span class="va">nc</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">is_sf_list</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="sf_list.html">is_sf_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">is_bbox</span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span></span>
