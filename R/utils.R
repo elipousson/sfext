@@ -158,6 +158,17 @@ list_rbind <- function(x, names_to = zap(), ptype = NULL) {
 }
 
 #' @keywords internal
+#' @importFrom sf st_as_sf
+list_rbind_as_sf <- function(x, ...) {
+  sf::st_as_sf(list_rbind(x, ...))
+}
+
+#' @keywords internal
+map_sf <- function(x, .f, ...) {
+  list_rbind_as_sf(map(x, .f, ...))
+}
+
+#' @keywords internal
 #' @importFrom rlang zap current_env
 #' @importFrom vctrs vec_cbind
 list_cbind <- function(x,
