@@ -142,17 +142,17 @@ st_square <- function(x,
     rotate <- rotate + 45
   } else {
     geom <-
-      purrr::map_dfr(
-        sf::st_geometry(x),
+      map(
+        sf_to_sfc_list(x),
         ~ st_bbox_ext(
           x = .x,
           asp = 1,
-          class = "sf",
+          class = "sfc",
           crs = crs
         )
       )
 
-    geom <- sf::st_as_sfc(geom)
+    geom <- vctrs::list_unchop(geom)
   }
 
   x <- sf::st_set_geometry(x, geom)
@@ -204,7 +204,7 @@ st_circle <- function(x,
 
   if (by_feature) {
     if (use_lwgeom && !inscribed) {
-      rlang::check_installed("lwgeom")
+      check_installed("lwgeom")
       return(lwgeom::st_minimum_bounding_circle(x))
     }
 
@@ -314,7 +314,13 @@ st_donut <- function(x,
       x <- as_sf(x)
     }
 
-    x$st_donut_id <- seq_len(nrow(x))
+    x <-
+      dplyr::bind_cols(
+        x,
+        "st_donut_id" = as.character(seq_len(nrow(x)))
+      )
+
+    x <- dplyr::relocate(x, all_of("st_donut_id"), .before = everything())
 
     x_list <- as_sf_list(x, col = "st_donut_id")
 
