@@ -53,7 +53,11 @@ st_trim <- function(x, y, union = TRUE, ...) {
   )
 }
 
-#' @noRd
+#' Checks if all geometries are already valid and make valid if not
+#'
+#' @inheritParams sf::st_make_valid
+#' @export
+#' @importFrom sf st_is_valid st_make_valid
 st_make_valid_ext <- function(x, ...) {
   if (all(sf::st_is_valid(x))) {
     return(x)

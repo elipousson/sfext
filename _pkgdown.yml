@@ -38,6 +38,7 @@ reference:
   - '`st_misc`'
   - '`st_nudge`'
   - '`st_transform_ext`'
+  - '`st_make_valid_ext`'
   - '`st_cast_ext`'
   - '`st_make_grid_ext`'
 - title: Get information about sf, sfc, and bbox objects
