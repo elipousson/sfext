@@ -15,8 +15,7 @@ test_that("is_sf and as_sf functions work", {
   expect_true(is_sf(sfc, ext = TRUE))
 
   expect_true(is_sf_list(list(nc)))
-  expect_false(is_sf_list(list(nc), named = TRUE))
-  expect_true(is_sf_list(list("nc" = nc), named = TRUE))
+  expect_true(is_sf_list(list("nc" = nc)))
 
   expect_true(is_geo_coords(nc_geo_coords))
 
