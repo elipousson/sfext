@@ -56,7 +56,9 @@ st_bbox_ext <- function(x = NULL,
           asp = asp,
           unit = unit,
           crs = crs,
-          class = class
+          class = class,
+          nudge = nudge,
+          allow_null = allow_null
         )
       )
 
