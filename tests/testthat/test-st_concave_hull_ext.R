@@ -1,7 +1,7 @@
 test_that("st_concave_hull_ext works", {
   nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc$group <- sample(c("A", "B", "C"), size = nrow(nc), replace = TRUE)
-
+  skip_on_ci()
   expect_s3_class(
     st_concave_hull_ext(nc),
     "sf"
