@@ -59,7 +59,9 @@ st_trim <- function(x, y, union = TRUE, ...) {
 #' @export
 #' @importFrom sf st_is_valid st_make_valid
 st_make_valid_ext <- function(x, ...) {
-  if (all(sf::st_is_valid(x))) {
+  validity <- sf::st_is_valid(x)
+
+  if (!any(is.na(validity)) && all(validity)) {
     return(x)
   }
 
