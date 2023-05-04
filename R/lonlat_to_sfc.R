@@ -86,17 +86,12 @@ is_lonlat_in_range <- function(x,
                                range = NULL,
                                rev = FALSE,
                                allow_null = TRUE,
-                               call = parent.frame()) {
-  if (is_null(range) & allow_null) {
+                               call = caller_env()) {
+  if (allow_null && is_null(range)) {
     return(TRUE)
   }
 
-  cli_abort_ifnot(
-    "{.arg x} must be a length 2 vector." = (length(x) == 2),
-    call = call
-  )
-
-  check_range(range)
+  check_range(range, call = call)
 
   if (isTRUE(rev)) {
     x <- rev(x)
@@ -104,8 +99,16 @@ is_lonlat_in_range <- function(x,
 
   x <- as.numeric(x)
 
-  lon_in_range <- (x[[1]] >= range[["xmin"]]) & (x[[1]] <= range[["xmax"]])
-  lat_in_range <- (x[[2]] >= range[["ymin"]]) & (x[[2]] <= range[["ymax"]])
+  check_number_decimal(x, call = call)
 
-  lon_in_range & lon_in_range
+  cli_abort_ifnot(
+    has_length(x, 2),
+    message = "{.arg x} must be a length 2 vector.",
+    call = call
+  )
+
+  lon_in_range <- (x[[1]] >= range[["xmin"]]) && (x[[1]] <= range[["xmax"]])
+  lat_in_range <- (x[[2]] >= range[["ymin"]]) && (x[[2]] <= range[["ymax"]])
+
+  lon_in_range && lon_in_range
 }
