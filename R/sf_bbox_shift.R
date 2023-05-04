@@ -24,27 +24,33 @@ sf_bbox_shift <- function(bbox,
                           dir = NULL,
                           call = caller_env()) {
 
-  xy_nudge <- set_xy_nudge_list(x_nudge, y_nudge, dir)
+  xy_nudge <- set_xy_nudge_list(x_nudge, y_nudge, dir, call = call)
 
   side <- arg_match(side, multiple = TRUE, error_call = call)
 
-  check_side <- function(x, y) {
+  has_side_value <- function(x, y) {
     is_any_in(c(x, "all"), y)
   }
 
-  if (check_side("left", side)) {
+  nudge_bbox <- function(bb, nudge, dim = "x", side = "min") {
+    dim <- paste0(dim, side)
+    bb[[dim]] <- bb[[dim]] + nudge[[side]]
+    bb
+  }
+
+  if (has_side_value("left", side)) {
     bbox <- nudge_bbox(bbox, xy_nudge[["x_nudge"]], "x", "min")
   }
 
-  if (check_side("right", side)) {
+  if (has_side_value("right", side)) {
     bbox <- nudge_bbox(bbox, xy_nudge[["x_nudge"]], "x", "max")
   }
 
-  if (check_side("bottom", side)) {
+  if (has_side_value("bottom", side)) {
     bbox <- nudge_bbox(bbox, xy_nudge[["y_nudge"]], "y", "min")
   }
 
-  if (check_side("top", side)) {
+  if (has_side_value("top", side)) {
     bbox <- nudge_bbox(bbox, xy_nudge[["y_nudge"]], "y", "max")
   }
 
@@ -58,8 +64,8 @@ set_xy_nudge_list <- function(x_nudge = 0,
                               call = caller_env()) {
   dir <- set_shift_dir(dir, call = call)
 
-  check_number_decimal(x_nudge, call = call)
-  check_number_decimal(y_nudge, call = call)
+  check_bare_numeric(x_nudge, call = call)
+  check_bare_numeric(y_nudge, call = call)
 
   if (has_length(x_nudge, 1) && has_length(y_nudge, 1)) {
     if (is_null(dir)) {
@@ -78,19 +84,12 @@ set_xy_nudge_list <- function(x_nudge = 0,
 }
 
 #' @noRd
-nudge_bbox <- function(bb, nudge, dim = "x", side = "min") {
-  dim <- paste0(dim, side)
-  bb[[dim]] <- bb[[dim]] + nudge[[side]]
-  bb
-}
-
-#' @noRd
 set_shift_dir <- function(dir, allow_null = TRUE, call = caller_env()) {
   if (allow_null && is_null(dir)) {
     return(dir)
   }
 
-  if (is.numeric(dir)) {
+  if (is_bare_numeric(dir)) {
     return(c(dir * -1, dir))
   }
 

@@ -32,7 +32,7 @@ sf_bbox_diag_ratio_to_dist(bbox, diag_ratio, units = NULL, drop = TRUE)
 
 sf_bbox_asp(bbox)
 
-sf_bbox_orientation(bbox, tolerance = 0.1)
+sf_bbox_orientation(bbox, tolerance = 0.1, call = caller_env())
 
 sf_bbox_check_fit(bbox, dist)
 }

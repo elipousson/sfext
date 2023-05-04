@@ -145,9 +145,9 @@ sf_bbox_asp <- function(bbox) {
 #'   [sf_bbox_orientation()] to describe an aspect ratio as landscape or
 #'   portrait; defaults to 0.1.
 #' @export
-sf_bbox_orientation <- function(bbox, tolerance = 0.1) {
+sf_bbox_orientation <- function(bbox, tolerance = 0.1, call = caller_env()) {
   bbox_asp <- sf_bbox_asp(bbox)
-  check_number_decimal(tolerance)
+  check_number_decimal(tolerance, call = call)
 
   if (bbox_asp > (1 + tolerance)) {
     return("landscape")

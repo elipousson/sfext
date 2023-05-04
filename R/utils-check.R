@@ -21,6 +21,34 @@ check_null <- function(x = NULL,
   return(invisible(TRUE))
 }
 
+#' Check bare numeric
+#'
+#' @noRd
+check_bare_numeric <- function(x,
+                               ...,
+                               allow_null = FALSE,
+                               arg = caller_arg(x),
+                               call = caller_env()) {
+  if (!missing(x)) {
+    if (is_bare_numeric(x)) {
+      return(invisible(NULL))
+    }
+    if (allow_null && is_null(x)) {
+      return(invisible(NULL))
+    }
+  }
+
+  stop_input_type(
+    x,
+    "a bare numeric vector",
+    ...,
+    allow_na = FALSE,
+    allow_null = allow_null,
+    arg = arg,
+    call = call
+  )
+}
+
 #' Check if x is between a min and max length
 #'
 #' @noRd

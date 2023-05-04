@@ -72,10 +72,11 @@ lonlat_to_sfc <- function(x,
 
 #' @keywords internal
 #' @noRd
-check_range <- function(range = NULL, nm = c("xmin", "ymin", "xmax", "ymax")) {
-  if (!is_vector(range, length(nm)) | !all(has_name(range, nm))) {
+check_range <- function(range = NULL, nm = c("xmin", "ymin", "xmax", "ymax"), call = caller_env()) {
+  if (!is_vector(range, length(nm)) || !all(has_name(range, nm))) {
     cli_abort(
-      "{.arg range} must be a length {length(nm)} vector with names {.val {nm}}."
+      "{.arg range} must be a length {length(nm)} vector with names {.val {nm}}.",
+      call = call
     )
   }
 }
@@ -99,7 +100,7 @@ is_lonlat_in_range <- function(x,
 
   x <- as.numeric(x)
 
-  check_number_decimal(x, call = call)
+  check_bare_numeric(x, call = call)
 
   cli_abort_ifnot(
     has_length(x, 2),
