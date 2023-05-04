@@ -82,7 +82,11 @@ the <code>allow_list</code> parameter supports this type of input.</p>
 <span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_sf_list</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="cn">TRUE</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">is_sf_list</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="cn">TRUE</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">sf_list_rbind</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">map_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">.f</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -126,6 +130,12 @@ not; defaults to <code>FALSE</code>. (used by <a href="is_sf.html">is_sf</a>)</p
 
 <dt>allow_null</dt>
 <dd><p>If <code>TRUE</code> and x is <code>NULL</code>, return <code>TRUE</code>; defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>For <code>sf_list_rbind()</code>, additional parameters passed to
+<code><a href="https://purrr.tidyverse.org/reference/list_c.html" class="external-link">purrr::list_rbind()</a></code>. For <code>map_as_sf()</code>, additional parameters passed to
+map.</p></dd>
 
 </dl></div>
     <div class="section level2">
