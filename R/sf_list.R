@@ -20,6 +20,9 @@ NULL
 #'   provided.
 #' @param .name_repair One of "unique", "universal", or "check_unique". See
 #'   [vctrs::vec_as_names()] for the meaning of these options.
+#' @param ... For [sf_list_rbind()], additional parameters passed to
+#'   [purrr::list_rbind()]. For [map_as_sf()], additional parameters passed to
+#'   map.
 #' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom dplyr summarize group_keys group_nest
@@ -152,4 +155,29 @@ is_sf_list <- function(x, ext = TRUE, allow_null = FALSE) {
       TRUE
     )
   )
+}
+
+#' @keywords internal
+#' @importFrom rlang zap current_env
+#' @importFrom vctrs vec_rbind
+list_rbind <- function(x, names_to = zap(), ptype = NULL) {
+  vctrs::vec_rbind(
+    !!!x,
+    .names_to = names_to,
+    .ptype = ptype,
+    .error_call = current_env()
+  )
+}
+
+#' @name sf_list_rbind
+#' @rdname sf_list
+#' @importFrom sf st_as_sf
+sf_list_rbind <- function(x, ...) {
+  sf::st_as_sf(list_rbind(x, ...))
+}
+
+#' @name map_as_sf
+#' @rdname sf_list
+map_as_sf <- function(x, .f, ...) {
+  sf_list_rbind(map(x, .f, ...))
 }

@@ -5,6 +5,8 @@
 \alias{as_sf_list}
 \alias{new_sf_list}
 \alias{is_sf_list}
+\alias{sf_list_rbind}
+\alias{map_as_sf}
 \title{Creating and checking sf lists}
 \usage{
 as_sf_list(
@@ -27,6 +29,10 @@ new_sf_list(
 )
 
 is_sf_list(x, ext = TRUE, allow_null = FALSE)
+
+sf_list_rbind(x, ...)
+
+map_as_sf(x, .f, ...)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}
@@ -53,6 +59,10 @@ mentioned in error messages as the source of the error. See the
 not; defaults to \code{FALSE}. (used by \link{is_sf})}
 
 \item{allow_null}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
+
+\item{...}{For \code{\link[=sf_list_rbind]{sf_list_rbind()}}, additional parameters passed to
+\code{\link[purrr:list_c]{purrr::list_rbind()}}. For \code{\link[=map_as_sf]{map_as_sf()}}, additional parameters passed to
+map.}
 }
 \description{
 Functions for coercing an object to an sf_list class objects created by

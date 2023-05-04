@@ -347,7 +347,7 @@ read_sf_excel <- function(path,
     map_fn <- map
 
     if (is_true(combine_sheets)) {
-      map_fn <- map_sf
+      map_fn <- map_as_sf
     }
 
     data <- map_fn(
@@ -724,7 +724,7 @@ read_sf_gmap <- function(url,
 
     if (combine_layers) {
       data <-
-        map_sf(
+        map_as_sf(
           cli_progress_layers,
           ~ map_gmap_layers(layer[.x])
         )
