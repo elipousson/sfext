@@ -23,67 +23,83 @@ sf_bbox_shift <- function(bbox,
                           side = c("all", "top", "bottom", "left", "right"),
                           dir = NULL,
                           call = caller_env()) {
+
+  xy_nudge <- set_xy_nudge_list(x_nudge, y_nudge, dir)
+
   side <- arg_match(side, multiple = TRUE, error_call = call)
-
-  if (is.character(dir)) {
-    dir <-
-      switch(dir,
-        "in" = c(1, -1),
-        "out" = c(-1, 1)
-      )
-  } else if (is.numeric(dir)) {
-    dir <- c(dir * -1, dir)
-  }
-
-  stopifnot(
-    is.numeric(x_nudge) && is.numeric(y_nudge),
-    (length(x_nudge) <= 2) && (length(y_nudge) <= 2)
-  )
-
-  if ((length(x_nudge) == 1) && (length(y_nudge) == 1)) {
-    if (is_null(dir)) {
-      x_nudge <- as.list(rep(x_nudge, 2))
-      y_nudge <- as.list(rep(y_nudge, 2))
-    } else if (is.numeric(dir)) {
-      x_nudge <- as.list(dir * abs(x_nudge))
-      y_nudge <- as.list(dir * abs(y_nudge))
-    }
-  } else if ((length(x_nudge) == 2) && (length(y_nudge) == 2)) {
-    x_nudge <- as.list(x_nudge)
-    y_nudge <- as.list(y_nudge)
-  }
-
-  nm <- c("min", "max")
-  x_nudge <- set_names(x_nudge, nm)
-  y_nudge <- set_names(y_nudge, nm)
 
   check_side <- function(x, y) {
     is_any_in(c(x, "all"), y)
   }
 
-  nudge_bbox <- function(bb, nudge, dim = "x", side = "min") {
-    dim <- paste0(dim, side)
-    bb[[dim]] <- bb[[dim]] + nudge[[side]]
-    bb
-  }
-
   if (check_side("left", side)) {
-    bbox <- nudge_bbox(bbox, x_nudge, "x", "min")
+    bbox <- nudge_bbox(bbox, xy_nudge[["x_nudge"]], "x", "min")
   }
 
   if (check_side("right", side)) {
-    bbox <- nudge_bbox(bbox, x_nudge, "x", "max")
+    bbox <- nudge_bbox(bbox, xy_nudge[["x_nudge"]], "x", "max")
   }
 
   if (check_side("bottom", side)) {
-    bbox <- nudge_bbox(bbox, y_nudge, "y", "min")
+    bbox <- nudge_bbox(bbox, xy_nudge[["y_nudge"]], "y", "min")
   }
 
   if (check_side("top", side)) {
-    bbox <- nudge_bbox(bbox, y_nudge, "y", "max")
+    bbox <- nudge_bbox(bbox, xy_nudge[["y_nudge"]], "y", "max")
   }
 
   bbox
+}
+
+#' @noRd
+set_xy_nudge_list <- function(x_nudge = 0,
+                              y_nudge = 0,
+                              dir = NULL,
+                              call = caller_env()) {
+  dir <- set_shift_dir(dir, call = call)
+
+  check_number_decimal(x_nudge, call = call)
+  check_number_decimal(y_nudge, call = call)
+
+  if (has_length(x_nudge, 1) && has_length(y_nudge, 1)) {
+    if (is_null(dir)) {
+      x_nudge <- rep(x_nudge, 2)
+      y_nudge <- rep(y_nudge, 2)
+    } else if (is.numeric(dir)) {
+      x_nudge <- dir * abs(x_nudge)
+      y_nudge <- dir * abs(y_nudge)
+    }
+  }
+
+  list(
+    "x_nudge" = set_names(as.list(x_nudge), c("min", "max")),
+    "y_nudge" = set_names(as.list(y_nudge), c("min", "max"))
+  )
+}
+
+#' @noRd
+nudge_bbox <- function(bb, nudge, dim = "x", side = "min") {
+  dim <- paste0(dim, side)
+  bb[[dim]] <- bb[[dim]] + nudge[[side]]
+  bb
+}
+
+#' @noRd
+set_shift_dir <- function(dir, allow_null = TRUE, call = caller_env()) {
+  if (allow_null && is_null(dir)) {
+    return(dir)
+  }
+
+  if (is.numeric(dir)) {
+    return(c(dir * -1, dir))
+  }
+
+  dir <- arg_match0(dir, c("in", "out"), error_call = call)
+
+  switch(dir,
+    "in" = c(1, -1),
+    "out" = c(-1, 1)
+  )
 }
 
 
