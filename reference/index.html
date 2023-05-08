@@ -105,7 +105,7 @@ EXIF metadata to image files</dd>
 
       <dl><dt>
           
-          <code><a href="is_sf.html">is_sf()</a></code> <code><a href="is_sf.html">is_sfg()</a></code> <code><a href="is_sf.html">is_sfc()</a></code> <code><a href="is_sf.html">is_bbox()</a></code> <code><a href="is_sf.html">is_raster()</a></code> <code><a href="is_sf.html">is_sp()</a></code> <code><a href="is_sf.html">is_geo_coords()</a></code> <code><a href="is_sf.html">is_wgs84()</a></code> <code><a href="is_sf.html">is_same_crs()</a></code> 
+          <code><a href="is_sf.html">is_sf()</a></code> <code><a href="is_sf.html">is_sfg()</a></code> <code><a href="is_sf.html">is_sfc()</a></code> <code><a href="is_sf.html">is_bbox()</a></code> <code><a href="is_sf.html">is_raster()</a></code> <code><a href="is_sf.html">is_sp()</a></code> <code><a href="is_sf.html">is_geo_coords()</a></code> 
         </dt>
         <dd>What is the class or spatial attributes of this feature?</dd>
       </dl><dl><dt>
@@ -126,12 +126,12 @@ EXIF metadata to image files</dd>
 MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object</dd>
       </dl><dl><dt>
           
-          <code><a href="as_sf.html">as_sf()</a></code> <code><a href="as_sf.html">as_bbox()</a></code> <code><a href="as_sf.html">as_sfc()</a></code> <code><a href="as_sf.html">as_sf_class()</a></code> <code><a href="as_sf.html">as_crs()</a></code> <code><a href="as_sf.html">as_wgs84()</a></code> 
+          <code><a href="as_sf.html">as_sf()</a></code> <code><a href="as_sf.html">as_bbox()</a></code> <code><a href="as_sf.html">as_sfc()</a></code> <code><a href="as_sf.html">as_sf_class()</a></code> 
         </dt>
         <dd>Convert an object to a simple feature or bounding box object</dd>
       </dl><dl><dt>
           
-          <code><a href="sf_list.html">as_sf_list()</a></code> <code><a href="sf_list.html">new_sf_list()</a></code> <code><a href="sf_list.html">is_sf_list()</a></code> <code><a href="sf_list.html">sf_list_rbind()</a></code> <code><a href="sf_list.html">map_as_sf()</a></code> 
+          <code><a href="sf_list.html">as_sf_list()</a></code> <code><a href="sf_list.html">new_sf_list()</a></code> <code><a href="sf_list.html">is_sf_list()</a></code> <code><a href="sf_list.html">sf_list_rbind()</a></code> <code><a href="sf_list.html">map_as_sf_list()</a></code> <code><a href="sf_list.html">map_as_sf()</a></code> 
         </dt>
         <dd>Creating and checking sf lists</dd>
       </dl><dl><dt>
@@ -139,6 +139,12 @@ MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object</dd>
           <code><a href="as_xy.html">as_xy()</a></code> 
         </dt>
         <dd>Convert data to a data frame with X/Y coordinate pairs</dd>
+      </dl><dl><dt>
+          
+          <code><a href="as_crs.html">as_crs()</a></code> <code><a href="as_crs.html">is_same_crs()</a></code> <code><a href="as_crs.html">is_wgs84()</a></code> 
+        </dt>
+        <dd>Convert object to coordinate reference system or check coordinate reference
+system</dd>
       </dl></div><div class="section level2">
       <h2 id="converting-sf-and-data-frame-objects">Converting sf and data frame objects<a class="anchor" aria-label="anchor" href="#converting-sf-and-data-frame-objects"></a></h2>
       
@@ -230,9 +236,20 @@ to an sf object</dd>
 geometry</dd>
       </dl><dl><dt>
           
-          <code><a href="st_misc.html">st_scale_rotate()</a></code> <code><a href="st_misc.html">st_center()</a></code> <code><a href="st_misc.html">st_square()</a></code> <code><a href="st_misc.html">st_inscribed_square()</a></code> <code><a href="st_misc.html">st_circle()</a></code> <code><a href="st_misc.html">st_circumscribed_circle()</a></code> <code><a href="st_misc.html">st_donut()</a></code> 
+          <code><a href="st_misc.html">st_center()</a></code> <code><a href="st_misc.html">st_circle()</a></code> <code><a href="st_misc.html">st_circumscribed_circle()</a></code> <code><a href="st_misc.html">st_donut()</a></code> 
         </dt>
         <dd>Modify the geometry of a simple feature or bounding box object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="st_square.html">st_square()</a></code> <code><a href="st_square.html">st_inscribed_square()</a></code> 
+        </dt>
+        <dd>Create a square within or around a simple feature object or collection</dd>
+      </dl><dl><dt>
+          
+          <code><a href="st_scale_rotate.html">st_scale_rotate()</a></code> 
+        </dt>
+        <dd>Scale and rotate a simple feature object, simple feature collection, or
+bounding box</dd>
       </dl><dl><dt>
           
           <code><a href="st_nudge.html">st_nudge()</a></code> 
@@ -240,7 +257,7 @@ geometry</dd>
         <dd>Nudge a simple feature to the center of another feature and/or a set distance</dd>
       </dl><dl><dt>
           
-          <code><a href="st_transform_ext.html">st_transform_ext()</a></code> <code><a href="st_transform_ext.html">st_omerc()</a></code> 
+          <code><a href="st_transform_ext.html">st_transform_ext()</a></code> <code><a href="st_transform_ext.html">st_omerc()</a></code> <code><a href="st_transform_ext.html">st_wgs84()</a></code> 
         </dt>
         <dd>Transform or convert coordinates of a simple feature or bounding box object</dd>
       </dl><dl><dt>

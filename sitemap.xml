@@ -31,6 +31,9 @@
     <loc>https://elipousson.github.io/sfext/reference/area_unit_options.html</loc>
   </url>
   <url>
+    <loc>https://elipousson.github.io/sfext/reference/as_crs.html</loc>
+  </url>
+  <url>
     <loc>https://elipousson.github.io/sfext/reference/as_point.html</loc>
   </url>
   <url>
@@ -191,6 +194,12 @@
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/st_nudge.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/sfext/reference/st_scale_rotate.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/sfext/reference/st_square.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/sfext/reference/st_transform_ext.html</loc>

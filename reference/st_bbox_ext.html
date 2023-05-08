@@ -64,7 +64,7 @@ across the bounding box) and to match the provided aspect ratio.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_bbox_ext</span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">x</span>,</span>
 <span>  dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  asp <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -76,7 +76,94 @@ across the bounding box) and to match the provided aspect ratio.</p>
 <span>  allow_list <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">st_bbox_asp</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, asp <span class="op">=</span> <span class="cn">NULL</span>, class <span class="op">=</span> <span class="st">"bbox"</span>, allow_list <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">st_bbox_ext</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  asp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  class <span class="op">=</span> <span class="st">"bbox"</span>,</span>
+<span>  nudge <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  allow_null <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for bbox</span></span>
+<span><span class="fu">st_bbox_ext</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  asp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  class <span class="op">=</span> <span class="st">"bbox"</span>,</span>
+<span>  nudge <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for list</span></span>
+<span><span class="fu">st_bbox_ext</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  asp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  class <span class="op">=</span> <span class="st">"bbox"</span>,</span>
+<span>  nudge <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  allow_null <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  allow_list <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sf_list</span></span>
+<span><span class="fu">st_bbox_ext</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  asp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  class <span class="op">=</span> <span class="st">"bbox"</span>,</span>
+<span>  nudge <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  allow_null <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  allow_list <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_bbox_asp</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  asp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  class <span class="op">=</span> <span class="st">"bbox"</span>,</span>
+<span>  allow_null <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  allow_list <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">st_bbox_asp</span><span class="op">(</span><span class="va">x</span>, asp <span class="op">=</span> <span class="cn">NULL</span>, class <span class="op">=</span> <span class="st">"bbox"</span>, allow_null <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for bbox</span></span>
+<span><span class="fu">st_bbox_asp</span><span class="op">(</span><span class="va">x</span>, asp <span class="op">=</span> <span class="cn">NULL</span>, class <span class="op">=</span> <span class="st">"bbox"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sf_list</span></span>
+<span><span class="fu">st_bbox_asp</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  asp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  class <span class="op">=</span> <span class="st">"bbox"</span>,</span>
+<span>  allow_null <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  allow_list <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for list</span></span>
+<span><span class="fu">st_bbox_asp</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  asp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  class <span class="op">=</span> <span class="st">"bbox"</span>,</span>
+<span>  allow_null <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  allow_list <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -134,6 +221,10 @@ vector or sf object.</p></dd>
 <dd><p>If <code>TRUE</code>, allow sf list objects as an input and use
 <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code> to apply the provided parameters to each object within the
 list to return as a new sf list object.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Additional parameters passed to <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">

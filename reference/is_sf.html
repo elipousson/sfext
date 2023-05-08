@@ -63,17 +63,13 @@
 <span></span>
 <span><span class="fu">is_sfc</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_bbox</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">is_bbox</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span>, allow_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">is_raster</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">is_sp</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_geo_coords</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">is_wgs84</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">is_same_crs</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">is_geo_coords</span><span class="op">(</span><span class="va">x</span>, allow_null <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -97,7 +93,7 @@ not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 
 <dt>y</dt>
 <dd><p>An sf object or a character or numeric object supported by
-<a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs</a> that can be compared to x. (used by is_same_crs)</p></dd>
+<a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs</a> that can be compared to x. (used by <a href="as_crs.html">is_same_crs</a>)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -110,13 +106,13 @@ not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 <li><p>is_raster: is x a <code>Raster</code> class object?</p></li>
 <li><p>is_sp: is x a <code>Spatial</code> class object of any type?</p></li>
 <li><p>is_geo_coords: is x likely a geodetic coordinate pair (a length 2 numeric vector, with a max absolute value less than or equal to 180)?</p></li>
-<li><p>is_wgs84: is x using the <a href="https://en.wikipedia.org/wiki/World_Geodetic_System" class="external-link">WSG84</a> coordinate reference system?</p></li>
-<li><p>is_same_crs: do x and y have the same coordinate reference system?</p></li>
+<li><p><a href="as_crs.html">is_wgs84</a>: is x using the <a href="https://en.wikipedia.org/wiki/World_Geodetic_System" class="external-link">WSG84</a> coordinate reference system?</p></li>
+<li><p><a href="as_crs.html">is_same_crs</a>: do x and y have the same coordinate reference system?</p></li>
 </ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">is_sf</span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
@@ -130,10 +126,10 @@ not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 <span class="r-in"><span><span class="fu">is_bbox</span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">is_wgs84</span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="as_crs.html">is_wgs84</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">is_same_crs</span><span class="op">(</span><span class="va">nc</span>, <span class="fl">4267</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="as_crs.html">is_same_crs</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">4267</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 </code></pre></div>
     </div>
