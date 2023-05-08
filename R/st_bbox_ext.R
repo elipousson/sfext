@@ -56,6 +56,10 @@ st_bbox_ext.default <- function(x,
     ext = c("sf", "sfc", "bbox", "sfg", "Raster", "Extent", "numeric", "character")
   )
 
+  if (allow_null && is_null(x)) {
+    return(x)
+  }
+
   st_bbox_ext.bbox(
     x = as_bbox(x),
     dist = dist,
@@ -65,7 +69,6 @@ st_bbox_ext.default <- function(x,
     crs = crs,
     class = class,
     nudge = nudge,
-    allow_null = allow_null,
     ...
   )
 }
@@ -80,12 +83,7 @@ st_bbox_ext.bbox <- function(x,
                              crs = NULL,
                              class = "bbox",
                              nudge = NULL,
-                             allow_null = TRUE,
                              ...) {
-  if (allow_null && is_null(x)) {
-    return(x)
-  }
-
   if (!is_null(nudge)) {
     x <- st_nudge(x, to = nudge)
   }

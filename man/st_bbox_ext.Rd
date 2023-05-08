@@ -49,7 +49,6 @@ st_bbox_ext(
   crs = NULL,
   class = "bbox",
   nudge = NULL,
-  allow_null = TRUE,
   ...
 )
 
