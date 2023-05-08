@@ -2,22 +2,13 @@
 % Please edit documentation in R/st_misc.R
 \name{st_misc}
 \alias{st_misc}
-\alias{st_scale_rotate}
 \alias{st_center}
-\alias{st_square}
-\alias{st_inscribed_square}
 \alias{st_circle}
 \alias{st_circumscribed_circle}
 \alias{st_donut}
 \title{Modify the geometry of a simple feature or bounding box object}
 \usage{
-st_scale_rotate(x, scale = 1, rotate = 0)
-
 st_center(x, class = "list", ext = TRUE, ...)
-
-st_square(x, scale = 1, rotate = 0, inscribed = FALSE, by_feature = FALSE)
-
-st_inscribed_square(x, scale = 1, rotate = 0, by_feature = FALSE)
 
 st_circle(
   x,
@@ -36,10 +27,6 @@ st_donut(x, width = 0.4, scale = 1, inscribed = FALSE, by_feature = TRUE, ...)
 \arguments{
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object}
 
-\item{scale}{numeric; scale factor, Default: 1}
-
-\item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
-
 \item{class}{Class to return for \code{\link[=st_center]{st_center()}}: "sfc", "sf", "geometry"
 (original input geometry), "x" (original input object), "crs" (original
 input crs), or "list" (including all other class types).}
@@ -54,10 +41,6 @@ object, as an \code{sf} object (with lon and lat values), the original geometry
 
 \item{inscribed}{If \code{TRUE}, make circle, square, or donut inscribed within x,
 if \code{FALSE}, make it circumscribed.}
-
-\item{by_feature}{If \code{TRUE}, create new geometry for each feature. If
-\code{FALSE}, create new geometry for all features combine with
-\code{\link[=st_union_ext]{st_union_ext()}}.}
 
 \item{dTolerance}{numeric; tolerance parameter, specified for all or for each
 feature geometry. If you run \code{st_simplify}, the input data is
@@ -76,10 +59,7 @@ meters.}
 \description{
 Support \code{sf}, \code{sfc}, and \code{bbox} and objects as inputs.
 \itemize{
-\item Scale or rotate a simple feature or bounding box object using affine
-transformations
 \item Get the center point for a \code{sf} object
-\item Get a circumscribed square or approximate inscribed square in a \code{sf} object
 \item Get a circumscribed circle or inscribed circle in a \code{sf} object
 \item Get a donut for a \code{sf} object (may not work if \code{inscribed = TRUE})
 }
@@ -92,13 +72,10 @@ rotation value can be provided to change the orientation of the shape, e.g.
 with \code{asp = 1}.
 }
 \examples{
-nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
-nc <- st_transform_ext(nc, crs = 3857)
+nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
+nc <- sf::st_transform(nc, crs = 3857)
 
 plot(nc, max.plot = 1)
-plot(st_scale_rotate(nc, scale = 0.75, rotate = 15), max.plot = 1)
-
-plot(st_square(nc[1:10,], by_feature = TRUE), max.plot = 1)
 
 plot(st_circumscribed_circle(nc, by_feature = FALSE), max.plot = 1)
 plot(st_circle(nc, by_feature = FALSE), max.plot = 1, add = TRUE)

@@ -11,10 +11,7 @@ discard_na_geom <- function(x) {
 #' @description
 #' Support `sf`, `sfc`, and `bbox` and objects as inputs.
 #'
-#'  - Scale or rotate a simple feature or bounding box object using affine
-#'  transformations
 #'  - Get the center point for a `sf` object
-#'  - Get a circumscribed square or approximate inscribed square in a `sf` object
 #'  - Get a circumscribed circle or inscribed circle in a `sf` object
 #'  - Get a donut for a `sf` object (may not work if `inscribed = TRUE`)
 #'
@@ -26,9 +23,6 @@ discard_na_geom <- function(x) {
 #' with `asp = 1`.
 #'
 #' @example examples/st_misc.R
-#' @param x A `sf`, `sfc`, or `bbox` object
-#' @param scale numeric; scale factor, Default: 1
-#' @param rotate numeric; degrees to rotate (-360 to 360), Default: 0
 #' @param inscribed If `TRUE`, make circle, square, or donut inscribed within x,
 #'   if `FALSE`, make it circumscribed.
 #' @param ... Additional parameters passed to [sf::st_centroid()] by
@@ -40,32 +34,8 @@ discard_na_geom <- function(x) {
 NULL
 
 #' @rdname st_misc
-#' @name st_scale_rotate
-#' @export
-#' @importFrom sf st_geometry st_crs
-st_scale_rotate <- function(x, scale = 1, rotate = 0) {
-  if ((scale == 1) && (rotate == 0)) {
-    return(x)
-  }
-
-  x <- as_sf(x)
-  crs <- sf::st_crs(x)
-
-  # rotate function (see here:
-  # https://r-spatial.github.io/sf/articles/sf3.html#affine-transformations
-  rot <- function(a) matrix(c(cos(a), sin(a), -sin(a), cos(a)), 2, 2)
-
-  geom <- as_sfc(x)
-  centroid <- suppressWarnings(sf::st_centroid(geom))
-  geom <- (geom - centroid) * rot(pi / (360 / (rotate * 2)))
-  geom <- geom * scale + centroid
-
-  x <- sf::st_set_geometry(x, geom)
-  sf::st_set_crs(x, crs)
-}
-
-#' @rdname st_misc
 #' @name st_center
+#' @param x A `sf`, `sfc`, or `bbox` object
 #' @param class Class to return for [st_center()]: "sfc", "sf", "geometry"
 #'   (original input geometry), "x" (original input object), "crs" (original
 #'   input crs), or "list" (including all other class types).
@@ -102,84 +72,6 @@ st_center <- function(x,
   }
 
   types[[class]]
-}
-
-#' @rdname st_misc
-#' @name st_square
-#' @param by_feature If `TRUE`, create new geometry for each feature. If
-#'   `FALSE`, create new geometry for all features combine with
-#'   [st_union_ext()].
-#' @export
-#' @importFrom sf st_is_longlat st_inscribed_circle st_geometry st_dimension
-#'   st_set_geometry
-st_square <- function(x,
-                      scale = 1,
-                      rotate = 0,
-                      inscribed = FALSE,
-                      by_feature = FALSE) {
-  check_sf(x, ext = TRUE)
-
-  if (!is_sf(x)) {
-    x <- as_sf(x)
-  }
-
-  is_lonlat <- sf::st_is_longlat(x)
-
-  if (is_lonlat) {
-    lonlat_crs <- sf::st_crs(x)
-    x <- sf::st_transform(x, crs = 3857)
-  }
-
-  crs <- sf::st_crs(x)
-
-  if (!by_feature) {
-    x <- st_union_ext(x, name_col = NULL)
-  }
-
-  if (inscribed) {
-    geom <- sf::st_inscribed_circle(as_sfc(x, crs = crs), nQuadSegs = 1)
-    geom <- discard(geom, ~ is.na(sf::st_dimension(.x)))
-    rotate <- rotate + 45
-  } else {
-    geom <-
-      map(
-        sf_to_sfc_list(x),
-        ~ st_bbox_ext(
-          x = .x,
-          asp = 1,
-          class = "sfc",
-          crs = crs
-        )
-      )
-
-    geom <- vctrs::list_unchop(geom)
-  }
-
-  x <- sf::st_set_geometry(x, geom)
-
-  square <- st_scale_rotate(x, rotate = rotate, scale = scale)
-
-  if (is_lonlat) {
-    square <- sf::st_transform(square, crs = lonlat_crs)
-  }
-
-  square
-}
-
-#' @rdname st_misc
-#' @name st_inscribed_square
-#' @export
-st_inscribed_square <- function(x,
-                                scale = 1,
-                                rotate = 0,
-                                by_feature = FALSE) {
-  st_square(
-    x = x,
-    scale = scale,
-    rotate = rotate,
-    inscribed = TRUE,
-    by_feature = by_feature
-  )
 }
 
 #' @rdname st_misc

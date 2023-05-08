@@ -65,3 +65,10 @@ object to return.}
 Nudge, move, or shift a \code{sf}, \code{sfc}, or \code{bbox} object to the center of
 another feature and/or by a set distance.
 }
+\examples{
+nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
+nc <- sf::st_transform(nc, crs = 3857)
+
+plot(sf::st_union(st_nudge(nc, to = nc[1, ]), nc), max.plot = 1)
+
+}

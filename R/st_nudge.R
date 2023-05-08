@@ -12,6 +12,12 @@
 #'   numeric).
 #' @inheritParams as_sfc
 #' @inheritParams st_scale_rotate
+#' @examples
+#' nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
+#' nc <- sf::st_transform(nc, crs = 3857)
+#'
+#' plot(sf::st_union(st_nudge(nc, to = nc[1, ]), nc), max.plot = 1)
+#'
 #' @export
 st_nudge <- function(x,
                      to = NULL,
