@@ -9,8 +9,6 @@
 \alias{is_sp}
 \alias{is_coords}
 \alias{is_geo_coords}
-\alias{is_wgs84}
-\alias{is_same_crs}
 \title{What is the class or spatial attributes of this feature?}
 \usage{
 is_sf(x, ext = FALSE, allow_null = FALSE, allow_list = FALSE)
@@ -19,17 +17,13 @@ is_sfg(x, allow_null = FALSE)
 
 is_sfc(x, allow_null = FALSE)
 
-is_bbox(x, allow_null = FALSE)
+is_bbox(x, allow_null = FALSE, allow_na = FALSE)
 
 is_raster(x, allow_null = FALSE)
 
 is_sp(x, allow_null = FALSE)
 
 is_geo_coords(x, allow_null = FALSE)
-
-is_wgs84(x)
-
-is_same_crs(x, y)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}

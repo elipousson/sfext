@@ -2,8 +2,10 @@
 % Please edit documentation in R/st_transform_ext.R
 \name{st_transform_ext}
 \alias{st_transform_ext}
-\alias{st_transform_omerc}
 \alias{st_omerc}
+\alias{st_transform_omerc}
+\alias{st_wgs84}
+\alias{as_wgs84}
 \title{Transform or convert coordinates of a simple feature or bounding box object}
 \usage{
 st_transform_ext(
@@ -16,6 +18,8 @@ st_transform_ext(
 )
 
 st_omerc(x, rotate = 0)
+
+st_wgs84(x)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object, a list of sf objects, or a
@@ -51,6 +55,20 @@ objects. Typically, takes a \code{sf}, \code{sfc}, or \code{bbox} object and tra
 coordinate reference system to match the value of crs or the object provided
 to crs. If \code{x} is a data.frame or if \code{x} is \code{NULL} and \code{allow_null} is \code{TRUE}
 (defaults to \code{FALSE}) it is returned as is.
+}
+\examples{
+nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
+
+nc_bbox <- sf::st_bbox(nc)
+
+nc_3857 <- st_transform_ext(nc, 3857)
+
+st_transform_ext(nc_bbox, crs = 4326)
+
+sf::st_crs(st_transform_ext(nc_3857, crs = nc))$input
+
+sf::st_crs(st_wgs84(nc_3857))$input
+
 }
 \seealso{
 \code{\link[sf:st_transform]{sf::st_transform()}},\code{\link[sf:st_crs]{sf::st_crs()}}

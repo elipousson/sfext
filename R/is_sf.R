@@ -38,7 +38,8 @@ is_sf <- function(x, ext = FALSE, allow_null = FALSE, allow_list = FALSE) {
     return(is_what(x, what = what, allow_null = allow_null))
   }
 
-  is_what(x, what = what, allow_null = allow_null) || is_sf_list(x, ext = ext, allow_null = allow_null)
+  is_what(x, what = what, allow_null = allow_null) ||
+    is_sf_list(x, ext = ext, allow_null = allow_null)
 }
 
 #' @name is_sfg
@@ -58,8 +59,9 @@ is_sfc <- function(x, allow_null = FALSE) {
 #' @name is_bbox
 #' @rdname is_sf
 #' @export
-is_bbox <- function(x, allow_null = FALSE) {
-  is_what(x, what = "bbox", allow_null = allow_null)
+is_bbox <- function(x, allow_null = FALSE, allow_na = FALSE) {
+  is_what(x, what = "bbox", allow_null = allow_null) &&
+    (!any(is.na(x)) || allow_na)
 }
 
 #' @name is_raster
@@ -89,27 +91,4 @@ is_geo_coords <- function(x, allow_null = FALSE) {
   }
 
   is.numeric(x) && (length(x) == 2) && (max(abs(x)) <= 180)
-}
-
-#' @name is_wgs84
-#' @rdname  is_sf
-#' @export
-is_wgs84 <- function(x) {
-  is_same_crs(x, 4326)
-}
-
-#' @name is_same_crs
-#' @rdname  is_sf
-#' @importFrom sf st_crs
-#' @export
-is_same_crs <- function(x, y) {
-  crs_x <- sf::st_crs(x)
-  crs_y <- sf::st_crs(y)
-
-  any(
-    c(
-      crs_x == crs_y,
-      !is.na(crs_x$input) && !is.na(crs_y$input) && (crs_x$input == crs_y$input)
-    )
-  )
 }

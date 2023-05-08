@@ -33,7 +33,7 @@ transform_sf <- function(x, crs = NULL, allow_null = TRUE, ...) {
     return(x)
   }
 
-  crs <- as_crs(crs, check = TRUE)
+  crs <- as_crs(crs, allow_na = FALSE)
 
   if (is_same_crs(x, crs)) {
     return(x)

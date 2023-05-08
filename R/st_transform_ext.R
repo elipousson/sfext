@@ -26,21 +26,30 @@
 #'   `TRUE`.
 #' @return An `sf`, `sfc`, or `bbox` object transformed to a new coordinate
 #'   reference system.
+#' @example examples/st_transform_ext.R
 #' @seealso [sf::st_transform()],[sf::st_crs()]
 #' @rdname st_transform_ext
 #' @export
-#' @importFrom sf st_transform st_crs
+#' @importFrom dplyr case_when
 st_transform_ext <- function(x,
                              crs = NULL,
                              class = NULL,
                              rotate = 0,
                              allow_null = FALSE,
                              allow_list = TRUE) {
-  if (any(c(is.data.frame(x) && !is_sf(x), allow_null && is_null(x)))) {
+  if (is.data.frame(x) && !is_sf(x)) {
+    cli_warn(
+      "{.arg x} can't be transformed to {.arg crs} because
+      {.arg x} is a {.cls data.frame}."
+    )
     return(x)
   }
 
   check_sf(x, ext = TRUE, allow_null = allow_null, allow_list = allow_list)
+
+  if (is_null(x)) {
+    return(x)
+  }
 
   type <-
     dplyr::case_when(
@@ -53,7 +62,7 @@ st_transform_ext <- function(x,
 
   x <-
     switch(type,
-      "list" = map(x, ~ st_transform_ext(.x, crs, class, rotate)),
+      "list" = map(x, ~ st_transform_ext(.x, crs, class, rotate, allow_null)),
       "bbox" = sf_bbox_transform(x, crs = crs),
       "omerc" = st_omerc(x, rotate = rotate),
       "sf" = transform_sf(x, crs = crs),
@@ -63,8 +72,9 @@ st_transform_ext <- function(x,
   as_sf_class(x, class = class)
 }
 
-#' @name st_transform_omerc
+#' @name st_omerc
 #' @rdname st_transform_ext
+#' @aliases st_transform_omerc
 #' @export
 #' @importFrom dplyr between
 #' @importFrom sf st_union st_transform
@@ -88,3 +98,16 @@ st_omerc <- function(x, rotate = 0) {
 
   sf::st_transform(x = x, crs = crs)
 }
+
+#' @name st_wgs84
+#' @rdname st_transform_ext
+#' @aliases as_wgs84
+#' @export
+st_wgs84 <- function(x) {
+  if (is_wgs84(x)) {
+    return(x)
+  }
+
+  st_transform_ext(x, 4326)
+}
+

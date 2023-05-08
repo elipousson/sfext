@@ -66,16 +66,7 @@ as_sf <- function(x,
       "data.frame" = df_to_sf(x, ...),
       "address" = address_to_sf(x, ...),
       "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
-      "other" = try_fetch(
-        sf::st_as_sf(x, ...),
-        error = function(cnd) {
-          cli_abort(
-            "{.arg x} can't be converted to a {.cls sf} object.",
-            parent = cnd,
-            call = call
-          )
-        }
-      )
+      "other" = try_st_as_sf(x, ..., call = call)
     )
 
   if (as_tibble) {
@@ -89,12 +80,30 @@ as_sf <- function(x,
   transform_sf(x, crs = crs)
 }
 
+#' @noRd
+try_st_as_sf <- function(x, ..., call = caller_env()) {
+  try_fetch(
+    sf::st_as_sf(x, ...),
+    error = function(cnd) {
+      cli_abort(
+        "{.arg x} can't be converted to a {.cls sf} object.",
+        parent = cnd,
+        call = call
+      )
+    }
+  )
+}
+
 #' @name as_bbox
 #' @rdname as_sf
 #' @export
 #' @importFrom sf st_bbox st_as_sf
 #' @importFrom dplyr bind_rows
-as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
+as_bbox <- function(x,
+                    crs = NULL,
+                    ext = TRUE,
+                    ...,
+                    call = caller_env()) {
   if (is_bbox(x)) {
     return(sf_bbox_transform(bbox = x, crs = crs))
   }
@@ -128,12 +137,32 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ...) {
         ),
         crs = crs, ...
       ),
-      "other" = sf::st_bbox(as_sf(x, ext = ext), ...)
+      "other" = try_st_bbox(x, ...)
     )
+
+  if (!is_bbox(x)) {
+    cli_abort(
+      "{.arg x} can't be converted to a {.cls bbox} object.",
+      call = call
+    )
+  }
 
   sf_bbox_transform(bbox = x, crs = crs)
 }
 
+#' @noRd
+try_st_bbox <- function(x, ..., call = caller_env()) {
+  try_fetch(
+    sf::st_bbox(x, ...),
+    error = function(cnd) {
+      cli_abort(
+        "{.arg x} can't be converted to a {.cls bbox} object.",
+        parent = cnd,
+        call = call
+      )
+    }
+  )
+}
 
 #' @name as_sfc
 #' @rdname as_sf
@@ -160,21 +189,26 @@ as_sfc <- function(x, crs = NULL, ext = TRUE, ..., call = caller_env()) {
       "sf" = sf::st_geometry(x, ...),
       "sfg" = sf::st_sfc(x, ...),
       # "sfc_list" =
-      "df" = sf::st_geometry(as_sf(x, ext = ext, ...)),
+      "df" = sf::st_geometry(as_sf(x, ext = ext, ..., call = call)),
       "geo_coords" = lonlat_to_sfc(x, ...),
-      "other" = try_fetch(
-        sf::st_as_sfc(x, ...),
-        error = function(cnd) {
-          cli_abort(
-            "{.arg x} can't be converted to a {.cls sfc} object.",
-            parent = cnd,
-            call = call
-          )
-        }
-      )
+      "other" = try_st_as_sfc(x, ..., call = call)
     )
 
   transform_sf(x, crs = crs)
+}
+
+#' @noRd
+try_st_as_sfc <- function(x, ..., call = caller_env()) {
+  try_fetch(
+    sf::st_as_sfc(x, ...),
+    error = function(cnd) {
+      cli_abort(
+        "{.arg x} can't be converted to a {.cls sfc} object.",
+        parent = cnd,
+        call = call
+      )
+    }
+  )
 }
 
 #' Convert data to a different class
@@ -216,48 +250,13 @@ as_sf_class <- function(x,
   )
 
   switch(class,
-    "sf" = as_sf(x, ...),
-    "sfc" = as_sfc(x, ...),
-    "bbox" = as_bbox(x, ...),
+    "sf" = as_sf(x, ..., call = call),
+    "sfc" = as_sfc(x, ..., call = call),
+    "bbox" = as_bbox(x, ..., call = call),
     "list" = as_sf_list(x, ...),
     "data.frame" = sf_to_df(x, ...)
   )
 }
-
-#' @name as_crs
-#' @rdname as_sf
-#' @param check For `as_crs()`, if `TRUE`, error if crs cannot be converted to a
-#'   valid coordinate reference system. Defaults to `FALSE`.
-#' @export
-#' @importFrom rlang try_fetch
-#' @importFrom sf st_crs
-#' @importFrom cli cli_alert_warning cli_abort
-as_crs <- function(crs = NULL, check = FALSE, call = caller_env()) {
-  try_fetch(
-    sf::st_crs(crs),
-    error = function(cnd) {
-      msg <- "{.arg crs} {.val {crs}} can't be used."
-      if (check) {
-        cli_abort(msg, parent = cnd, call = call)
-      } else {
-        cli::cli_alert_warning(msg)
-        NA_crs_
-      }
-    }
-  )
-}
-
-#' @name as_wgs84
-#' @rdname as_sf
-#' @export
-as_wgs84 <- function(x) {
-  if (is_wgs84(x)) {
-    return(x)
-  }
-
-  st_transform_ext(x, 4326)
-}
-
 
 #' Convert data to a data frame with X/Y coordinate pairs
 #'

@@ -43,9 +43,6 @@ test_that("is_sf and as_sf functions work", {
   expect_s3_class(as_sf_class(nc, class = "data.frame"), "data.frame")
   expect_error(as_sf_class(bbox, class = "data.frame"))
 
-  expect_true(is_same_crs(nc, nc))
-  expect_true(is_same_crs(nc, bbox))
-
   null_test <- NULL
 
   expect_true(is_sf(null_test, allow_null = TRUE))

@@ -5,8 +5,6 @@
 \alias{as_bbox}
 \alias{as_sfc}
 \alias{as_sf_class}
-\alias{as_crs}
-\alias{as_wgs84}
 \title{Convert an object to a simple feature or bounding box object}
 \usage{
 as_sf(
@@ -19,15 +17,11 @@ as_sf(
   call = caller_env()
 )
 
-as_bbox(x, crs = NULL, ext = TRUE, ...)
+as_bbox(x, crs = NULL, ext = TRUE, ..., call = caller_env())
 
 as_sfc(x, crs = NULL, ext = TRUE, ..., call = caller_env())
 
 as_sf_class(x, class = NULL, allow_null = TRUE, ..., call = caller_env())
-
-as_crs(crs = NULL, check = FALSE, call = caller_env())
-
-as_wgs84(x)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that can
@@ -65,9 +59,6 @@ mentioned in error messages as the source of the error. See the
 \item{allow_null}{For \link{as_sf_class}, if class is \code{NULL} and allow_null is \code{TRUE},
 return x without any class conversion or checks. Defaults to \code{TRUE}.}
 
-\item{check}{For \code{as_crs()}, if \code{TRUE}, error if crs cannot be converted to a
-valid coordinate reference system. Defaults to \code{FALSE}.}
-
 \item{data}{Data that can be converted to sf, sfc, bbox or a sf list object.}
 }
 \description{
@@ -78,16 +69,18 @@ is applied. If a character object is passed to \code{\link[=as_bbox]{as_bbox()}}
 bounding box.
 }
 \examples{
-nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
-nc[["category"]] <- sample(c("A", "B", "C", "D", "E"), nrow(nc), replace = TRUE)
+nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
+nc[["category"]] <- sample(c("A", "B", "C"), nrow(nc), replace = TRUE)
 
 as_sf(nc$geometry)
 
-as_bbox(nc)
+nc_bbox <- as_bbox(nc)
 
-as_sf_list(nc, col = "category")
+nc_bbox
 
-as_crs(nc)
+as_sfc(nc_bbox)
 
 as_xy(nc[1,])
+
+as_sf_list(nc, col = "category")
 }
