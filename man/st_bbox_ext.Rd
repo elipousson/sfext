@@ -89,9 +89,9 @@ st_bbox_asp(
   allow_list = TRUE
 )
 
-\method{st_bbox_asp}{default}(x, asp = NULL, class = "bbox", allow_null = TRUE, ...)
+\method{st_bbox_asp}{default}(x, asp = NULL, class = "bbox", allow_null = TRUE)
 
-\method{st_bbox_asp}{bbox}(x, asp = NULL, class = "bbox", ...)
+\method{st_bbox_asp}{bbox}(x, asp = NULL, class = "bbox")
 
 \method{st_bbox_asp}{sf_list}(
   x,

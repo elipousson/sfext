@@ -65,7 +65,8 @@ st_bbox_ext.default <- function(x,
     crs = crs,
     class = class,
     nudge = nudge,
-    allow_null = allow_null
+    allow_null = allow_null,
+    ...
   )
 }
 
@@ -96,7 +97,8 @@ st_bbox_ext.bbox <- function(x,
       dist = dist,
       diag_ratio = diag_ratio,
       unit = unit,
-      class = "sfc"
+      class = "sfc",
+      ...
     )
 
   # Transform crs of sfc object
@@ -201,8 +203,7 @@ st_bbox_asp <- function(x,
 st_bbox_asp.default <- function(x,
                                 asp = NULL,
                                 class = "bbox",
-                                allow_null = TRUE,
-                                ...) {
+                                allow_null = TRUE) {
   if (allow_null && is_null(x)) {
     return(x)
   }
@@ -210,8 +211,7 @@ st_bbox_asp.default <- function(x,
   st_bbox_asp.bbox(
     x = as_bbox(x),
     asp = asp,
-    class = class,
-    allow_list = allow_list
+    class = class
   )
 }
 
@@ -220,8 +220,7 @@ st_bbox_asp.default <- function(x,
 #' @export
 st_bbox_asp.bbox <- function(x,
                              asp = NULL,
-                             class = "bbox",
-                             ...) {
+                             class = "bbox") {
   # Get adjusted aspect ratio
   if (!is_bare_numeric(asp)) {
     asp <- get_asp(asp = asp)
@@ -272,7 +271,6 @@ st_bbox_asp.sf_list <- function(x,
       x,
       asp = asp,
       class = class,
-      allow_list = allow_list,
       allow_null = allow_null
     )
   )
