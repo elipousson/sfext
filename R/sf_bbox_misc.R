@@ -62,13 +62,13 @@ sf_bbox_transform <- function(bbox, crs = NULL) {
     return(bbox)
   }
 
-  crs <- as_crs(crs, TRUE)
+  crs <- as_crs(crs, allow_na = FALSE)
 
   if (is_same_crs(bbox, crs)) {
     return(bbox)
   }
 
-  sf::st_bbox(sf::st_transform(sf_bbox_to_sfc(bbox), crs))
+  sf::st_bbox(sf::st_transform(sf::st_as_sfc(bbox), crs))
 }
 
 #' @name sf_bbox_point

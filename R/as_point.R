@@ -73,7 +73,7 @@ as_points <- function(..., to = "POINT", call = caller_env()) {
 
   crs <- NULL
   if (has_name(params, "crs")) {
-    crs <- as_crs(params$crs, check = TRUE, call = call)
+    crs <- as_crs(params$crs, allow_na = FALSE, call = call)
     params <- params[names(params) != "crs"]
   } else if (is_sf(params[[1]], ext = TRUE)) {
     crs <- sf::st_crs(params[[1]])
