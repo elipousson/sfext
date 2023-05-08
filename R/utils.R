@@ -27,7 +27,7 @@ utils::globalVariables(
     "latitude_ref", "longitude", "longitude_ref", "name", "orientation",
     "source_file", "asp", "block_height", "block_width", "col_width", "gutter",
     "height", "row_height", "width", "img_cardinal_dir", "img_direction",
-    "path", "x_nudge", "y_nudge", "trim_area", "init_area", "pct_area",
+    "path", "trim_area", "init_area", "pct_area",
     "trim_length", "init_length", "trim_join_id", "pct_length"
   )
 )

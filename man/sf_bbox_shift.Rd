@@ -8,29 +8,29 @@
 \usage{
 sf_bbox_shift(
   bbox,
-  x_nudge = 0,
-  y_nudge = 0,
+  nudge_x = 0,
+  nudge_y = 0,
   side = c("all", "top", "bottom", "left", "right"),
   dir = NULL,
   call = caller_env()
 )
 
-sf_bbox_contract(bbox, x_nudge = 0, y_nudge = 0)
+sf_bbox_contract(bbox, nudge_x = 0, nudge_y = 0)
 
-sf_bbox_expand(bbox, x_nudge = 0, y_nudge = 0)
+sf_bbox_expand(bbox, nudge_x = 0, nudge_y = 0)
 }
 \arguments{
 \item{bbox}{A \code{bbox} object.}
 
-\item{x_nudge, y_nudge}{Length 1 or 2 numeric vector; unitless. Used by or
+\item{nudge_x, nudge_y}{Length 1 or 2 numeric vector; unitless. Used by or
 passed to \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}. Required for  \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
 
 \item{side}{one or more sides to shift: "top", "bottom", "left", "right", or
 "all". Required for \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
 
-\item{dir}{If "in", contract the \code{bbox} by x_nudge and y_nudge. If "out",
-expand the bbox by x_nudge and y_nudge. If dir is not \code{NULL}; absolute
-values are used for x_nudge and y_nudge. Defaults to \code{NULL}. Optional
+\item{dir}{If "in", contract the \code{bbox} by nudge_x and nudge_y. If "out",
+expand the bbox by nudge_x and nudge_y. If dir is not \code{NULL}; absolute
+values are used for nudge_x and nudge_y. Defaults to \code{NULL}. Optional
 \code{\link[=sf_bbox_shift]{sf_bbox_shift()}}.}
 
 \item{call}{The execution environment of a currently

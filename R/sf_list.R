@@ -50,6 +50,11 @@ as_sf_list <- function(x,
     x <- x$data
   } else if (!is_sf_list(x, ext = TRUE)) {
     x <- new_sf_list(x, nm, col, clean_names, .name_repair, call)
+  } else if (is_sf_list(x) && !inherits(x, "sf_list")) {
+    x <- vctrs::new_list_of(
+      x,
+      class = "sf_list"
+    )
   }
 
   if (!is_sf_list(x, ext = TRUE)) {
@@ -174,6 +179,15 @@ list_rbind <- function(x, names_to = zap(), ptype = NULL) {
 #' @importFrom sf st_as_sf
 sf_list_rbind <- function(x, ...) {
   sf::st_as_sf(list_rbind(x, ...))
+}
+
+#' @name map_as_sf
+#' @rdname sf_list
+map_as_sf_list <- function(x, .f, ...) {
+  vctrs::new_list_of(
+    x = map(x, .f, ...),
+    class = "sf_list"
+  )
 }
 
 #' @name map_as_sf

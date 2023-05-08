@@ -25,7 +25,7 @@
 #' @name st_bbox_ext
 #' @export
 #' @importFrom sf st_bbox
-st_bbox_ext <- function(x = NULL,
+st_bbox_ext <- function(x,
                         dist = NULL,
                         diag_ratio = NULL,
                         asp = NULL,
@@ -35,34 +35,54 @@ st_bbox_ext <- function(x = NULL,
                         nudge = NULL,
                         allow_null = TRUE,
                         allow_list = TRUE) {
-  check_sf(x,
+  UseMethod("st_bbox_ext")
+}
+
+#' @name st_bbox_ext
+#' @export
+st_bbox_ext.default <- function(x,
+                                dist = NULL,
+                                diag_ratio = NULL,
+                                asp = NULL,
+                                unit = NULL,
+                                crs = NULL,
+                                class = "bbox",
+                                nudge = NULL,
+                                allow_null = TRUE,
+                                ...) {
+  check_sf(
+    x,
     allow_null = allow_null,
-    allow_list = allow_list,
-    ext = c("sf", "sfc", "bbox", "sfg", "Raster", "Extent", "numeric")
+    ext = c("sf", "sfc", "bbox", "sfg", "Raster", "Extent", "numeric", "character")
   )
 
-  if (is_null(x) && is_true(allow_null)) {
+  st_bbox_ext.bbox(
+    x = as_bbox(x),
+    dist = dist,
+    diag_ratio = diag_ratio,
+    asp = asp,
+    unit = unit,
+    crs = crs,
+    class = class,
+    nudge = nudge,
+    allow_null = allow_null
+  )
+}
+
+#' @name st_bbox_ext
+#' @export
+st_bbox_ext.bbox <- function(x,
+                             dist = NULL,
+                             diag_ratio = NULL,
+                             asp = NULL,
+                             unit = NULL,
+                             crs = NULL,
+                             class = "bbox",
+                             nudge = NULL,
+                             allow_null = TRUE,
+                             ...) {
+  if (allow_null && is_null(x)) {
     return(x)
-  }
-
-  if (is_sf_list(x, ext = TRUE) && is_true(allow_list)) {
-    bbox_list <-
-      map(
-        x,
-        ~ st_bbox_ext(
-          x = .x,
-          dist = dist,
-          diag_ratio = diag_ratio,
-          asp = asp,
-          unit = unit,
-          crs = crs,
-          class = class,
-          nudge = nudge,
-          allow_null = allow_null
-        )
-      )
-
-    return(bbox_list)
   }
 
   if (!is_null(nudge)) {
@@ -75,76 +95,212 @@ st_bbox_ext <- function(x = NULL,
       x = x,
       dist = dist,
       diag_ratio = diag_ratio,
-      unit = unit
+      unit = unit,
+      class = "sfc"
     )
 
-  # Transform crs of sf object
+  # Transform crs of sfc object
   x <- transform_sf(x, crs = crs)
 
   # Get aspect adjusted bbox
-  bbox <-
-    st_bbox_asp(
-      x = x,
-      asp = asp
-    )
-
-  as_sf_class(bbox, class = class)
+  st_bbox_asp(
+    x = x,
+    asp = asp,
+    class = class
+  )
 }
+
+#' @name st_bbox_ext
+#' @export
+st_bbox_ext.list <- function(x,
+                             dist = NULL,
+                             diag_ratio = NULL,
+                             asp = NULL,
+                             unit = NULL,
+                             crs = NULL,
+                             class = "bbox",
+                             nudge = NULL,
+                             allow_null = TRUE,
+                             allow_list = TRUE,
+                             ...) {
+  if (!allow_list) {
+    cli_abort(
+      "{.arg allow_list} must be {.code TRUE} if {.arg x} is a {.cls list}."
+    )
+  }
+
+  map(
+    x,
+    function(x, ...) {
+      st_bbox_ext.default(
+        x = x,
+        dist = dist,
+        diag_ratio = diag_ratio,
+        asp = asp,
+        unit = unit,
+        crs = crs,
+        class = class,
+        nudge = nudge,
+        allow_null = allow_null,
+        ...
+      )
+    }
+  )
+}
+
+#' @name st_bbox_ext
+#' @export
+st_bbox_ext.sf_list <- function(x,
+                                dist = NULL,
+                                diag_ratio = NULL,
+                                asp = NULL,
+                                unit = NULL,
+                                crs = NULL,
+                                class = "bbox",
+                                nudge = NULL,
+                                allow_null = TRUE,
+                                allow_list = TRUE,
+                                ...) {
+  if (!allow_list) {
+    cli_abort(
+      "{.arg allow_list} must be {.code TRUE} if {.arg x} is a {.cls sf_list}."
+    )
+  }
+
+  as_sf_list(
+    st_bbox_ext.list(
+      x = x,
+      dist = dist,
+      diag_ratio = diag_ratio,
+      asp = asp,
+      unit = unit,
+      crs = crs,
+      class = class,
+      nudge = nudge,
+      allow_null = allow_null,
+      ...
+    )
+  )
+}
+
 
 #' @rdname st_bbox_ext
 #' @name st_bbox_asp
 #' @export
-st_bbox_asp <- function(x = NULL,
+st_bbox_asp <- function(x,
                         asp = NULL,
                         class = "bbox",
+                        allow_null = TRUE,
                         allow_list = TRUE) {
-  if (is_sf_list(x, ext = TRUE) && is_true(allow_list)) {
-    return(
-      map(
-        x,
-        ~ st_bbox_asp(
-          .x,
-          asp = asp,
-          class = class
-        )
-      )
-    )
+  UseMethod("st_bbox_asp")
+}
+
+#' @name st_bbox_asp
+#' @rdname st_bbox_ext
+#' @export
+st_bbox_asp.default <- function(x,
+                                asp = NULL,
+                                class = "bbox",
+                                allow_null = TRUE,
+                                ...) {
+  if (allow_null && is_null(x)) {
+    return(x)
   }
 
-  bbox <- as_bbox(x)
+  st_bbox_asp.bbox(
+    x = as_bbox(x),
+    asp = asp,
+    class = class,
+    allow_list = allow_list
+  )
+}
 
+#' @name st_bbox_asp
+#' @rdname st_bbox_ext
+#' @export
+st_bbox_asp.bbox <- function(x,
+                             asp = NULL,
+                             class = "bbox",
+                             ...) {
   # Get adjusted aspect ratio
-  if (!is.numeric(asp)) {
+  if (!is_bare_numeric(asp)) {
     asp <- get_asp(asp = asp)
   }
 
-  if (!is_null(asp) && is.numeric(asp)) {
-    # Get width/height
-    xdist <- sf_bbox_xdist(bbox) # Get width
-    ydist <- sf_bbox_ydist(bbox) # Get height
-
-    # Set default nudge to 0
-    x_nudge <- 0
-    y_nudge <- 0
-
-    # Compare adjust aspect ratio to bbox aspect ratio
-    if (asp >= sf_bbox_asp(bbox)) {
-      # adjust x
-      x_nudge <- (asp * ydist - xdist) / 2
-    } else {
-      # adjust y
-      y_nudge <- ((xdist / asp) - ydist) / 2
-    }
-
-    bbox <-
-      sf_bbox_shift(
-        bbox = bbox,
-        x_nudge = x_nudge,
-        y_nudge = y_nudge,
-        side = c("top", "bottom", "left", "right"),
-        dir = "out"
-      )
+  if (is_empty(asp)) {
+    return(as_sf_class(x, class = class))
   }
 
-  as_sf_class(bbox, class = class)
+  xdist <- sf_bbox_xdist(x)
+  ydist <- sf_bbox_ydist(x)
+
+  nudge_x <- 0
+  nudge_y <- ((xdist / asp) - ydist) / 2
+
+  # Compare adjust aspect ratio to bbox aspect ratio
+  if (asp >= sf_bbox_asp(x)) {
+    nudge_x <- (asp * ydist - xdist) / 2
+    nudge_y <- 0
+  }
+
+  x <-
+    sf_bbox_expand(
+      x,
+      nudge_x = nudge_x,
+      nudge_y = nudge_y
+    )
+
+  as_sf_class(x, class = class)
+}
+
+#' @name st_bbox_asp
+#' @rdname st_bbox_ext
+#' @export
+st_bbox_asp.sf_list <- function(x,
+                                asp = NULL,
+                                class = "bbox",
+                                allow_null = TRUE,
+                                allow_list = TRUE) {
+  if (!allow_list) {
+    cli_abort(
+      "{.arg allow_list} must be {.code TRUE} if {.arg x} is a {.cls sf_list}."
+    )
+  }
+
+  as_sf_list(
+    st_bbox_asp.list(
+      x,
+      asp = asp,
+      class = class,
+      allow_list = allow_list,
+      allow_null = allow_null
+    )
+  )
+}
+
+#' @name st_bbox_asp
+#' @rdname st_bbox_ext
+#' @export
+st_bbox_asp.list <- function(x,
+                             asp = NULL,
+                             class = "bbox",
+                             allow_null = TRUE,
+                             allow_list = TRUE) {
+  if (!allow_list) {
+    cli_abort(
+      "{.arg allow_list} must be {.code TRUE} if {.arg x} is a {.cls list}."
+    )
+  }
+
+  map(
+    x,
+    function(x) {
+      st_bbox_asp.default(
+        x,
+        asp = asp,
+        class = class,
+        allow_null = allow_null
+      )
+    }
+  )
 }

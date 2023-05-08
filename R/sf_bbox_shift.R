@@ -6,30 +6,30 @@
 #'
 #' @name sf_bbox_shift
 #' @param bbox A `bbox` object.
-#' @param x_nudge,y_nudge Length 1 or 2 numeric vector; unitless. Used by or
+#' @param nudge_x,nudge_y Length 1 or 2 numeric vector; unitless. Used by or
 #'   passed to [sf_bbox_shift()]. Required for  [sf_bbox_shift()].
 #' @param side one or more sides to shift: "top", "bottom", "left", "right", or
 #'   "all". Required for [sf_bbox_shift()].
-#' @param dir If "in", contract the `bbox` by x_nudge and y_nudge. If "out",
-#'   expand the bbox by x_nudge and y_nudge. If dir is not `NULL`; absolute
-#'   values are used for x_nudge and y_nudge. Defaults to `NULL`. Optional
+#' @param dir If "in", contract the `bbox` by nudge_x and nudge_y. If "out",
+#'   expand the bbox by nudge_x and nudge_y. If dir is not `NULL`; absolute
+#'   values are used for nudge_x and nudge_y. Defaults to `NULL`. Optional
 #'   [sf_bbox_shift()].
 #' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom rlang caller_env arg_match has_length
 sf_bbox_shift <- function(bbox,
-                          x_nudge = 0,
-                          y_nudge = 0,
+                          nudge_x = 0,
+                          nudge_y = 0,
                           side = c("all", "top", "bottom", "left", "right"),
                           dir = NULL,
                           call = caller_env()) {
+  dir <- set_shift_dir(dir)
 
-  xy_nudge <- set_xy_nudge_list(x_nudge, y_nudge, dir, call = call)
+  nudge_x <- set_bbox_nudge(nudge_x, dir)
+  nudge_y <- set_bbox_nudge(nudge_y, dir)
 
-  side <- arg_match(side, multiple = TRUE, error_call = call)
-
-  has_side_value <- function(x, y) {
-    is_any_in(c(x, "all"), y)
+  has_side <- function(x, y) {
+    any(c(x, "all") %in% y)
   }
 
   nudge_bbox <- function(bb, nudge, dim = "x", side = "min") {
@@ -38,58 +38,50 @@ sf_bbox_shift <- function(bbox,
     bb
   }
 
-  if (has_side_value("left", side)) {
-    bbox <- nudge_bbox(bbox, xy_nudge[["x_nudge"]], "x", "min")
+  side <- arg_match(side, multiple = TRUE, error_call = call)
+
+  if (has_side("left", side)) {
+    bbox <- nudge_bbox(bbox, nudge_x, "x", "min")
   }
 
-  if (has_side_value("right", side)) {
-    bbox <- nudge_bbox(bbox, xy_nudge[["x_nudge"]], "x", "max")
+  if (has_side("right", side)) {
+    bbox <- nudge_bbox(bbox, nudge_x, "x", "max")
   }
 
-  if (has_side_value("bottom", side)) {
-    bbox <- nudge_bbox(bbox, xy_nudge[["y_nudge"]], "y", "min")
+  if (has_side("bottom", side)) {
+    bbox <- nudge_bbox(bbox, nudge_y, "y", "min")
   }
 
-  if (has_side_value("top", side)) {
-    bbox <- nudge_bbox(bbox, xy_nudge[["y_nudge"]], "y", "max")
+  if (has_side("top", side)) {
+    bbox <- nudge_bbox(bbox, nudge_y, "y", "max")
   }
 
   bbox
 }
 
 #' @noRd
-set_xy_nudge_list <- function(x_nudge = 0,
-                              y_nudge = 0,
-                              dir = NULL,
-                              call = caller_env()) {
-  dir <- set_shift_dir(dir, call = call)
-
-  check_bare_numeric(x_nudge, call = call)
-  check_bare_numeric(y_nudge, call = call)
-
-  if (has_length(x_nudge, 1) && has_length(y_nudge, 1)) {
-    if (is_null(dir)) {
-      x_nudge <- rep(x_nudge, 2)
-      y_nudge <- rep(y_nudge, 2)
-    } else if (is.numeric(dir)) {
-      x_nudge <- dir * abs(x_nudge)
-      y_nudge <- dir * abs(y_nudge)
-    }
+set_bbox_nudge <- function(nudge, dir) {
+  if (has_length(nudge, 1)) {
+    nudge <- rep(nudge, 2)
   }
 
-  list(
-    "x_nudge" = set_names(as.list(x_nudge), c("min", "max")),
-    "y_nudge" = set_names(as.list(y_nudge), c("min", "max"))
-  )
+  if (is.numeric(dir)) {
+    nudge <- dir * abs(nudge)
+  }
+
+  set_names(as.list(nudge), c("min", "max"))
 }
 
+
 #' @noRd
-set_shift_dir <- function(dir, allow_null = TRUE, call = caller_env()) {
+set_shift_dir <- function(dir = NULL,
+                          allow_null = TRUE,
+                          call = caller_env()) {
   if (allow_null && is_null(dir)) {
     return(dir)
   }
 
-  if (is_bare_numeric(dir)) {
+  if (is.numeric(dir)) {
     return(c(dir * -1, dir))
   }
 
@@ -101,19 +93,18 @@ set_shift_dir <- function(dir, allow_null = TRUE, call = caller_env()) {
   )
 }
 
-
 #' @name sf_bbox_contract
 #' @rdname sf_bbox_shift
 #' @export
 sf_bbox_contract <- function(bbox,
-                             x_nudge = 0,
-                             y_nudge = 0) {
+                             nudge_x = 0,
+                             nudge_y = 0) {
   sf_bbox_shift(
     bbox = bbox,
-    x_nudge = x_nudge,
-    y_nudge = y_nudge,
+    nudge_x = nudge_x,
+    nudge_y = nudge_y,
     side = "all",
-    dir = -1
+    dir = "in"
   )
 }
 
@@ -121,13 +112,13 @@ sf_bbox_contract <- function(bbox,
 #' @rdname sf_bbox_shift
 #' @export
 sf_bbox_expand <- function(bbox,
-                           x_nudge = 0,
-                           y_nudge = 0) {
+                           nudge_x = 0,
+                           nudge_y = 0) {
   sf_bbox_shift(
     bbox = bbox,
-    x_nudge = x_nudge,
-    y_nudge = y_nudge,
+    nudge_x = nudge_x,
+    nudge_y = nudge_y,
     side = "all",
-    dir = 1
+    dir = "out"
   )
 }

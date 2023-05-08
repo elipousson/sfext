@@ -33,7 +33,7 @@
 #' @param allow_list If `TRUE`, allow sf list objects as an input and use
 #'   [purrr::map()] to apply the provided parameters to each object within the
 #'   list to return as a new sf list object.
-#' @param ... additional parameters passed to [sf::st_buffer()]
+#' @param ... Additional parameters passed to [sf::st_buffer()]
 #' @export
 #' @importFrom sf st_is_longlat st_crs st_transform st_bbox st_buffer
 #' @importFrom units set_units drop_units
@@ -45,29 +45,30 @@ st_buffer_ext <- function(x,
                           end_style = NULL,
                           join_style = NULL,
                           single_side = FALSE,
+                          allow_null = TRUE,
                           allow_list = TRUE,
                           ...) {
-  if (is_sf_list(x, ext = TRUE) && is_true(allow_list)) {
-    x <-
-      map(
-        x,
-        ~ st_buffer_ext(
-          .x,
-          dist, diag_ratio, unit, dist_limits,
-          end_style, join_style, single_side
-        )
-      )
+  UseMethod("st_buffer_ext")
+}
 
+#' @name st_buffer_ext
+#' @export
+st_buffer_ext.default <- function(x,
+                                  dist = NULL,
+                                  diag_ratio = NULL,
+                                  unit = "meter",
+                                  dist_limits = NULL,
+                                  end_style = NULL,
+                                  join_style = NULL,
+                                  single_side = FALSE,
+                                  allow_null = TRUE,
+                                  ...) {
+  # If dist is NULL and diag_ratio is NULL return x (with bbox converted to sf
+  # if no buffer applied)
+  if (allow_null && is_null(x)) {
     return(x)
   }
 
-  # If bbox, convert to sfc
-  if (is_bbox(x)) {
-    x <- sf_bbox_to_sfc(x)
-  }
-
-  # If dist is NULL and diag_ratio is NULL return x (with bbox converted to sf
-  # if no buffer applied)
   if (is_null(dist) && is_null(diag_ratio)) {
     return(x)
   }
@@ -87,7 +88,9 @@ st_buffer_ext <- function(x,
 
   dist <- dist %||% sf_bbox_diag_ratio_to_dist(as_bbox(x), diag_ratio)
 
-  unit <- unit %||% get_dist_units(dist, quiet = TRUE)
+  if (is_units(dist)) {
+    unit <- unit %||% get_dist_units(dist, quiet = TRUE)
+  }
 
   units_gdal <- crs$units_gdal
 
@@ -100,6 +103,7 @@ st_buffer_ext <- function(x,
     crs = crs
   )
 
+  # FIXME: Why is this needed?
   if (!is_null(end_style)) {
     dist <- as.numeric(dist)
   }
@@ -125,6 +129,108 @@ st_buffer_ext <- function(x,
   }
 
   sf::st_transform(x, lonlat_crs)
+}
+
+#' @name st_buffer_ext
+#' @export
+st_buffer_ext.bbox <- function(x,
+                               dist = NULL,
+                               diag_ratio = NULL,
+                               unit = "meter",
+                               dist_limits = NULL,
+                               end_style = NULL,
+                               join_style = NULL,
+                               single_side = FALSE,
+                               ...) {
+  sf::st_bbox(
+    st_buffer_ext.default(
+      x = sf_bbox_to_sfc(x),
+      dist = dist,
+      diag_ratio = diag_ratio,
+      unit = unit,
+      dist_limits = dist_limits,
+      end_style = end_style,
+      join_style = join_style,
+      single_side = single_side,
+      ...
+    )
+  )
+}
+
+#' @name st_buffer_ext
+#' @export
+st_buffer_ext.list <- function(x,
+                               dist = NULL,
+                               diag_ratio = NULL,
+                               unit = "meter",
+                               dist_limits = NULL,
+                               end_style = NULL,
+                               join_style = NULL,
+                               single_side = FALSE,
+                               allow_null = TRUE,
+                               allow_list = TRUE,
+                               ...) {
+  if (!allow_list) {
+    cli_abort(
+      "{.arg allow_list} must be {.code TRUE} is {.arg x} is a {.cls list}."
+    )
+  }
+
+  map(
+    x,
+    function(x, ...) {
+      st_buffer_ext.default(
+        x,
+        dist = dist,
+        diag_ratio = diag_ratio,
+        unit = unit,
+        dist_limits = dist_limits,
+        end_style = end_style,
+        join_style = join_style,
+        single_side = single_side,
+        allow_null = allow_null,
+        ...
+      )
+    }
+  )
+}
+
+#' @name st_buffer_ext
+#' @export
+st_buffer_ext.sf_list <- function(x,
+                                  dist = NULL,
+                                  diag_ratio = NULL,
+                                  unit = "meter",
+                                  dist_limits = NULL,
+                                  end_style = NULL,
+                                  join_style = NULL,
+                                  single_side = FALSE,
+                                  allow_null = TRUE,
+                                  allow_list = TRUE,
+                                  ...) {
+  if (!allow_list) {
+    cli_abort(
+      "{.arg allow_list} must be {.code TRUE} is {.arg x} is a {.cls sf_list}."
+    )
+  }
+
+  map_as_sf_list(
+    x,
+    function(x, ...) {
+      st_buffer_ext.default(
+        x,
+        dist = dist,
+        diag_ratio = diag_ratio,
+        unit = unit,
+        dist_limits = dist_limits,
+        end_style = end_style,
+        join_style = join_style,
+        single_side = single_side,
+        allow_null = allow_null,
+        ...
+      )
+    }
+  )
 }
 
 #' Limit distance to the min/max values of dist_limits
@@ -196,16 +302,16 @@ limit_dist <- function(dist = NULL,
       "above" = max_limit
     )
 
-  input_lab <- dist_unit_lab(input_dist, to = unit)
-  limit_lab <- dist_unit_lab(dist, to = unit)
+  input_label <- dist_unit_label(input_dist, to = unit)
+  limit_label <- dist_unit_label(dist, to = unit)
 
   message <-
     switch(compared_to,
-      "between" = c("The buffer dist ({input_lab}) is between the min/max distance limits.",
-        "v" = "Replacing with nearest distance limit ({limit_lab})."
+      "between" = c("The buffer dist ({input_label}) is between the min/max distance limits.",
+        "v" = "Replacing with nearest distance limit ({limit_label})."
       ),
-      "below" = "Replacing buffer dist ({input_lab}) with the minimum limit ({limit_lab}).",
-      "above" = "Replacing buffer dist ({input_lab}) with the maximum limit ({limit_lab})."
+      "below" = "Replacing buffer dist ({input_label}) with the minimum limit ({limit_label}).",
+      "above" = "Replacing buffer dist ({input_label}) with the maximum limit ({limit_label})."
     )
 
   cli_inform(
@@ -216,43 +322,40 @@ limit_dist <- function(dist = NULL,
 }
 
 #' @noRd
-dist_unit_lab <- function(x, to = NULL) {
+dist_unit_label <- function(x, to = NULL) {
   if (!is_null(to)) {
     x <- convert_dist_units(x, to = to)
-    unit_lab <- to
+    unit_label <- to
   } else {
-    unit_lab <- get_dist_units(x)
+    unit_label <- get_dist_units(x)
   }
 
-  paste(as.character(x), unit_lab)
+  paste(as.character(x), unit_label)
 }
 
 #' @rdname st_buffer_ext
 #' @name st_edge
 #' @export
-#' @importFrom sf st_difference
 st_edge <- function(x,
                     dist = NULL,
                     diag_ratio = NULL,
                     unit = "meter",
                     ...) {
-  if (is_null(c(dist, diag_ratio))) {
+  if (is_null(dist) && is_null(diag_ratio)) {
     return(x)
   }
 
-  check_sf(x, ext = TRUE)
+  x_dist <- st_buffer_ext(
+    x,
+    dist = dist,
+    diag_ratio = diag_ratio,
+    unit = unit,
+    ...
+  )
 
-  if (is_bbox(x)) {
-    x <- sf_bbox_to_sfc(x)
+  if (is_true(dist > 0 || diag_ratio > 0)) {
+    return(st_erase(x_dist, x))
   }
 
-  x_dist <-
-    st_buffer_ext(x, dist = dist, diag_ratio = diag_ratio, unit = unit, ...)
-
-  if (any(c(dist, diag_ratio) > 0)) {
-    st_erase(x_dist, x)
-  } else if (any(c(dist, diag_ratio) <= 0)) {
-    # FIXME: Does this cause an error when dist or diag_ratio = 0?
-    st_erase(x, x_dist)
-  }
+  st_erase(x, x_dist)
 }

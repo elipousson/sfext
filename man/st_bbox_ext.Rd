@@ -3,11 +3,19 @@
 \name{st_bbox_ext}
 \alias{st_bbox_ext}
 \alias{st_bbox_adj}
+\alias{st_bbox_ext.default}
+\alias{st_bbox_ext.bbox}
+\alias{st_bbox_ext.list}
+\alias{st_bbox_ext.sf_list}
 \alias{st_bbox_asp}
+\alias{st_bbox_asp.default}
+\alias{st_bbox_asp.bbox}
+\alias{st_bbox_asp.sf_list}
+\alias{st_bbox_asp.list}
 \title{Get a bounding box buffered a set distance or to match an aspect ratio}
 \usage{
 st_bbox_ext(
-  x = NULL,
+  x,
   dist = NULL,
   diag_ratio = NULL,
   asp = NULL,
@@ -19,7 +27,87 @@ st_bbox_ext(
   allow_list = TRUE
 )
 
-st_bbox_asp(x = NULL, asp = NULL, class = "bbox", allow_list = TRUE)
+\method{st_bbox_ext}{default}(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  asp = NULL,
+  unit = NULL,
+  crs = NULL,
+  class = "bbox",
+  nudge = NULL,
+  allow_null = TRUE,
+  ...
+)
+
+\method{st_bbox_ext}{bbox}(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  asp = NULL,
+  unit = NULL,
+  crs = NULL,
+  class = "bbox",
+  nudge = NULL,
+  allow_null = TRUE,
+  ...
+)
+
+\method{st_bbox_ext}{list}(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  asp = NULL,
+  unit = NULL,
+  crs = NULL,
+  class = "bbox",
+  nudge = NULL,
+  allow_null = TRUE,
+  allow_list = TRUE,
+  ...
+)
+
+\method{st_bbox_ext}{sf_list}(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  asp = NULL,
+  unit = NULL,
+  crs = NULL,
+  class = "bbox",
+  nudge = NULL,
+  allow_null = TRUE,
+  allow_list = TRUE,
+  ...
+)
+
+st_bbox_asp(
+  x,
+  asp = NULL,
+  class = "bbox",
+  allow_null = TRUE,
+  allow_list = TRUE
+)
+
+\method{st_bbox_asp}{default}(x, asp = NULL, class = "bbox", allow_null = TRUE, ...)
+
+\method{st_bbox_asp}{bbox}(x, asp = NULL, class = "bbox", ...)
+
+\method{st_bbox_asp}{sf_list}(
+  x,
+  asp = NULL,
+  class = "bbox",
+  allow_null = TRUE,
+  allow_list = TRUE
+)
+
+\method{st_bbox_asp}{list}(
+  x,
+  asp = NULL,
+  class = "bbox",
+  allow_null = TRUE,
+  allow_list = TRUE
+)
 }
 \arguments{
 \item{x}{An object \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, or \code{sp} object or a
@@ -56,6 +144,8 @@ vector or sf object.}
 \item{allow_list}{If \code{TRUE}, allow sf list objects as an input and use
 \code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the
 list to return as a new sf list object.}
+
+\item{...}{Additional parameters passed to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
 }
 \value{
 A \code{bbox} object converted to match the class of the class parameter.

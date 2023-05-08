@@ -2,6 +2,10 @@
 % Please edit documentation in R/st_buffer_ext.R
 \name{st_buffer_ext}
 \alias{st_buffer_ext}
+\alias{st_buffer_ext.default}
+\alias{st_buffer_ext.bbox}
+\alias{st_buffer_ext.list}
+\alias{st_buffer_ext.sf_list}
 \alias{st_edge}
 \title{Buffer a simple feature or bounding box object}
 \usage{
@@ -14,6 +18,60 @@ st_buffer_ext(
   end_style = NULL,
   join_style = NULL,
   single_side = FALSE,
+  allow_null = TRUE,
+  allow_list = TRUE,
+  ...
+)
+
+\method{st_buffer_ext}{default}(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  unit = "meter",
+  dist_limits = NULL,
+  end_style = NULL,
+  join_style = NULL,
+  single_side = FALSE,
+  allow_null = TRUE,
+  ...
+)
+
+\method{st_buffer_ext}{bbox}(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  unit = "meter",
+  dist_limits = NULL,
+  end_style = NULL,
+  join_style = NULL,
+  single_side = FALSE,
+  ...
+)
+
+\method{st_buffer_ext}{list}(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  unit = "meter",
+  dist_limits = NULL,
+  end_style = NULL,
+  join_style = NULL,
+  single_side = FALSE,
+  allow_null = TRUE,
+  allow_list = TRUE,
+  ...
+)
+
+\method{st_buffer_ext}{sf_list}(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  unit = "meter",
+  dist_limits = NULL,
+  end_style = NULL,
+  join_style = NULL,
+  single_side = FALSE,
+  allow_null = TRUE,
   allow_list = TRUE,
   ...
 )
@@ -53,7 +111,7 @@ right-hand side, positive on the left.}
 \code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the
 list to return as a new sf list object.}
 
-\item{...}{additional parameters passed to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
+\item{...}{Additional parameters passed to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
 }
 \description{
 Return an sf object with a buffer based on \code{dist} or a proportion of the
