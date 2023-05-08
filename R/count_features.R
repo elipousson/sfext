@@ -1,8 +1,8 @@
 #' Count simple features based on relationship with a second simple feature object
 #'
 #' Use [st_join_ext()] and [dplyr::count()] to count features in x based on
-#' their spatial relationship with y. Very similar to [count_sf_ext()] so they may
-#' be merged in the future.
+#' their spatial relationship with y. Very similar to [count_sf_ext()] so they
+#' may be merged in the future.
 #'
 #' @param x Data frame or `sf` object, Default: `NULL`
 #' @param y Length 1 named `sf` list (name of y is used as count if count is
@@ -37,14 +37,15 @@ count_features <- function(x = NULL,
   }
 
   cli_abort_ifnot(
-    "{.arg y} must be an sf object (if {.arg nm} is provided), an sf list, or NULL (if {.arg count} is provided).",
+    "{.arg y} must be an sf object (if {.arg nm} is provided), an sf list,
+    or {.code NULL} (if {.arg count} is provided).",
     condition = is_sf_list(y) | !is_null(count)
   )
 
   if (is_sf(x) && is_sf_list(y)) {
     cli_abort_ifnot(
-      "{.arg y} must be length 1 if it is an sf list.",
-      condition = (length(y) == 1)
+      "{.arg y} must be length 1 if it is an sf_list.",
+      condition = has_length(y, 1)
     )
 
     x <- st_join_ext(x, y, join = join, .id = .id, ...)
@@ -57,7 +58,7 @@ count_features <- function(x = NULL,
 
   cli_abort_ifnot(
     "{.arg count} must be a length 1 character vector.",
-    condition = is.character(count) && (length(count) == 1)
+    condition = is.character(count) && has_length(count, 1)
   )
 
   x <-
@@ -69,7 +70,7 @@ count_features <- function(x = NULL,
       name = name
     )
 
-  geometry <- arg_match(geometry, c("y", "x", "drop"))
+  geometry <- arg_match0(geometry, c("y", "x", "drop"))
 
   if (!is_sf(y) || (geometry == "x")) {
     return(x)
