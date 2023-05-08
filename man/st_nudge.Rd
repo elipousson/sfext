@@ -2,6 +2,9 @@
 % Please edit documentation in R/st_nudge.R
 \name{st_nudge}
 \alias{st_nudge}
+\alias{st_nudge.default}
+\alias{st_nudge.bbox}
+\alias{st_nudge.sf}
 \title{Nudge a simple feature to the center of another feature and/or a set distance}
 \usage{
 st_nudge(
@@ -14,6 +17,21 @@ st_nudge(
   rotate = 0,
   crs = NULL
 )
+
+\method{st_nudge}{default}(
+  x,
+  to = NULL,
+  nudge_y = 0,
+  nudge_x = 0,
+  unit = NULL,
+  scale = 1,
+  rotate = 0,
+  crs = NULL
+)
+
+\method{st_nudge}{bbox}(x, ...)
+
+\method{st_nudge}{sf}(x, ...)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that can
@@ -39,6 +57,9 @@ numeric).}
 
 \item{crs}{Coordinate reference system for \code{sf}, \code{bbox}, \code{sfc} or \code{sf} list
 object to return.}
+
+\item{...}{Additional parameters passed to \link{as_sf}, \link{as_sfc}, \link{as_bbox}, or
+\link{as_sf_list}}
 }
 \description{
 Nudge, move, or shift a \code{sf}, \code{sfc}, or \code{bbox} object to the center of

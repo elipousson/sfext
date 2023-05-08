@@ -25,10 +25,10 @@ test_that("st_nudge works", {
     "sf"
   )
 
-  # bbox input
+  # bbox input returns bbox
   expect_s3_class(
     st_nudge(sf::st_bbox(nc[1, ]), to = nc[2:4, ]),
-    "sfc"
+    "bbox"
   )
 
   # numeric to value
