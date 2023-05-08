@@ -11,7 +11,8 @@ write_sf_svg(data, filename = NULL, path = NULL, ..., width = 10, height = 10)
 
 \item{filename}{the name of the output file.
     The page number is substituted if a C integer format is included in
-    the character string, as in the default.  (The result must be less
+    the character string, as in the default.  (Depending on the platform,
+    the result must be less
     than \code{PATH_MAX} characters long, and may be truncated if not.
     See \code{\link[grDevices]{postscript}} for further details.)  Tilde expansion
     is performed where supported by the platform.}

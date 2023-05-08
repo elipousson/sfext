@@ -1,4 +1,4 @@
-nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
+nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 
 is_sf(nc)
 

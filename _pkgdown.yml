@@ -36,6 +36,8 @@ reference:
   - '`st_filter_ext`'
   - '`st_filter_pct`'
   - '`st_misc`'
+  - '`st_square`'
+  - '`st_scale_rotate`'
   - '`st_nudge`'
   - '`st_transform_ext`'
   - '`st_make_valid_ext`'

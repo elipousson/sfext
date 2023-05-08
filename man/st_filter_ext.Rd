@@ -54,7 +54,7 @@ options to crop, trim or erase the geometry of the input object based on a
 predicate function. Returns x transformed to match crs if y is \code{NULL}.
 }
 \examples{
-nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
+nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 
 plot(
   st_filter_ext(

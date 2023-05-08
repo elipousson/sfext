@@ -88,7 +88,7 @@ Using \code{\link[=as_centroid]{as_centroid()}}
 the input object.
 }
 \examples{
-nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
+nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 
 as_point(nc)
 
