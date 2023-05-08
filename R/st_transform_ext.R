@@ -38,10 +38,13 @@ st_transform_ext <- function(x,
                              allow_null = FALSE,
                              allow_list = TRUE) {
   if (is.data.frame(x) && !is_sf(x)) {
-    cli_warn(
-      "{.arg x} can't be transformed to {.arg crs} because
+    if (!is_null(crs)) {
+      cli_warn(
+        "{.arg x} can't be transformed to {.arg crs} because
       {.arg x} is a {.cls data.frame}."
-    )
+      )
+    }
+
     return(x)
   }
 
@@ -110,4 +113,3 @@ st_wgs84 <- function(x) {
 
   st_transform_ext(x, 4326)
 }
-
