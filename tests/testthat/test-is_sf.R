@@ -1,5 +1,5 @@
 test_that("is_sf and as_sf functions work", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
   sfc <- nc$geometry
   bbox <- sf::st_bbox(nc)
   nc_geo_coords <- c(-81.47276, 36.23436)

@@ -1,5 +1,5 @@
 test_that("st_transform_ext works", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 
   # Transform crs as expected
   expect_identical(

@@ -1,5 +1,5 @@
 test_that("sf_bbox_dist functions work", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc_bbox <- sf::st_bbox(nc)
 
   tol <- 1e-5
@@ -21,7 +21,7 @@ test_that("sf_bbox_dist functions work", {
 })
 
 test_that("sf_bbox_check_fit functions work", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc_bbox <- sf::st_bbox(nc)
 
   expect_error(

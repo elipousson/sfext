@@ -1,5 +1,5 @@
 test_that("write_sf_ext works", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 
   expect_error(
     write_sf_ext(nc)
@@ -65,7 +65,7 @@ test_that("write_sf_ext works", {
 test_that("write_sf_svg works", {
   skip_if_not_installed("ggplot2")
   skip_on_ci()
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 
   withr::with_tempdir({
     write_sf_svg(
@@ -81,7 +81,7 @@ test_that("write_sf_svg works", {
 
 
 test_that("write_sf_ext works with df objects", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc_df <- sf::st_drop_geometry(nc)
 
   withr::with_tempdir({
@@ -102,6 +102,5 @@ test_that("write_sf_ext works with df objects", {
     expect_true(
       file.exists("nc_df.xlsx")
     )
-
   })
 })

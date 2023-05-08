@@ -1,5 +1,5 @@
 test_that("st_make_grid_ext works", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   expect_s3_class(
     st_make_grid_ext(nc),
     "sf"

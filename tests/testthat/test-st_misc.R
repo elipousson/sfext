@@ -1,5 +1,5 @@
 test_that("st_misc functions work", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc_6543 <- sf::st_transform(nc, 6543)
   nc_latlon <- sf::st_transform(nc, 4326)
 

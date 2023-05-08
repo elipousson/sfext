@@ -1,5 +1,5 @@
 test_that("st_erase works", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc <- sf::st_transform(nc, 3857)
 
   expect_s3_class(st_erase(nc, nc[2:3, ]), "sf")
@@ -8,7 +8,7 @@ test_that("st_erase works", {
 })
 
 test_that("st_trim works", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc <- sf::st_transform(nc, 3857)
 
   expect_s3_class(st_trim(nc, nc[2:3, ]), "sf")

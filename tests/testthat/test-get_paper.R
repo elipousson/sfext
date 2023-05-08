@@ -30,7 +30,7 @@ test_that("get_paper works", {
     7 / 4.5
   )
 
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc_bbox <- sf::st_bbox(nc)
 
   expect_identical(

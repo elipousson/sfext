@@ -1,5 +1,5 @@
 test_that("df_to_sf works", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc_df <- sf_to_df(nc)
   nc_sf <- df_to_sf(x = nc_df, coords = c("lon", "lat"))
   expect_s3_class(nc_sf, "sf")

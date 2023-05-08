@@ -8,7 +8,7 @@ test_that("as_point works", {
   expect_true(!is.na(sf::st_crs(as_points(c(0, 1), c(1, 0), crs = 4326, to = "MULTIPOINT"))))
 
   # Check sf inputs and outputs
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc_crs <- sf::st_crs(nc)
 
   expect_true(is_point(as_point(nc)))

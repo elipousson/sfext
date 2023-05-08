@@ -1,5 +1,5 @@
 test_that("sf_bbox functions work", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   nc_bbox <- sf::st_bbox(nc)
 
   expect_s3_class(sf_bbox_to_sf(nc_bbox), "sf")

@@ -1,5 +1,5 @@
 test_that("is_geom_type works", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 
   expect_identical(
     is_geom_type(nc, ext = FALSE),

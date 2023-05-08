@@ -1,5 +1,5 @@
 test_that("get_measurements works", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   expect_true(
     is_dist_units(get_area(nc[1:2, ], units = "acres")$area)
   )

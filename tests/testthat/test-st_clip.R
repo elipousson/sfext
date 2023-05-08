@@ -1,5 +1,5 @@
 test_that("st_clip works", {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   # Bad inputs
   expect_error(st_clip(nc, clip = "XX"))
   expect_error(st_clip(nc, keep = "XX"))
