@@ -768,7 +768,7 @@ read_sf_gmap <- function(url,
 get_gmap_id <- function(url) {
   str_extract(
     url,
-    regex("(?<=mid=)([[:alnum:]]|_)+((?=&)|(?=/$)|$)", TRUE)
+    regex("(?<=mid=)([[:alnum:]]|-|_)+((?=(&|/$))|$)", TRUE)
   )
 }
 
