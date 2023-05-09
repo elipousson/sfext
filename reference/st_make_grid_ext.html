@@ -87,8 +87,9 @@ rows. This documentation is incomplete the function may change.</p>
 
 <dt>...</dt>
 <dd><p>Arguments passed on to <code><a href="st_bbox_ext.html">st_bbox_ext</a></code></p><dl><dt><code>nudge</code></dt>
-<dd><p>Passed as to parameter <code><a href="st_nudge.html">st_nudge()</a></code> when not <code>NULL</code>. Numeric
-vector or sf object.</p></dd>
+<dd><p>Passed as to parameter <code><a href="st_nudge.html">st_nudge()</a></code> when not <code>NULL</code>. A numeric
+vector, a <code>sf</code> object, or any other object that can be converted to a
+simple feature collection with <code><a href="as_sf.html">as_sfc()</a></code>..</p></dd>
 
     <dt><code>dist</code></dt>
 <dd><p>buffer distance in units. Optional.</p></dd>

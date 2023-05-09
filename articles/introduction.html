@@ -219,7 +219,7 @@ exports.</p>
 <span>  prefix <span class="op">=</span> <span class="st">"date"</span>,</span>
 <span>  fileext <span class="op">=</span> <span class="st">"gpkg"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2023-05-08_nc_ashe_county.gpkg"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2023-05-09_nc_ashe_county.gpkg"</span></span></code></pre></div>
 <p><code><a href="../reference/write_sf_ext.html">write_sf_ext()</a></code> also supports the automatic creation of
 destination folders and the use of a package-specific cache folder
 created by <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code>. These functions are
@@ -330,7 +330,7 @@ frames.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/address_to_sf.html">address_to_sf</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"350 Fifth Avenue, New York, NY 10118"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Passing 1 address to the Nominatim single address geocoder</span></span>
-<span><span class="co">#&gt; Query completed in: 2.4 seconds</span></span>
+<span><span class="co">#&gt; Query completed in: 2.8 seconds</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
 <span><span class="co">#&gt; Attribute-geometry relationship: 3 constant, 0 aggregate, 0 identity</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
@@ -368,8 +368,8 @@ distance unit.</p>
 <li>
 <code><a href="../reference/st_transform_ext.html">st_transform_ext()</a></code>: takes sf, sfc, or bbox objects as
 the crs parameter for <code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">sf::st_transform()</a></code> and supports lists
-of sf objects (look for the list.ok = TRUE parameter to see which
-functions support lists)</li>
+of sf objects (look for the <code>allow_list = TRUE</code> parameter to
+see which functions support lists)</li>
 <li>
 <code><a href="../reference/st_union_ext.html">st_union_ext()</a></code>: unions geometry while also collapsing a
 name column into a single character string using the
@@ -390,8 +390,8 @@ geometry of input objects. Typically, these functions bind the
 information as a new column to an existing sf input (and convert sfc
 input objects to sf results).</p>
 <p>The <code><a href="../reference/get_measurements.html">get_length()</a></code> function wraps
-<code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_length()</a></code> and (for POLYGON geometries only)
-<code><a href="https://rdrr.io/pkg/lwgeom/man/perimeter.html" class="external-link">lwgeom::st_perimeter()</a></code>:</p>
+<code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_length</a></code> and (for POLYGON geometries only)
+<code><a href="https://rdrr.io/pkg/lwgeom/man/perimeter.html" class="external-link">lwgeom::st_perimeter</a></code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_point.html">as_line</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="../reference/as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span></span>
