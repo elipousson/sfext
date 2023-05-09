@@ -2,22 +2,10 @@
 % Please edit documentation in R/st_scale_rotate.R
 \name{st_scale_rotate}
 \alias{st_scale_rotate}
-\alias{st_scale_rotate.default}
-\alias{st_scale_rotate.sfc}
-\alias{st_scale_rotate.sf}
-\alias{st_scale_rotate.bbox}
 \title{Scale and rotate a simple feature object, simple feature collection, or
 bounding box}
 \usage{
 st_scale_rotate(x, scale = 1, rotate = 0, call = caller_env())
-
-\method{st_scale_rotate}{default}(x, ...)
-
-\method{st_scale_rotate}{sfc}(x, scale = 1, rotate = 0, call = caller_env())
-
-\method{st_scale_rotate}{sf}(x, ...)
-
-\method{st_scale_rotate}{bbox}(x, ...)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object or another object coercible to a

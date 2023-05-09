@@ -1,30 +1,35 @@
 #' Get a bounding box buffered a set distance or to match an aspect ratio
 #'
-#' This function takes a `sf` object and returns a bounding box buffered by a
-#' specified distance or diagonal ratio (a proportion of the diagonal distance
-#' across the bounding box) and to match the provided aspect ratio.
+#' [st_bbox_ext()] converts the input to a bounding box with [as_bbox()],
+#' applies a buffer (based on a specified distance or proportion of the diagonal
+#' distance across the bounding box) and adjusts the bounding box aspect ratio
+#' before returning a bounding box (or another class specified by the class
+#' parameter). If the input object is a list or `sf_list` object, the function
+#' always returns a `list` or `sf_list`.
 #'
-#' Common aspect ratios include "1:1" (1), "4:6" (0.666), "8.5:11", "16:9"
-#' (1.777). The asp parameter supports both numeric values and character
-#' strings with ratios matching the format of "width:height".
+#' [st_bbox_asp()] supports aspect ratio adjustments without applying a buffer.
+#' asp can be supplied as a number or a string matching the format of
+#' "width:height". Common aspect ratios include "1:1" (1), "4:6" (0.666),
+#' "8.5:11", "16:9" (1.777).
 #'
-#' @param x An object `sf`, `bbox`, `sfc`, `raster`, or `sp` object or a
-#'   `data.frame` that can be converted to an `sf` object or a list of `sf`,
-#'   `bbox`, or `sfc` objects. [st_bbox_asp()] also supports vectors in the same
-#'   format as a `bbox` object.
+#' @param x A `sf`, `sfc`, `bbox`, `sfg`, `Raster`, `Spatial`, `Extent`,
+#'   `numeric`, or `character` object (a place name passed to
+#'   [osmdata::getbb()]). See [as_bbox()] for more details.
 #' @inheritParams st_buffer_ext
 #' @inheritParams get_asp
-#' @param nudge Passed as to parameter [st_nudge()] when not `NULL`. Numeric
-#'   vector or sf object.
+#' @param nudge Passed as to parameter [st_nudge()] when not `NULL`. A numeric
+#'   vector, a `sf` object, or any other object that can be converted to a
+#'   simple feature collection with `as_sfc()`..
 #' @param crs Coordinate reference system of bounding box to return; defaults to
 #'   `NULL` which maintains the crs of the input object.
-#' @param class Class of object to return (`sf` or `bbox`); defaults to "bbox".
-#' @param allow_null If `TRUE` and x is `NULL`, return `NULL`.
+#' @param class Class of object to return passed to [as_sf_class()]; defaults to
+#'   "bbox".
+#' @param allow_null If `TRUE` (default) and x is `NULL`, return `NULL` or, if
+#'   `FALSE`, abort function.
 #' @return A `bbox` object converted to match the class of the class parameter.
 #' @aliases st_bbox_adj
 #' @name st_bbox_ext
 #' @export
-#' @importFrom sf st_bbox
 st_bbox_ext <- function(x,
                         dist = NULL,
                         diag_ratio = NULL,
@@ -38,7 +43,6 @@ st_bbox_ext <- function(x,
   UseMethod("st_bbox_ext")
 }
 
-#' @name st_bbox_ext
 #' @export
 st_bbox_ext.default <- function(x,
                                 dist = NULL,
@@ -53,37 +57,13 @@ st_bbox_ext.default <- function(x,
   check_sf(
     x,
     allow_null = allow_null,
-    ext = c("sf", "sfc", "bbox", "sfg", "Raster", "Extent", "numeric", "character")
+    ext = c("sfc", "bbox", "sfg", "Raster", "Spatial", "Extent", "numeric", "character")
   )
 
   if (allow_null && is_null(x)) {
     return(x)
   }
 
-  st_bbox_ext.bbox(
-    x = as_bbox(x),
-    dist = dist,
-    diag_ratio = diag_ratio,
-    asp = asp,
-    unit = unit,
-    crs = crs,
-    class = class,
-    nudge = nudge,
-    ...
-  )
-}
-
-#' @name st_bbox_ext
-#' @export
-st_bbox_ext.bbox <- function(x,
-                             dist = NULL,
-                             diag_ratio = NULL,
-                             asp = NULL,
-                             unit = NULL,
-                             crs = NULL,
-                             class = "bbox",
-                             nudge = NULL,
-                             ...) {
   if (!is_null(nudge)) {
     x <- st_nudge(x, to = nudge)
   }
@@ -98,18 +78,22 @@ st_bbox_ext.bbox <- function(x,
       ...
     )
 
-  # Transform crs of bbox object
-  x <- sf_bbox_transform(x, crs = crs)
-
   # Get aspect adjusted bbox
-  st_bbox_asp(
-    x = x,
-    asp = asp,
-    class = class
-  )
+  x <-
+    st_bbox_asp(
+      x = x,
+      asp = asp,
+      class = class
+    )
+
+  if (is_sf_list(x)) {
+    return(st_transform_ext(x, crs = crs))
+  }
+
+  # Transform crs of bbox object
+  sf_bbox_transform(x, crs = crs)
 }
 
-#' @name st_bbox_ext
 #' @export
 st_bbox_ext.list <- function(x,
                              dist = NULL,
@@ -147,7 +131,6 @@ st_bbox_ext.list <- function(x,
   )
 }
 
-#' @name st_bbox_ext
 #' @export
 st_bbox_ext.sf_list <- function(x,
                                 dist = NULL,
@@ -182,7 +165,6 @@ st_bbox_ext.sf_list <- function(x,
   )
 }
 
-
 #' @rdname st_bbox_ext
 #' @name st_bbox_asp
 #' @export
@@ -194,8 +176,6 @@ st_bbox_asp <- function(x,
   UseMethod("st_bbox_asp")
 }
 
-#' @name st_bbox_asp
-#' @rdname st_bbox_ext
 #' @export
 st_bbox_asp.default <- function(x,
                                 asp = NULL,
@@ -212,8 +192,6 @@ st_bbox_asp.default <- function(x,
   )
 }
 
-#' @name st_bbox_asp
-#' @rdname st_bbox_ext
 #' @export
 st_bbox_asp.bbox <- function(x,
                              asp = NULL,
@@ -249,32 +227,6 @@ st_bbox_asp.bbox <- function(x,
   as_sf_class(x, class = class)
 }
 
-#' @name st_bbox_asp
-#' @rdname st_bbox_ext
-#' @export
-st_bbox_asp.sf_list <- function(x,
-                                asp = NULL,
-                                class = "bbox",
-                                allow_null = TRUE,
-                                allow_list = TRUE) {
-  if (!allow_list) {
-    cli_abort(
-      "{.arg allow_list} must be {.code TRUE} if {.arg x} is a {.cls sf_list}."
-    )
-  }
-
-  as_sf_list(
-    st_bbox_asp.list(
-      x,
-      asp = asp,
-      class = class,
-      allow_null = allow_null
-    )
-  )
-}
-
-#' @name st_bbox_asp
-#' @rdname st_bbox_ext
 #' @export
 st_bbox_asp.list <- function(x,
                              asp = NULL,
@@ -297,5 +249,27 @@ st_bbox_asp.list <- function(x,
         allow_null = allow_null
       )
     }
+  )
+}
+
+#' @export
+st_bbox_asp.sf_list <- function(x,
+                                asp = NULL,
+                                class = "bbox",
+                                allow_null = TRUE,
+                                allow_list = TRUE) {
+  if (!allow_list) {
+    cli_abort(
+      "{.arg allow_list} must be {.code TRUE} if {.arg x} is a {.cls sf_list}."
+    )
+  }
+
+  as_sf_list(
+    st_bbox_asp.list(
+      x,
+      asp = asp,
+      class = class,
+      allow_null = allow_null
+    )
   )
 }

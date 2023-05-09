@@ -21,13 +21,11 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0, call = caller_env()) {
   UseMethod("st_scale_rotate")
 }
 
-#' @name st_scale_rotate
 #' @export
 st_scale_rotate.default <- function(x, ...) {
   st_scale_rotate.sfc(as_sfc(x), ...)
 }
 
-#' @name st_scale_rotate
 #' @export
 #' @importFrom sf st_crs st_centroid st_set_crs
 st_scale_rotate.sfc <- function(x, scale = 1, rotate = 0, call = caller_env()) {
@@ -51,14 +49,12 @@ st_scale_rotate.sfc <- function(x, scale = 1, rotate = 0, call = caller_env()) {
   sf::st_set_crs(x, crs)
 }
 
-#' @name st_scale_rotate
 #' @export
 #' @importFrom sf st_set_geometry
 st_scale_rotate.sf <- function(x, ...) {
   sf::st_set_geometry(x, st_scale_rotate.default(x, ...))
 }
 
-#' @name st_scale_rotate
 #' @export
 #' @importFrom sf st_bbox
 st_scale_rotate.bbox <- function(x, ...) {

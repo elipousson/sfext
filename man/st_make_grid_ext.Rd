@@ -28,8 +28,9 @@ st_make_grid_ext(
 \item{...}{
   Arguments passed on to \code{\link[=st_bbox_ext]{st_bbox_ext}}
   \describe{
-    \item{\code{nudge}}{Passed as to parameter \code{\link[=st_nudge]{st_nudge()}} when not \code{NULL}. Numeric
-vector or sf object.}
+    \item{\code{nudge}}{Passed as to parameter \code{\link[=st_nudge]{st_nudge()}} when not \code{NULL}. A numeric
+vector, a \code{sf} object, or any other object that can be converted to a
+simple feature collection with \code{as_sfc()}..}
     \item{\code{dist}}{buffer distance in units. Optional.}
     \item{\code{diag_ratio}}{ratio of diagonal distance of area's bounding box used as
 buffer distance. e.g. if the diagonal distance is 3000 meters and the
