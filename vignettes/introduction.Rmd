@@ -206,7 +206,7 @@ nc_basemap +
 
 Other notable functions in this category include:
 
-- `st_transform_ext()`: takes sf, sfc, or bbox objects as the crs parameter for `sf::st_transform()` and supports lists of sf objects (look for the list.ok = TRUE parameter to see which functions support lists)
+- `st_transform_ext()`: takes sf, sfc, or bbox objects as the crs parameter for `sf::st_transform()` and supports lists of sf objects (look for the `allow_list = TRUE` parameter to see which functions support lists)
 - `st_union_ext()`: unions geometry while also collapsing a name column into a single character string using the `cli::pluralize` function
 - `st_erase()`: checks the validity of inputs with `sf::st_is_valid` before and after using `sf::st_difference` or (if flip = TRUE) `sf::st_difference`
 
@@ -214,7 +214,7 @@ Other notable functions in this category include:
 
 There are also several functions that return information about the geometry of input objects. Typically, these functions bind the information as a new column to an existing sf input (and convert sfc input objects to sf results).
 
-The `get_length()` function wraps `sf::st_length()` and (for POLYGON geometries only) `lwgeom::st_perimeter()`:
+The `get_length()` function wraps `sf::st_length` and (for POLYGON geometries only) `lwgeom::st_perimeter`:
 
 ```{r}
 example_line <- as_line(as_point(nc[1, ]), as_point(nc[2, ]), crs = 4326)
