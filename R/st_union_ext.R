@@ -40,6 +40,10 @@ st_union_ext <- function(x,
   }
 
   if (!is_null(y)) {
+    if (!is_same_crs(x, y)) {
+      y <- st_transform_ext(y, crs = x)
+    }
+
     return(suppressWarnings(sf::st_union(x, y, ...)))
   }
 
@@ -50,8 +54,7 @@ st_union_ext <- function(x,
   }
 
   if (nrow(x) == 1) {
-    sf::st_geometry(x) <- sfc
-    return(x)
+    return(sf::st_set_geometry(x, sfc))
   }
 
   .sf_col <- .sf_col %||% get_sf_col(x)
