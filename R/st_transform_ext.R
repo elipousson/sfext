@@ -48,11 +48,11 @@ st_transform_ext <- function(x,
     return(x)
   }
 
-  check_sf(x, ext = TRUE, allow_null = allow_null, allow_list = allow_list)
-
-  if (is_null(x)) {
+  if (allow_null && is_null(x)) {
     return(x)
   }
+
+  check_sf(x, ext = TRUE, allow_null = allow_null, allow_list = allow_list)
 
   type <-
     dplyr::case_when(
