@@ -82,6 +82,7 @@ read_sf_exif <- function(path = NULL,
       )
     )
 
+    tags <- tags %||% filenamr::default_tags
     tags <- c(tags, geo_tags)
   }
 
@@ -94,13 +95,14 @@ read_sf_exif <- function(path = NULL,
 
   if (is_true(geometry)) {
     data <- df_to_sf(data, from_crs = 4326, crs = bbox)
+    data <- st_filter_ext(data, bbox)
   }
 
   if (!is_null(sort)) {
     data <- sort_features(data, sort = sort)
   }
 
-  st_filter_ext(data, bbox)
+  data
 }
 
 #' Write EXIF data for photos on spatial join with a sf object or list of sf objects
