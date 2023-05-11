@@ -78,20 +78,14 @@ st_bbox_ext.default <- function(x,
       ...
     )
 
+  x <- st_transform_ext(x, crs = crs)
+
   # Get aspect adjusted bbox
-  x <-
-    st_bbox_asp(
-      x = x,
-      asp = asp,
-      class = class
-    )
-
-  if (is_sf_list(x)) {
-    return(st_transform_ext(x, crs = crs))
-  }
-
-  # Transform crs of bbox object
-  sf_bbox_transform(x, crs = crs)
+  st_bbox_asp(
+    x = x,
+    asp = asp,
+    class = class
+  )
 }
 
 #' @export
