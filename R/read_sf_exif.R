@@ -1,37 +1,3 @@
-default_exif_tags <-
-  c(
-    "Title",
-    "ImageDescription",
-    "Keywords",
-    "Headline",
-    "Byline",
-    "Caption",
-    "FileName",
-    "CreateDate",
-    "DateTimeOriginal",
-    "OffsetTimeOriginal",
-    "ImageWidth",
-    "ImageHeight",
-    "Orientation",
-    "SourceFile",
-    "FileSize",
-    "FileType",
-    "*GPS*"
-  )
-
-exif_xwalk <-
-  list(
-    "description" = "image_description",
-    "lon" = "longitude",
-    "lat" = "latitude",
-    "lon_ref" = "longitude_ref",
-    "lat_ref" = "latitude_ref",
-    "path" = "source_file",
-    "img_width" = "image_width",
-    "img_height" = "image_height",
-    "exif_orientation" = "orientation"
-  )
-
 #' Read EXIF metadata to create a simple feature object or write
 #' EXIF metadata to image files
 #'
@@ -70,7 +36,9 @@ read_sf_exif <- function(path = NULL,
                          sort = NULL,
                          tags = NULL,
                          geometry = TRUE,
+                         quiet = TRUE,
                          ...) {
+  cli_quiet(quiet)
   geo_tags <- c("GPSLatitude", "GPSLongitude")
 
   if (is_true(geometry) && !all(geo_tags %in% tags)) {
