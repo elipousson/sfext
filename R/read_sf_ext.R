@@ -204,20 +204,42 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     condition = file.exists(path)
   )
 
-  type <-
-    dplyr::case_when(
-      is_csv_fileext(path) ~ "csv",
-      is_excel_fileext(path) ~ "excel",
-      is_rdata_fileext(path) ~ "rdata",
-      TRUE ~ "query"
-    )
+  if (is_csv_fileext(path)) {
+    return(read_sf_csv(path = path, bbox = bbox, ...))
+  }
 
-  switch(type,
-    "csv" = read_sf_csv(path = path, bbox = bbox, ...),
-    "excel" = read_sf_excel(path = path, bbox = bbox, ...),
-    "rdata" = read_sf_rdata(path = path, bbox = bbox, ...),
-    "query" = read_sf_query(path = path, bbox = bbox, ...)
-  )
+  if (is_excel_fileext(path)) {
+   return(read_sf_excel(path = path, bbox = bbox, ...))
+  }
+
+  if (is_rdata_fileext(path)) {
+    return(read_sf_rdata(path = path, bbox = bbox, ...))
+  }
+
+  if (is_zip_fileext(path)) {
+    return(read_sf_zip(path = path, bbox = bbox, ...))
+  }
+
+  read_sf_query(path = path, bbox = bbox, ...)
+}
+
+#' @name read_sf_zip
+#' @rdname read_sf_ext
+#' @inheritParams utils::unzip
+#' @importFrom utils unzip
+read_sf_zip <- function(path,
+                        bbox = NULL,
+                        exdir = NULL,
+                        overwrite = TRUE,
+                        unzip = "internal",
+                        ...) {
+  exdir <- exdir %||% basename(path)
+
+  utils::unzip(path, exdir = basename(path), overwrite = overwrite, unzip = unzip)
+
+  path <- grep(".shp$", list.files(exdir), ignore.case = TRUE, value = TRUE)
+
+  read_sf_query(path, bbox = bbox, ...)
 }
 
 #' @name read_sf_rdata

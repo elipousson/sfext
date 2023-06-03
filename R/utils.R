@@ -4,7 +4,7 @@
 
 # @staticimports pkg:isstatic
 #  is_any is_all has_same_len is_any_in is_url is_esri_url is_gsheet_url
-#  is_gist_url is_gmap_url is_unit is_rds_fileext is_rda_fileext
+#  is_gist_url is_gmap_url is_unit is_rds_fileext is_rda_fileext is_zip_fileext
 #  is_rdata_fileext is_excel_fileext is_csv_fileext is_geojson_fileext is_units
 #  has_fileext int_to_alpha as_numbered_labels str_add_fileext
 #  str_remove_fileext str_extract_fileext has_min_length

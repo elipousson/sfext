@@ -4,6 +4,7 @@
 \alias{read_sf_ext}
 \alias{read_sf_pkg}
 \alias{read_sf_path}
+\alias{read_sf_zip}
 \alias{read_sf_rdata}
 \alias{read_sf_query}
 \alias{read_sf_excel}
@@ -30,6 +31,15 @@ read_sf_pkg(
 )
 
 read_sf_path(path, bbox = NULL, ...)
+
+read_sf_zip(
+  path,
+  bbox = NULL,
+  exdir = NULL,
+  overwrite = TRUE,
+  unzip = "internal",
+  ...
+)
 
 read_sf_rdata(
   path,
@@ -153,6 +163,17 @@ cache directory or extdata system files.}
 
 \item{path}{A file path.}
 
+\item{exdir}{The directory to extract files to (the equivalent of
+    \code{unzip -d}).  It will be created if necessary.}
+
+\item{overwrite}{If \code{TRUE}, overwrite existing files (the equivalent
+    of \command{unzip -o}), otherwise ignore such files (the equivalent of
+    \command{unzip -n}).}
+
+\item{unzip}{If \code{TRUE}, url must be a zip file that is downloaded to a cache
+folder, unzipped into a temporary directory (created with \code{\link[=tempdir]{tempdir()}}), and
+then read to a file using the specified file type.}
+
 \item{file}{The file path to read from/write to.}
 
 \item{refhook}{A function to handle reference objects.}
@@ -246,10 +267,6 @@ date/time prefix; defaults to \code{NULL}.}
     The method can also be set through the option
     \code{"download.file.method"}: see \code{\link{options}()}.
   }
-
-\item{unzip}{If \code{TRUE}, url must be a zip file that is downloaded to a cache
-folder, unzipped into a temporary directory (created with \code{\link[=tempdir]{tempdir()}}), and
-then read to a file using the specified file type.}
 
 \item{ss}{Something that identifies a Google Sheet:
 \itemize{

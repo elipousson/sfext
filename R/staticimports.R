@@ -522,6 +522,15 @@ is_url <- function(x) {
   )
 }
 
+#' [is_zip_fileext]: Does this text end with a zip file extension?
+#'
+#' @name is_zip_fileext
+#' @rdname is_fileext_path
+#' @noRd
+is_zip_fileext <- function(x, ignore.case = TRUE) {
+  is_fileext_path(x, "zip", ignore.case)
+}
+
 #' Simple helper for pluralizing words
 #'
 #' @noRd
