@@ -83,6 +83,15 @@ filtered before download or reading into memory where possible).</p>
 <span></span>
 <span><span class="fu">read_sf_path</span><span class="op">(</span><span class="va">path</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">read_sf_zip</span><span class="op">(</span></span>
+<span>  <span class="va">path</span>,</span>
+<span>  bbox <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exdir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  unzip <span class="op">=</span> <span class="st">"internal"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">read_sf_rdata</span><span class="op">(</span></span>
 <span>  <span class="va">path</span>,</span>
 <span>  file <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -219,6 +228,23 @@ cache directory or extdata system files.</p></dd>
 
 <dt>path</dt>
 <dd><p>A file path.</p></dd>
+
+
+<dt>exdir</dt>
+<dd><p>The directory to extract files to (the equivalent of
+    <code>unzip -d</code>).  It will be created if necessary.</p></dd>
+
+
+<dt>overwrite</dt>
+<dd><p>If <code>TRUE</code>, overwrite existing files (the equivalent
+    of <code class="command">unzip -o</code>), otherwise ignore such files (the equivalent of
+    <code class="command">unzip -n</code>).</p></dd>
+
+
+<dt>unzip</dt>
+<dd><p>If <code>TRUE</code>, url must be a zip file that is downloaded to a cache
+folder, unzipped into a temporary directory (created with <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>), and
+then read to a file using the specified file type.</p></dd>
 
 
 <dt>file</dt>
@@ -361,12 +387,6 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
     ‘Note’.</p>
 <p>The method can also be set through the option
     <code>"download.file.method"</code>: see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a>()</code>.</p></dd>
-
-
-<dt>unzip</dt>
-<dd><p>If <code>TRUE</code>, url must be a zip file that is downloaded to a cache
-folder, unzipped into a temporary directory (created with <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>), and
-then read to a file using the specified file type.</p></dd>
 
 
 <dt>ss</dt>
