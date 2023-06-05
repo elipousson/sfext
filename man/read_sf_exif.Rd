@@ -13,6 +13,7 @@ read_sf_exif(
   sort = NULL,
   tags = NULL,
   geometry = TRUE,
+  quiet = TRUE,
   ...
 )
 }
@@ -33,7 +34,9 @@ tags to create an \code{sf} object.}
 \item{geometry}{If \code{TRUE} (default), return a simple feature object. If
 \code{FALSE}, return a data.frame.}
 
-\item{...}{Additional EXIF tags to pass to \code{\link[exiftoolr:exif_read]{exiftoolr::exif_read()}}}
+\item{quiet}{If \code{TRUE} (default), suppress function messages.}
+
+\item{...}{Additional parameters to pass to \code{\link[exiftoolr:exif_read]{exiftoolr::exif_read()}}}
 }
 \description{
 \code{read_sf_exif()} read EXIF data from folder of files and, geometry is \code{TRUE}
