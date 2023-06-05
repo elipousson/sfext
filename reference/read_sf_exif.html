@@ -98,6 +98,7 @@ IPTC:Caption-Abstract</p></li>
 <span>  sort <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tags <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  geometry <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -132,8 +133,12 @@ tags to create an <code>sf</code> object.</p></dd>
 <code>FALSE</code>, return a data.frame.</p></dd>
 
 
+<dt>quiet</dt>
+<dd><p>If <code>TRUE</code> (default), suppress function messages.</p></dd>
+
+
 <dt>...</dt>
-<dd><p>Additional EXIF tags to pass to <code><a href="https://rdrr.io/pkg/exiftoolr/man/exif_read.html" class="external-link">exiftoolr::exif_read()</a></code></p></dd>
+<dd><p>Additional parameters to pass to <code><a href="https://rdrr.io/pkg/exiftoolr/man/exif_read.html" class="external-link">exiftoolr::exif_read()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
