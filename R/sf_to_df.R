@@ -86,17 +86,13 @@ df_to_sf <- function(x,
                      ...,
                      as_tibble = TRUE,
                      call = caller_env()) {
-  cli_abort_ifnot(
-    "{.arg x} must be a {.cls data.frame}.",
-    condition = is.data.frame(x),
-    call = call
-  )
+  check_data_frame(x, call = call)
 
   type <-
     dplyr::case_when(
       has_name(x, "geometry") && !all(has_name(x, coords)) ~ "geometry_df",
       geo && has_name(x, address) && !all(has_name(x, coords)) ~ "address_df",
-      has_name(x, "wkt") ~ "wkt_df",
+      identical(coords, "wkt") || has_name(x, "wkt") ~ "wkt_df",
       !is_null(y) ~ "join_sf",
       TRUE ~ "coords_df"
     )
