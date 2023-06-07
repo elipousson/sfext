@@ -50,7 +50,7 @@ read_sf_exif <- function(path = NULL,
       )
     )
 
-    tags <- tags %||% filenamr::default_tags
+    tags <- tags %||% filenamr::default_exif_tags
     tags <- c(tags, geo_tags)
   }
 
