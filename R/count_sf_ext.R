@@ -78,6 +78,8 @@ count_sf_ext <- function(data,
 
   check_sf(y)
 
+  y <- st_transform_ext(y, crs = data)
+
   cli_abort_ifnot(
     "{.arg .id} must be a length 1 character vector.",
     condition = is.character(.id) && (length(.id) == 1)
