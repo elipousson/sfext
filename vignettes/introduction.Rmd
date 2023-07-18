@@ -67,7 +67,7 @@ nc_basemap +
 The second, `read_sf_url()`, that supports reading url that are already supported by `sf::read_sf` but also supports ArcGIS Feature Layers (using the [{esri2sf}](https://github.com/elipousson/esri2sf) package) and URLs for tabular data (including both CSV files and Google Sheets). Several functions also support queries based on a name and name_col value (generating a simple SQL query) based on the provided values.
 
 ```{r}
-sample_esri_url <- "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0"
+sample_esri_url <- "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_Boundaries_2022/FeatureServer/1"
 states <- read_sf_esri(url = sample_esri_url)
 # This is equivalent to read_sf_url(sample_esri_url)
 # Or esri2sf::esri2sf(url = sample_esri_url)
