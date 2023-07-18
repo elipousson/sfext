@@ -75,7 +75,7 @@ read_sf_exif <- function(path = NULL,
 
 #' Write EXIF data for photos on spatial join with a sf object or list of sf objects
 #'
-#' Extends [sfext::read_sf_exif()] and [filenamr::write_exif()]
+#' Extends [read_sf_exif()] and [filenamr::write_exif()]
 #'
 #' @name write_exif_from
 #' @aliases write_exif_keywords
