@@ -3,6 +3,8 @@
 # sfext development
 
 * Replace st_concave_hull with `st_concave_hull_ext()`
+* Add rdeck helper functions `rdeck_edit()` and `rdeck_select()`
+* Add mapview helper functions `mapview_ext()` and `mapview_exif()`
 
 # sfext 0.1.1 (2023-03-28)
 

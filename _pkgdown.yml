@@ -72,6 +72,12 @@ reference:
   - '`get_social_image`'
   - '`get_asp`'
   - '`get_margin`'
+- title: Helper functions for interactive mapping
+  contents:
+  - starts_with("mapview")
+  - '`make_img_leafpop`'
+  - starts_with("rdeck")
+  - '`editor_options`'
 - title: Reference data for units, scales, and paper
   contents:
   - '`dist_units`'
