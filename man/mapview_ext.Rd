@@ -3,7 +3,7 @@
 \name{mapview_ext}
 \alias{mapview_ext}
 \alias{mapview_exif}
-\alias{make_img_leafpop}
+\alias{mapview_popup_img}
 \title{Use mapview to interactively explore spatial data}
 \usage{
 mapview_ext(x, zcol = NULL, remove_na = FALSE, ...)
@@ -12,12 +12,21 @@ mapview_exif(
   path = NULL,
   fileext = "jpeg",
   popup = TRUE,
+  tooltip = FALSE,
   images = NULL,
   width = 320,
   ...
 )
 
-make_img_leafpop(images, popup = TRUE, width = 320)
+mapview_popup_img(
+  images,
+  popup = TRUE,
+  tooltip = FALSE,
+  map = NULL,
+  width = 320,
+  ...,
+  call = caller_env()
+)
 }
 \arguments{
 \item{x}{a \code{Raster*} or \code{Spatial*} or \code{Satellite} or
@@ -44,6 +53,8 @@ zcol before passing to \code{\link[mapview:mapView]{mapview::mapview()}}}
 
 \item{images}{A simple feature object with columns for the image path/url,
 image width, and image height.}
+
+\item{map}{an optional existing map to be updated/added to.}
 }
 \description{
 A wrapper for \code{\link[mapview:mapView]{mapview::mapview()}} that drops list columns and makes it

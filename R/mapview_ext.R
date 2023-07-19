@@ -7,7 +7,7 @@
 #' @inheritDotParams mapview::mapview
 #' @param remove_na If TRUE and zcol is not `NULL`, filter `NA` values from the
 #'   zcol before passing to [mapview::mapview()]
-#' @inheritParams make_img_leafpop
+#' @inheritParams mapview_popup_img
 #' @seealso
 #'  [mapview::mapview()]
 #' @export
@@ -47,50 +47,59 @@ mapview_ext <- function(x, zcol = NULL, remove_na = FALSE, ...) {
 mapview_exif <- function(path = NULL,
                          fileext = "jpeg",
                          popup = TRUE,
+                         tooltip = FALSE,
                          images = NULL,
                          width = 320,
                          ...) {
   images <- images %||% read_sf_exif(
-      path = path,
-      fileext = fileext,
-      ...
-    )
+    path = path,
+    fileext = fileext,
+    ...
+  )
 
-  if (!is_sf(images)) {
-    images <-as_sf(images)
-  }
-
-  make_img_leafpop(
+  mapview_popup_img(
     images = images,
     width = width,
+    tooltip = tooltip,
     popup = popup
   )
 }
 
 #' @param popup If `TRUE`, add a popup image to a leaflet map; defaults `TRUE`.
-#' @rdname mapview_ext
 #' @param images A simple feature object with columns for the image path/url,
 #'   image width, and image height.
-#' @name make_img_leafpop
+#' @name mapview_popup_img
+#' @rdname mapview_ext
 #' @export
-make_img_leafpop <- function(images,
-                             popup = TRUE,
-                             width = 320) {
-  check_installed("leaflet")
-  check_installed("leafpop")
+mapview_popup_img <- function(images,
+                              popup = TRUE,
+                              tooltip = FALSE,
+                              map = NULL,
+                              width = 320,
+                              ...,
+                              call = caller_env()) {
+  check_installed("leaflet", call = call)
+  check_installed("leafpop", call = call)
 
-  stopifnot(
-    all(has_name(images, c("img_width", "img_height"))),
-    any(has_name(images, c("path", "img_url"))),
-    is_sf(images)
-  )
+  if (!is_sf(images)) {
+    images <- as_sf(images, call = call)
+  }
 
-  leaflet_map <-
+  map <- map %||%
     leaflet::addCircleMarkers(
       leaflet::addTiles(leaflet::leaflet()),
       data = images,
       group = "images"
     )
+
+  if (!popup) {
+    return(map)
+  }
+
+  stopifnot(
+    all(has_name(images, c("img_width", "img_height"))),
+    any(has_name(images, c("path", "img_url")))
+  )
 
   if (has_name(images, "img_url")) {
     image <- images$img_url
@@ -101,12 +110,8 @@ make_img_leafpop <- function(images,
   asp <- images$img_width / images$img_height
   height <- width / asp
 
-  if (!popup) {
-    return(leaflet_map)
-  }
-
   leafpop::addPopupImages(
-    map = leaflet_map,
+    map = map,
     image = image,
     width = width,
     height = height,
