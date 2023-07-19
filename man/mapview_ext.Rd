@@ -8,9 +8,16 @@
 \usage{
 mapview_ext(x, zcol = NULL, remove_na = FALSE, ...)
 
-mapview_exif(path = NULL, fileext = "jpeg", popup = TRUE, photos = NULL, ...)
+mapview_exif(
+  path = NULL,
+  fileext = "jpeg",
+  popup = TRUE,
+  images = NULL,
+  width = 320,
+  ...
+)
 
-make_img_leafpop(images, popup = TRUE)
+make_img_leafpop(images, popup = TRUE, width = 320)
 }
 \arguments{
 \item{x}{a \code{Raster*} or \code{Spatial*} or \code{Satellite} or
@@ -22,8 +29,8 @@ make_img_leafpop(images, popup = TRUE)
 \item{zcol}{attribute name(s) or column number(s) in attribute table
 of the column(s) to be rendered. See also Details.}
 
-\item{remove_na}{If TRUE and col is not \code{NULL}, filter \code{NA} values from the col
-before passing to \code{\link[mapview:mapView]{mapview::mapview()}}}
+\item{remove_na}{If TRUE and zcol is not \code{NULL}, filter \code{NA} values from the
+zcol before passing to \code{\link[mapview:mapView]{mapview::mapview()}}}
 
 \item{...}{
   Arguments passed on to \code{\link[mapview:mapView]{mapview::mapview}}
@@ -35,11 +42,12 @@ before passing to \code{\link[mapview:mapView]{mapview::mapview()}}}
 
 \item{popup}{If \code{TRUE}, add a popup image to a leaflet map; defaults \code{TRUE}.}
 
-\item{images}{A simple feature object with columns for the image path/url, image width, and image height.}
+\item{images}{A simple feature object with columns for the image path/url,
+image width, and image height.}
 }
 \description{
-A wrapper for \code{\link[mapview:mapView]{mapview::mapview()}}. x can be an sf object or sf list. If nm is
-NULL and x is an sf list the first item in the list is used.
+A wrapper for \code{\link[mapview:mapView]{mapview::mapview()}} that drops list columns and makes it
+easier to quickly specify a zcol value.
 }
 \seealso{
 \code{\link[mapview:mapView]{mapview::mapview()}}

@@ -1,12 +1,12 @@
 #' Use mapview to interactively explore spatial data
 #'
-#' A wrapper for [mapview::mapview()]. x can be an sf object or sf list. If nm is
-#' NULL and x is an sf list the first item in the list is used.
+#' A wrapper for [mapview::mapview()] that drops list columns and makes it
+#' easier to quickly specify a zcol value.
 #'
 #' @inheritParams mapview::mapview
 #' @inheritDotParams mapview::mapview
-#' @param remove_na If TRUE and col is not `NULL`, filter `NA` values from the col
-#'   before passing to [mapview::mapview()]
+#' @param remove_na If TRUE and zcol is not `NULL`, filter `NA` values from the
+#'   zcol before passing to [mapview::mapview()]
 #' @inheritParams make_img_leafpop
 #' @seealso
 #'  [mapview::mapview()]
@@ -47,27 +47,35 @@ mapview_ext <- function(x, zcol = NULL, remove_na = FALSE, ...) {
 mapview_exif <- function(path = NULL,
                          fileext = "jpeg",
                          popup = TRUE,
-                         photos = NULL,
+                         images = NULL,
+                         width = 320,
                          ...) {
-  photos <- photos %||% read_sf_exif(
+  images <- images %||% read_sf_exif(
       path = path,
       fileext = fileext,
       ...
     )
 
+  if (!is_sf(images)) {
+    images <-as_sf(images)
+  }
+
   make_img_leafpop(
-    images = photos,
+    images = images,
+    width = width,
     popup = popup
   )
 }
 
 #' @param popup If `TRUE`, add a popup image to a leaflet map; defaults `TRUE`.
 #' @rdname mapview_ext
-#' @param images A simple feature object with columns for the image path/url, image width, and image height.
+#' @param images A simple feature object with columns for the image path/url,
+#'   image width, and image height.
 #' @name make_img_leafpop
 #' @export
 make_img_leafpop <- function(images,
-                             popup = TRUE) {
+                             popup = TRUE,
+                             width = 320) {
   check_installed("leaflet")
   check_installed("leafpop")
 
@@ -90,8 +98,8 @@ make_img_leafpop <- function(images,
     image <- images$path
   }
 
-  width <- images$img_width
-  height <- images$img_height
+  asp <- images$img_width / images$img_height
+  height <- width / asp
 
   if (!popup) {
     return(leaflet_map)
