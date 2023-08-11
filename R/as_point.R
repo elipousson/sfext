@@ -104,7 +104,7 @@ as_points <- function(..., to = "POINT", call = caller_env()) {
 #' @name as_startpoints
 #' @rdname as_point
 #' @export
-as_startpoint <- function(x) {
+as_startpoint <- function(x, keep_all = FALSE) {
   check_installed("lwgeom")
 
   cliExtras::cli_abort_ifnot(
@@ -117,13 +117,20 @@ as_startpoint <- function(x) {
     x <- x[1, ]
   }
 
-  lwgeom::st_startpoint(x)
+
+  geometry <- lwgeom::st_startpoint(x)
+
+  if (keep_all) {
+    return(sf::st_set_geometry(x, geometry))
+  }
+
+  geometry
 }
 
 #' @name as_endpoints
 #' @rdname as_point
 #' @export
-as_endpoint <- function(x) {
+as_endpoint <- function(x, keep_all = FALSE) {
   check_installed("lwgeom")
 
   cliExtras::cli_abort_ifnot(
@@ -136,7 +143,13 @@ as_endpoint <- function(x) {
     x <- x[nrow(x), ]
   }
 
-  lwgeom::st_endpoint(x)
+  geometry <- lwgeom::st_endpoint(x)
+
+  if (keep_all) {
+    return(sf::st_set_geometry(x, geometry))
+  }
+
+  geometry
 }
 
 #' @details Using [as_lines]:

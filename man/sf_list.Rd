@@ -6,6 +6,7 @@
 \alias{new_sf_list}
 \alias{is_sf_list}
 \alias{sf_list_rbind}
+\alias{sf_list_cbind}
 \alias{map_as_sf}
 \alias{map_as_sf_list}
 \title{Creating and checking sf lists}
@@ -32,6 +33,8 @@ new_sf_list(
 is_sf_list(x, ext = TRUE, allow_null = FALSE)
 
 sf_list_rbind(x, ...)
+
+sf_list_cbind(x, ...)
 
 map_as_sf_list(x, .f, ...)
 

@@ -76,7 +76,7 @@ st_buffer_ext(
   ...
 )
 
-st_edge(x, dist = NULL, diag_ratio = NULL, unit = "meter", ...)
+st_edge(x, dist = NULL, diag_ratio = NULL, unit = "meter", union = TRUE, ...)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object or a list of \code{sf} objects.}

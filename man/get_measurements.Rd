@@ -42,9 +42,25 @@ st_distance_ext(
   ...
 )
 
-get_bearing(x, dir = FALSE, keep_all = TRUE, .id = "bearing")
+get_bearing(
+  x,
+  to = NULL,
+  dir = FALSE,
+  keep_all = TRUE,
+  keep_lines = FALSE,
+  .id = "bearing",
+  ...
+)
 
-st_bearing(x, dir = FALSE, keep_all = TRUE, .id = "bearing")
+st_bearing(
+  x,
+  to = NULL,
+  dir = FALSE,
+  keep_all = TRUE,
+  keep_lines = FALSE,
+  .id = "bearing",
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{sf} or \code{sfc} object to measure.}
@@ -64,7 +80,9 @@ bearing.}
 "to" is an \code{sf} or \code{sfc} object, it must have either a single feature or
 the same number of features as x (if by_element is \code{TRUE}). If "to" is a
 character vector it must represent a valid xy pair using the following
-options: "xmin", "ymin", "xmax", "ymax", "xmid", "ymid".}
+options: "xmin", "ymin", "xmax", "ymax", "xmid", "ymid". \code{\link[=get_bearing]{get_bearing()}}
+and \code{\link[=st_bearing]{st_bearing()}} only support sf or sfc objects as the to input
+parameter.}
 
 \item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc; an error is raised if \code{x} and \code{y} are not the same length. If \code{FALSE}, return the dense matrix with all pairwise distances.}
 

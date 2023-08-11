@@ -18,9 +18,9 @@ as_point(..., to = "POINT")
 
 as_points(..., to = "POINT", call = caller_env())
 
-as_startpoint(x)
+as_startpoint(x, keep_all = FALSE)
 
-as_endpoint(x)
+as_endpoint(x, keep_all = FALSE)
 
 as_line(..., to = "LINESTRING", call = caller_env())
 

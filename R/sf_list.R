@@ -181,6 +181,13 @@ sf_list_rbind <- function(x, ...) {
   sf::st_as_sf(list_rbind(x, ...))
 }
 
+#' @name sf_list_cbind
+#' @rdname sf_list
+#' @importFrom sf st_as_sf
+sf_list_cbind <- function(x, ...) {
+  sf::st_as_sf(list_cbind(x, ...))
+}
+
 #' @name map_as_sf
 #' @rdname sf_list
 map_as_sf_list <- function(x, .f, ...) {

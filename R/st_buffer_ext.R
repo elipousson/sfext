@@ -340,6 +340,7 @@ st_edge <- function(x,
                     dist = NULL,
                     diag_ratio = NULL,
                     unit = "meter",
+                    union = TRUE,
                     ...) {
   if (is_null(dist) && is_null(diag_ratio)) {
     return(x)
@@ -354,8 +355,8 @@ st_edge <- function(x,
   )
 
   if (is_true(dist > 0 || diag_ratio > 0)) {
-    return(st_erase(x_dist, x))
+    return(st_erase(x_dist, x, union = union))
   }
 
-  st_erase(x, x_dist)
+  st_erase(x, x_dist, union = union)
 }

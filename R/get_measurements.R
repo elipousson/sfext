@@ -130,7 +130,9 @@ st_length_ext <- get_length
 #'   "to" is an `sf` or `sfc` object, it must have either a single feature or
 #'   the same number of features as x (if by_element is `TRUE`). If "to" is a
 #'   character vector it must represent a valid xy pair using the following
-#'   options: "xmin", "ymin", "xmax", "ymax", "xmid", "ymid".
+#'   options: "xmin", "ymin", "xmax", "ymax", "xmid", "ymid". [get_bearing()]
+#'   and [st_bearing()] only support sf or sfc objects as the to input
+#'   parameter.
 #' @inheritParams sf::st_distance
 #' @name get_dist
 #' @rdname get_measurements
@@ -147,7 +149,7 @@ get_dist <- function(x,
                      ...) {
   stopifnot(
     is_sf(x, ext = TRUE),
-    is_sf(to, ext = TRUE) | is.character(to)
+    is_sf(to, ext = TRUE) || is.character(to)
   )
 
   crs <- sf::st_crs(x)
@@ -171,7 +173,7 @@ get_dist <- function(x,
       )
 
     to <- sf_bbox_point(as_bbox(x), point = to)
-    to <- as_sf(to, crs = crs)
+    to <- as_sf(to, crs = from)
     by_element <- FALSE
   }
 
@@ -211,7 +213,13 @@ st_distance_ext <- get_dist
 #' @name get_bearing
 #' @rdname get_measurements
 #' @export
-get_bearing <- function(x, dir = FALSE, keep_all = TRUE, .id = "bearing") {
+get_bearing <- function(x,
+                        to = NULL,
+                        dir = FALSE,
+                        keep_all = TRUE,
+                        keep_lines = FALSE,
+                        .id = "bearing",
+                        ...) {
   check_installed("geosphere")
 
   cli_abort_ifnot(
@@ -223,18 +231,24 @@ get_bearing <- function(x, dir = FALSE, keep_all = TRUE, .id = "bearing") {
     x <- as_sf(x)
   }
 
-  if (!is_line(x)) {
-    convert_geom_type_alert(x, to = "LINESTRING", with = "as_lines")
-    x_lines <- as_lines(x)
-  } else {
-    x_lines <- x
+  x_lines <- x
+
+  if (is_sf(to) || is_sfc(to)) {
+    to <- sf::st_point_on_surface(to)
+    cli::cli_progress_step("Converting {.arg x} to {.val POINT} and combining with {.arg to}")
+    x_lines <- vec_st_union(x_lines, to)
+    # x <- suppressWarnings(st_union_ext(sf::st_point_on_surface(x), to, ...))
   }
 
-  start_pts <- get_coords(as_sf(as_startpoint(x_lines)), drop = FALSE)
-  end_pts <- get_coords(as_sf(as_endpoint(x_lines)), drop = FALSE)
+  if (!is_line(x_lines)) {
+    convert_geom_type_alert(x_lines, to = "LINESTRING", with = "as_lines")
+    x_lines <- as_lines(x_lines)
+  }
 
-  x_bearing <-
-    vapply(
+  start_pts <- get_coords(as_sf(as_startpoint(x_lines)), crs = 4326, drop = FALSE)
+  end_pts <- get_coords(as_sf(as_endpoint(x_lines)), crs = 4326, drop = FALSE)
+
+  x_bearing <- vapply(
       seq_len(length(start_pts$lon)),
       function(x) {
         geosphere::bearing(
@@ -246,6 +260,10 @@ get_bearing <- function(x, dir = FALSE, keep_all = TRUE, .id = "bearing") {
 
   if (!dir) {
     x_bearing <- abs(x_bearing)
+  }
+
+  if (keep_lines) {
+    x <- sf::st_set_geometry(x, sf::st_geometry(x_lines))
   }
 
   bind_units_col(
@@ -265,5 +283,5 @@ st_bearing <- get_bearing
 
 #' @noRd
 convert_geom_type_alert <- function(x, to = NULL, with = NULL) {
-  cli_inform("Converting {as.character(is_geom_type(x, ext = FALSE))} object to {to} with {.fun {fn}}.")
+  cli::cli_progress_step("Converting {.val {as.character(is_geom_type(x, ext = FALSE))}} object to {.val {to}} with {.fun {with}}.")
 }

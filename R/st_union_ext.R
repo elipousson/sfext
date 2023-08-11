@@ -100,14 +100,10 @@ st_union_ext <- function(x,
 st_union_by <- function(x, ..., .sf_col = NULL) {
   check_sf(x)
   .sf_col <- .sf_col %||% get_sf_col(x)
-  x <-
-    dplyr::summarise(
-      dplyr::group_by(
-        sf::st_make_valid(x),
-        ...
-      ),
-      "{.sf_col}" := {.sf_col}
-    )
+
+  x <- dplyr::group_by(sf::st_make_valid(x), ...)
+
+  x <- dplyr::summarise(x, "{.sf_col}" := {{ .sf_col }})
 
   sf::st_make_valid(x)
 }
