@@ -1,12 +1,9 @@
 # sfext (development version)
 
-<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
-
-# sfext development
-
 * Replace st_concave_hull with `st_concave_hull_ext()`
 * Add rdeck helper functions `rdeck_edit()` and `rdeck_select()`
 * Add mapview helper functions `mapview_ext()` and `mapview_exif()`
+* Add new `read_sf_felt()` function (#5)
 
 # sfext 0.1.1 (2023-03-28)
 
