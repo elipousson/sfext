@@ -11,6 +11,7 @@
 \alias{read_sf_csv}
 \alias{read_sf_url}
 \alias{read_sf_esri}
+\alias{read_sf_felt}
 \alias{read_sf_gist}
 \alias{read_sf_gmap}
 \alias{read_sf_download}
@@ -101,6 +102,14 @@ read_sf_esri(
   name_col = NULL,
   coords = c("lon", "lat"),
   from_crs = 4326,
+  .name_repair = "check_unique",
+  ...
+)
+
+read_sf_felt(
+  url = NULL,
+  bbox = NULL,
+  map_id = NULL,
   .name_repair = "check_unique",
   ...
 )

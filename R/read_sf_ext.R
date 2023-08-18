@@ -210,7 +210,7 @@ read_sf_path <- function(path, bbox = NULL, ...) {
   }
 
   if (is_excel_fileext(path)) {
-   return(read_sf_excel(path = path, bbox = bbox, ...))
+    return(read_sf_excel(path = path, bbox = bbox, ...))
   }
 
   if (is_rdata_fileext(path)) {
@@ -509,9 +509,10 @@ read_sf_url <- function(url,
 
   url_type <-
     dplyr::case_when(
+      is_esri_url(url) ~ "esri",
+      is_felt_url(url) ~ "felt",
       is_csv_fileext(url) ~ "csv",
       is_excel_fileext(url) ~ "excel",
-      is_esri_url(url) ~ "esri",
       is_gist_url(url) ~ "gist",
       is_gmap_url(url) ~ "gmap",
       is_gsheet_url(url) ~ "gsheet",
@@ -572,6 +573,14 @@ read_sf_url <- function(url,
       name_col = params[["name_col"]],
       coords = coords,
       from_crs = from_crs,
+      .name_repair = .name_repair
+    ),
+    "felt" = read_sf_felt(
+      url = url,
+      map_id = params[["map_id"]],
+      bbox = bbox,
+      token = params[["token"]],
+      crs = params[["crs"]],
       .name_repair = .name_repair
     ),
     "gist" = read_sf_gist(
@@ -676,6 +685,30 @@ read_sf_esri <- function(url,
   df_to_sf(data, from_crs = from_crs, coords = coords)
 }
 
+#' @name read_sf_felt
+#' @rdname read_sf_ext
+#' @export
+read_sf_felt <- function(url = NULL,
+                         bbox = NULL,
+                         map_id = NULL,
+                         .name_repair = "check_unique",
+                         ...) {
+  check_installed("feltr")
+
+  map_id <- map_id %||% url
+
+  data <- feltr::read_felt_map(
+    map_id = map_id,
+    ...
+  )
+
+  data <- set_names_repair(
+    data,
+    .name_repair = .name_repair
+  )
+
+  st_filter_ext(data, bbox)
+}
 
 #' @name read_sf_gist
 #' @rdname read_sf_ext
@@ -707,7 +740,6 @@ read_sf_gist <- function(url,
     ...
   )
 }
-
 
 #' @name read_sf_gmap
 #' @rdname read_sf_ext

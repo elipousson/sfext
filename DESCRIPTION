@@ -19,6 +19,7 @@ Imports:
     cli,
     cliExtras (>= 0.1.0),
     dplyr,
+    feltr (>= 0.1.1.9005),
     filenamr (>= 0.1.0.9002),
     glue,
     grDevices,
@@ -58,11 +59,12 @@ Suggests:
     withr
 VignetteBuilder: 
     knitr
-Remotes: 
+Remotes:  
     elipousson/cliExtras,
     elipousson/esri2sf,
     elipousson/filenamr,
-    qfes/rdeck
+    qfes/rdeck,
+    elipousson/feltr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8

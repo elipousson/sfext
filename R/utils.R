@@ -207,3 +207,12 @@ has_same_name_col <- function(x,
 
   dplyr::rename(x, "{new_col}" := col)
 }
+
+#' Is x a Felt url?
+#'
+#' Copied from `feltr::is_felt_url`
+#'
+#' @noRd
+is_felt_url <- function(x) {
+  is_url(x) & grepl("felt.com", x)
+}
