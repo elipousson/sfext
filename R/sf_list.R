@@ -104,7 +104,11 @@ new_sf_list <- function(x,
     .name_repair <- janitor::make_clean_names
   }
 
-  x <- set_names_repair(x, nm = nm, .name_repair = .name_repair)
+  x <- set_names_repair(
+    x,
+    nm = as.character(nm),
+    .name_repair = .name_repair
+  )
 
   vctrs::new_list_of(
     x,
