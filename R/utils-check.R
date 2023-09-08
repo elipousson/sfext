@@ -190,10 +190,7 @@ check_has_name <- function(x,
   n_nm <- length(nm)
 
   if (allow_any) {
-    nm <- cli::cli_vec(
-      nm,
-      style = c(cli::builtin_theme()$span.val, "vec-last" = " or ")
-    )
+    nm <- .cli_vec_or(nm)
     message <- "{.arg {arg}} must have any of the {name}{qty(n_nm)}{?s} {.val {nm}}"
   } else {
     message <- c(
