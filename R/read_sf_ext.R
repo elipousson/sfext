@@ -78,8 +78,8 @@ read_sf_ext <- function(...) {
   if (!is_named(params[1])) {
     names(params)[1] <- dplyr::case_when(
       is_url(params[[1]]) ~ "url",
-      has_fileext(params[[1]]) ~ "path",
       any(has_name(params, c("package", "pkg"))) ~ "data",
+      has_fileext(params[[1]]) ~ "path",
       TRUE ~ "dsn"
     )
   }
