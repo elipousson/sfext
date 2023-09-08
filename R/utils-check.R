@@ -155,6 +155,7 @@ check_df_paper <- function(x,
 #' Check if x has names
 #'
 #' @noRd
+#' @importFrom cli cli_vec builtin_theme qty
 check_has_name <- function(x,
                            nm,
                            allow_any = FALSE,
@@ -163,6 +164,11 @@ check_has_name <- function(x,
                            ...,
                            call = caller_env()) {
   check_required(x, arg = arg, call = call)
+
+  if (allow_null && is_null(x)) {
+    return(invisible(NULL))
+  }
+
   check_character(nm, call = call)
 
   has_nm <- has_name(x, nm)
@@ -175,11 +181,8 @@ check_has_name <- function(x,
     return(invisible(NULL))
   }
 
-  if (allow_null && is_null(x)) {
-    return(invisible(NULL))
-  }
-
   name <- "name"
+
   if (is.data.frame(x)) {
     name <- "column name"
   }
@@ -191,11 +194,10 @@ check_has_name <- function(x,
       nm,
       style = c(cli::builtin_theme()$span.val, "vec-last" = " or ")
     )
-    message <-
-      "{.arg {arg}} must have any of the {name}{qty(n_nm)}{?s} {nm}"
+    message <- "{.arg {arg}} must have any of the {name}{qty(n_nm)}{?s} {.val {nm}}"
   } else {
-    message <-
-      c("{.arg {arg}} must have all of the {name}{qty(n_nm)}{?s} {.val {nm}}",
+    message <- c(
+      "{.arg {arg}} must have all of the {name}{qty(n_nm)}{?s} {.val {nm}}",
         "i" = "The {name}{qty(n_nm)}{?s} {.val {nm[!has_nm]}} are missing."
       )
   }
