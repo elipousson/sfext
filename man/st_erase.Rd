@@ -3,22 +3,23 @@
 \name{st_erase}
 \alias{st_erase}
 \alias{st_trim}
-\title{Erase an area of a simple feature object}
+\title{Erase or trim geometry of a sf or sfc object}
 \usage{
-st_erase(x, y, flip = FALSE, union = TRUE, ...)
+st_erase(x, y, flip = FALSE, union = TRUE, combine = FALSE, ...)
 
-st_trim(x, y, union = TRUE, ...)
+st_trim(x, y, union = TRUE, combine = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object to erase or trim.}
 
 \item{y}{A \code{sf}, \code{sfc}, or \code{bbox} object to use to erase or trim.}
 
-\item{flip}{If \code{TRUE}, use st_intersection; if \code{FALSE} use st_difference,
-Default: \code{FALSE}}
+\item{flip}{If \code{TRUE}, use \code{\link[sf:geos_binary_ops]{sf::st_intersection()}} to "erase" geometry of x
+that intersects y; if \code{FALSE} use \code{\link[sf:geos_binary_ops]{sf::st_difference()}} to trim x to y
+geometry, Default: \code{FALSE}.}
 
-\item{union}{If \code{TRUE}, use \link[sf:geos_combine]{sf::st_combine} and \link[sf:geos_combine]{sf::st_union} on y before
-applying difference/intersection; defaults to \code{FALSE}.}
+\item{union}{If \code{TRUE}, use \code{\link[sf:geos_combine]{sf::st_combine()}} and \code{\link[sf:geos_combine]{sf::st_union()}} on y
+before applying difference/intersection; defaults to \code{TRUE}.}
 
 \item{...}{arguments passed on to \link[s2]{s2_options}}
 }
@@ -27,4 +28,25 @@ This function extends \code{\link[sf:geos_binary_ops]{sf::st_difference()}} by u
 by default, checking validity of inputs, and optionally (when \code{flip = TRUE})
 using \code{\link[sf:geos_binary_ops]{sf::st_intersection()}} instead of \link[sf:geos_binary_ops]{sf::st_difference}. \code{\link[=st_trim]{st_trim()}} is
 equivalent to \code{\link[=st_erase]{st_erase()}} with flip set to \code{TRUE}.
+}
+\examples{
+nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
+
+nc <- st_transform_ext(nc, 3657)
+
+plot(
+  st_erase(
+    st_buffer(nc[1, ], 1000),
+    nc[1, ]
+  ),
+  max.plot = 1
+)
+
+plot(
+  st_trim(
+    nc,
+    st_buffer(nc[1, ], 2000)
+  ),
+  max.plot = 1
+)
 }

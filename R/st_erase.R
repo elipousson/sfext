@@ -13,7 +13,7 @@
 #' @param union If `TRUE`, use [sf::st_combine()] and [sf::st_union()] on y
 #'   before applying difference/intersection; defaults to `TRUE`.
 #' @inheritParams sf::st_difference
-#' @examples examples/st_erase.R
+#' @example examples/st_erase.R
 #' @export
 #' @importFrom sf st_union st_combine st_intersection st_difference
 st_erase <- function(x, y, flip = FALSE, union = TRUE, combine = FALSE, ...) {
