@@ -42,9 +42,9 @@ st_distance_ext(
   ...
 )
 
-get_bearing(x, dir = FALSE, keep_all = TRUE, .id = "bearing")
+get_bearing(x, to = NULL, dir = FALSE, keep_all = TRUE, .id = "bearing")
 
-st_bearing(x, dir = FALSE, keep_all = TRUE, .id = "bearing")
+st_bearing(x, to = NULL, dir = FALSE, keep_all = TRUE, .id = "bearing")
 }
 \arguments{
 \item{x}{A \code{sf} or \code{sfc} object to measure.}

@@ -72,13 +72,13 @@ st_area_ext <- get_area
 #' @importFrom sf st_length
 get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "length") {
   cli_abort_ifnot(
-    "{.arg x} must be a {.cls sf} or {.cls sfc} object.",
-    condition = is_sf(x) | is_sfc(x)
+    is_sf(x) || is_sfc(x),
+    message = "{.arg x} must be a {.cls sf} or {.cls sfc} object."
   )
 
   cli_abort_ifnot(
-    "{.fn get_length} can't work with a {.val MULTIPOLYGON} input for {.arg x}.",
-    condition = !is_multipolygon(x)
+    !is_multipolygon(x),
+    message = "{.fn get_length} can't work with a {.val MULTIPOLYGON} input for {.arg x}."
   )
 
   if (is_point(x) | is_multipoint(x)) {
@@ -163,12 +163,11 @@ get_dist <- function(x,
   }
 
   if (is.character(to)) {
-    to <-
-      match.arg(
-        to,
-        c("xmin", "ymin", "xmax", "ymax", "xmid", "ymid"),
-        several.ok = TRUE
-      )
+    to <- match.arg(
+      to,
+      c("xmin", "ymin", "xmax", "ymax", "xmid", "ymid"),
+      several.ok = TRUE
+    )
 
     to <- sf_bbox_point(as_bbox(x), point = to)
     to <- as_sf(to, crs = crs)
@@ -211,19 +210,29 @@ st_distance_ext <- get_dist
 #' @name get_bearing
 #' @rdname get_measurements
 #' @export
-get_bearing <- function(x, dir = FALSE, keep_all = TRUE, .id = "bearing") {
+get_bearing <- function(x, to = NULL, dir = FALSE, keep_all = TRUE, .id = "bearing") {
   check_installed("geosphere")
 
   cli_abort_ifnot(
-    "{.arg x} must be a {.cls sf} or {.cls sfc} object.",
-    condition = is_sf(x) | is_sfc(x)
+    is_sf(x) || is_sfc(x),
+    message = "{.arg x} must be a {.cls sf} or {.cls sfc} object."
   )
 
   if (is_sfc(x)) {
     x <- as_sf(x)
   }
 
-  if (!is_line(x)) {
+  if (!is.null(to)) {
+    x_points <- x
+
+    if (!is_point(x)) {
+      x_points <- as_point(x)
+    }
+
+    to <- as_point(to)
+
+    x_lines <- as_lines(as_sfc(x_points), as_sfc(to))
+  } else if (!is_line(x)) {
     convert_geom_type_alert(x, to = "LINESTRING", with = "as_lines")
     x_lines <- as_lines(x)
   } else {
@@ -241,7 +250,7 @@ get_bearing <- function(x, dir = FALSE, keep_all = TRUE, .id = "bearing") {
           p1 = c(start_pts[x, ]$lon, start_pts[x, ]$lat),
           p2 = c(end_pts[x, ]$lon, end_pts[x, ]$lat)
         )
-      }, 1.0
+      }, NA_real_
     )
 
   if (!dir) {
