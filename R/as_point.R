@@ -107,9 +107,9 @@ as_points <- function(..., to = "POINT", call = caller_env()) {
 as_startpoint <- function(x) {
   check_installed("lwgeom")
 
-  cliExtras::cli_abort_ifnot(
-    "Must have LINESTRING or MULTILINESTRING geometry.",
-    condition = is_line(x) | is_multiline(x)
+  cli_abort_ifnot(
+    is_line(x) || is_multiline(x),
+    message = "Must have LINESTRING or MULTILINESTRING geometry."
   )
 
   if (is_multiline(x)) {
@@ -126,9 +126,9 @@ as_startpoint <- function(x) {
 as_endpoint <- function(x) {
   check_installed("lwgeom")
 
-  cliExtras::cli_abort_ifnot(
-    "Must have LINESTRING or MULTILINESTRING geometry.",
-    condition = is_line(x) | is_multiline(x)
+  cli_abort_ifnot(
+    is_line(x) || is_multiline(x),
+    message = "Must have LINESTRING or MULTILINESTRING geometry."
   )
 
   if (is_multiline(x)) {
@@ -161,8 +161,10 @@ as_line <- function(..., to = "LINESTRING", call = caller_env()) {
   params <- list2(...)
   to <- arg_match(to, c("LINESTRING", "MULTILINESTRING"), error_call = call)
 
-  if (all(sapply(params, is_line)) | all(sapply(params, is_multiline))) {
-    return(purrr::map_dfr(params, ~ as_sf(.x, crs = crs)))
+  if (all(sapply(params, is_line)) || all(sapply(params, is_multiline))) {
+    return(purrr::map_dfr(params, \(x) {
+      as_sf(x, crs = crs)
+    }))
   }
 
   crs <- NULL
@@ -205,15 +207,35 @@ as_lines <- function(..., to = "LINESTRING") {
     crs <- sf::st_crs(params[[1]])
   }
 
-  if (all(map_lgl(params, ~ is_line(.x) | is_multiline(.x)))) {
-    return(map_as_sf(params, ~ as_sf(.x)))
+  if (has_length(params, 2) &&
+    is_sf(params[[1]], "sfc") &&
+    is_point(params[[2]]) &&
+    has_length(params[[2]], 1)) {
+    params[[1]] <- lapply(params[[1]], function(x) {
+      st_union(as_sfc(x, crs = crs), params[[2]])
+    })
+
+    params[[1]] <- vctrs::list_unchop(params[[1]])
+
+    params[[1]] <- st_filter_geom_type(params[[1]], type = "MULTIPOINT")
+
+    return(sf::st_cast(params[[1]], to = "LINESTRING"))
   }
 
-  params <-
-    map_as_sf(
-      params,
-      ~ as_sf(as_line(.x))
-    )
+  if (all(map_lgl(params, \(x) {
+    is_line(x) || is_multiline(x)
+  }))) {
+    return(map_as_sf(params, \(x) {
+      as_sf(x)
+    }))
+  }
+
+  params <- map_as_sf(
+    params,
+    \(x) {
+      as_sf(as_line(x))
+    }
+  )
 
   as_sf(sf::st_cast(params, to = to), crs = crs)
 }
@@ -232,11 +254,25 @@ as_polygons <- function(..., to = "POLYGON") {
     crs <- sf::st_crs(params[[1]])
   }
 
-  if (all(map_lgl(params, ~ is_polygon(.x)))) {
-    return(map_as_sf(params, ~ as_sf(.x)))
+  if (all(map_lgl(params, \(x) {
+    is_polygon(x)
+  }))) {
+    params <- map_as_sf(
+      params,
+      \(x) {
+        as_sf(x)
+      }
+    )
+
+    return(params)
   }
 
-  params <- map_as_sf(params, ~ as_sf(.x))
+  params <- map_as_sf(
+    params,
+    \(x) {
+      as_sf(x)
+    }
+  )
 
   suppressWarnings(
     as_sf(sf::st_cast(params, to = to), crs = crs)
