@@ -48,8 +48,8 @@ bind_units_col <- function(x,
   }
 
   cli_abort_ifnot(
-    "A {.arg .id} or {.arg units} value must be provided.",
-    condition = !is_null(units) | !is_null(.id),
+    !is_null(units) || !is_null(.id),
+    message = "A {.arg .id} or {.arg units} value must be provided.",
     call = call
   )
 

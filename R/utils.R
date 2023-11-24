@@ -32,6 +32,40 @@ utils::globalVariables(
   )
 )
 
+#' @noRd
+cli_abort_ifnot <- function(...,
+                            message = NULL,
+                            arg = caller_arg(x),
+                            .envir = call,
+                            call = caller_env()) {
+  cli_ifnot(
+    ...,
+    message = message,
+    .default = cli::cli_abort,
+    arg = arg,
+    .envir = .envir,
+    call = call
+  )
+}
+
+
+#' @noRd
+cli_warn_ifnot <- function(...,
+                           message = NULL,
+                           arg = caller_arg(x),
+                           .envir = call,
+                           call = caller_env()) {
+  cli_ifnot(
+    ...,
+    message = message,
+    .default = cli::cli_warn,
+    arg = arg,
+    .envir = .envir,
+    call = call
+  )
+}
+
+
 #' Set names using vctrs::vec_as_names
 #'
 #' @noRd

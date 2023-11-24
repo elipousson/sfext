@@ -20,25 +20,24 @@ get_asp <- function(asp = NULL,
                     block_asp = FALSE,
                     allow_null = TRUE,
                     ...) {
-  type <-
-    dplyr::case_when(
-      allow_null && is_null(asp) && is_null(paper) ~ "null",
-      is.numeric(asp) ~ "num",
-      is.character(asp) && grepl(":", asp) ~ "char",
-      !is_null(paper) && is_null(asp) && !block_asp ~ "paper",
-      !is_null(paper) && is_null(asp) && block_asp ~ "block",
-      !is_null(bbox) ~ "bbox",
-      TRUE ~ "abort"
-    )
+  type <- dplyr::case_when(
+    allow_null && is_null(asp) && is_null(paper) ~ "null",
+    is.numeric(asp) ~ "num",
+    is.character(asp) && grepl(":", asp) ~ "char",
+    !is_null(paper) && is_null(asp) && !block_asp ~ "paper",
+    !is_null(paper) && is_null(asp) && block_asp ~ "block",
+    !is_null(bbox) ~ "bbox",
+    .default = "abort"
+  )
 
   cli_abort_ifnot(
-    "A {.arg asp} or {.arg paper} input value must be provided.",
-    condition = (type != "abort")
+    type != "abort",
+    message = "A valid {.arg asp} or {.arg paper} input value must be provided."
   )
 
   cli_warn_ifnot(
-    "{.arg margin} is ignored if {.arg block_asp} is {.val FALSE}.",
-    condition = !block_asp && is_null(margin)
+    !block_asp && is_null(margin),
+    message = "{.arg margin} is ignored if {.arg block_asp} is {.val FALSE}."
   )
 
   switch(type,

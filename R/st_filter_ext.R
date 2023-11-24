@@ -62,8 +62,8 @@ st_filter_ext <- function(x,
   }
 
   cli_abort_ifnot(
-    "Both {.arg x} and {.arg y} must be either sf, sfc or bbox objects.",
-    condition = is_sf(x, ext = TRUE) && is_sf(y, ext = TRUE)
+    is_sf(x, ext = TRUE) && is_sf(y, ext = TRUE),
+    message = "Both {.arg x} and {.arg y} must be either sf, sfc or bbox objects.",
   )
 
   class <- "sf"
@@ -74,40 +74,37 @@ st_filter_ext <- function(x,
 
   if (erase) {
     cli_warn_ifnot(
-      "{.arg erase} is ignored if {.arg trim} or {.arg crop} are {.val TRUE}.",
-      condition = !trim | !crop
+      (!trim || !crop),
+      message = "{.arg erase} is ignored if {.arg trim} or {.arg crop} are {.val TRUE}."
     )
   }
 
   y <- st_transform_ext(y, crs = x)
 
-  case <-
-    dplyr::case_when(
-      crop ~ "crop",
-      trim ~ "trim",
-      erase ~ "erase",
-      TRUE ~ "filter"
-    )
+  case <- dplyr::case_when(
+    crop ~ "crop",
+    trim ~ "trim",
+    erase ~ "erase",
+    TRUE ~ "filter"
+  )
 
   if (crop) {
     y <- sf::st_bbox(y)
   }
 
-  x <-
-    sf::st_filter(
-      x,
-      as_sfc(y),
-      ...,
-      .predicate = .predicate
-    )
+  x <- sf::st_filter(
+    x,
+    as_sfc(y),
+    ...,
+    .predicate = .predicate
+  )
 
-  x <-
-    switch(case,
-      "crop" = suppressWarnings(sf::st_crop(x, y)),
-      "trim" = st_trim(x, y),
-      "erase" = st_erase(x, y),
-      "filter" = x
-    )
+  x <- switch(case,
+    "crop" = suppressWarnings(sf::st_crop(x, y)),
+    "trim" = st_trim(x, y),
+    "erase" = st_erase(x, y),
+    "filter" = x
+  )
 
   x <- st_filter_geom_type(x, type)
 
@@ -127,8 +124,8 @@ st_filter_ext <- function(x,
 #' @importFrom sf st_is
 st_filter_geom_type <- function(x, type = NULL) {
   cli_abort_ifnot(
-    "{.arg x} must be an {.cls sf} or {.cls sfc} object.",
-    condition = is_sf(x) | is_sfc(x)
+    is_sf(x) || is_sfc(x),
+    message = "{.arg x} must be an {.cls sf} or {.cls sfc} object."
   )
 
   if (is_null(type)) {

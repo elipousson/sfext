@@ -192,20 +192,19 @@ address_to_sf <- function(x,
   x <- has_same_name_col(x, col = "lat")
 
   # Geocode the address column
-  x <-
-    tidygeocoder::geocode(
-      x,
-      address = address,
-      long = "lon",
-      lat = "lat",
-      full_results = full_results,
-      quiet = is_interactive(),
-      ...
-    )
+  x <- tidygeocoder::geocode(
+    x,
+    address = address,
+    long = "lon",
+    lat = "lat",
+    full_results = full_results,
+    quiet = is_interactive(),
+    ...
+  )
 
   cli_abort_ifnot(
-    "No addresses from {.arg x} could be geocoded.",
-    condition = (nrow(x) > 0),
+    (nrow(x) > 0),
+    message = "No addresses from {.arg x} could be geocoded.",
     call = call
   )
 

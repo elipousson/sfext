@@ -26,14 +26,14 @@
 #' @importFrom vctrs vec_rbind
 #' @importFrom sf st_make_valid st_as_sf
 bind_sf_coverage <- function(x,
-                          coverage,
-                          coverage_nm = NULL,
-                          .id = "name",
-                          x_arg = caller_arg(x),
-                          coverage_arg = caller_arg(coverage),
-                          id_arg = caller_arg(id),
-                          combine = FALSE,
-                          error_call = caller_env()) {
+                             coverage,
+                             coverage_nm = NULL,
+                             .id = "name",
+                             x_arg = caller_arg(x),
+                             coverage_arg = caller_arg(coverage),
+                             id_arg = caller_arg(id),
+                             combine = FALSE,
+                             error_call = caller_env()) {
   check_sf(x, call = error_call)
   check_sf(coverage, ext = TRUE, call = error_call)
 
@@ -82,13 +82,13 @@ bind_sf_coverage <- function(x,
     allow_null = TRUE,
     allow_empty = FALSE,
     call = error_call
-    )
+  )
 
   if (is.null(coverage_nm)) {
     coverage_nm <- paste0(
       sample(letters, size = 12, replace = TRUE),
       collapse = ""
-      )
+    )
 
     cli::cli_alert_info(
       "Using placeholder name {.val {coverage_nm}} for coverage"

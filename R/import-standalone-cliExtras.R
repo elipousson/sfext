@@ -5,12 +5,18 @@
 # ---
 # repo: elipousson/cliExtras
 # file: standalone-cliExtras.R
-# last-updated: 2023-03-21
+# last-updated: 2023-09-18
 # license: https://unlicense.org
-# imports: rlang, cli
+# imports: [rlang, cli]
 # ---
 #
 # ## Changelog
+#
+# 2023-09-18:
+# * Add missing `.envir` parameter to `cli_if()` and `cli_ifnot()`
+#
+# 2023-03-30:
+# * Added `cli_ask()` and `check_yes()`
 #
 # 2023-03-22:
 # * Added `cli_ifnot()`
@@ -38,6 +44,7 @@ cli_if <- function(x = NULL,
                    .predicate = rlang::is_true,
                    .fn = NULL,
                    .default = cli::cli_alert,
+                   .envir = rlang::caller_env(),
                    call = rlang::caller_env()) {
   check <- rlang::try_fetch(
     .predicate(x),
@@ -60,7 +67,7 @@ cli_if <- function(x = NULL,
 
   if (rlang::is_true(check)) {
     .fn <- .fn %||% .default
-    fn_call <- rlang::call2(.fn, ...)
+    fn_call <- rlang::call2(.fn, ..., .envir = .envir)
     if (rlang::has_name(rlang::call_args_names(fn_call), "call")) {
       fn_call <- rlang::call_modify(fn_call, call = call, .homonyms = "last")
     }
@@ -73,6 +80,7 @@ cli_ifnot <- function(x = NULL,
                       .predicate = rlang::is_false,
                       .fn = NULL,
                       .default = cli::cli_alert,
+                      .envir = rlang::caller_env(),
                       call = rlang::caller_env()) {
   cli_if(
     x = x,
@@ -80,6 +88,39 @@ cli_ifnot <- function(x = NULL,
     .predicate = .predicate,
     .fn = .fn,
     .default = .default,
+    .envir = .envir,
+    call = call
+  )
+}
+
+cli_ask <- function(prompt = "?",
+                    ...,
+                    .envir = rlang::caller_env(),
+                    call = .envir) {
+  cli_ifnot(
+    x = rlang::is_interactive(),
+    "User interaction is required.",
+    .fn = cli::cli_abort,
+    call = call
+  )
+  if (!rlang::is_empty(rlang::list2(...))) {
+    cli::cli_bullets(..., .envir = .envir)
+  }
+  readline(paste0(prompt, "\u00a0"))
+}
+
+check_yes <- function(prompt = NULL,
+                      yes = c("", "Y", "Yes", "Yup", "Yep", "Yeah"),
+                      message = "Aborted. A yes is required.",
+                      .envir = rlang::caller_env(),
+                      call = .envir) {
+  resp <- cli_ask(paste0("?\u00a0", prompt, "\u00a0(Y/n)"), .envir = .envir)
+
+  cli_ifnot(
+    x = all(tolower(resp) %in% tolower(yes)),
+    message = message,
+    .fn = cli::cli_abort,
+    .envir = .envir,
     call = call
   )
 }

@@ -28,8 +28,8 @@ sf_bbox_corners <- function(x, .id = "corner", class = "sf") {
     }
 
     cli_abort_ifnot(
-      "{.arg x} must be a length 1 {.cls sfc} object or a {.cls sf} object with 1 feature.",
-      condition = (is_sf(x) && (nrow(x) == 1)) | (is_sfc(x) && length(x) == 1)
+      (is_sf(x) && (nrow(x) == 1)) || (is_sfc(x) && length(x) == 1),
+      message = "{.arg x} must be a length 1 {.cls sfc} object or a {.cls sf} object with 1 feature.",
     )
 
     bbox <- as_bbox(x)

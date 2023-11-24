@@ -17,8 +17,8 @@ convert_dist_units <- function(dist,
                                drop = FALSE,
                                digits = NULL) {
   cli_abort_ifnot(
-    "{.arg dist} must be a numeric or units class object.",
-    condition = (is.numeric(dist) || is_units(dist))
+    (is.numeric(dist) || is_units(dist)),
+    message = "{.arg dist} must be a numeric or units class object."
   )
 
   if (is_units(dist)) {

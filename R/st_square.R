@@ -16,7 +16,7 @@
 #' nc <- sf::st_transform(nc, crs = 3857)
 #'
 #' plot(st_square(nc), max.plot = 1)
-#' plot(st_square(nc[1:10,], by_feature = TRUE), max.plot = 1)
+#' plot(st_square(nc[1:10, ], by_feature = TRUE), max.plot = 1)
 #'
 #' @export
 #' @importFrom sf st_is_longlat st_inscribed_circle st_geometry st_dimension
@@ -64,16 +64,15 @@ st_square.sfc <- function(x,
     geometry <- discard(geometry, ~ is.na(sf::st_dimension(.x)))
     rotate <- rotate + 45
   } else {
-    geometry <-
-      map(
-        vctrs::vec_chop(x),
-        ~ st_bbox_ext(
-          x = .x,
-          asp = 1,
-          class = "sfc",
-          crs = crs
-        )
+    geometry <- map(
+      vctrs::vec_chop(x),
+      ~ st_bbox_ext(
+        x = .x,
+        asp = 1,
+        class = "sfc",
+        crs = crs
       )
+    )
 
     geometry <- vctrs::list_unchop(geometry)
   }

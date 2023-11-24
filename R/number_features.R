@@ -140,27 +140,27 @@ sort_features <- function(x,
       sort <- match.arg(sort, dist_opts)
 
       cli_warn_ifnot(
-        "{.arg sort} is ignored when {.arg sort} and {.arg to}
-        are both provided." = is_null(to)
+        is_null(to),
+        message = "{.arg sort} is ignored when {.arg sort} and {.arg to}
+        are both provided.",
       )
 
       to <- strsplit(sort, "_")[[1]][2:3]
     }
 
-    x <-
-      get_dist(
-        x,
-        to = to,
-        keep_all = TRUE,
-        drop = FALSE
-      )
+    x <- get_dist(
+      x,
+      to = to,
+      keep_all = TRUE,
+      drop = FALSE
+    )
 
     sort <- "dist"
   }
 
   cli_warn_ifnot(
-    "{.arg sort} column ({.val {sort}}) can't be found in {.arg x}.",
-    condition = has_name(x, sort)
+    has_name(x, sort),
+    message = "{.arg sort} column ({.val {sort}}) can't be found in {.arg x}."
   )
 
   by_group <- FALSE

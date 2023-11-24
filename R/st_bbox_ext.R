@@ -69,14 +69,13 @@ st_bbox_ext.default <- function(x,
   }
 
   # Get buffered area
-  x <-
-    st_buffer_ext(
-      x = x,
-      dist = dist,
-      diag_ratio = diag_ratio,
-      unit = unit,
-      ...
-    )
+  x <- st_buffer_ext(
+    x = x,
+    dist = dist,
+    diag_ratio = diag_ratio,
+    unit = unit,
+    ...
+  )
 
   x <- st_transform_ext(x, crs = crs)
 
@@ -211,8 +210,7 @@ st_bbox_asp.bbox <- function(x,
     nudge_y <- 0
   }
 
-  x <-
-    sf_bbox_expand(
+  x <- sf_bbox_expand(
       x,
       nudge_x = nudge_x,
       nudge_y = nudge_y

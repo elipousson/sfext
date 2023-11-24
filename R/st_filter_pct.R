@@ -23,12 +23,12 @@ st_filter_pct <- function(x, y, pct = NULL, ...) {
 #' @name st_filter_pct_area
 #' @rdname st_filter_pct
 #' @export
-#' @importFrom cliExtras cli_abort_ifnot
 #' @importFrom sf st_drop_geometry
 #' @importFrom dplyr filter left_join mutate select
 st_filter_pct_area <- function(x, y, pct = NULL) {
-  cliExtras::cli_abort_ifnot(
-    "{.arg y} must be a POLYGON or MULTIPOLYGON object." = is_polygon(x) | is_multipolygon(x)
+  cli_abort_ifnot(
+    is_polygon(y) || is_multipolygon(y),
+    message = "{.arg y} must be a POLYGON or MULTIPOLYGON object."
   )
 
   x <- get_area(x, .id = "init_area", drop = TRUE)
@@ -37,8 +37,9 @@ st_filter_pct_area <- function(x, y, pct = NULL) {
 
   x_trim <- st_trim(x, y)
 
-  x_trim <-
-    sf::st_drop_geometry(get_length(x_trim, .id = "trim_area", drop = TRUE))
+  x_trim <- sf::st_drop_geometry(
+    get_length(x_trim, .id = "trim_area", drop = TRUE)
+  )
 
   x <- dplyr::filter(dplyr::left_join(x, x_trim), !is.na(trim_area))
 
@@ -47,15 +48,15 @@ st_filter_pct_area <- function(x, y, pct = NULL) {
     pct_area = trim_area / init_area
   )
 
-  x <-
-    dplyr::select(
-      x,
-      -dplyr::all_of(c("trim_join_id", "trim_area", "init_area"))
-    )
+  x <- dplyr::select(
+    x,
+    -dplyr::all_of(c("trim_join_id", "trim_area", "init_area"))
+  )
 
   if (!is_null(pct)) {
-    cliExtras::cli_abort_ifnot(
-      "{.arg pct} must be a {.cls numeric} value of 1 or less." = is.numeric(pct) & (pct <= 1)
+    cli_abort_ifnot(
+      is.numeric(pct) && (pct <= 1),
+      message = "{.arg pct} must be a {.cls numeric} value of 1 or less."
     )
     x <- dplyr::filter(x, pct_area >= pct)
   }
@@ -66,12 +67,12 @@ st_filter_pct_area <- function(x, y, pct = NULL) {
 #' @name st_filter_pct_length
 #' @rdname st_filter_pct
 #' @export
-#' @importFrom cliExtras cli_abort_ifnot
 #' @importFrom sf st_drop_geometry
 #' @importFrom dplyr filter left_join mutate select
 st_filter_pct_length <- function(x, y, pct = NULL) {
-  cliExtras::cli_abort_ifnot(
-    "{.arg y} must be a LINESTRING or MULTILINESTRING object." = is_line(x) | is_multiline(x)
+  cli_abort_ifnot(
+    is_line(x) || is_multiline(x),
+    message = "{.arg y} must be a LINESTRING or MULTILINESTRING object."
   )
 
   x <- get_length(x, .id = "init_length", drop = TRUE)
@@ -97,8 +98,9 @@ st_filter_pct_length <- function(x, y, pct = NULL) {
     )
 
   if (!is_null(pct)) {
-    cliExtras::cli_abort_ifnot(
-      "{.arg pct} must be a {.cls numeric} value of 1 or less." = is.numeric(pct) & (pct <= 1)
+    cli_abort_ifnot(
+      is.numeric(pct) && (pct <= 1),
+      message = "{.arg pct} must be a {.cls numeric} value of 1 or less."
     )
     x <- dplyr::filter(x, pct_length >= pct)
   }

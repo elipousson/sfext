@@ -104,10 +104,9 @@ check_coords <- function(x = NULL,
 
   cli_abort_ifnot(
     # FIXME: What about the coord_col value where coordinates are split in two?
-    "{.arg coords} must be a length 2 {.cls character}
+    length(coords) == 2 && (is.character(coords) || is.numeric(coords)),
+    message = "{.arg coords} must be a length 2 {.cls character}
     or {.cls numeric} vector.",
-    condition = length(coords) == 2 &&
-      (is.character(coords) || is.numeric(coords)),
     call = call
   )
 
@@ -192,14 +191,14 @@ format_coords <- function(x,
                           keep_missing = FALSE,
                           call = caller_env()) {
   cli_abort_ifnot(
-    "{.arg coords} can't be {.val NULL} or {.val character(0)}.",
-    condition = !is_null(coords) && !identical(coords, character(0)),
+    !is_null(coords) && !identical(coords, character(0)),
+    message = "{.arg coords} can't be {.val NULL} or {.val character(0)}.",
     call = call
   )
 
   cli_abort_ifnot(
-    "{.arg x} must be a {.cls data.frame} with columns named {.val {coords}}.",
-    condition = is.data.frame(x) && all(has_name(x, coords)),
+    is.data.frame(x) && all(has_name(x, coords)),
+    message = "{.arg x} must be a {.cls data.frame} with columns named {.val {coords}}.",
     call = call
   )
 
@@ -217,7 +216,7 @@ format_coords <- function(x,
 
   if (n_missing_coords == nrow(x)) {
     cli_abort(
-      "{.arg x} must have one or more coordinate pairs in
+      message = "{.arg x} must have one or more coordinate pairs in
       column{?s} {.val {coords}}.",
       call = call
     )

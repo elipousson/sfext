@@ -111,7 +111,6 @@ is_shorter <- function(x, y) {
 #' @export
 #' @importFrom sf st_crs
 #' @importFrom rlang arg_match
-#' @importFrom cliExtras cli_warn_ifnot cli_abort_ifnot
 get_dist_units <- function(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE) {
   if (allow_null && is_null(x)) {
     return(x)
@@ -150,20 +149,20 @@ get_dist_units <- function(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE)
   }
 
   if (is.numeric(x)) {
-    cliExtras::cli_warn_ifnot(
-      "{.var units} can't be determined for a numeric vector with no
-      {.arg units} attribute.",
-      condition = quiet
+    cli_warn_ifnot(
+      quiet,
+      message = "{.var units} can't be determined for a numeric vector with no
+      {.arg units} attribute."
     )
 
     return(invisible(NULL))
   }
 
-  cliExtras::cli_abort_ifnot(
-    "{.var units} must be a {.cls character} string from
+  cli_abort_ifnot(
+    inherits(x, c("character", "units", "sf")),
+    message = "{.var units} must be a {.cls character} string from
     {.code dist_unit_options} or {.code area_unit_options}, a {.cls units}
     object, or a {.cls sf} object with a valid crs.",
-    condition = inherits(x, c("character", "units", "sf"))
   )
 }
 

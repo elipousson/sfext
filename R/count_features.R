@@ -37,15 +37,15 @@ count_features <- function(x = NULL,
   }
 
   cli_abort_ifnot(
-    "{.arg y} must be an sf object (if {.arg nm} is provided), an sf list,
-    or {.code NULL} (if {.arg count} is provided).",
-    condition = is_sf_list(y) | !is_null(count)
+    is_sf_list(y) || !is_null(count),
+    message = "{.arg y} must be an sf object (if {.arg nm} is provided), an sf list,
+    or {.code NULL} (if {.arg count} is provided)."
   )
 
   if (is_sf(x) && is_sf_list(y)) {
     cli_abort_ifnot(
-      "{.arg y} must be length 1 if it is an sf_list.",
-      condition = has_length(y, 1)
+      has_length(y, 1),
+      message = "{.arg y} must be length 1 if it is an sf_list.",
     )
 
     x <- st_join_ext(x, y, join = join, .id = .id, ...)
@@ -57,18 +57,17 @@ count_features <- function(x = NULL,
   }
 
   cli_abort_ifnot(
-    "{.arg count} must be a length 1 character vector.",
-    condition = is.character(count) && has_length(count, 1)
+    is.character(count) && has_length(count, 1),
+    message = "{.arg count} must be a length 1 character vector."
   )
 
-  x <-
-    dplyr::count(
-      x,
-      .data[[count]],
-      wt = NULL,
-      sort = sort,
-      name = name
-    )
+  x <- dplyr::count(
+    x,
+    .data[[count]],
+    wt = NULL,
+    sort = sort,
+    name = name
+  )
 
   geometry <- arg_match0(geometry, c("y", "x", "drop"))
 

@@ -58,22 +58,20 @@ st_transform_ext <- function(x,
     return(as_sf_class(x, class = class))
   }
 
-  type <-
-    dplyr::case_when(
-      is_sf_list(x, ext = TRUE) ~ "list",
-      rotate != 0 ~ "omerc",
-      is_bbox(x) ~ "bbox",
-      is_sf(x, ext = TRUE) ~ "sf"
-    )
+  type <- dplyr::case_when(
+    is_sf_list(x, ext = TRUE) ~ "list",
+    rotate != 0 ~ "omerc",
+    is_bbox(x) ~ "bbox",
+    is_sf(x, ext = TRUE) ~ "sf"
+  )
 
-  x <-
-    switch(type,
-      "list" = map(x, ~ st_transform_ext(.x, crs, class, rotate, allow_null)),
-      "bbox" = sf_bbox_transform(x, crs = crs),
-      "omerc" = st_omerc(x, rotate = rotate),
-      "sf" = transform_sf(x, crs = crs),
-      x
-    )
+  x <- switch(type,
+    "list" = map(x, ~ st_transform_ext(.x, crs, class, rotate, allow_null)),
+    "bbox" = sf_bbox_transform(x, crs = crs),
+    "omerc" = st_omerc(x, rotate = rotate),
+    "sf" = transform_sf(x, crs = crs),
+    x
+  )
 
   as_sf_class(x, class = class)
 }
@@ -88,19 +86,17 @@ st_omerc <- function(x, rotate = 0) {
   check_sf(x, ext = "sfc")
 
   cli_warn_ifnot(
-    "{.fn st_omerc} may return an error when {.arg rotate} is
+    dplyr::between(rotate, -45, 45),
+    message = "{.fn st_omerc} may return an error when {.arg rotate} is
     greater than or less than 45 degrees.",
-    condition = dplyr::between(rotate, -45, 45)
   )
 
-  coords <-
-    get_coords(sf::st_union(x), keep_all = FALSE, crs = 4326)
+  coords <- get_coords(sf::st_union(x), keep_all = FALSE, crs = 4326)
 
-  crs <-
-    glue(
-      "+proj=omerc +lat_0={coords$lat} +lonc={coords$lon}
+  crs <- glue(
+    "+proj=omerc +lat_0={coords$lat} +lonc={coords$lon}
       +datum=WGS84 +units=m +no_defs +gamma={rotate}"
-    )
+  )
 
   sf::st_transform(x = x, crs = crs)
 }

@@ -96,7 +96,7 @@ read_sf_exif <- function(path = NULL,
 #'   or [sf::st_nearest_feature] if from contains other types.
 #' @export
 #' @importFrom filenamr list_path_filenames
-#' @importFrom cliExtras cli_abort_ifnot cli_list_files
+#' @importFrom cliExtras cli_list_files
 #' @importFrom rlang has_name
 #' @importFrom sf st_drop_geometry st_join
 #' @importFrom dplyr summarize group_by
@@ -119,9 +119,9 @@ write_exif_from <- function(path,
   } else if (is.data.frame(path)) {
     data <- path
 
-    cliExtras::cli_abort_ifnot(
-      "{.arg data} must have a column named {.val path}.",
-      condition = has_name(data, "path")
+    cli_abort_ifnot(
+      has_name(data, "path"),
+      message = "{.arg data} must have a column named {.val path}."
     )
 
     path <- data[["path"]]
@@ -135,17 +135,16 @@ write_exif_from <- function(path,
 
   join <- set_join_by_geom_type(from, join = join)
 
-  data <-
-    map(
-      from,
-      ~ sf::st_drop_geometry(
-        sf::st_join(
-          data,
-          .x[, .id],
-          join = join
-        )
+  data <- map(
+    from,
+    ~ sf::st_drop_geometry(
+      sf::st_join(
+        data,
+        .x[, .id],
+        join = join
       )
     )
+  )
 
   data <- list_rbind(data)
 

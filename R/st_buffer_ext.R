@@ -266,9 +266,9 @@ limit_dist <- function(dist = NULL,
     )
 
   cli_abort_ifnot(
-    "{.arg dist_limits} must be length 2 or greater
+    (length(dist_limits) >= 2) && is_units(dist_limits),
+    message = "{.arg dist_limits} must be length 2 or greater
     and a {.code units} class object.",
-    condition = (length(dist_limits) >= 2) && is_units(dist_limits),
     call = call
   )
 

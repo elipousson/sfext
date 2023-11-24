@@ -81,13 +81,14 @@ count_sf_ext <- function(data,
   y <- st_transform_ext(y, crs = data)
 
   cli_abort_ifnot(
-    "{.arg .id} must be a length 1 character vector.",
-    condition = is.character(.id) && (length(.id) == 1)
+    is.character(.id) && (length(.id) == 1),
+    message = "{.arg .id} must be a length 1 character vector."
   )
 
   cli_abort_ifnot(
-    "{.arg y} must have a column with named {.val {(.id)}} to match the {.arg .id} parameter.",
-    condition = has_name(y, .id)
+    has_name(y, .id),
+    message = "{.arg y} must have a column with named {.val {(.id)}} to
+    match the {.arg .id} parameter."
   )
 
   sf_col <- get_sf_col(y)
@@ -103,23 +104,21 @@ count_sf_ext <- function(data,
 
   name <- name %||% "n"
 
-  data_count <-
-    dplyr::count(
-      x = sf::st_drop_geometry(data),
-      .data[[.id]],
-      wt = {{ wt }}, # wt is a data-masking variable
-      sort = sort,
-      name = name
-    )
+  data_count <- dplyr::count(
+    x = sf::st_drop_geometry(data),
+    .data[[.id]],
+    wt = {{ wt }}, # wt is a data-masking variable
+    sort = sort,
+    name = name
+  )
 
-  data_count <-
-    dplyr::right_join(
-      x = data_count,
-      y = y,
-      by = {
-        .id
-      }
-    )
+  data_count <- dplyr::right_join(
+    x = data_count,
+    y = y,
+    by = {
+      .id
+    }
+  )
 
   if (replace_na) {
     check_installed("tidyr")

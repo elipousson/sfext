@@ -195,8 +195,8 @@ check_has_name <- function(x,
   } else {
     message <- c(
       "{.arg {arg}} must have all of the {name}{qty(n_nm)}{?s} {.val {nm}}",
-        "i" = "The {name}{qty(n_nm)}{?s} {.val {nm[!has_nm]}} are missing."
-      )
+      "i" = "The {name}{qty(n_nm)}{?s} {.val {nm[!has_nm]}} are missing."
+    )
   }
 
   cli_abort(

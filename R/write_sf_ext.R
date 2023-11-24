@@ -522,8 +522,8 @@ write_sf_svg <- function(data,
   }
 
   cli_abort_ifnot(
-    "{.arg filename} or {.arg path} must include a {.val svg} file extension.",
-    condition = has_fileext(filename, "svg")
+    has_fileext(filename, "svg"),
+    message = "{.arg filename} or {.arg path} must include a {.val svg} file extension."
   )
 
   grDevices::svg(

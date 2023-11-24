@@ -208,8 +208,8 @@ get_grid_params <- function(bbox,
 
     # FIXME: Check this and see what the issue actually is and if a warning is needed
     cli_warn_ifnot(
-      "The row and columns values for the output simple feature grid are inconsistent when style is {style}.",
-      condition = !(style %in% c("hex", "flat_top_hex"))
+      !(style %in% c("hex", "flat_top_hex")),
+      message = "row and columns values for the output sf grid are inconsistent when style is {style}.",
     )
   } else if (!is_null(n)) {
     n <-

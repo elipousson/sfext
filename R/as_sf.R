@@ -244,8 +244,8 @@ as_sf_class <- function(x,
   }
 
   cli_abort_ifnot(
-    "{.arg x} must be an {.arg sf} object if {.arg class} is {.val data.frame}.",
-    condition = (class != "data.frame") | (is_sf(x) && class == "data.frame"),
+    (class != "data.frame") || (is_sf(x) && class == "data.frame"),
+    message = "{.arg x} must be an {.arg sf} object if {.arg class} is {.val data.frame}.",
     call = call
   )
 

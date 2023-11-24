@@ -1,4 +1,3 @@
-
 #' Convert distance from scale to actual units
 #'
 #' This function converts scale distances to actual units based on named
@@ -42,15 +41,15 @@ convert_dist_scale <- function(dist = NULL,
     scale <- get_scale(scale = scale, standard = scale_standard, series = scale_series)
 
     cli_abort_ifnot(
-      c("{.arg scale} {.val {scale_nm}} returned {nrow(scale)} scales from {.code standard_scales}.",
+      nrow(scale) == 1,
+      message = c("{.arg scale} {.val {scale_nm}} returned {nrow(scale)} scales from {.code standard_scales}.",
         "i" = "Provide {.arg scale_standard} and {.arg scale_series} parameters to return only 1 scale."
-      ),
-      condition = nrow(scale) == 1
+      )
     )
 
     cli_warn_ifnot(
-      c("{.arg actual_unit} is ignored if {.arg scale} is provided."),
-      condition = is.null(actual_unit)
+      is.null(actual_unit),
+      message = c("{.arg actual_unit} is ignored if {.arg scale} is provided.")
     )
   }
 
@@ -59,30 +58,29 @@ convert_dist_scale <- function(dist = NULL,
     paper <- get_paper(paper = paper, orientation = orientation, ...)
 
     cli_abort_ifnot(
-      c("{.arg paper} {.val {paper_nm}} returned {nrow(paper)} options from {.code paper_sizes}.",
+      nrow(paper) == 1,
+      message = c("{.arg paper} {.val {paper_nm}} returned {nrow(paper)} options from {.code paper_sizes}.",
         "i" = "Provide {.arg orientation} or other parameters for {.fn get_paper} to return 1 option."
-      ),
-      condition = nrow(paper) == 1
+      )
     )
 
     dist <- c(paper$width, paper$height)
 
     cli_warn_ifnot(
-      c("{.arg scale_unit} and {.arg scale_factor} are ignored if {.arg paper} is provided."),
-      condition = is.null(scale_unit) | is.null(scale_factor) | (!is.null(scale_unit) && scale_unit == paper$units)
+      is.null(scale_unit) || is.null(scale_factor) || (!is.null(scale_unit) && scale_unit == paper$units),
+      message = c("{.arg scale_unit} and {.arg scale_factor} are ignored if {.arg paper} is provided.")
     )
 
     scale_unit <- paper$units
   }
 
-  dist <-
-    switch(scale_unit,
-      "mm" = dist / 10,
-      "cm" = dist,
-      # FIXME: Double-check how this handles px
-      "px" = dist / dpi,
-      "in" = dist
-    )
+  dist <- switch(scale_unit,
+    "mm" = dist / 10,
+    "cm" = dist,
+    # FIXME: Double-check how this handles px
+    "px" = dist / dpi,
+    "in" = dist
+  )
 
   if (scale_unit %in% c("mm", "cm")) {
     scale_unit <- "cm"
@@ -100,11 +98,10 @@ convert_dist_scale <- function(dist = NULL,
     )
   }
 
-  dist <-
-    convert_dist_units(
-      dist = as.numeric(dist * scale_factor),
-      to = actual_unit
-    )
+  dist <- convert_dist_units(
+    dist = as.numeric(dist * scale_factor),
+    to = actual_unit
+  )
 
   if (is.null(paper)) {
     return(dist)
