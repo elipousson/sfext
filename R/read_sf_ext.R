@@ -75,22 +75,13 @@
 read_sf_ext <- function(...) {
   params <- list2(...)
 
-  if (!is_named(params[1])) {
-    names(params)[1] <- dplyr::case_when(
-      is_url(params[[1]]) ~ "url",
-      any(has_name(params, c("package", "pkg"))) ~ "data",
-      has_fileext(params[[1]]) ~ "path",
-      TRUE ~ "dsn"
-    )
-  }
-
   type <- dplyr::case_when(
+    is_url(params[[1]]) ~ "url",
     !is_null(params[["url"]]) ~ "url",
+    any(has_name(params, c("package", "pkg"))) ~ "pkg",
+    has_fileext(params[[1]]) ~ "path",
     !is_null(params[["path"]]) ~ "path",
-    !is_null(params[["package"]]) ~ "pkg",
-    !is_null(params[["pkg"]]) ~ "pkg",
-    !is_null(params[["dsn"]]) ~ "sf",
-    TRUE ~ "sf"
+    .default = "sf"
   )
 
   read_sf_fn <- switch(type,
@@ -100,45 +91,8 @@ read_sf_ext <- function(...) {
     "sf" = read_sf_query
   )
 
-  # FIXME: read_sf_ext has an issue with passing parameters that it shouldn't
-  # Adding a path = NULL parameter to read_sf_pkg may fix one of the issues
-  # temporarily but modify_fn_fmls needs an overhaul
-  args <- modify_fn_fmls(
-    params = params,
-    fn = read_sf_fn,
-    keep_missing = TRUE
-  )
-
-  exec(read_sf_fn, !!!args)
+  read_sf_fn(...)
 }
-
-
-#' Modify function parameters
-#'
-#' @keywords internal
-#' @noRd
-#' @importFrom utils modifyList
-#' @importFrom rlang fn_fmls list2
-modify_fn_fmls <- function(params,
-                           fn,
-                           keep_missing = FALSE,
-                           keep.null = FALSE,
-                           ...) {
-  fmls <- fn_fmls(fn)
-
-  if (is_false(keep_missing)) {
-    fmls <- discard(fmls, is_missing)
-  }
-
-  params <- c(list2(...), params)
-
-  utils::modifyList(
-    fmls,
-    params,
-    keep.null = keep.null
-  )
-}
-
 
 #' @name read_sf_pkg
 #' @rdname read_sf_ext
@@ -196,8 +150,8 @@ read_sf_pkg <- function(data,
 #' @importFrom sf read_sf
 read_sf_path <- function(path, bbox = NULL, ...) {
   cli_abort_ifnot(
-    "{.arg path} can't be found at {.path {path}}.",
-    condition = file.exists(path)
+    file.exists(path),
+    message = "{.arg path} can't be found at {.path {path}}."
   )
 
   if (is_csv_fileext(path)) {
@@ -251,15 +205,14 @@ read_sf_rdata <- function(path,
                           ...) {
   file <- file %||% path
 
-  type <-
-    dplyr::case_when(
-      is_rds_fileext(file) ~ "rds",
-      is_rdata_fileext(file) ~ "rdata"
-    )
+  type <- dplyr::case_when(
+    is_rds_fileext(file) ~ "rds",
+    is_rdata_fileext(file) ~ "rdata"
+  )
 
   if (type == "rds") {
     check_installed("readr")
-    data <- readr::read_rds(file, refhook = refhook)
+    data <- readr::read_rds(file, refhook = refhook, ...)
   } else {
     file_name <- load(file)
     data <- get(file_name)
@@ -271,10 +224,11 @@ read_sf_rdata <- function(path,
     return(st_filter_ext(data, bbox))
   }
 
-  cliExtras::cli_warning_ifnot(
+  cli_ifnot(
+    is_null(bbox),
     "{.arg file} {.file {file}} is not a {.cls sf} object
       and can't be filtered by {.arg bbox}.",
-    condition = is_null(bbox)
+    .default = cli::cli_alert_warning
   )
 
   data
@@ -489,8 +443,8 @@ read_sf_url <- function(url,
   params <- list2(...)
 
   cli_abort_ifnot(
-    c("{.arg url} must be a valid url."),
-    condition = is_url(url)
+    is_url(url),
+    message = "{.arg url} must be a valid url."
   )
 
   url_type <- dplyr::case_when(
@@ -792,8 +746,7 @@ read_sf_gmap <- function(url,
     data <- naniar::replace_with_na(data, replace = list("Description" = ""))
   }
 
-  data <-
-    set_names_repair(data, .name_repair = .name_repair)
+  data <- set_names_repair(data, .name_repair = .name_repair)
 
   if (zm_drop) {
     data <- sf::st_zm(data)
@@ -815,7 +768,8 @@ get_gmap_id <- function(url) {
 #' @noRd
 make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
   cli_abort_ifnot(
-    "{.arg url} must be a valid Google Maps url." = is_gmap_url(url)
+    is_gmap_url(url),
+    message = "{.arg url} must be a valid Google Maps url."
   )
 
   if (!is_null(url)) {
@@ -980,7 +934,10 @@ make_sf_options <- function(options = NULL,
                             wkt = NULL,
                             rev = TRUE) {
   if (!is_null(wkt) && has_length(wkt, 1)) {
-    options <- c(options, glue("GEOM_POSSIBLE_NAMES={wkt}"))
+    options <- c(
+      options,
+      glue("GEOM_POSSIBLE_NAMES={wkt}")
+    )
   } else if (!is_null(coords) && has_length(coords, 2)) {
     coords <- check_coords(coords = coords, rev = rev)
     options <- c(
@@ -998,18 +955,21 @@ make_sf_options <- function(options = NULL,
 #' @noRd
 make_sf_wkt_filter <- function(dsn = NULL,
                                wkt_filter = NULL,
+                               from_crs = NULL,
+                               n_layer = 1,
+                               options = character(0),
                                bbox = NULL) {
   if (is_null(bbox)) {
     return(wkt_filter %||% character(0))
   }
 
   cli_warn_ifnot(
-    "{.arg wkt_filter} is ignored if {.arg bbox} is provided." =
-      is_null(wkt_filter)
+    is_null(wkt_filter),
+    message = "{.arg wkt_filter} is ignored if {.arg bbox} is provided."
   )
 
-  dsn_layers <- sf::st_layers(dsn)
-  crs <- dsn_layers$crs[[1]]
+  crs <- from_crs %||%
+    sf::st_layers(dsn, options = options)$crs[[n_layer]]
 
   # Convert bbox to well known text
   sf_bbox_to_wkt(bbox = bbox, crs = crs)
@@ -1022,6 +982,7 @@ make_sf_query <- function(dsn = NULL,
                           table = NULL,
                           name = NULL,
                           name_col = NULL,
+                          options = character(0),
                           query = NULL) {
   if (any(c(is_null(name), is_null(name_col), is_geojson_fileext(dsn)))) {
     return(query %||% NA)
@@ -1035,12 +996,13 @@ make_sf_query <- function(dsn = NULL,
 
   table <- arg_match(
     table,
-    as.character(sf::st_layers(dsn = dsn)[["name"]])
+    as.character(sf::st_layers(dsn = dsn, options = options)[["name"]])
   )
 
   cli_warn_ifnot(
-    "{.arg query} is ignored if {.arg name}
-      and {.arg name_col} are provided." = is_null(query)
+    is_null(query),
+    message = "{.arg query} is ignored if {.arg name} and
+    {.arg name_col} are provided.",
   )
 
   glue(
