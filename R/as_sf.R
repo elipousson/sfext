@@ -240,6 +240,13 @@ as_sf_class <- function(x,
     )
 
   if (is_what(x, class)) {
+
+    params <- list2(...)
+
+    if (!is.null(params[["crs"]])) {
+      x <- as_crs(x, crs = params[["crs"]])
+    }
+
     return(x)
   }
 
