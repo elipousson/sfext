@@ -244,7 +244,7 @@ as_sf_class <- function(x,
     params <- list2(...)
 
     if (!is.null(params[["crs"]])) {
-      x <- as_crs(x, crs = params[["crs"]])
+      x <- st_transform_ext(x, crs = params[["crs"]])
     }
 
     return(x)
