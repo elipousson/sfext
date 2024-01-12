@@ -107,6 +107,7 @@ read_sf_pkg <- function(data,
                         ...) {
   fileext <- fileext %||% filetype
   package <- package %||% pkg
+
   check_string(package, allow_empty = FALSE)
   check_installed(package)
   check_string(
@@ -123,6 +124,12 @@ read_sf_pkg <- function(data,
   if (is_pkg_data(data, package)) {
     # FIXME: Check equivalency to readr::read_builtin
     return(use_eval_parse(data = data, package = package))
+  }
+
+  data_fileext <- str_extract_fileext(data)
+
+  if (!is.na(data_fileext) && (data_fileext != fileext)) {
+    fileext <- data_fileext
   }
 
   filename <- str_add_fileext(data, fileext = fileext)
