@@ -20,7 +20,7 @@
 #' @family dist
 #' @export
 is_dist_units <- function(x) {
-  is_units(x) && (get_dist_units(x) %in% c(dist_unit_options, area_unit_options))
+  is_units(x) && (get_dist_units(x) %in% c(sfext::dist_unit_options, sfext::area_unit_options))
 }
 
 #' @name diff_dist
@@ -124,7 +124,8 @@ get_dist_units <- function(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE)
     return(
       arg_match(
         x,
-        c(dist_unit_options, area_unit_options),
+        c(sfext::dist_unit_options,
+          sfext::area_unit_options),
         multiple = multiple
       )
     )
@@ -132,10 +133,10 @@ get_dist_units <- function(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE)
 
   if (is_units(x)) {
     x_is_dist_unit <-
-      all(as.character(units(x)[["numerator"]]) %in% dist_unit_options)
+      all(as.character(units(x)[["numerator"]]) %in% sfext::dist_unit_options)
 
     x_not_area_unit <-
-      !(as.character(units(x)) %in% area_unit_options)
+      !(as.character(units(x)) %in% sfext::area_unit_options)
 
     if (x_is_dist_unit && x_not_area_unit) {
       return(as.character(units(x)[["numerator"]]))
@@ -185,7 +186,7 @@ as_dist_units <- function(x,
   units <-
     arg_match(
       units,
-      c(dist_unit_options, area_unit_options),
+      c(sfext::dist_unit_options, sfext::area_unit_options),
       error_call = call
     )
 

@@ -17,7 +17,7 @@
 get_scale <- function(scale = NULL,
                       standard = NULL,
                       series = NULL) {
-  select_scale <- standard_scales
+  select_scale <- sfext::standard_scales
 
   if (!is_null(scale)) {
     select_scale <- dplyr::filter(select_scale, .data$scale %in% {{ scale }})
@@ -29,7 +29,8 @@ get_scale <- function(scale = NULL,
   }
 
   if (!is_null(series)) {
-    series <- arg_match(series, unique(standard_scales$series), multiple = TRUE)
+    series_values <- unique(sfext::standard_scales$series)
+    series <- arg_match(series, series_values, multiple = TRUE)
     select_scale <- dplyr::filter(select_scale, .data$series %in% {{ series }})
   }
 

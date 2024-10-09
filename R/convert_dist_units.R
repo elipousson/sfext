@@ -77,7 +77,8 @@ set_dist_units <- function(x = NULL,
   value <-
     arg_match(
       value,
-      c(dist_unit_options, area_unit_options),
+      c(sfext::dist_unit_options,
+        sfext::area_unit_options),
       error_call = call
     )
 

@@ -156,6 +156,7 @@ set_paper_orientation <- function(paper, orientation = NULL, bbox = NULL) {
 #'
 #' @noRd
 get_paper_name <- function(paper) {
+  paper_sizes <- sfext::paper_sizes
   paper_sizes[tolower(paper_sizes[["name"]]) %in% tolower(paper), ]
 }
 
@@ -163,6 +164,7 @@ get_paper_name <- function(paper) {
 #'
 #' @noRd
 get_paper_standard <- function(standard, series = NULL, size = NULL) {
+  paper_sizes <- sfext::paper_sizes
   standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
   paper <- paper_sizes[paper_sizes[["standard"]] %in% standard, ]
 
@@ -184,6 +186,7 @@ get_paper_standard <- function(standard, series = NULL, size = NULL) {
 #' @noRd
 #' @importFrom dplyr filter
 get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
+  paper_sizes <- sfext::paper_sizes
   units <- match.arg(tolower(units), c("in", "mm", "px"))
   paper <- paper_sizes[paper_sizes[["units"]] %in% units, ]
 
@@ -212,7 +215,7 @@ get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
 #' @export
 get_social_image <- function(image = NULL, platform = NULL, format = NULL, orientation = NULL) {
   lifecycle::signal_stage("superseded", "sfext::get_social_image()", "papersize::get_social_size()")
-
+  paper_sizes <- sfext::paper_sizes
   image_sizes <- paper_sizes[paper_sizes$type == "social", ]
 
   if (!is_null(platform)) {

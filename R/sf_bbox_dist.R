@@ -54,7 +54,7 @@ sf_bbox_dist <- function(bbox,
   units <-
     arg_match(
       units,
-      c(units_gdal, dist_unit_options)
+      c(units_gdal, sfext::dist_unit_options)
     )
 
   dist <-

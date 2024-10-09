@@ -9,18 +9,6 @@
 #  has_fileext int_to_alpha as_numbered_labels str_add_fileext
 #  str_remove_fileext str_extract_fileext has_min_length
 
-.onLoad <- function(lib, pkg) {
-  utils::data(
-    list = c(
-      "dist_units",
-      "dist_unit_options", "area_unit_options",
-      "standard_scales", "paper_sizes"
-    ),
-    package = pkg,
-    envir = parent.env(environment())
-  )
-}
-
 utils::globalVariables(
   c(
     "filename", "image_description", "image_height", "image_width", "latitude",
@@ -33,12 +21,14 @@ utils::globalVariables(
 )
 
 #' @noRd
-cli_abort_ifnot <- function(...,
+cli_abort_ifnot <- function(x = NULL,
+                            ...,
                             message = NULL,
                             arg = caller_arg(x),
                             .envir = call,
                             call = caller_env()) {
   cli_ifnot(
+    x = x,
     ...,
     message = message,
     .default = cli::cli_abort,
@@ -50,12 +40,14 @@ cli_abort_ifnot <- function(...,
 
 
 #' @noRd
-cli_warn_ifnot <- function(...,
+cli_warn_ifnot <- function(x = NULL,
+                          ...,
                            message = NULL,
                            arg = caller_arg(x),
                            .envir = call,
                            call = caller_env()) {
   cli_ifnot(
+    x = x,
     ...,
     message = message,
     .default = cli::cli_warn,
