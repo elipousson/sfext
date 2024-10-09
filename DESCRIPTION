@@ -18,7 +18,7 @@ Depends:
 Imports: 
     cli,
     cliExtras (>= 0.1.0),
-    dplyr,
+    dplyr (>= 1.0.0),
     feltr (>= 0.1.1.9005),
     filenamr (>= 0.1.0.9002),
     glue,
@@ -28,6 +28,7 @@ Imports:
     rlang (>= 1.1.0),
     sf (>= 1.0-11),
     tibble,
+    tidyselect,
     units (>= 0.8-2),
     vctrs
 Suggests: 
@@ -59,15 +60,16 @@ Suggests:
     withr
 VignetteBuilder: 
     knitr
-Remotes:  
+Remotes: 
     elipousson/cliExtras,
     elipousson/esri2sf,
+    elipousson/feltr,
     elipousson/filenamr,
-    qfes/rdeck,
-    elipousson/feltr
+    qfes/rdeck
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
+Language: en-US
