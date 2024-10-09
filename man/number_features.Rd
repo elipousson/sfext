@@ -83,7 +83,9 @@ number column.}
 A \code{sf} object with a number column ordered by sort values.
 }
 \description{
-Used with \code{\link[maplayer:layer_markers]{maplayer::layer_numbers()}}. Supports multiple types of sorting including
+Used by
+\href{https://elipousson.github.io/maplayer/reference/layer_markers.html}{layer_numbers()}
+function from maplayer package. Supports multiple types of sorting including
 sorting:
 \itemize{
 \item by centroid coordinates ("lon", "lat") appended with \code{\link[=get_coords]{get_coords()}}

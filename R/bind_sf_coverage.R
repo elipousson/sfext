@@ -6,7 +6,8 @@
 #' [st_make_valid_coverage()] and [st_make_valid_union()] take a sf object and
 #' create a non-intersecting coverage area of a surrounding geography defined by
 #' a second sf, sfc, or bbox object. This was originally developed for the
-#' [getACS::make_area_xwalk()] function.
+#' [make_area_xwalk()](https://elipousson.github.io/getACS/reference/make_area_xwalk.html)
+#' function in the getACS package.
 #'
 #' @param x A input sf object
 #' @param coverage A sf, sfc, or bbox object that covers x.

@@ -70,6 +70,6 @@ If sf (>=1.0-17) is installed, \code{\link[=sf_bbox_transform]{sf_bbox_transform
 \seealso{
 \itemize{
 \item \code{\link[sf:st_as_sf]{sf::st_as_sf()}},\code{\link[sf:st_as_sfc]{sf::st_as_sfc()}}
-\item \code{\link[sfx:st_extent]{sfx::st_extent()}}
+\item \href{https://seasmith.github.io/packages/sfx/reference/st_extent.html}{st_extent()} in sfx package
 }
 }

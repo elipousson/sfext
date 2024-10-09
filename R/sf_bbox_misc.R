@@ -35,7 +35,7 @@ NULL
 #' @return sf object
 #' @seealso
 #'  - [sf::st_as_sf()],[sf::st_as_sfc()]
-#'  - [sfx::st_extent()]
+#'  - [st_extent()](https://seasmith.github.io/packages/sfx/reference/st_extent.html) in sfx package
 #' @rdname sf_bbox_misc
 #' @export
 #' @importFrom sf st_sf st_geometry

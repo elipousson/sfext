@@ -69,7 +69,7 @@ sf_to_df <- function(x,
 #' @param .name_repair Passed to [tibble::as_tibble()].
 #' @inheritParams rlang::args_error_context
 #' @seealso
-#'  [ggspatial::df_spatial()]
+#'  [df_spatial()](https://paleolimbot.github.io/ggspatial/reference/df_spatial.html) in the ggspatial package
 #'  [sf::st_as_sf()]
 #' @export
 #' @importFrom sf st_sf st_geometry st_as_sf

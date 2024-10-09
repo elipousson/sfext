@@ -1,7 +1,9 @@
 #' Sort and number features by coordinates or distance
 #'
 #' @description
-#' Used with [maplayer::layer_numbers()]. Supports multiple types of sorting including
+#' Used by
+#' [layer_numbers()](https://elipousson.github.io/maplayer/reference/layer_markers.html)
+#' function from maplayer package. Supports multiple types of sorting including
 #' sorting:
 #'
 #' - by centroid coordinates ("lon", "lat") appended with [get_coords()]

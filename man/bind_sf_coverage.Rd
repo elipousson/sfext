@@ -66,7 +66,8 @@ A sf object or a sfc object
 \code{\link[=st_make_valid_coverage]{st_make_valid_coverage()}} and \code{\link[=st_make_valid_union]{st_make_valid_union()}} take a sf object and
 create a non-intersecting coverage area of a surrounding geography defined by
 a second sf, sfc, or bbox object. This was originally developed for the
-\code{\link[getACS:make_area_xwalk]{getACS::make_area_xwalk()}} function.
+\href{https://elipousson.github.io/getACS/reference/make_area_xwalk.html}{make_area_xwalk()}
+function in the getACS package.
 }
 \seealso{
 \code{\link[vctrs:vec_bind]{vctrs::vec_bind()}}

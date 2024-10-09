@@ -127,6 +127,6 @@ df_to_sf(nc_df, coords = "xy", into = c("lon", "lat"))
 \seealso{
 \code{\link[sf:st_coordinates]{sf::st_coordinates()}}
 
-\code{\link[ggspatial:df_spatial]{ggspatial::df_spatial()}}
+\href{https://paleolimbot.github.io/ggspatial/reference/df_spatial.html}{df_spatial()} in the ggspatial package
 \code{\link[sf:st_as_sf]{sf::st_as_sf()}}
 }
