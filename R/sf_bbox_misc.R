@@ -13,6 +13,9 @@
 #' - Convert a point and a corresponding bounding box into into a npc
 #' (normalised parent coordinates) value with [sf_bbox_to_npc()]
 #'
+#' If sf (>=1.0-17) is installed, [sf_bbox_transform()] uses
+#' [sf::st_transform()] *without* converting to a sfc object and back to bbox.
+#'
 #' @param bbox A `bbox` object. Convert input objects to bounding boxes
 #'   with [sf::st_bbox()] or [as_bbox()].
 #' @param coords Column names with coordinates for query. e.g. `c("X", "Y")` or
@@ -68,7 +71,11 @@ sf_bbox_transform <- function(bbox, crs = NULL) {
     return(bbox)
   }
 
-  sf::st_bbox(sf::st_transform(sf::st_as_sfc(bbox), crs))
+  if (is_installed("sf", version = "1.0-17")) {
+    sf::st_transform(bbox, crs = crs)
+  }
+
+  sf::st_bbox(sf::st_transform(sf::st_as_sfc(bbox), crs = crs))
 }
 
 #' @name sf_bbox_point
