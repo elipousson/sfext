@@ -31,7 +31,7 @@ bind_sf_coverage <- function(x,
                              .id = "name",
                              x_arg = caller_arg(x),
                              coverage_arg = caller_arg(coverage),
-                             id_arg = caller_arg(id),
+                             id_arg = caller_arg(.id),
                              combine = FALSE,
                              error_call = caller_env()) {
   check_sf(x, call = error_call)
