@@ -1,231 +1,80 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://elipousson.github.io/sfext/404.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/articles/introduction.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/index.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/address_to_sf.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/area_unit_options.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/as_crs.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/as_point.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/as_sf.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/as_xy.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/bind_sf_coverage.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/bind_units_col.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/check_sf.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/cli_format.sf.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/compare_dist.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/convert_dist_scale.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/convert_dist_units.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/coords_to_sf.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/count_features.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/count_sf_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/dist_unit_options.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/dist_units.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/get_asp.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/get_coords.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/get_data_dir.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/get_margin.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/get_measurements.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/get_paper.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/get_scale.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/get_social_image.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/is_dist_units.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/is_geom_type.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/is_sf.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/lonlat_to_sfc.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/make_sf_grid_list.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/mapview_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/misc_sf.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/number_features.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/paper_sizes.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/rdeck_edit.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/read_sf_exif.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/read_sf_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/sf_bbox_corners.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/sf_bbox_dist.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/sf_bbox_misc.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/sf_bbox_shift.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/sf_list.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/sf_to_df.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/sfext-package.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_bbox_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_buffer_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_cast_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_clip.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_concave_hull_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_erase.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_filter_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_filter_pct.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_join_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_make_grid_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_make_valid_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_misc.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_nudge.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_scale_rotate.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_square.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_transform_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/st_union_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/standard_scales.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/write_exif_from.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/write_sf_ext.html</loc>
-  </url>
-  <url>
-    <loc>https://elipousson.github.io/sfext/reference/write_sf_svg.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://elipousson.github.io/sfext/404.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/LICENSE-text.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/LICENSE.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/articles/index.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/articles/introduction.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/authors.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/index.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/news/index.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/address_to_sf.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/area_unit_options.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/as_crs.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/as_point.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/as_sf.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/as_xy.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/bind_sf_coverage.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/bind_units_col.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/check_sf.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/cli_format.sf.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/compare_dist.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/convert_dist_scale.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/convert_dist_units.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/coords_to_sf.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/count_features.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/count_sf_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/dist_unit_options.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/dist_units.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/get_asp.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/get_coords.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/get_data_dir.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/get_margin.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/get_measurements.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/get_paper.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/get_scale.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/get_social_image.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/index.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/is_dist_units.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/is_geom_type.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/is_sf.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/lonlat_to_sfc.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/make_sf_grid_list.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/mapview_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/misc_sf.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/number_features.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/paper_sizes.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/rdeck_edit.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/read_sf_exif.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/read_sf_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/reexports.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/sf_bbox_corners.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/sf_bbox_dist.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/sf_bbox_misc.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/sf_bbox_shift.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/sf_list.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/sf_to_df.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/sfext-package.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_bbox_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_buffer_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_cast_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_clip.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_concave_hull_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_dissolve.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_erase.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_filter_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_filter_pct.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_join_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_make_grid_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_make_valid_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_misc.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_nudge.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_scale_rotate.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_square.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_transform_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/st_union_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/standard_scales.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/write_exif_from.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/write_sf_ext.html</loc></url>
+<url><loc>https://elipousson.github.io/sfext/reference/write_sf_svg.html</loc></url>
 </urlset>
+
