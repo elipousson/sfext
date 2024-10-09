@@ -54,6 +54,7 @@ Suggests:
     readr,
     readxl,
     rmarkdown,
+    spdep,
     testthat (>= 3.0.0),
     tidygeocoder,
     tidyr,
