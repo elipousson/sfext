@@ -33,6 +33,7 @@ reference:
   - '`st_clip`'
   - '`st_concave_hull_ext`'
   - '`st_union_ext`'
+  - '`st_dissolve`'
   - '`st_join_ext`'
   - '`st_filter_ext`'
   - '`st_filter_pct`'
