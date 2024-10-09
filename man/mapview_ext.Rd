@@ -38,8 +38,9 @@ mapview_popup_img(
 \item{zcol}{attribute name(s) or column number(s) in attribute table
 of the column(s) to be rendered. See also Details.}
 
-\item{remove_na}{If TRUE and zcol is not \code{NULL}, filter \code{NA} values from the
-zcol before passing to \code{\link[mapview:mapView]{mapview::mapview()}}}
+\item{remove_na}{If \code{TRUE} and \code{zcol} is not \code{NULL}, filter \code{NA} values from
+the data frame column defined by \code{zcol} before passing to
+\code{\link[mapview:mapView]{mapview::mapview()}}}
 
 \item{...}{
   Arguments passed on to \code{\link[mapview:mapView]{mapview::mapview}}
@@ -49,12 +50,24 @@ zcol before passing to \code{\link[mapview:mapView]{mapview::mapview()}}}
 
 \item{path}{A path to folder or file.}
 
+\item{fileext}{File extension. Defaults to "jpeg".}
+
 \item{popup}{If \code{TRUE}, add a popup image to a leaflet map; defaults \code{TRUE}.}
+
+\item{tooltip}{logical, whether to show image(s) as popup(s) (on click) or
+tooltip(s) (on hover).}
 
 \item{images}{A simple feature object with columns for the image path/url,
 image width, and image height.}
 
+\item{width}{the width of the image(s) in pixels.}
+
 \item{map}{an optional existing map to be updated/added to.}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 A wrapper for \code{\link[mapview:mapView]{mapview::mapview()}} that drops list columns and makes it

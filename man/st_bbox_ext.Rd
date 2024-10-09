@@ -61,7 +61,7 @@ simple feature collection with \code{as_sfc()}..}
 \item{allow_null}{If \code{TRUE} (default) and x is \code{NULL}, return \code{NULL} or, if
 \code{FALSE}, abort function.}
 
-\item{allow_list}{If \code{TRUE}, allow sf list objects as an input and use
+\item{allow_list}{If \code{TRUE} (default), allow sf list objects as an input and use
 \code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the
 list to return as a new sf list object.}
 }

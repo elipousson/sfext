@@ -39,6 +39,9 @@ object, as an \code{sf} object (with lon and lat values), the original geometry
 \item{...}{Additional parameters passed to \code{\link[sf:geos_unary]{sf::st_centroid()}} by
 \code{\link[=st_center]{st_center()}} or \code{\link[=st_circle]{st_circle()}} by \code{\link[=st_donut]{st_donut()}}.}
 
+\item{scale}{For \code{\link[=st_donut]{st_donut()}}, scale to apply to donut using \code{\link[=st_circle]{st_circle()}}.
+Defaults to 1 which keeps the donut as the same size as the input object.}
+
 \item{inscribed}{If \code{TRUE}, make circle, square, or donut inscribed within x,
 if \code{FALSE}, make it circumscribed.}
 
@@ -47,6 +50,10 @@ feature geometry. If you run \code{st_simplify}, the input data is
 specified with long-lat coordinates and \code{sf_use_s2()} returns
 \code{TRUE}, then the value of \code{dTolerance} must be specified in
 meters.}
+
+\item{by_feature}{For \code{\link[=st_donut]{st_donut()}}, if \code{TRUE} the input object \code{x} is unioned
+before converting into a donut geometry. If \code{FALSE}, each feature in the
+input data remains a separate feature in the output.}
 
 \item{use_hull}{For \code{\link[=st_circle]{st_circle()}}, if \code{TRUE} use the geometry from
 \code{\link[sf:geos_unary]{sf::st_convex_hull()}} (to address issues with MULTIPOLYGON objects).}

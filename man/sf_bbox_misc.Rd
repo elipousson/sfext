@@ -63,6 +63,9 @@ well known text (\code{\link[=sf_bbox_to_wkt]{sf_bbox_to_wkt()}})
 \item Convert a point and a corresponding bounding box into into a npc
 (normalised parent coordinates) value with \code{\link[=sf_bbox_to_npc]{sf_bbox_to_npc()}}
 }
+
+If sf (>=1.0-17) is installed, \code{\link[=sf_bbox_transform]{sf_bbox_transform()}} uses
+\code{\link[sf:st_transform]{sf::st_transform()}} \emph{without} converting to a sfc object and back to bbox.
 }
 \seealso{
 \itemize{

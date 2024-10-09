@@ -24,12 +24,7 @@ as_sfc(x, crs = NULL, ext = TRUE, ..., call = caller_env())
 as_sf_class(x, class = NULL, allow_null = TRUE, ..., call = caller_env())
 }
 \arguments{
-\item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that can
-be converted into a simple feature or bounding box object. \code{\link[=as_bbox]{as_bbox()}} can
-also convert a vector with xmin, ymin, xmax, and ymax values.
-\code{\link[=as_sf_list]{as_sf_list()}} only supports sf objects or a data frames with a sf list
-column named "data" (typically created by using \code{\link[dplyr:group_nest]{dplyr::group_nest()}} on an
-sf object.}
+\item{x}{Object to convert to an sf, sfc, bbox or a sf list object.}
 
 \item{crs}{Coordinate reference system for \code{sf}, \code{bbox}, \code{sfc} or \code{sf} list
 object to return.}
@@ -58,8 +53,6 @@ mentioned in error messages as the source of the error. See the
 
 \item{allow_null}{For \link{as_sf_class}, if class is \code{NULL} and allow_null is \code{TRUE},
 return x without any class conversion or checks. Defaults to \code{TRUE}.}
-
-\item{data}{Data that can be converted to sf, sfc, bbox or a sf list object.}
 }
 \description{
 Both functions will pass a \code{NULL} value without returning an error. If a

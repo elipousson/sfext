@@ -34,8 +34,10 @@ mentioned in error messages as the source of the error. See the
 \item{y}{For \code{\link[=is_same_crs]{is_same_crs()}}, object to compare to x.}
 }
 \description{
-Convert object to coordinate reference system or check coordinate reference
-system
+\itemize{
+\item \link{as_crs}: coerce x to a CRS object and (optionally) error if a NA value is returned.
+\item \link{is_same_crs}: do x and y have the same coordinate reference system?
+}
 }
 \examples{
 nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))

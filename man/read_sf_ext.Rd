@@ -239,6 +239,11 @@ by the \code{col_types} argument.}
 \item{where}{string for where condition. Default is \code{NULL} (equivalent to
 \code{1=1}) to return all rows.}
 
+\item{map_id}{A Felt map URL, map ID string, or a named list with a id and
+type element. If map_id is a list, it must be equivalent to the output from
+\code{\link[feltr:get_felt_map]{get_felt_map()}} where the list includes a "id" string and a "type" string
+with the value "map".}
+
 \item{id}{The name of a column in which to store the file path. This is
 useful when reading multiple input files and there is data in the file
 paths, such as the data collection date. If \code{NULL} (the default) no extra

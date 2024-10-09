@@ -107,7 +107,10 @@ joinStyle parameter of \code{\link[sf:geos_unary]{sf::st_buffer()}}.}
 geometries, in which case negative dist values give buffers on the
 right-hand side, positive on the left.}
 
-\item{allow_list}{If \code{TRUE}, allow sf list objects as an input and use
+\item{allow_null}{If \code{TRUE} (default) and x is \code{NULL}, a \code{NULL} value is
+returned with no error.}
+
+\item{allow_list}{If \code{TRUE} (default), allow sf list objects as an input and use
 \code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the
 list to return as a new sf list object.}
 

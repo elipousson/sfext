@@ -14,7 +14,8 @@ rdeck_select(features, ..., mode = "select")
 editor_options(mode = rdeck::cur_value(), features = rdeck::cur_value())
 }
 \arguments{
-\item{features}{<\code{sf} | \code{sfc}> Features with which to initialise the editor}
+\item{features}{<\code{\link[rdeck]{wk-geometry}}> Features with which to initialise the editor.
+Requires CRS \href{http://epsg.io/4326}{EPSG:4326}.}
 
 \item{mode}{<\code{editor-mode}> The polygon editor mode. One of:
 \itemize{
@@ -28,8 +29,10 @@ editor_options(mode = rdeck::cur_value(), features = rdeck::cur_value())
 \item \code{lasso}: freehand polygon draw by click-dragging
 }}
 
-\item{initial_bounds}{<\code{\link[sf:st_bbox]{st_bbox}} | \code{\link[sf:sf]{sf}} | \code{\link[sf:sfc]{sfc}}>
-The initial bounds of the map; overwrites \code{initial_view_state}.}
+\item{initial_bounds}{<\code{\link[wk:rct]{rct}}/\code{\link[sf:st_bbox]{st_bbox}}/\code{\link[rdeck]{wk-geometry}}>
+Sets the initial bounds of the map if not \code{NULL}. Takes priority over \code{initial_view_state}.
+Accepts a bounding box, or a geometry from which a bounding box can be computed. Requires
+CRS \href{http://epsg.io/4326}{EPSG:4326}.}
 
 \item{...}{
   Arguments passed on to \code{\link[rdeck:rdeck]{rdeck::rdeck}}

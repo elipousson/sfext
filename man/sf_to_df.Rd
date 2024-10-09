@@ -28,6 +28,7 @@ df_to_sf(
   by = NULL,
   ...,
   as_tibble = TRUE,
+  .name_repair = "unique",
   call = caller_env()
 )
 }
@@ -77,6 +78,11 @@ to \code{FALSE}.}
 \code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.}
 
 \item{...}{Other parameters passed onto methods.}
+
+\item{as_tibble}{If \code{TRUE}, use \code{\link[tibble:as_tibble]{tibble::as_tibble()}} to make sure a sf
+tibble is returned.}
+
+\item{.name_repair}{Passed to \code{\link[tibble:as_tibble]{tibble::as_tibble()}}.}
 
 \item{call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be

@@ -35,8 +35,8 @@ not; defaults to \code{FALSE}. (used by \link{is_sf})}
 
 \item{allow_list}{If \code{TRUE}, \link{is_sf} will return TRUE if x is a list of sf objects.}
 
-\item{y}{An sf object or a character or numeric object supported by
-\link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{is_same_crs})}
+\item{allow_na}{If \code{TRUE}, \code{\link[=is_bbox]{is_bbox()}} ignores any \code{NA} values. Defaults to
+\code{FALSE}.}
 }
 \description{
 What is the class or spatial attributes of this feature?
@@ -51,7 +51,6 @@ What is the class or spatial attributes of this feature?
 \item \link{is_sp}: is x a \code{Spatial} class object of any type?
 \item \link{is_geo_coords}: is x likely a geodetic coordinate pair (a length 2 numeric vector, with a max absolute value less than or equal to 180)?
 \item \link{is_wgs84}: is x using the \href{https://en.wikipedia.org/wiki/World_Geodetic_System}{WSG84} coordinate reference system?
-\item \link{is_same_crs}: do x and y have the same coordinate reference system?
 }
 }
 \examples{

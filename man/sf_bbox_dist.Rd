@@ -54,7 +54,7 @@ running function, e.g. \code{caller_env()}. The function will be
 mentioned in error messages as the source of the error. See the
 \code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
-\item{...}{passed on to \link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}}
+\item{...}{passed on to \link[s2]{s2_distance}, \link[s2]{s2_distance_matrix}, or \link[s2]{s2_perimeter}}
 
 \item{diag_ratio}{Proportion of the diagonal distance (ratio of distance to
 the full diagonal distance) across the bounding box.}

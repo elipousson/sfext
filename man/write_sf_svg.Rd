@@ -9,12 +9,12 @@ write_sf_svg(data, filename = NULL, path = NULL, ..., width = 10, height = 10)
 \arguments{
 \item{data}{A sf object to save as a svg file.}
 
-\item{filename}{the name of the output file.
+\item{filename}{the file path of the output file(s).
     The page number is substituted if a C integer format is included in
     the character string, as in the default.  (Depending on the platform,
     the result must be less
     than \code{PATH_MAX} characters long, and may be truncated if not.
-    See \code{\link[grDevices]{postscript}} for further details.)  Tilde expansion
+    See \code{\link[grDevices]{pdf}} for further details.)  Tilde expansion
     is performed where supported by the platform.}
 
 \item{path}{File path to combine with filename. Optional if filename is
@@ -30,11 +30,11 @@ provided. filename is optional if path includes a svg file extension.}
     string specify a font family to be searched for in a
     system-dependent way.
 
-    On unix-alikes (incl.\\ Mac), see
+    On unix-alikes (incl.\\ macOS), see
     the \sQuote{Cairo fonts} section in the help for \code{\link[grDevices]{X11}}.
   }
     \item{\code{bg}}{the initial background colour: can be overridden by setting
-    par("bg").}
+    \code{par("bg")}.}
     \item{\code{antialias}}{string, the type of anti-aliasing (if any) to be used;
     defaults to \code{"default"}.}
     \item{\code{symbolfamily}}{

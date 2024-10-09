@@ -54,6 +54,9 @@ simple feature collection with \code{\link[=as_sfc]{as_sfc()}}.}
 running function, e.g. \code{caller_env()}. The function will be
 mentioned in error messages as the source of the error. See the
 \code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
+
+\item{...}{Additional parameters passed to \code{\link[=st_square]{st_square()}} \code{sfc} method if x is
+a \code{sf} or \code{bbox} object.}
 }
 \description{
 Get a circumscribed square or approximate inscribed square in a \code{sf} object.
@@ -66,6 +69,6 @@ nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 nc <- sf::st_transform(nc, crs = 3857)
 
 plot(st_square(nc), max.plot = 1)
-plot(st_square(nc[1:10,], by_feature = TRUE), max.plot = 1)
+plot(st_square(nc[1:10, ], by_feature = TRUE), max.plot = 1)
 
 }

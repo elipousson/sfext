@@ -18,13 +18,16 @@ st_trim(x, y, union = TRUE, combine = FALSE, ...)
 that intersects y; if \code{FALSE} use \code{\link[sf:geos_binary_ops]{sf::st_difference()}} to trim x to y
 geometry, Default: \code{FALSE}.}
 
-\item{union}{If \code{TRUE}, use \code{\link[sf:geos_combine]{sf::st_combine()}} and \code{\link[sf:geos_combine]{sf::st_union()}} on y
-before applying difference/intersection; defaults to \code{TRUE}.}
+\item{union}{If \code{TRUE}, union \code{y} with \code{\link[sf:geos_combine]{sf::st_union()}} before applying
+difference/intersection; defaults to \code{TRUE}.}
+
+\item{combine}{If \code{TRUE} and \code{union = TRUE}, combine \code{y} with
+\code{\link[sf:geos_combine]{sf::st_combine()}} before unioning. Defaults to \code{FALSE}.}
 
 \item{...}{arguments passed on to \link[s2]{s2_options}}
 }
 \description{
-This function extends \code{\link[sf:geos_binary_ops]{sf::st_difference()}} by unioning the second parameter
+\code{\link[=st_erase]{st_erase()}} extends \code{\link[sf:geos_binary_ops]{sf::st_difference()}} by unioning the second parameter
 by default, checking validity of inputs, and optionally (when \code{flip = TRUE})
 using \code{\link[sf:geos_binary_ops]{sf::st_intersection()}} instead of \link[sf:geos_binary_ops]{sf::st_difference}. \code{\link[=st_trim]{st_trim()}} is
 equivalent to \code{\link[=st_erase]{st_erase()}} with flip set to \code{TRUE}.
@@ -36,7 +39,7 @@ nc <- st_transform_ext(nc, 3657)
 
 plot(
   st_erase(
-    st_buffer(nc[1, ], 1000),
+    sf::st_buffer(nc[1, ], 1000),
     nc[1, ]
   ),
   max.plot = 1
@@ -45,7 +48,7 @@ plot(
 plot(
   st_trim(
     nc,
-    st_buffer(nc[1, ], 2000)
+    sf::st_buffer(nc[1, ], 2000)
   ),
   max.plot = 1
 )

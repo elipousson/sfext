@@ -13,7 +13,7 @@ bind_sf_coverage(
   .id = "name",
   x_arg = caller_arg(x),
   coverage_arg = caller_arg(coverage),
-  id_arg = caller_arg(id),
+  id_arg = caller_arg(.id),
   combine = FALSE,
   error_call = caller_env()
 )
@@ -51,7 +51,7 @@ mentioned in error messages as the source of the error. See the
 
 \item{y}{Second parameter for \code{\link[=st_make_valid_coverage]{st_make_valid_coverage()}}}
 
-\item{is_coverage}{logical; if TRUE, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)}
+\item{is_coverage}{logical; if \code{TRUE}, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)}
 
 \item{.fn}{Defaults to sf::st_difference}
 }

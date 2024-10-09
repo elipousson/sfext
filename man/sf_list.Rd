@@ -46,6 +46,10 @@ is provided, the values of the grouping column are used as names.}
 \item{col}{For \link{as_sf_list}, the name of the column used to group data if x
 is a sf object or used to group and nest data before passing to x.}
 
+\item{crs}{A character or numeric reference to a coordinate reference system
+supported by \code{\link[sf:st_crs]{sf::st_crs()}} or another  \code{sf}, \code{sfc}, or \code{bbox} object that
+is used to provide crs.}
+
 \item{clean_names}{If \code{TRUE}, clean names provided to nm or created based on
 value of col using \link[janitor:clean_names]{janitor::clean_names}. If \code{FALSE}, use names as
 provided.}
@@ -66,6 +70,19 @@ not; defaults to \code{FALSE}. (used by \link{is_sf})}
 \item{...}{For \code{\link[=sf_list_rbind]{sf_list_rbind()}}, additional parameters passed to
 \code{\link[purrr:list_c]{purrr::list_rbind()}}. For \code{\link[=map_as_sf]{map_as_sf()}}, additional parameters passed to
 map.}
+
+\item{.f}{A function, specified in one of the following ways:
+\itemize{
+\item A named function, e.g. \code{mean}.
+\item An anonymous function, e.g. \verb{\\(x) x + 1} or \code{function(x) x + 1}.
+\item A formula, e.g. \code{~ .x + 1}. You must use \code{.x} to refer to the first
+argument. Only recommended if you require backward compatibility with
+older versions of R.
+\item A string, integer, or list, e.g. \code{"idx"}, \code{1}, or \code{list("idx", 1)} which
+are shorthand for \verb{\\(x) pluck(x, "idx")}, \verb{\\(x) pluck(x, 1)}, and
+\verb{\\(x) pluck(x, "idx", 1)} respectively. Optionally supply \code{.default} to
+set a default value if the indexed element is \code{NULL} or does not exist.
+}}
 }
 \description{
 Functions for coercing an object to an sf_list class objects created by
