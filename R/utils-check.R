@@ -190,8 +190,7 @@ check_has_name <- function(x,
   n_nm <- length(nm)
 
   if (allow_any) {
-    nm <- .cli_vec_or(nm)
-    message <- "{.arg {arg}} must have any of the {name}{qty(n_nm)}{?s} {.val {nm}}"
+    message <- "{.arg {arg}} must have any of the {name}{qty(n_nm)}{?s} {.or {nm}}"
   } else {
     message <- c(
       "{.arg {arg}} must have all of the {name}{qty(n_nm)}{?s} {.val {nm}}",
