@@ -1,6 +1,9 @@
 #' Convert object to coordinate reference system or check coordinate reference
 #' system
 #'
+#' - [as_crs]: coerce x to a CRS object and (optionally) error if a NA value is returned.
+#' - [is_same_crs]: do x and y have the same coordinate reference system?
+#'
 #' @param x For [as_crs()], object to convert to a coordinate reference system.
 #'   For [is_same_crs()] and [is_wgs84()], object to check. For [as_wgs84()],
 #'   object to convert to EPSG:4326.
