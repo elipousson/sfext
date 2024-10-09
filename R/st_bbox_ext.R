@@ -79,6 +79,7 @@ st_bbox_ext.default <- function(x,
 
   x <- st_transform_ext(x, crs = crs)
 
+  # FIXME: Add check for empty geometries
   # Get aspect adjusted bbox
   st_bbox_asp(
     x = x,
@@ -173,6 +174,7 @@ st_bbox_asp <- function(x,
 st_bbox_asp.default <- function(x,
                                 asp = NULL,
                                 class = "bbox",
+                                ...,
                                 allow_null = TRUE) {
   if (allow_null && is_null(x)) {
     return(x)
@@ -188,6 +190,7 @@ st_bbox_asp.default <- function(x,
 #' @export
 st_bbox_asp.bbox <- function(x,
                              asp = NULL,
+                             ...,
                              class = "bbox") {
   # Get adjusted aspect ratio
   if (!is_bare_numeric(asp)) {
