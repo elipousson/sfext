@@ -50,7 +50,8 @@ as_sf <- function(x,
       is_sf_list(x) ~ "sf_list",
       is_geo_coords(x) ~ "geo_coords",
       ext && is.data.frame(x) ~ "data.frame",
-      # FIXME: Is there any better way of testing an address than just confirming it is a character?
+      # FIXME: Is there any better way of testing an address than just
+      # confirming it is a character?
       ext && is.character(x) ~ "address",
       is_raster(x) ~ "raster",
       TRUE ~ "other"
@@ -213,7 +214,7 @@ try_st_as_sfc <- function(x, ..., call = caller_env()) {
 
 #' Convert data to a different class
 #'
-#' @param data Data that can be converted to sf, sfc, bbox or a sf list object.
+#' @param x Object to convert to an sf, sfc, bbox or a sf list object.
 #' @param class A class to convert data to; defaults to NULL (which returns
 #'   "sf")
 #' @param allow_null For [as_sf_class], if class is `NULL` and allow_null is `TRUE`,
