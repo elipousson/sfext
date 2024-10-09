@@ -190,6 +190,11 @@ st_circumscribed_circle <- function(x,
 #' @rdname st_misc
 #' @name st_donut
 #' @param width Donut width as proportion of outer size.
+#' @param scale For [st_donut()], scale to apply to donut using [st_circle()].
+#'   Defaults to 1 which keeps the donut as the same size as the input object.
+#' @param by_feature For [st_donut()], if `TRUE` the input object `x` is unioned
+#'   before converting into a donut geometry. If `FALSE`, each feature in the
+#'   input data remains a separate feature in the output.
 #' @export
 #' @importFrom sf st_inscribed_circle
 st_donut <- function(x,

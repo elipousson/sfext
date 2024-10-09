@@ -30,7 +30,9 @@
 #' @param single_side If `TRUE`, single-sided buffers are returned for linear
 #'   geometries, in which case negative dist values give buffers on the
 #'   right-hand side, positive on the left.
-#' @param allow_list If `TRUE`, allow sf list objects as an input and use
+#' @param allow_null If `TRUE` (default) and x is `NULL`, a `NULL` value is
+#'   returned with no error.
+#' @param allow_list If `TRUE` (default), allow sf list objects as an input and use
 #'   [purrr::map()] to apply the provided parameters to each object within the
 #'   list to return as a new sf list object.
 #' @param ... Additional parameters passed to [sf::st_buffer()]

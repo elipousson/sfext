@@ -1,6 +1,6 @@
 #' Erase or trim geometry of a sf or sfc object
 #'
-#' This function extends [sf::st_difference()] by unioning the second parameter
+#' [st_erase()] extends [sf::st_difference()] by unioning the second parameter
 #' by default, checking validity of inputs, and optionally (when `flip = TRUE`)
 #' using [sf::st_intersection()] instead of [sf::st_difference]. [st_trim()] is
 #' equivalent to [st_erase()] with flip set to `TRUE`.
@@ -10,13 +10,20 @@
 #' @param flip If `TRUE`, use [sf::st_intersection()] to "erase" geometry of x
 #'   that intersects y; if `FALSE` use [sf::st_difference()] to trim x to y
 #'   geometry, Default: `FALSE`.
-#' @param union If `TRUE`, use [sf::st_combine()] and [sf::st_union()] on y
-#'   before applying difference/intersection; defaults to `TRUE`.
+#' @param union If `TRUE`, union `y` with [sf::st_union()] before applying
+#'   difference/intersection; defaults to `TRUE`.
+#' @param combine If `TRUE` and `union = TRUE`, combine `y` with
+#'   [sf::st_combine()] before unioning. Defaults to `FALSE`.
 #' @inheritParams sf::st_difference
 #' @example examples/st_erase.R
 #' @export
 #' @importFrom sf st_union st_combine st_intersection st_difference
-st_erase <- function(x, y, flip = FALSE, union = TRUE, combine = FALSE, ...) {
+st_erase <- function(x,
+                     y,
+                     flip = FALSE,
+                     union = TRUE,
+                     combine = FALSE,
+                     ...) {
   check_sf(x, ext = TRUE)
 
   if (is_bbox(x)) {

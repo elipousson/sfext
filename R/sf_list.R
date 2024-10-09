@@ -23,6 +23,7 @@ NULL
 #' @param ... For [sf_list_rbind()], additional parameters passed to
 #'   [purrr::list_rbind()]. For [map_as_sf()], additional parameters passed to
 #'   map.
+#' @inheritParams st_transform_ext
 #' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom dplyr summarize group_keys group_nest
@@ -187,6 +188,7 @@ sf_list_rbind <- function(x, ...) {
 
 #' @name map_as_sf
 #' @rdname sf_list
+#' @inheritParams purrr::map
 map_as_sf_list <- function(x, .f, ...) {
   vctrs::new_list_of(
     x = map(x, .f, ...),

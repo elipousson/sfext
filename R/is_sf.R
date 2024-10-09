@@ -12,8 +12,6 @@ is_what <- function(x, what = NULL, allow_null = FALSE) {
 #' What is the class or spatial attributes of this feature?
 #'
 #' @param x An `sf`, `sfc`, or `bbox` object.
-#' @param y An sf object or a character or numeric object supported by
-#'   [sf::st_crs] that can be compared to x. (used by [is_same_crs])
 #' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
 #'   not; defaults to `FALSE`. (used by [is_sf])
 #' @param allow_null If `TRUE` and x is `NULL`, return `TRUE`; defaults to `FALSE`.
@@ -27,7 +25,6 @@ is_what <- function(x, what = NULL, allow_null = FALSE) {
 #' - [is_sp]: is x a `Spatial` class object of any type?
 #' - [is_geo_coords]: is x likely a geodetic coordinate pair (a length 2 numeric vector, with a max absolute value less than or equal to 180)?
 #' - [is_wgs84]: is x using the [WSG84](https://en.wikipedia.org/wiki/World_Geodetic_System) coordinate reference system?
-#' - [is_same_crs]: do x and y have the same coordinate reference system?
 #'
 #' @example examples/is_sf.R
 #' @export
@@ -58,6 +55,8 @@ is_sfc <- function(x, allow_null = FALSE) {
 
 #' @name is_bbox
 #' @rdname is_sf
+#' @param allow_na If `TRUE`, [is_bbox()] ignores any `NA` values. Defaults to
+#'   `FALSE`.
 #' @export
 is_bbox <- function(x, allow_null = FALSE, allow_na = FALSE) {
   is_what(x, what = "bbox", allow_null = allow_null) &&

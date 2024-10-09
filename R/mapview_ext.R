@@ -5,8 +5,9 @@
 #'
 #' @inheritParams mapview::mapview
 #' @inheritDotParams mapview::mapview
-#' @param remove_na If TRUE and zcol is not `NULL`, filter `NA` values from the
-#'   zcol before passing to [mapview::mapview()]
+#' @param remove_na If `TRUE` and `zcol` is not `NULL`, filter `NA` values from
+#'   the data frame column defined by `zcol` before passing to
+#'   [mapview::mapview()]
 #' @inheritParams mapview_popup_img
 #' @seealso
 #'  [mapview::mapview()]
@@ -42,8 +43,9 @@ mapview_ext <- function(x, zcol = NULL, remove_na = FALSE, ...) {
 
 #' @rdname mapview_ext
 #' @name mapview_exif
-#' @export
 #' @inheritParams read_sf_exif
+#' @param fileext File extension. Defaults to "jpeg".
+#' @export
 mapview_exif <- function(path = NULL,
                          fileext = "jpeg",
                          popup = TRUE,
@@ -70,6 +72,8 @@ mapview_exif <- function(path = NULL,
 #'   image width, and image height.
 #' @name mapview_popup_img
 #' @rdname mapview_ext
+#' @inheritParams leafpop::addPopupImages
+#' @inheritParams rlang::args_error_context
 #' @export
 mapview_popup_img <- function(images,
                               popup = TRUE,

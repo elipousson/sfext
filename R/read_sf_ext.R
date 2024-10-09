@@ -636,6 +636,7 @@ read_sf_esri <- function(url,
 
 #' @name read_sf_felt
 #' @rdname read_sf_ext
+#' @inheritParams feltr::read_felt_map
 #' @export
 read_sf_felt <- function(url = NULL,
                          bbox = NULL,

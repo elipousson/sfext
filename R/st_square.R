@@ -11,6 +11,8 @@
 #' @param by_feature If `TRUE`, create new geometry for each feature. If
 #'   `FALSE`, create new geometry for all features combine with
 #'   [st_union_ext()].
+#' @param ... Additional parameters passed to [st_square()] `sfc` method if x is
+#'   a `sf` or `bbox` object.
 #' @examples
 #' nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 #' nc <- sf::st_transform(nc, crs = 3857)
@@ -27,7 +29,7 @@ st_square <- function(x,
                       inscribed = FALSE,
                       by_feature = FALSE,
                       call = caller_env()) {
-  check_sf(x, ext = TRUE)
+  check_sf(x, ext = TRUE, call = call)
   UseMethod("st_square")
 }
 
