@@ -64,6 +64,9 @@ sf_to_df <- function(x,
 #' @param y A sf object passed as y argument to [dplyr::left_join()].
 #' @param by A character vector of variables to join by passed to
 #'   [dplyr::left_join()].
+#' @param as_tibble If `TRUE`, use [tibble::as_tibble()] to make sure a sf
+#'   tibble is returned.
+#' @param .name_repair Passed to [tibble::as_tibble()].
 #' @inheritParams rlang::args_error_context
 #' @seealso
 #'  [ggspatial::df_spatial()]
@@ -85,6 +88,7 @@ df_to_sf <- function(x,
                      by = NULL,
                      ...,
                      as_tibble = TRUE,
+                     .name_repair = "unique",
                      call = caller_env()) {
   check_data_frame(x, call = call)
 
@@ -124,7 +128,7 @@ df_to_sf <- function(x,
     )
 
   if (as_tibble && !is_tibble(x)) {
-    x <- sf::st_as_sf(as_tibble(x))
+    x <- sf::st_as_sf(as_tibble(x, .name_repair = .name_repair))
   }
 
   st_transform_ext(x = x, crs = crs, class = "sf")
