@@ -10,7 +10,8 @@ get_data_dir(
   cache = FALSE,
   create = TRUE,
   pkg = "sfext",
-  allow_null = TRUE
+  allow_null = TRUE,
+  recursive = TRUE
 )
 
 list_data_files(
@@ -40,6 +41,9 @@ new directory will be created.}
 
 \item{allow_null}{If \code{TRUE}, path is \code{NULL}, cache is \code{FALSE}, return the \code{NULL}
 path value; defaults to \code{TRUE}.}
+
+\item{recursive}{logical. Should elements of the path other than the
+    last be created?  If true, like the Unix command \command{mkdir -p}.}
 
 \item{fileext}{If pattern is NULL, fileext is used to set the pattern and
 filter listed files to those matching the file extension.}

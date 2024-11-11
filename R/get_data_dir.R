@@ -16,12 +16,14 @@
 #' @param pkg Package name; defaults to "sfext"
 #' @param allow_null If `TRUE`, path is `NULL`, cache is `FALSE`, return the `NULL`
 #'   path value; defaults to `TRUE`.
+#' @inheritParams base::dir.create
 #' @export
 get_data_dir <- function(path = NULL,
                          cache = FALSE,
                          create = TRUE,
                          pkg = "sfext",
-                         allow_null = TRUE) {
+                         allow_null = TRUE,
+                         recursive = TRUE) {
   lifecycle::signal_stage("superseded", "get_data_dir()", "filenamr::get_data_dir()")
 
   if (cache) {
@@ -55,7 +57,7 @@ get_data_dir <- function(path = NULL,
   }
 
   if (create) {
-    dir.create(path)
+    dir.create(path, recursive = recursive)
     cli_inform(c("v" = "New directory created at {.file {path}}"))
   }
 }
