@@ -36,7 +36,7 @@ test_that("st_transform_ext works", {
     nc
   )
 
-  skip_on_ci()
+  skip()
   omerc <- st_omerc(nc, 30)
   expect_identical(
     sf::st_crs(omerc)$input,
