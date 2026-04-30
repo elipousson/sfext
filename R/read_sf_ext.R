@@ -652,34 +652,6 @@ read_sf_esri <- function(
   df_to_sf(data, from_crs = from_crs, coords = coords)
 }
 
-#' @name read_sf_felt
-#' @rdname read_sf_ext
-#' @inheritParams feltr::read_felt_map
-#' @export
-read_sf_felt <- function(
-  url = NULL,
-  bbox = NULL,
-  map_id = NULL,
-  .name_repair = "check_unique",
-  ...
-) {
-  check_installed("feltr")
-
-  map_id <- map_id %||% url
-
-  data <- feltr::read_felt_map(
-    map_id = map_id,
-    ...
-  )
-
-  data <- set_names_repair(
-    data,
-    .name_repair = .name_repair
-  )
-
-  st_filter_ext(data, bbox)
-}
-
 #' @name read_sf_gist
 #' @rdname read_sf_ext
 #' @param nth For [read_sf_gist()], the file to return from the gist, e.g. 1 for

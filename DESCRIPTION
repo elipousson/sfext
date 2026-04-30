@@ -2,7 +2,7 @@ Type: Package
 Package: sfext
 Title: Extra Functions for Simple Feature Data
 Version: 0.1.1.9000
-Authors@R: 
+Authors@R:
     person("Eli", "Pousson", , "eli.pousson@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-8280-1706"))
 Description: Extra functions with additional options for reading, writing,
@@ -13,13 +13,12 @@ License: MIT + file LICENSE
 URL: https://github.com/elipousson/sfext,
     https://elipousson.github.io/sfext/
 BugReports: https://github.com/elipousson/sfext/issues
-Depends: 
+Depends:
     R (>= 2.10)
-Imports: 
+Imports:
     cli,
     cliExtras (>= 0.1.0),
     dplyr (>= 1.0.0),
-    feltr (>= 0.1.1.9005),
     filenamr (>= 0.1.0.9002),
     glue,
     grDevices,
@@ -31,7 +30,7 @@ Imports:
     tidyselect,
     units (>= 0.8-2),
     vctrs
-Suggests: 
+Suggests:
     covr,
     esri2sf (>= 0.1.1),
     exiftoolr,
@@ -59,9 +58,9 @@ Suggests:
     tidygeocoder,
     tidyr,
     withr
-VignetteBuilder: 
+VignetteBuilder:
     knitr
-Remotes: 
+Remotes:
     elipousson/cliExtras,
     elipousson/esri2sf,
     elipousson/feltr,
