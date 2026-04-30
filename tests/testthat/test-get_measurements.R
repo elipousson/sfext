@@ -9,7 +9,9 @@ test_that("get_measurements works", {
   )
 
   expect_true(
-    is_dist_units(get_dist(nc[1, ], to = c("xmax", "ymax"), units = "mile")$dist)
+    is_dist_units(
+      get_dist(nc[1, ], to = c("xmax", "ymax"), units = "mile")$dist
+    )
   )
 
   expect_true(

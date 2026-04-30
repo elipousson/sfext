@@ -26,13 +26,15 @@
 #' @importFrom sf st_union st_geometry
 #' @importFrom dplyr tibble
 #' @importFrom cli pluralize
-st_union_ext <- function(x,
-                         y = NULL,
-                         name_col = "name",
-                         .sf_col = NULL,
-                         label = NULL,
-                         ext = TRUE,
-                         ...) {
+st_union_ext <- function(
+  x,
+  y = NULL,
+  name_col = "name",
+  .sf_col = NULL,
+  label = NULL,
+  ext = TRUE,
+  ...
+) {
   check_sf(x, ext = TRUE)
 
   if (is_bbox(x)) {
@@ -62,7 +64,8 @@ st_union_ext <- function(x,
   if (!is_null(name_col)) {
     if (!has_name(x, name_col)) {
       cli_warn(
-        c("{.arg name_col} {.val {name_col}} can't be found in {.arg x}",
+        c(
+          "{.arg name_col} {.val {name_col}} can't be found in {.arg x}",
           "i" = "Setting {.arg name_col} to the first column of {.arg x}:
           {.val {names(x)[[1]]}}"
         )
@@ -106,7 +109,9 @@ st_union_by <- function(x, ..., .sf_col = NULL) {
         sf::st_make_valid(x),
         ...
       ),
-      "{.sf_col}" := {.sf_col}
+      "{.sf_col}" := {
+        .sf_col
+      }
     )
 
   sf::st_make_valid(x)

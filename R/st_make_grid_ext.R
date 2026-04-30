@@ -31,21 +31,23 @@
 #' @export
 #' @importFrom sf st_make_grid st_filter
 #' @importFrom dplyr mutate arrange row_number everything
-st_make_grid_ext <- function(x,
-                             ...,
-                             unit = NULL,
-                             crs = NULL,
-                             ncol = NULL,
-                             nrow = NULL,
-                             n = NULL,
-                             gutter = 0,
-                             desc = FALSE,
-                             cellsize = NULL,
-                             what = NULL,
-                             style = "rect",
-                             .id = "id",
-                             filter = FALSE,
-                             trim = FALSE) {
+st_make_grid_ext <- function(
+  x,
+  ...,
+  unit = NULL,
+  crs = NULL,
+  ncol = NULL,
+  nrow = NULL,
+  n = NULL,
+  gutter = 0,
+  desc = FALSE,
+  cellsize = NULL,
+  what = NULL,
+  style = "rect",
+  .id = "id",
+  filter = FALSE,
+  trim = FALSE
+) {
   check_sf(x, ext = TRUE)
 
   if (!is_sf(x)) {
@@ -153,17 +155,22 @@ st_make_grid_ext <- function(x,
 #' @importFrom rlang has_length
 #' @importFrom cli cli_alert_danger cli_alert_info
 #' @importFrom dplyr case_when
-get_grid_params <- function(bbox,
-                            cellsize = NULL,
-                            unit = NULL,
-                            n = NULL,
-                            what = NULL,
-                            ncol = NULL,
-                            nrow = NULL,
-                            base = 10,
-                            style = NULL) {
+get_grid_params <- function(
+  bbox,
+  cellsize = NULL,
+  unit = NULL,
+  n = NULL,
+  what = NULL,
+  ncol = NULL,
+  nrow = NULL,
+  base = 10,
+  style = NULL
+) {
   what <- match.arg(what, c("polygons", "corners", "centers"))
-  style <- match.arg(style, c("rect", "square", "hex", "flat_top_hex", "circle", "circle_offset"))
+  style <- match.arg(
+    style,
+    c("rect", "square", "hex", "flat_top_hex", "circle", "circle_offset")
+  )
 
   if (!is_null(cellsize)) {
     if (has_length(n, 1)) {
@@ -171,11 +178,15 @@ get_grid_params <- function(bbox,
     }
 
     if (!is_null(ncol) && is_longer(ncol * cellsize[1], sf_bbox_xdist(bbox))) {
-      cli::cli_warn("The cellsize will not fit within the width of the bounding box with the number of columns requested.")
+      cli::cli_warn(
+        "The cellsize will not fit within the width of the bounding box with the number of columns requested."
+      )
     }
 
     if (!is_null(nrow) && is_longer(nrow * cellsize[2], sf_bbox_ydist(bbox))) {
-      cli::cli_warn("The specified cellsize will not fit within the height of the bounding box with the number of nrow requested.")
+      cli::cli_warn(
+        "The specified cellsize will not fit within the height of the bounding box with the number of nrow requested."
+      )
     }
   }
 
@@ -201,7 +212,10 @@ get_grid_params <- function(bbox,
 
     n <-
       dplyr::case_when(
-        (is_null(ncol) && !is_null(nrow) && (style == "square")) ~ c(nrow * bbox_asp, nrow),
+        (is_null(ncol) && !is_null(nrow) && (style == "square")) ~ c(
+          nrow * bbox_asp,
+          nrow
+        ),
         (is_null(ncol) && !is_null(nrow)) ~ c(nrow, nrow),
         TRUE ~ n
       )
@@ -243,7 +257,8 @@ get_grid_params <- function(bbox,
   list(
     cellsize = cellsize,
     n = n,
-    ncol = n[1], nrow = n[2],
+    ncol = n[1],
+    nrow = n[2],
     square = square,
     what = what,
     flat_topped = flat_topped
@@ -261,13 +276,15 @@ get_grid_params <- function(bbox,
 #' @inheritDotParams st_make_grid_ext
 #' @export
 #' @importFrom dplyr mutate
-make_sf_grid_list <- function(x,
-                              style = "rect",
-                              ncol = 2,
-                              nrow = 2,
-                              .id = "grid_id",
-                              crs = NULL,
-                              ...) {
+make_sf_grid_list <- function(
+  x,
+  style = "rect",
+  ncol = 2,
+  nrow = 2,
+  .id = "grid_id",
+  crs = NULL,
+  ...
+) {
   grid <- st_make_grid_ext(
     x,
     style = style,

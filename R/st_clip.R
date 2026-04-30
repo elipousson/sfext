@@ -21,13 +21,15 @@
 #' @export
 #' @importFrom sf st_crs st_bbox
 #' @importFrom dplyr select
-st_clip <- function(x,
-                    clip = NULL,
-                    keep = NULL,
-                    flip = FALSE,
-                    dist = NULL,
-                    diag_ratio = NULL,
-                    unit = "meter") {
+st_clip <- function(
+  x,
+  clip = NULL,
+  keep = NULL,
+  flip = FALSE,
+  dist = NULL,
+  diag_ratio = NULL,
+  unit = "meter"
+) {
   # If bbox, convert to sf
   x <- as_sf(x)
 
@@ -74,8 +76,14 @@ make_clip <- function(x, clip, crs, style = NULL, call = caller_env()) {
     arg_match(
       clip,
       c(
-        "top", "right", "bottom", "left",
-        "topright", "bottomright", "bottomleft", "topleft"
+        "top",
+        "right",
+        "bottom",
+        "left",
+        "topright",
+        "bottomright",
+        "bottomleft",
+        "topleft"
       ),
       error_call = call
     )
@@ -123,11 +131,26 @@ make_clip <- function(x, clip, crs, style = NULL, call = caller_env()) {
     } else if (bottom) {
       pts <- edges$v$middle[1:2]
       if (right) {
-        pts <- c(pts, edges$h$bottom[2:3], edges$h$middle[2:3], edges$v$right[1:1])
+        pts <- c(
+          pts,
+          edges$h$bottom[2:3],
+          edges$h$middle[2:3],
+          edges$v$right[1:1]
+        )
       } else if (left) {
-        pts <- c(pts, edges$h$bottom[1:2], edges$h$middle[1:2], edges$v$left[1:2])
+        pts <- c(
+          pts,
+          edges$h$bottom[1:2],
+          edges$h$middle[1:2],
+          edges$v$left[1:2]
+        )
       } else {
-        pts <- c(pts, edges$h$bottom[2:3], edges$h$middle[2:3], edges$v$right[1:1])
+        pts <- c(
+          pts,
+          edges$h$bottom[2:3],
+          edges$h$middle[2:3],
+          edges$v$right[1:1]
+        )
       }
     }
   }

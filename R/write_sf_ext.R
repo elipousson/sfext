@@ -41,21 +41,23 @@
 #'  [sf::st_write()]
 #' @export
 #' @importFrom sf write_sf
-write_sf_ext <- function(data,
-                         name = NULL,
-                         label = NULL,
-                         prefix = NULL,
-                         postfix = NULL,
-                         filename = NULL,
-                         fileext = NULL,
-                         filetype = NULL,
-                         description = NULL,
-                         path = NULL,
-                         cache = FALSE,
-                         pkg = "sfext",
-                         overwrite = FALSE,
-                         onefile = FALSE,
-                         ...) {
+write_sf_ext <- function(
+  data,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  fileext = NULL,
+  filetype = NULL,
+  description = NULL,
+  path = NULL,
+  cache = FALSE,
+  pkg = "sfext",
+  overwrite = FALSE,
+  onefile = FALSE,
+  ...
+) {
   fileext <- fileext %||% filetype
   if (is_sf_list(data) && is_named(data)) {
     write_sf_list(
@@ -120,19 +122,21 @@ write_sf_ext <- function(data,
 #'   filename), save a sf list as a multilayer GeoPackage file where names for
 #'   list items are used as layer names.
 #' @export
-write_sf_list <- function(data,
-                          name = NULL,
-                          label = NULL,
-                          prefix = NULL,
-                          postfix = NULL,
-                          filename = NULL,
-                          fileext = NULL,
-                          filetype = NULL,
-                          path = NULL,
-                          overwrite = FALSE,
-                          onefile = FALSE,
-                          cache = FALSE,
-                          ...) {
+write_sf_list <- function(
+  data,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  fileext = NULL,
+  filetype = NULL,
+  path = NULL,
+  overwrite = FALSE,
+  onefile = FALSE,
+  cache = FALSE,
+  ...
+) {
   fileext <- fileext %||% filetype
   if (!onefile) {
     walk(
@@ -200,19 +204,21 @@ write_sf_list <- function(data,
 #'   [write_sf_cache] or [write_sf_ext] if `cache = TRUE`.
 #' @export
 #' @importFrom sf write_sf
-write_sf_cache <- function(data,
-                           name = NULL,
-                           label = NULL,
-                           prefix = NULL,
-                           postfix = NULL,
-                           filename = NULL,
-                           fileext = NULL,
-                           filetype = NULL,
-                           data_dir = NULL,
-                           pkg = "sfext",
-                           overwrite = FALSE,
-                           create = TRUE,
-                           ...) {
+write_sf_cache <- function(
+  data,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  fileext = NULL,
+  filetype = NULL,
+  data_dir = NULL,
+  pkg = "sfext",
+  overwrite = FALSE,
+  create = TRUE,
+  ...
+) {
   fileext <- fileext %||% filetype
 
   filename <-
@@ -251,18 +257,20 @@ write_sf_cache <- function(data,
 #'   gists; defaults to Sys.getenv("GITHUB_PAT")
 #' @export
 #' @importFrom filenamr make_filename
-write_sf_gist <- function(data,
-                          name = NULL,
-                          label = NULL,
-                          prefix = NULL,
-                          postfix = NULL,
-                          filename = NULL,
-                          fileext = "geojson",
-                          filetype = NULL,
-                          description = NULL,
-                          public = TRUE,
-                          browse = FALSE,
-                          token = Sys.getenv("GITHUB_PAT")) {
+write_sf_gist <- function(
+  data,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  fileext = "geojson",
+  filetype = NULL,
+  description = NULL,
+  public = TRUE,
+  browse = FALSE,
+  token = Sys.getenv("GITHUB_PAT")
+) {
   fileext <- fileext %||% filetype
   check_installed("gistr")
 
@@ -313,16 +321,18 @@ write_sf_gist <- function(data,
 #'   provided data.
 #' @inheritParams googlesheets4::sheet_write
 #' @export
-write_sf_gsheet <- function(data,
-                            name = NULL,
-                            label = NULL,
-                            prefix = NULL,
-                            postfix = NULL,
-                            filename = NULL,
-                            sheet = 1,
-                            ask = FALSE,
-                            key = NULL,
-                            ...) {
+write_sf_gsheet <- function(
+  data,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  sheet = 1,
+  ask = FALSE,
+  key = NULL,
+  ...
+) {
   check_installed("googlesheets4")
 
   if (!is_null(filename)) {
@@ -363,16 +373,18 @@ write_sf_gsheet <- function(data,
 #' @importFrom sf write_sf
 #' @importFrom cliExtras cli_yesno
 #' @importFrom filenamr check_file_overwrite
-write_sf_types <- function(data,
-                           filename = NULL,
-                           path = NULL,
-                           fileext = NULL,
-                           filetype = NULL,
-                           description = NULL,
-                           overwrite = TRUE,
-                           append = FALSE,
-                           layer_options = NULL,
-                           ...) {
+write_sf_types <- function(
+  data,
+  filename = NULL,
+  path = NULL,
+  fileext = NULL,
+  filetype = NULL,
+  description = NULL,
+  overwrite = TRUE,
+  append = FALSE,
+  layer_options = NULL,
+  ...
+) {
   fileext <- fileext %||% filetype
   # Get working directory if path is NULL
   # if (is_null(path)) {
@@ -385,8 +397,10 @@ write_sf_types <- function(data,
     if (!is_null(filename)) {
       # FIXME: Is this just an internal error or can this be triggered by a
       # user?
-      cli_abort("A {.arg filename} *or* {.arg path} with a filename must be
-      provided. Both can't be provided.")
+      cli_abort(
+        "A {.arg filename} *or* {.arg path} with a filename must be
+      provided. Both can't be provided."
+      )
     }
 
     filename <- basename(path)
@@ -446,11 +460,12 @@ write_sf_types <- function(data,
     if (!(fileext %in% c("rda", "rds", "RData"))) {
       ask <-
         is_interactive() &&
-          cli_yesno(
-            c("{.arg data} is not a simple feature object.",
-              ">" = "Do you want to save {.arg data} as a RDA file?"
-            )
+        cli_yesno(
+          c(
+            "{.arg data} is not a simple feature object.",
+            ">" = "Do you want to save {.arg data} as a RDA file?"
           )
+        )
 
       if (!ask) {
         return(invisible())
@@ -476,11 +491,17 @@ write_sf_types <- function(data,
 
   cli_inform(c("v" = "Writing {.file {path}}"))
 
-  switch(type,
+  switch(
+    type,
     "sf_csv" = readr::write_csv(x = data, file = path),
     "sf_excel" = openxlsx::write.xlsx(data, file = path),
     "sf_gsheet" = write_sf_gsheet(data = data, filename = filename, ...),
-    "sf_spatial" = sf::write_sf(obj = data, dsn = path, layer_options = layer_options, ...),
+    "sf_spatial" = sf::write_sf(
+      obj = data,
+      dsn = path,
+      layer_options = layer_options,
+      ...
+    ),
     "sf_svg" = write_sf_svg(data = data, filename = path, ...),
     "df_csv" = readr::write_csv(x = data, file = path),
     "df_excel" = openxlsx::write.xlsx(data, file = path),
@@ -504,12 +525,14 @@ write_sf_types <- function(data,
 #' @export
 #' @importFrom grDevices svg dev.off
 #' @importFrom sf st_geometry
-write_sf_svg <- function(data,
-                         filename = NULL,
-                         path = NULL,
-                         ...,
-                         width = 10,
-                         height = 10) {
+write_sf_svg <- function(
+  data,
+  filename = NULL,
+  path = NULL,
+  ...,
+  width = 10,
+  height = 10
+) {
   check_required(data)
 
   if (is_null(filename) && has_fileext(path)) {

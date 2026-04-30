@@ -22,11 +22,16 @@
 #' @export
 #' @importFrom cli cli_alert_warning cli_alert_success
 #' @importFrom sf st_point st_sfc
-lonlat_to_sfc <- function(x,
-                          range = getOption("sfext.coord_range", c("xmin" = -180, "ymin" = -50, "xmax" = 180, "ymax" = 60)),
-                          quiet = FALSE,
-                          call = parent.frame(),
-                          ...) {
+lonlat_to_sfc <- function(
+  x,
+  range = getOption(
+    "sfext.coord_range",
+    c("xmin" = -180, "ymin" = -50, "xmax" = 180, "ymax" = 60)
+  ),
+  quiet = FALSE,
+  call = parent.frame(),
+  ...
+) {
   if (!is_geo_coords(x)) {
     cli_abort("{.arg x} must be geodetic coordinates.", call = call)
   }
@@ -66,13 +71,16 @@ lonlat_to_sfc <- function(x,
     x <- rev(x)
   }
 
-
   sf::st_sfc(sf::st_point(x), crs = 4326, ...)
 }
 
 #' @keywords internal
 #' @noRd
-check_range <- function(range = NULL, nm = c("xmin", "ymin", "xmax", "ymax"), call = caller_env()) {
+check_range <- function(
+  range = NULL,
+  nm = c("xmin", "ymin", "xmax", "ymax"),
+  call = caller_env()
+) {
   if (!is_vector(range, length(nm)) || !all(has_name(range, nm))) {
     cli_abort(
       "{.arg range} must be a length {length(nm)} vector with names {.val {nm}}.",
@@ -83,11 +91,13 @@ check_range <- function(range = NULL, nm = c("xmin", "ymin", "xmax", "ymax"), ca
 
 #' @keywords internal
 #' @noRd
-is_lonlat_in_range <- function(x,
-                               range = NULL,
-                               rev = FALSE,
-                               allow_null = TRUE,
-                               call = caller_env()) {
+is_lonlat_in_range <- function(
+  x,
+  range = NULL,
+  rev = FALSE,
+  allow_null = TRUE,
+  call = caller_env()
+) {
   if (allow_null && is_null(range)) {
     return(TRUE)
   }

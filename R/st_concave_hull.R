@@ -9,11 +9,13 @@
 #' @export
 #' @importFrom sf st_centroid st_combine st_cast st_make_valid st_concave_hull
 #'   st_set_geometry
-st_concave_hull_ext <- function(x,
-                                by = NULL,
-                                centroid = FALSE,
-                                ratio = 0.5,
-                                allow_holes = FALSE) {
+st_concave_hull_ext <- function(
+  x,
+  by = NULL,
+  centroid = FALSE,
+  ratio = 0.5,
+  allow_holes = FALSE
+) {
   check_sf(x, ext = "sfc")
 
   if (centroid) {

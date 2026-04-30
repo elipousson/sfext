@@ -9,6 +9,6 @@ nc_bbox
 
 as_sfc(nc_bbox)
 
-as_xy(nc[1,])
+as_xy(nc[1, ])
 
 as_sf_list(nc, col = "category")

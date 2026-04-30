@@ -30,13 +30,15 @@
 #' @export
 #' @importFrom dplyr case_when bind_rows
 #' @importFrom sf st_sf st_sfc st_as_sfc st_bbox st_as_sf st_geometry
-as_sf <- function(x,
-                  crs = NULL,
-                  sf_col = "geometry",
-                  ext = TRUE,
-                  ...,
-                  as_tibble = TRUE,
-                  call = caller_env()) {
+as_sf <- function(
+  x,
+  crs = NULL,
+  sf_col = "geometry",
+  ext = TRUE,
+  ...,
+  as_tibble = TRUE,
+  call = caller_env()
+) {
   if (is_sf(x)) {
     return(transform_sf(x, crs = crs))
   }
@@ -58,7 +60,8 @@ as_sf <- function(x,
     )
 
   x <-
-    switch(x_is,
+    switch(
+      x_is,
       "bbox" = sf_bbox_to_sf(x, ...),
       "sfg" = sf::st_sf(sf::st_sfc(x), ...),
       "sfc" = sf::st_sf(x, ...),
@@ -100,11 +103,7 @@ try_st_as_sf <- function(x, ..., call = caller_env()) {
 #' @export
 #' @importFrom sf st_bbox st_as_sf
 #' @importFrom dplyr bind_rows
-as_bbox <- function(x,
-                    crs = NULL,
-                    ext = TRUE,
-                    ...,
-                    call = caller_env()) {
+as_bbox <- function(x, crs = NULL, ext = TRUE, ..., call = caller_env()) {
   if (is_bbox(x)) {
     return(sf_bbox_transform(bbox = x, crs = crs))
   }
@@ -128,15 +127,19 @@ as_bbox <- function(x,
     )
 
   x <-
-    switch(x_is,
+    switch(
+      x_is,
       "sf_pt" = sf::st_bbox(st_buffer_ext(x, dist = 0.00000001), ...),
       "sf_or_sfc" = sf::st_bbox(x, ...),
       "num_bbox" = sf::st_bbox(
         c(
-          xmin = x[1], ymin = x[2],
-          xmax = x[3], ymax = x[4]
+          xmin = x[1],
+          ymin = x[2],
+          xmax = x[3],
+          ymax = x[4]
         ),
-        crs = crs, ...
+        crs = crs,
+        ...
       ),
       "other" = try_st_bbox(x, ...)
     )
@@ -186,7 +189,8 @@ as_sfc <- function(x, crs = NULL, ext = TRUE, ..., call = caller_env()) {
     )
 
   x <-
-    switch(x_is,
+    switch(
+      x_is,
       "sf" = sf::st_geometry(x, ...),
       "sfg" = sf::st_sfc(x, ...),
       # "sfc_list" =
@@ -224,11 +228,13 @@ try_st_as_sfc <- function(x, ..., call = caller_env()) {
 #' @name as_sf_class
 #' @rdname as_sf
 #' @export
-as_sf_class <- function(x,
-                        class = NULL,
-                        allow_null = TRUE,
-                        ...,
-                        call = caller_env()) {
+as_sf_class <- function(
+  x,
+  class = NULL,
+  allow_null = TRUE,
+  ...,
+  call = caller_env()
+) {
   if (allow_null && is_null(class)) {
     return(x)
   }
@@ -241,7 +247,6 @@ as_sf_class <- function(x,
     )
 
   if (is_what(x, class)) {
-
     params <- list2(...)
 
     if (!is.null(params[["crs"]])) {
@@ -257,7 +262,8 @@ as_sf_class <- function(x,
     call = call
   )
 
-  switch(class,
+  switch(
+    class,
     "sf" = as_sf(x, ..., call = call),
     "sfc" = as_sfc(x, ..., call = call),
     "bbox" = as_bbox(x, ..., call = call),
@@ -286,11 +292,7 @@ as_sf_class <- function(x,
 #' @export
 #' @importFrom dplyr case_when
 #' @importFrom sf st_coordinates
-as_xy <- function(x,
-                  bbox = NULL,
-                  crs = NULL,
-                  nm = c("x", "y"),
-                  ...) {
+as_xy <- function(x, bbox = NULL, crs = NULL, nm = c("x", "y"), ...) {
   type <-
     dplyr::case_when(
       is.character(x) && is_sf(bbox, ext = TRUE) ~ "sf_bbox_point",
@@ -299,10 +301,9 @@ as_xy <- function(x,
     )
 
   x <-
-    switch(type,
-      "sf_bbox_point" = sf_bbox_point(as_bbox(bbox),
-        point = x, crs = crs, ...
-      ),
+    switch(
+      type,
+      "sf_bbox_point" = sf_bbox_point(as_bbox(bbox), point = x, crs = crs, ...),
       "as_point" = as_points(x, crs = crs, ...),
       "point" = as_sfc(x, crs = crs, ...)
     )
@@ -356,8 +357,11 @@ get_start_end_line <- function(x) {
   map2(
     pts$start,
     pts$end,
-    ~ sf::st_cast(sf::st_combine(
-      c(.x, .y)
-    ), "LINESTRING")
+    ~ sf::st_cast(
+      sf::st_combine(
+        c(.x, .y)
+      ),
+      "LINESTRING"
+    )
   )
 }

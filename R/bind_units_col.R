@@ -17,13 +17,15 @@
 #' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom dplyr bind_cols
-bind_units_col <- function(x,
-                           y,
-                           units = NULL,
-                           drop = FALSE,
-                           keep_all = TRUE,
-                           .id = NULL,
-                           call = caller_env()) {
+bind_units_col <- function(
+  x,
+  y,
+  units = NULL,
+  drop = FALSE,
+  keep_all = TRUE,
+  .id = NULL,
+  call = caller_env()
+) {
   if (!is_null(units)) {
     y <-
       convert_dist_units(

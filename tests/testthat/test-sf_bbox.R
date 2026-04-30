@@ -15,13 +15,19 @@ test_that("sf_bbox functions work", {
   expect_s3_class(sf_bbox_shift(nc_bbox, c(0, 10), c(0, 10)), "bbox")
 
   expect_type(sf_bbox_to_lonlat_query(nc_bbox), "character")
-  expect_type(sf_bbox_to_lonlat_query(nc_bbox, coords = c("lat", "lon")), "character")
+  expect_type(
+    sf_bbox_to_lonlat_query(nc_bbox, coords = c("lat", "lon")),
+    "character"
+  )
   expect_error(sf_bbox_to_lonlat_query("nc_bbox"))
 
   expect_match(sf_bbox_to_wkt(nc_bbox), "^POLYGON")
   expect_length(sf_bbox_to_wkt(nc), 100)
 
-  expect_s3_class(sf_bbox_point(nc_bbox, point = c("xmid", "ymid"), crs = NA), "sfg")
+  expect_s3_class(
+    sf_bbox_point(nc_bbox, point = c("xmid", "ymid"), crs = NA),
+    "sfg"
+  )
   expect_s3_class(sf_bbox_point(nc_bbox, point = c("xmid", "ymid")), "sfc")
   expect_identical(
     sf_bbox_point(nc_bbox, point = c("xmax", "ymax")),

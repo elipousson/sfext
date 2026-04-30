@@ -26,7 +26,11 @@ test_that("get_paper works", {
 
   # Checks get_margins
   expect_identical(
-    get_paper(paper = "letter", orientation = "landscape", margin = "extrawide")$block_asp,
+    get_paper(
+      paper = "letter",
+      orientation = "landscape",
+      margin = "extrawide"
+    )$block_asp,
     7 / 4.5
   )
 

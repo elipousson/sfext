@@ -11,22 +11,47 @@
 
 utils::globalVariables(
   c(
-    "filename", "image_description", "image_height", "image_width", "latitude",
-    "latitude_ref", "longitude", "longitude_ref", "name", "orientation",
-    "source_file", "asp", "block_height", "block_width", "col_width", "gutter",
-    "height", "row_height", "width", "img_cardinal_dir", "img_direction",
-    "path", "trim_area", "init_area", "pct_area",
-    "trim_length", "init_length", "trim_join_id", "pct_length"
+    "filename",
+    "image_description",
+    "image_height",
+    "image_width",
+    "latitude",
+    "latitude_ref",
+    "longitude",
+    "longitude_ref",
+    "name",
+    "orientation",
+    "source_file",
+    "asp",
+    "block_height",
+    "block_width",
+    "col_width",
+    "gutter",
+    "height",
+    "row_height",
+    "width",
+    "img_cardinal_dir",
+    "img_direction",
+    "path",
+    "trim_area",
+    "init_area",
+    "pct_area",
+    "trim_length",
+    "init_length",
+    "trim_join_id",
+    "pct_length"
   )
 )
 
 #' @noRd
-cli_abort_ifnot <- function(x = NULL,
-                            ...,
-                            message = NULL,
-                            arg = caller_arg(x),
-                            .envir = call,
-                            call = caller_env()) {
+cli_abort_ifnot <- function(
+  x = NULL,
+  ...,
+  message = NULL,
+  arg = caller_arg(x),
+  .envir = call,
+  call = caller_env()
+) {
   cli_ifnot(
     x = x,
     ...,
@@ -40,12 +65,14 @@ cli_abort_ifnot <- function(x = NULL,
 
 
 #' @noRd
-cli_warn_ifnot <- function(x = NULL,
-                          ...,
-                           message = NULL,
-                           arg = caller_arg(x),
-                           .envir = call,
-                           call = caller_env()) {
+cli_warn_ifnot <- function(
+  x = NULL,
+  ...,
+  message = NULL,
+  arg = caller_arg(x),
+  .envir = call,
+  call = caller_env()
+) {
   cli_ifnot(
     x = x,
     ...,
@@ -62,12 +89,14 @@ cli_warn_ifnot <- function(x = NULL,
 #'
 #' @noRd
 #' @importFrom vctrs vec_as_names
-set_names_repair <- function(data = NULL,
-                             nm = NULL,
-                             .name_repair = "check_unique",
-                             repair_arg = ".name_repair",
-                             quiet = FALSE,
-                             call = caller_env()) {
+set_names_repair <- function(
+  data = NULL,
+  nm = NULL,
+  .name_repair = "check_unique",
+  repair_arg = ".name_repair",
+  quiet = FALSE,
+  call = caller_env()
+) {
   check_character(nm, allow_null = TRUE, call = call)
 
   nm <- nm %||% names(data)
@@ -91,8 +120,18 @@ set_names_repair <- function(data = NULL,
 #' Set snakecase-ish names (simple stand-in for janitor::clean_names)
 #'
 #' @noRd
-set_snakecaseish_names <- function(x, .name_repair = NULL, ..., call = caller_env()) {
-  set_names_repair(x, snakecaseish(names(x)), .name_repair = .name_repair, call = call)
+set_snakecaseish_names <- function(
+  x,
+  .name_repair = NULL,
+  ...,
+  call = caller_env()
+) {
+  set_names_repair(
+    x,
+    snakecaseish(names(x)),
+    .name_repair = .name_repair,
+    call = call
+  )
 }
 
 #'
@@ -104,10 +143,12 @@ underscore <- function(x) {
 #' Make snakecase-ish names (simple stand-in for janitor::make_clean_names)
 #'
 #' @noRd
-snakecaseish <- function(x,
-                         replace_blank = "_",
-                         remove_punct = TRUE,
-                         lower = TRUE) {
+snakecaseish <- function(
+  x,
+  replace_blank = "_",
+  remove_punct = TRUE,
+  lower = TRUE
+) {
   if (!is.character(replace_blank)) {
     x <- gsub("[[:blank:]]", replace_blank, x, perl = TRUE)
   }
@@ -137,7 +178,12 @@ use_eval_parse <- function(data, package = NULL) {
 #' @param col Column name/value
 #' @noRd
 #' @importFrom dplyr group_by
-group_by_col <- function(data, col = NULL, allow_null = TRUE, call = caller_env()) {
+group_by_col <- function(
+  data,
+  col = NULL,
+  allow_null = TRUE,
+  call = caller_env()
+) {
   check_required(data, call = call)
 
   if (allow_null && is_null(col)) {
@@ -181,9 +227,11 @@ as_sf_tibble <- function(x) {
 #' @keywords internal
 #' @importFrom rlang zap current_env
 #' @importFrom vctrs vec_cbind
-list_cbind <- function(x,
-                       name_repair = c("unique", "universal", "check_unique"),
-                       size = NULL) {
+list_cbind <- function(
+  x,
+  name_repair = c("unique", "universal", "check_unique"),
+  size = NULL
+) {
   vctrs::vec_cbind(
     !!!x,
     .name_repair = name_repair,
@@ -198,13 +246,15 @@ list_cbind <- function(x,
 #' @noRd
 #' @importFrom dplyr select all_of rename
 #' @importFrom cliExtras cli_yesno
-has_same_name_col <- function(x,
-                              col = NULL,
-                              prefix = "orig",
-                              ask = FALSE,
-                              quiet = FALSE,
-                              drop = TRUE,
-                              call = caller_env()) {
+has_same_name_col <- function(
+  x,
+  col = NULL,
+  prefix = "orig",
+  ask = FALSE,
+  quiet = FALSE,
+  drop = TRUE,
+  call = caller_env()
+) {
   if (!has_name(x, col)) {
     return(x)
   }
@@ -221,8 +271,12 @@ has_same_name_col <- function(x,
   new_col <- paste0(prefix, "_", col)
 
   if (ask && !quiet) {
-    if (!cli_yesno("The provided data includes an existing column named '{col}'.
-                   Do you want to proceed and rename this column to {new_col}?")) {
+    if (
+      !cli_yesno(
+        "The provided data includes an existing column named '{col}'.
+                   Do you want to proceed and rename this column to {new_col}?"
+      )
+    ) {
       cli_abort("Please rename your column to use this function.", call = call)
     }
   }

@@ -39,21 +39,27 @@
 #' @export
 #' @importFrom dplyr filter select mutate
 #' @importFrom rlang .data
-get_paper <- function(paper = "letter",
-                      orientation = "portrait",
-                      standard = NULL,
-                      series = NULL,
-                      size = NULL,
-                      width = NULL,
-                      height = NULL,
-                      units = NULL,
-                      ncol = 1,
-                      nrow = 1,
-                      gutter = 0,
-                      bbox = NULL,
-                      margin = NULL,
-                      ...) {
-  lifecycle::signal_stage("superseded", "sfext::get_paper()", "papersize::get_page_size()")
+get_paper <- function(
+  paper = "letter",
+  orientation = "portrait",
+  standard = NULL,
+  series = NULL,
+  size = NULL,
+  width = NULL,
+  height = NULL,
+  units = NULL,
+  ncol = 1,
+  nrow = 1,
+  gutter = 0,
+  bbox = NULL,
+  margin = NULL,
+  ...
+) {
+  lifecycle::signal_stage(
+    "superseded",
+    "sfext::get_paper()",
+    "papersize::get_page_size()"
+  )
   type <-
     dplyr::case_when(
       is.data.frame(paper) && check_df_paper(paper, ext = FALSE) ~ "paper",
@@ -63,10 +69,15 @@ get_paper <- function(paper = "letter",
     )
 
   paper <-
-    switch(type,
+    switch(
+      type,
       "paper" = paper,
       "name" = get_paper_name(paper),
-      "standard" = get_paper_standard(standard = standard, series = series, size = size),
+      "standard" = get_paper_standard(
+        standard = standard,
+        series = series,
+        size = size
+      ),
       "dims" = get_paper_dims(width = width, height = height, units = units)
     )
 
@@ -137,7 +148,9 @@ set_paper_orientation <- function(paper, orientation = NULL, bbox = NULL) {
       paper$width <- paper_height
       paper$height <- paper_width
       paper$orientation <- orientation
-    } else if ((paper_orientation == "landscape") && (orientation == "portrait")) {
+    } else if (
+      (paper_orientation == "landscape") && (orientation == "portrait")
+    ) {
       # width and height for most papers are assumed to be in a portrait format
       paper$width <- paper_height
       paper$height <- paper_width
@@ -165,16 +178,37 @@ get_paper_name <- function(paper) {
 #' @noRd
 get_paper_standard <- function(standard, series = NULL, size = NULL) {
   paper_sizes <- sfext::paper_sizes
-  standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
+  standard <- match.arg(
+    standard,
+    c(
+      "ANSI",
+      "ISO",
+      "British Imperial",
+      "JIS",
+      "USPS",
+      "Facebook",
+      "Instagram",
+      "Twitter"
+    ),
+    several.ok = TRUE
+  )
   paper <- paper_sizes[paper_sizes[["standard"]] %in% standard, ]
 
   if (!is_null(series)) {
-    series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"), several.ok = TRUE)
+    series <- match.arg(
+      series,
+      c("A", "B", "C", "Engineering", "Architecture", "EDDM"),
+      several.ok = TRUE
+    )
     paper <- paper[paper[["series"]] %in% series, ]
   }
 
   if (!is_null(size)) {
-    paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"), several.ok = TRUE)
+    paper_series <- match.arg(
+      series,
+      c("A", "B", "C", "Engineering", "Architecture", "EDDM"),
+      several.ok = TRUE
+    )
     paper <- paper[paper[["size"]] %in% size, ]
   }
 
@@ -213,8 +247,17 @@ get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
 #' @param orientation Image orientation, Default: `NULL`.
 #' @rdname get_social_image
 #' @export
-get_social_image <- function(image = NULL, platform = NULL, format = NULL, orientation = NULL) {
-  lifecycle::signal_stage("superseded", "sfext::get_social_image()", "papersize::get_social_size()")
+get_social_image <- function(
+  image = NULL,
+  platform = NULL,
+  format = NULL,
+  orientation = NULL
+) {
+  lifecycle::signal_stage(
+    "superseded",
+    "sfext::get_social_image()",
+    "papersize::get_social_size()"
+  )
   paper_sizes <- sfext::paper_sizes
   image_sizes <- paper_sizes[paper_sizes$type == "social", ]
 

@@ -26,14 +26,16 @@
 #'  [ggplot2::margin()]
 #' @rdname get_margin
 #' @export
-get_margin <- function(margin = NULL,
-                       paper = NULL,
-                       orientation = NULL,
-                       dist = NULL,
-                       unit = "in",
-                       block_width = NULL,
-                       header = 0,
-                       footer = 0) {
+get_margin <- function(
+  margin = NULL,
+  paper = NULL,
+  orientation = NULL,
+  dist = NULL,
+  unit = "in",
+  block_width = NULL,
+  header = 0,
+  footer = 0
+) {
   check_installed("ggplot2")
 
   if (is.character(margin)) {
@@ -50,8 +52,17 @@ get_margin <- function(margin = NULL,
     arg_match(
       unit,
       c(
-        "in", "mm", "px", "cm", "npc", "picas",
-        "pc", "pt", "lines", "char", "native"
+        "in",
+        "mm",
+        "px",
+        "cm",
+        "npc",
+        "picas",
+        "pc",
+        "pt",
+        "lines",
+        "char",
+        "native"
       )
     )
 
@@ -108,7 +119,13 @@ get_margin_dist <- function(dist = NULL, unit = "in") {
   if (length(dist) == 1) {
     ggplot2::margin(t = dist, r = dist, b = dist, l = dist, unit = unit)
   } else if (length(dist) == 4) {
-    ggplot2::margin(t = dist[[1]], r = dist[[2]], b = dist[[3]], l = dist[[4]], unit = unit)
+    ggplot2::margin(
+      t = dist[[1]],
+      r = dist[[2]],
+      b = dist[[3]],
+      l = dist[[4]],
+      unit = unit
+    )
   }
 }
 
@@ -118,19 +135,45 @@ get_margin_dist <- function(dist = NULL, unit = "in") {
 get_margin_type <- function(paper = NULL, type = "none", unit = "in") {
   if (unit == "in") {
     margin <-
-      switch(type,
+      switch(
+        type,
         "extrawide" = ggplot2::margin(t = 2, r = 2, b = 2, l = 2, unit = unit),
-        "wide" = ggplot2::margin(t = 1.5, r = 1.5, b = 1.5, l = 1.5, unit = unit),
+        "wide" = ggplot2::margin(
+          t = 1.5,
+          r = 1.5,
+          b = 1.5,
+          l = 1.5,
+          unit = unit
+        ),
         "standard" = ggplot2::margin(t = 1, r = 1, b = 1, l = 1, unit = unit),
-        "narrow" = ggplot2::margin(t = 0.75, r = 0.75, b = 0.75, l = 0.75, unit = unit),
+        "narrow" = ggplot2::margin(
+          t = 0.75,
+          r = 0.75,
+          b = 0.75,
+          l = 0.75,
+          unit = unit
+        ),
         "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
       )
   } else if (unit == "mm") {
     margin <-
-      switch(type,
-        "extrawide" = ggplot2::margin(t = 80, r = 80, b = 80, l = 80, unit = unit),
+      switch(
+        type,
+        "extrawide" = ggplot2::margin(
+          t = 80,
+          r = 80,
+          b = 80,
+          l = 80,
+          unit = unit
+        ),
         "wide" = ggplot2::margin(t = 60, r = 60, b = 60, l = 60, unit = unit),
-        "standard" = ggplot2::margin(t = 40, r = 40, b = 40, l = 40, unit = unit),
+        "standard" = ggplot2::margin(
+          t = 40,
+          r = 40,
+          b = 40,
+          l = 40,
+          unit = unit
+        ),
         "narrow" = ggplot2::margin(t = 20, r = 20, b = 20, l = 20, unit = unit),
         "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
       )
@@ -146,7 +189,8 @@ get_margin_type <- function(paper = NULL, type = "none", unit = "in") {
       }
 
     margin <-
-      switch(type,
+      switch(
+        type,
         "extrawide" = ggplot2::margin(px_to_npc_margins(120), unit = "npc"), # 1080 / 6
         "wide" = ggplot2::margin(px_to_npc_margins(80), unit = "npc"), # 1080 / 8
         "standard" = ggplot2::margin(px_to_npc_margins(40), unit = "npc"), # 1080 / 12

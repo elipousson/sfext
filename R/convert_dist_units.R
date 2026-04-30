@@ -11,11 +11,13 @@
 #' @family dist
 #' @export
 #' @importFrom units set_units
-convert_dist_units <- function(dist,
-                               from = NULL,
-                               to = "meter",
-                               drop = FALSE,
-                               digits = NULL) {
+convert_dist_units <- function(
+  dist,
+  from = NULL,
+  to = "meter",
+  drop = FALSE,
+  digits = NULL
+) {
   cli_abort_ifnot(
     (is.numeric(dist) || is_units(dist)),
     message = "{.arg dist} must be a numeric or units class object."
@@ -26,7 +28,8 @@ convert_dist_units <- function(dist,
 
     if (!is_null(from) && !is_same_units(from, dist_from)) {
       cli::cli_warn(
-        c("{.arg dist} is class {.cls units} and is using different units
+        c(
+          "{.arg dist} is class {.cls units} and is using different units
             than {.arg from}.",
           "*" = "Replacing {.arg from} with {.val {dist_from}}."
         )
@@ -61,11 +64,13 @@ convert_dist_units <- function(dist,
 #'   return x without setting units.
 #' @noRd
 #' @importFrom units set_units
-set_dist_units <- function(x = NULL,
-                           value = NULL,
-                           mode = "standard",
-                           allow_null = TRUE,
-                           call = caller_env()) {
+set_dist_units <- function(
+  x = NULL,
+  value = NULL,
+  mode = "standard",
+  allow_null = TRUE,
+  call = caller_env()
+) {
   if (allow_null && is_null(value)) {
     return(x)
   }
@@ -77,8 +82,7 @@ set_dist_units <- function(x = NULL,
   value <-
     arg_match(
       value,
-      c(sfext::dist_unit_options,
-        sfext::area_unit_options),
+      c(sfext::dist_unit_options, sfext::area_unit_options),
       error_call = call
     )
 

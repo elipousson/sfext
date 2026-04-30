@@ -31,12 +31,14 @@
 #' @rdname st_transform_ext
 #' @export
 #' @importFrom dplyr case_when
-st_transform_ext <- function(x,
-                             crs = NULL,
-                             class = NULL,
-                             rotate = 0,
-                             allow_null = FALSE,
-                             allow_list = TRUE) {
+st_transform_ext <- function(
+  x,
+  crs = NULL,
+  class = NULL,
+  rotate = 0,
+  allow_null = FALSE,
+  allow_list = TRUE
+) {
   if (allow_null && is_null(x)) {
     return(x)
   }
@@ -65,7 +67,8 @@ st_transform_ext <- function(x,
     is_sf(x, ext = TRUE) ~ "sf"
   )
 
-  x <- switch(type,
+  x <- switch(
+    type,
     "list" = map(x, ~ st_transform_ext(.x, crs, class, rotate, allow_null)),
     "bbox" = sf_bbox_transform(x, crs = crs),
     "omerc" = st_omerc(x, rotate = rotate),

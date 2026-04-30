@@ -21,17 +21,19 @@
 #' @export
 #' @importFrom sf st_drop_geometry
 #' @importFrom dplyr count rename
-count_features <- function(x = NULL,
-                           y = NULL,
-                           nm = "data",
-                           join = NULL,
-                           .id = "name",
-                           by = NULL,
-                           count = NULL,
-                           sort = FALSE,
-                           name = NULL,
-                           geometry = "y",
-                           ...) {
+count_features <- function(
+  x = NULL,
+  y = NULL,
+  nm = "data",
+  join = NULL,
+  .id = "name",
+  by = NULL,
+  count = NULL,
+  sort = FALSE,
+  name = NULL,
+  geometry = "y",
+  ...
+) {
   if (!is_sf_list(y, allow_null = TRUE) && !is_null(nm)) {
     y <- as_sf_list(y, nm = nm, crs = x)
   }

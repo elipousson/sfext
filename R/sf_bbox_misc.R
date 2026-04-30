@@ -98,7 +98,8 @@ sf_bbox_point <- function(bbox, point = NULL, crs = NULL, call = caller_env()) {
     arg_match(
       point,
       c("xmin", "ymin", "xmax", "ymax", "xmid", "ymid"),
-      multiple = TRUE, error_call = call
+      multiple = TRUE,
+      error_call = call
     )
 
   if (any(c("xmid", "ymid") %in% point)) {
@@ -140,7 +141,11 @@ sf_bbox_to_wkt <- function(bbox, crs = NULL) {
 
 #' @rdname sf_bbox_misc
 #' @export
-sf_bbox_to_lonlat_query <- function(bbox, coords = c("longitude", "latitude"), crs = 4326) {
+sf_bbox_to_lonlat_query <- function(
+  bbox,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+) {
   bbox <- sf_bbox_transform(bbox, crs = crs)
 
   coords <- rev_coords(coords)
@@ -161,8 +166,7 @@ sf_bbox_to_lonlat_query <- function(bbox, coords = c("longitude", "latitude"), c
 #' @param point point to find npc coords for center
 #' @export
 #' @importFrom sf st_coordinates st_distance st_point
-sf_bbox_to_npc <- function(bbox,
-                           point) {
+sf_bbox_to_npc <- function(bbox, point) {
   if (is_sf(bbox)) {
     bbox <- as_bbox(bbox)
   }

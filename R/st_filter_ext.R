@@ -24,16 +24,18 @@
 #' @export
 #' @importFrom sf st_intersects st_bbox st_filter st_crop
 #' @importFrom dplyr case_when
-st_filter_ext <- function(x,
-                          y = NULL,
-                          crop = FALSE,
-                          trim = FALSE,
-                          erase = FALSE,
-                          crs = NULL,
-                          .predicate = sf::st_intersects,
-                          type = NULL,
-                          allow_list = TRUE,
-                          ...) {
+st_filter_ext <- function(
+  x,
+  y = NULL,
+  crop = FALSE,
+  trim = FALSE,
+  erase = FALSE,
+  crs = NULL,
+  .predicate = sf::st_intersects,
+  type = NULL,
+  allow_list = TRUE,
+  ...
+) {
   if (is_null(y)) {
     if (!is_null(type)) {
       return(st_filter_geom_type(transform_sf(x, crs = crs), type = type))
@@ -99,7 +101,8 @@ st_filter_ext <- function(x,
     .predicate = .predicate
   )
 
-  x <- switch(case,
+  x <- switch(
+    case,
     "crop" = suppressWarnings(sf::st_crop(x, y)),
     "trim" = st_trim(x, y),
     "erase" = st_erase(x, y),

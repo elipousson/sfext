@@ -17,12 +17,14 @@
 #' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom rlang caller_env arg_match has_length
-sf_bbox_shift <- function(bbox,
-                          nudge_x = 0,
-                          nudge_y = 0,
-                          side = c("all", "top", "bottom", "left", "right"),
-                          dir = NULL,
-                          call = caller_env()) {
+sf_bbox_shift <- function(
+  bbox,
+  nudge_x = 0,
+  nudge_y = 0,
+  side = c("all", "top", "bottom", "left", "right"),
+  dir = NULL,
+  call = caller_env()
+) {
   dir <- set_shift_dir(dir)
 
   nudge_x <- set_bbox_nudge(nudge_x, dir)
@@ -74,9 +76,7 @@ set_bbox_nudge <- function(nudge, dir) {
 
 
 #' @noRd
-set_shift_dir <- function(dir = NULL,
-                          allow_null = TRUE,
-                          call = caller_env()) {
+set_shift_dir <- function(dir = NULL, allow_null = TRUE, call = caller_env()) {
   if (allow_null && is_null(dir)) {
     return(dir)
   }
@@ -87,18 +87,13 @@ set_shift_dir <- function(dir = NULL,
 
   dir <- arg_match0(dir, c("in", "out"), error_call = call)
 
-  switch(dir,
-    "in" = c(1, -1),
-    "out" = c(-1, 1)
-  )
+  switch(dir, "in" = c(1, -1), "out" = c(-1, 1))
 }
 
 #' @name sf_bbox_contract
 #' @rdname sf_bbox_shift
 #' @export
-sf_bbox_contract <- function(bbox,
-                             nudge_x = 0,
-                             nudge_y = 0) {
+sf_bbox_contract <- function(bbox, nudge_x = 0, nudge_y = 0) {
   sf_bbox_shift(
     bbox = bbox,
     nudge_x = nudge_x,
@@ -111,9 +106,7 @@ sf_bbox_contract <- function(bbox,
 #' @name sf_bbox_expand
 #' @rdname sf_bbox_shift
 #' @export
-sf_bbox_expand <- function(bbox,
-                           nudge_x = 0,
-                           nudge_y = 0) {
+sf_bbox_expand <- function(bbox, nudge_x = 0, nudge_y = 0) {
   sf_bbox_shift(
     bbox = bbox,
     nudge_x = nudge_x,

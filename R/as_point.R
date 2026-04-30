@@ -67,7 +67,10 @@ as_points <- function(..., to = "POINT", call = caller_env()) {
   params <- list2(...)
   to <- arg_match(to, c("POINT", "MULTIPOINT"), error_call = call)
 
-  if ((is_point(params) && (to == "POINT")) | (is_multipoint(params) && (to == "MULTIPOINT"))) {
+  if (
+    (is_point(params) && (to == "POINT")) |
+      (is_multipoint(params) && (to == "MULTIPOINT"))
+  ) {
     return(params)
   }
 
@@ -207,10 +210,12 @@ as_lines <- function(..., to = "LINESTRING") {
     crs <- sf::st_crs(params[[1]])
   }
 
-  if (has_length(params, 2) &&
-    is_sf(params[[1]], "sfc") &&
-    is_point(params[[2]]) &&
-    has_length(params[[2]], 1)) {
+  if (
+    has_length(params, 2) &&
+      is_sf(params[[1]], "sfc") &&
+      is_point(params[[2]]) &&
+      has_length(params[[2]], 1)
+  ) {
     params[[1]] <- lapply(params[[1]], function(x) {
       st_union(as_sfc(x, crs = crs), params[[2]])
     })
@@ -222,9 +227,11 @@ as_lines <- function(..., to = "LINESTRING") {
     return(sf::st_cast(params[[1]], to = "LINESTRING"))
   }
 
-  if (all(map_lgl(params, \(x) {
-    is_line(x) || is_multiline(x)
-  }))) {
+  if (
+    all(map_lgl(params, \(x) {
+      is_line(x) || is_multiline(x)
+    }))
+  ) {
     return(map_as_sf(params, \(x) {
       as_sf(x)
     }))
@@ -254,9 +261,11 @@ as_polygons <- function(..., to = "POLYGON") {
     crs <- sf::st_crs(params[[1]])
   }
 
-  if (all(map_lgl(params, \(x) {
-    is_polygon(x)
-  }))) {
+  if (
+    all(map_lgl(params, \(x) {
+      is_polygon(x)
+    }))
+  ) {
     params <- map_as_sf(
       params,
       \(x) {

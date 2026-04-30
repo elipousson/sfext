@@ -27,13 +27,15 @@ NULL
 #' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom dplyr summarize group_keys group_nest
-as_sf_list <- function(x,
-                       nm = "data",
-                       col = NULL,
-                       crs = NULL,
-                       clean_names = TRUE,
-                       .name_repair = "check_unique",
-                       call = caller_env()) {
+as_sf_list <- function(
+  x,
+  nm = "data",
+  col = NULL,
+  crs = NULL,
+  clean_names = TRUE,
+  .name_repair = "check_unique",
+  call = caller_env()
+) {
   check_required(x, call = call)
   check_string(col, allow_null = TRUE, call = call)
 
@@ -60,7 +62,8 @@ as_sf_list <- function(x,
 
   if (!is_sf_list(x, ext = TRUE)) {
     cli_abort(
-      c("{.arg x} must be a list of {.cls sf} objects or a {.cls sf} object that
+      c(
+        "{.arg x} must be a list of {.cls sf} objects or a {.cls sf} object that
       can be converted to a list.",
         "i" = "The provided {.arg x} is class {.cls {class(x)}}."
       ),
@@ -74,12 +77,14 @@ as_sf_list <- function(x,
 #' @rdname sf_list
 #' @name new_sf_list
 #' @export
-new_sf_list <- function(x,
-                        nm = "data",
-                        col = NULL,
-                        clean_names = TRUE,
-                        .name_repair = "check_unique",
-                        call = caller_env()) {
+new_sf_list <- function(
+  x,
+  nm = "data",
+  col = NULL,
+  clean_names = TRUE,
+  .name_repair = "check_unique",
+  call = caller_env()
+) {
   check_sf(x, ext = TRUE, call = call)
 
   if (is_sf(x)) {
@@ -118,16 +123,14 @@ new_sf_list <- function(x,
 }
 
 #' @noRd
-validate_sf_list <- function(x,
-                             arg = caller_arg(x),
-                             ...,
-                             call = caller_env()) {
+validate_sf_list <- function(x, arg = caller_arg(x), ..., call = caller_env()) {
   if (inherits_all(x, c("sf_list", "vctrs_list_of"))) {
     return(invisible(x))
   }
 
   if (is_sf_list(x)) {
-    cli_alert_warning("{.arg {arg}} is a list of {.cls sf} objects but is
+    cli_alert_warning(
+      "{.arg {arg}} is a list of {.cls sf} objects but is
                       missing class {.cls {c('sf_list', 'vctrs_list_of')}}.",
       wrap = TRUE
     )

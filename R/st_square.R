@@ -23,31 +23,34 @@
 #' @export
 #' @importFrom sf st_is_longlat st_inscribed_circle st_geometry st_dimension
 #'   st_set_geometry
-st_square <- function(x,
-                      scale = 1,
-                      rotate = 0,
-                      inscribed = FALSE,
-                      by_feature = FALSE,
-                      call = caller_env()) {
+st_square <- function(
+  x,
+  scale = 1,
+  rotate = 0,
+  inscribed = FALSE,
+  by_feature = FALSE,
+  call = caller_env()
+) {
   check_sf(x, ext = TRUE, call = call)
   UseMethod("st_square")
 }
 
 #' @name st_square
 #' @export
-st_square.default <- function(x,
-                              ...) {
+st_square.default <- function(x, ...) {
   st_square.sfc(as_sfc(x), ...)
 }
 
 #' @name st_square
 #' @export
-st_square.sfc <- function(x,
-                          scale = 1,
-                          rotate = 0,
-                          inscribed = FALSE,
-                          by_feature = FALSE,
-                          call = caller_env()) {
+st_square.sfc <- function(
+  x,
+  scale = 1,
+  rotate = 0,
+  inscribed = FALSE,
+  by_feature = FALSE,
+  call = caller_env()
+) {
   is_lonlat <- sf::st_is_longlat(x)
 
   if (is_lonlat) {
@@ -79,7 +82,12 @@ st_square.sfc <- function(x,
     geometry <- vctrs::list_unchop(geometry)
   }
 
-  geometry <- st_scale_rotate(geometry, rotate = rotate, scale = scale, call = call)
+  geometry <- st_scale_rotate(
+    geometry,
+    rotate = rotate,
+    scale = scale,
+    call = call
+  )
 
   if (!is_lonlat) {
     return(geometry)
@@ -90,9 +98,7 @@ st_square.sfc <- function(x,
 
 #' @name st_square
 #' @export
-st_square.sf <- function(x,
-                         ...,
-                         by_feature = FALSE) {
+st_square.sf <- function(x, ..., by_feature = FALSE) {
   if (!by_feature) {
     x <- st_union_ext(x, name_col = NULL)
   }
@@ -105,18 +111,14 @@ st_square.sf <- function(x,
 
 #' @name st_square
 #' @export
-st_square.bbox <- function(x,
-                           ...) {
+st_square.bbox <- function(x, ...) {
   sf::st_bbox(st_square.sfc(sf::st_as_sfc(x), ...))
 }
 
 #' @rdname st_square
 #' @name st_inscribed_square
 #' @export
-st_inscribed_square <- function(x,
-                                scale = 1,
-                                rotate = 0,
-                                by_feature = FALSE) {
+st_inscribed_square <- function(x, scale = 1, rotate = 0, by_feature = FALSE) {
   st_square(
     x = x,
     scale = scale,

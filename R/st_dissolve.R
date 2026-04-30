@@ -12,11 +12,7 @@
 #' @inheritParams spdep::poly2nb
 #' @inheritDotParams spdep::poly2nb
 #' @noRd
-poly_2_ncomp_id <- function(x,
-                            snap = NULL,
-                            queen = TRUE,
-                            quiet = TRUE,
-                            ...) {
+poly_2_ncomp_id <- function(x, snap = NULL, queen = TRUE, quiet = TRUE, ...) {
   rlang::check_installed("spdep")
   fn <- invisible
   if (quiet) {
@@ -53,14 +49,16 @@ poly_2_ncomp_id <- function(x,
 #' @inheritParams check_sf
 #' @inheritDotParams spdep::poly2nb
 #' @export
-st_dissolve <- function(x,
-                        ...,
-                        .by = NULL,
-                        .keep = "nest",
-                        do_union = TRUE,
-                        .data_key = "data",
-                        .dissolve_key = "group.comp.id",
-                        call = caller_env) {
+st_dissolve <- function(
+  x,
+  ...,
+  .by = NULL,
+  .keep = "nest",
+  do_union = TRUE,
+  .data_key = "data",
+  .dissolve_key = "group.comp.id",
+  call = caller_env
+) {
   .check_sfish(x, allow_class = c("sfc"), call = call)
   check_string(.dissolve_key, call = call)
   check_string(.data_key, call = call)
@@ -77,7 +75,6 @@ st_dissolve <- function(x,
     x_is_sfc <- TRUE
     x <- sf::st_set_geometry(sf::st_as_sf(x), "geometry")
   }
-
 
   x_group_vars <- NULL
 
@@ -97,7 +94,8 @@ st_dissolve <- function(x,
   x <- x |>
     dplyr::mutate(
       "{.dissolve_key}" := paste0(
-        dplyr::cur_group_id(), ".",
+        dplyr::cur_group_id(),
+        ".",
         poly_2_ncomp_id(.data[[sf_column_nm]], ...)
       )
     )

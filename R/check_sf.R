@@ -8,13 +8,15 @@
 #' @param ... Additional parameters passed to [rlang::abort()].
 #' @inheritParams rlang::args_error_context
 #' @export
-check_sf <- function(x,
-                     ...,
-                     ext = FALSE,
-                     allow_list = FALSE,
-                     allow_null = FALSE,
-                     arg = caller_arg(x),
-                     call = caller_env()) {
+check_sf <- function(
+  x,
+  ...,
+  ext = FALSE,
+  allow_list = FALSE,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (!missing(x)) {
     is_sf_obj <- .check_is_sf_ext(
       x,
@@ -53,10 +55,7 @@ check_sf <- function(x,
 }
 
 #' @noRd
-.check_is_sf_ext <- function(x,
-                             ext,
-                             allow_list,
-                             allow_null) {
+.check_is_sf_ext <- function(x, ext, allow_list, allow_null) {
   if (is_sf(x, ext = ext)) {
     return(TRUE)
   }

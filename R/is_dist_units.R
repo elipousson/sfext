@@ -20,7 +20,9 @@
 #' @family dist
 #' @export
 is_dist_units <- function(x) {
-  is_units(x) && (get_dist_units(x) %in% c(sfext::dist_unit_options, sfext::area_unit_options))
+  is_units(x) &&
+    (get_dist_units(x) %in%
+      c(sfext::dist_unit_options, sfext::area_unit_options))
 }
 
 #' @name diff_dist
@@ -56,7 +58,14 @@ is_diff_dist <- function(x, y, units = NULL) {
 #' @param ... Additional parameters passed to [all.equal()]
 #' @export
 #' @importFrom sf st_area
-is_same_dist <- function(x, y, dist = NULL, diff = FALSE, call = caller_env(), ...) {
+is_same_dist <- function(
+  x,
+  y,
+  dist = NULL,
+  diff = FALSE,
+  call = caller_env(),
+  ...
+) {
   if (is.character(dist) && is_sf(x, ext = TRUE) && is_sf(y, ext = TRUE)) {
     x <- as_bbox(x)
     y <- as_bbox(x)
@@ -64,7 +73,8 @@ is_same_dist <- function(x, y, dist = NULL, diff = FALSE, call = caller_env(), .
     dist <- arg_match(dist, c("diagdist", "xdist", "ydist"), error_call = call)
 
     x <-
-      switch(dist,
+      switch(
+        dist,
         # FIXME: Is this going to work or is there a tolerance factor needed?
         "diagdist" = sf_bbox_diagdist(x, drop = FALSE),
         "xdist" = sf_bbox_xdist(x, drop = FALSE),
@@ -72,7 +82,8 @@ is_same_dist <- function(x, y, dist = NULL, diff = FALSE, call = caller_env(), .
       )
 
     y <-
-      switch(dist,
+      switch(
+        dist,
         # FIXME: Is this going to work or is there a tolerance factor needed?
         "diagdist" = sf_bbox_diagdist(y, drop = FALSE),
         "xdist" = sf_bbox_xdist(y, drop = FALSE),
@@ -111,7 +122,12 @@ is_shorter <- function(x, y) {
 #' @export
 #' @importFrom sf st_crs
 #' @importFrom rlang arg_match
-get_dist_units <- function(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE) {
+get_dist_units <- function(
+  x,
+  allow_null = TRUE,
+  multiple = TRUE,
+  quiet = FALSE
+) {
   if (allow_null && is_null(x)) {
     return(x)
   }
@@ -124,8 +140,7 @@ get_dist_units <- function(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE)
     return(
       arg_match(
         x,
-        c(sfext::dist_unit_options,
-          sfext::area_unit_options),
+        c(sfext::dist_unit_options, sfext::area_unit_options),
         multiple = multiple
       )
     )
@@ -173,10 +188,12 @@ get_dist_units <- function(x, allow_null = TRUE, multiple = TRUE, quiet = FALSE)
 #' @importFrom rlang arg_match
 #' @importFrom units as_units
 #' @importFrom cliExtras cli_yesno
-as_dist_units <- function(x,
-                          units = NULL,
-                          allow_null = FALSE,
-                          call = caller_env()) {
+as_dist_units <- function(
+  x,
+  units = NULL,
+  allow_null = FALSE,
+  call = caller_env()
+) {
   units <- get_dist_units(units, allow_null = allow_null)
 
   if (allow_null && is_null(units)) {
@@ -194,9 +211,11 @@ as_dist_units <- function(x,
     return(units::as_units(x, units))
   }
 
-  if (cliExtras::cli_yesno(
-    "Did you mean to convert {.var x} to {.val {units}}?"
-  )) {
+  if (
+    cliExtras::cli_yesno(
+      "Did you mean to convert {.var x} to {.val {units}}?"
+    )
+  ) {
     convert_dist_units(
       dist = x,
       to = units
@@ -227,12 +246,14 @@ st_combined_area <- function(x) {
 #' @name is_same_area
 #' @rdname  is_dist_units
 #' @export
-is_same_area <- function(x,
-                         y,
-                         units = NULL,
-                         combine = TRUE,
-                         diff = FALSE,
-                         ...) {
+is_same_area <- function(
+  x,
+  y,
+  units = NULL,
+  combine = TRUE,
+  diff = FALSE,
+  ...
+) {
   if (diff) {
     return(is_diff_area(x, y, units = units, combine = combine))
   }

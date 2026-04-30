@@ -46,18 +46,21 @@ mapview_ext <- function(x, zcol = NULL, remove_na = FALSE, ...) {
 #' @inheritParams read_sf_exif
 #' @param fileext File extension. Defaults to "jpeg".
 #' @export
-mapview_exif <- function(path = NULL,
-                         fileext = "jpeg",
-                         popup = TRUE,
-                         tooltip = FALSE,
-                         images = NULL,
-                         width = 320,
-                         ...) {
-  images <- images %||% read_sf_exif(
-    path = path,
-    fileext = fileext,
-    ...
-  )
+mapview_exif <- function(
+  path = NULL,
+  fileext = "jpeg",
+  popup = TRUE,
+  tooltip = FALSE,
+  images = NULL,
+  width = 320,
+  ...
+) {
+  images <- images %||%
+    read_sf_exif(
+      path = path,
+      fileext = fileext,
+      ...
+    )
 
   mapview_popup_img(
     images = images,
@@ -75,13 +78,15 @@ mapview_exif <- function(path = NULL,
 #' @inheritParams leafpop::addPopupImages
 #' @inheritParams rlang::args_error_context
 #' @export
-mapview_popup_img <- function(images,
-                              popup = TRUE,
-                              tooltip = FALSE,
-                              map = NULL,
-                              width = 320,
-                              ...,
-                              call = caller_env()) {
+mapview_popup_img <- function(
+  images,
+  popup = TRUE,
+  tooltip = FALSE,
+  map = NULL,
+  width = 320,
+  ...,
+  call = caller_env()
+) {
   check_installed("leaflet", call = call)
   check_installed("leafpop", call = call)
 

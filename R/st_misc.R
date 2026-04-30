@@ -45,10 +45,7 @@ NULL
 #'   `sf` object.
 #' @export
 #' @importFrom sf st_crs st_geometry st_centroid st_sf
-st_center <- function(x,
-                      class = "list",
-                      ext = TRUE,
-                      ...) {
+st_center <- function(x, class = "list", ext = TRUE, ...) {
   x <- as_sf(x)
   geometry <- as_sfc(x)
   centroid <- suppressWarnings(sf::st_centroid(geometry, ...))
@@ -83,13 +80,15 @@ st_center <- function(x,
 #'   [lwgeom::st_minimum_bounding_circle()].
 #' @export
 #' @importFrom sf st_inscribed_circle
-st_circle <- function(x,
-                      scale = 1,
-                      inscribed = TRUE,
-                      dTolerance = 0.01,
-                      by_feature = FALSE,
-                      use_hull = FALSE,
-                      use_lwgeom = FALSE) {
+st_circle <- function(
+  x,
+  scale = 1,
+  inscribed = TRUE,
+  dTolerance = 0.01,
+  by_feature = FALSE,
+  use_hull = FALSE,
+  use_lwgeom = FALSE
+) {
   if (!is_sf(x)) {
     x <- as_sf(x)
   }
@@ -174,10 +173,12 @@ st_circle <- function(x,
 #' @rdname st_misc
 #' @name st_circumscribed_circle
 #' @export
-st_circumscribed_circle <- function(x,
-                                    scale = 1,
-                                    dTolerance = 0,
-                                    by_feature = FALSE) {
+st_circumscribed_circle <- function(
+  x,
+  scale = 1,
+  dTolerance = 0,
+  by_feature = FALSE
+) {
   st_circle(
     x = x,
     scale = scale,
@@ -197,12 +198,14 @@ st_circumscribed_circle <- function(x,
 #'   input data remains a separate feature in the output.
 #' @export
 #' @importFrom sf st_inscribed_circle
-st_donut <- function(x,
-                     width = 0.4,
-                     scale = 1,
-                     inscribed = FALSE,
-                     by_feature = TRUE,
-                     ...) {
+st_donut <- function(
+  x,
+  width = 0.4,
+  scale = 1,
+  inscribed = FALSE,
+  by_feature = TRUE,
+  ...
+) {
   crs <- sf::st_crs(x)
   is_x_sfc <- is_sfc(x)
 

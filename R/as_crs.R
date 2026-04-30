@@ -16,10 +16,12 @@
 #' @importFrom rlang try_fetch
 #' @importFrom sf st_crs
 #' @importFrom cli cli_alert_warning cli_abort
-as_crs <- function(x = NULL,
-                   allow_na = TRUE,
-                   arg = caller_arg(x),
-                   call = caller_env()) {
+as_crs <- function(
+  x = NULL,
+  allow_na = TRUE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   try_fetch(
     sf::st_crs(x),
     error = function(cnd) {

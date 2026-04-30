@@ -46,20 +46,22 @@
 #' @export
 #' @importFrom dplyr count right_join filter mutate case_when select
 #' @importFrom sf st_join st_as_sf
-count_sf_ext <- function(data,
-                         x = NULL,
-                         y = NULL,
-                         join = sf::st_intersects,
-                         largest = TRUE,
-                         wt = NULL,
-                         sort = FALSE,
-                         replace_na = FALSE,
-                         keep_na = FALSE,
-                         lims = NULL,
-                         geometry = TRUE,
-                         .id = "id",
-                         name = NULL,
-                         ...) {
+count_sf_ext <- function(
+  data,
+  x = NULL,
+  y = NULL,
+  join = sf::st_intersects,
+  largest = TRUE,
+  wt = NULL,
+  sort = FALSE,
+  replace_na = FALSE,
+  keep_na = FALSE,
+  lims = NULL,
+  geometry = TRUE,
+  .id = "id",
+  name = NULL,
+  ...
+) {
   data <- as_sf(data)
 
   if (has_name(data, .id)) {

@@ -19,27 +19,31 @@
 #' plot(sf::st_union(st_nudge(nc, to = nc[1, ]), nc), max.plot = 1)
 #'
 #' @export
-st_nudge <- function(x,
-                     to = NULL,
-                     nudge_y = 0,
-                     nudge_x = 0,
-                     unit = NULL,
-                     scale = 1,
-                     rotate = 0,
-                     crs = NULL) {
+st_nudge <- function(
+  x,
+  to = NULL,
+  nudge_y = 0,
+  nudge_x = 0,
+  unit = NULL,
+  scale = 1,
+  rotate = 0,
+  crs = NULL
+) {
   UseMethod("st_nudge")
 }
 
 #' @name st_nudge
 #' @export
-st_nudge.default <- function(x,
-                             to = NULL,
-                             nudge_y = 0,
-                             nudge_x = 0,
-                             unit = NULL,
-                             scale = 1,
-                             rotate = 0,
-                             crs = NULL) {
+st_nudge.default <- function(
+  x,
+  to = NULL,
+  nudge_y = 0,
+  nudge_x = 0,
+  unit = NULL,
+  scale = 1,
+  rotate = 0,
+  crs = NULL
+) {
   check_sf(x, ext = TRUE)
 
   crs <- crs %||% sf::st_crs(x)
@@ -86,14 +90,12 @@ st_nudge.default <- function(x,
 
 #' @name st_nudge
 #' @export
-st_nudge.bbox <- function(x,
-                          ...) {
+st_nudge.bbox <- function(x, ...) {
   sf::st_bbox(st_nudge.default(sf_bbox_to_sfc(x), ...))
 }
 
 #' @name st_nudge
 #' @export
-st_nudge.sf <- function(x,
-                        ...) {
+st_nudge.sf <- function(x, ...) {
   sf::st_set_geometry(x, st_nudge.default(sf::st_geometry(x), ...))
 }

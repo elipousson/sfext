@@ -1,5 +1,4 @@
 test_that("read_sf_ext works with file paths", {
-
   nc <- read_sf_ext(
     path = system.file("shape/nc.shp", package = "sf")
   )

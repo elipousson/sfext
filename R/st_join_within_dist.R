@@ -1,10 +1,7 @@
 #' Join sf objects within specified distance
 #'
 #' @noRd
-st_join_within_dist <- function(x,
-                                y,
-                                dist = NULL,
-                                ...) {
+st_join_within_dist <- function(x, y, dist = NULL, ...) {
   x <- map(
     vctrs::vec_chop(x),
     function(feat) {

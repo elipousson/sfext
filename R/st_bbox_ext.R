@@ -30,34 +30,47 @@
 #' @aliases st_bbox_adj
 #' @name st_bbox_ext
 #' @export
-st_bbox_ext <- function(x,
-                        dist = NULL,
-                        diag_ratio = NULL,
-                        asp = NULL,
-                        unit = NULL,
-                        crs = NULL,
-                        class = "bbox",
-                        nudge = NULL,
-                        allow_null = TRUE,
-                        allow_list = TRUE) {
+st_bbox_ext <- function(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  asp = NULL,
+  unit = NULL,
+  crs = NULL,
+  class = "bbox",
+  nudge = NULL,
+  allow_null = TRUE,
+  allow_list = TRUE
+) {
   UseMethod("st_bbox_ext")
 }
 
 #' @export
-st_bbox_ext.default <- function(x,
-                                dist = NULL,
-                                diag_ratio = NULL,
-                                asp = NULL,
-                                unit = NULL,
-                                crs = NULL,
-                                class = "bbox",
-                                nudge = NULL,
-                                allow_null = TRUE,
-                                ...) {
+st_bbox_ext.default <- function(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  asp = NULL,
+  unit = NULL,
+  crs = NULL,
+  class = "bbox",
+  nudge = NULL,
+  allow_null = TRUE,
+  ...
+) {
   check_sf(
     x,
     allow_null = allow_null,
-    ext = c("sfc", "bbox", "sfg", "Raster", "Spatial", "Extent", "numeric", "character")
+    ext = c(
+      "sfc",
+      "bbox",
+      "sfg",
+      "Raster",
+      "Spatial",
+      "Extent",
+      "numeric",
+      "character"
+    )
   )
 
   if (allow_null && is_null(x)) {
@@ -89,17 +102,19 @@ st_bbox_ext.default <- function(x,
 }
 
 #' @export
-st_bbox_ext.list <- function(x,
-                             dist = NULL,
-                             diag_ratio = NULL,
-                             asp = NULL,
-                             unit = NULL,
-                             crs = NULL,
-                             class = "bbox",
-                             nudge = NULL,
-                             allow_null = TRUE,
-                             allow_list = TRUE,
-                             ...) {
+st_bbox_ext.list <- function(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  asp = NULL,
+  unit = NULL,
+  crs = NULL,
+  class = "bbox",
+  nudge = NULL,
+  allow_null = TRUE,
+  allow_list = TRUE,
+  ...
+) {
   if (!allow_list) {
     cli_abort(
       "{.arg allow_list} must be {.code TRUE} if {.arg x} is a {.cls list}."
@@ -126,17 +141,19 @@ st_bbox_ext.list <- function(x,
 }
 
 #' @export
-st_bbox_ext.sf_list <- function(x,
-                                dist = NULL,
-                                diag_ratio = NULL,
-                                asp = NULL,
-                                unit = NULL,
-                                crs = NULL,
-                                class = "bbox",
-                                nudge = NULL,
-                                allow_null = TRUE,
-                                allow_list = TRUE,
-                                ...) {
+st_bbox_ext.sf_list <- function(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  asp = NULL,
+  unit = NULL,
+  crs = NULL,
+  class = "bbox",
+  nudge = NULL,
+  allow_null = TRUE,
+  allow_list = TRUE,
+  ...
+) {
   if (!allow_list) {
     cli_abort(
       "{.arg allow_list} must be {.code TRUE} if {.arg x} is a {.cls sf_list}."
@@ -162,20 +179,24 @@ st_bbox_ext.sf_list <- function(x,
 #' @rdname st_bbox_ext
 #' @name st_bbox_asp
 #' @export
-st_bbox_asp <- function(x,
-                        asp = NULL,
-                        class = "bbox",
-                        allow_null = TRUE,
-                        allow_list = TRUE) {
+st_bbox_asp <- function(
+  x,
+  asp = NULL,
+  class = "bbox",
+  allow_null = TRUE,
+  allow_list = TRUE
+) {
   UseMethod("st_bbox_asp")
 }
 
 #' @export
-st_bbox_asp.default <- function(x,
-                                asp = NULL,
-                                class = "bbox",
-                                ...,
-                                allow_null = TRUE) {
+st_bbox_asp.default <- function(
+  x,
+  asp = NULL,
+  class = "bbox",
+  ...,
+  allow_null = TRUE
+) {
   if (allow_null && is_null(x)) {
     return(x)
   }
@@ -188,10 +209,7 @@ st_bbox_asp.default <- function(x,
 }
 
 #' @export
-st_bbox_asp.bbox <- function(x,
-                             asp = NULL,
-                             ...,
-                             class = "bbox") {
+st_bbox_asp.bbox <- function(x, asp = NULL, ..., class = "bbox") {
   # Get adjusted aspect ratio
   if (!is_bare_numeric(asp)) {
     asp <- get_asp(asp = asp)
@@ -214,20 +232,22 @@ st_bbox_asp.bbox <- function(x,
   }
 
   x <- sf_bbox_expand(
-      x,
-      nudge_x = nudge_x,
-      nudge_y = nudge_y
-    )
+    x,
+    nudge_x = nudge_x,
+    nudge_y = nudge_y
+  )
 
   as_sf_class(x, class = class)
 }
 
 #' @export
-st_bbox_asp.list <- function(x,
-                             asp = NULL,
-                             class = "bbox",
-                             allow_null = TRUE,
-                             allow_list = TRUE) {
+st_bbox_asp.list <- function(
+  x,
+  asp = NULL,
+  class = "bbox",
+  allow_null = TRUE,
+  allow_list = TRUE
+) {
   if (!allow_list) {
     cli_abort(
       "{.arg allow_list} must be {.code TRUE} if {.arg x} is a {.cls list}."
@@ -248,11 +268,13 @@ st_bbox_asp.list <- function(x,
 }
 
 #' @export
-st_bbox_asp.sf_list <- function(x,
-                                asp = NULL,
-                                class = "bbox",
-                                allow_null = TRUE,
-                                allow_list = TRUE) {
+st_bbox_asp.sf_list <- function(
+  x,
+  asp = NULL,
+  class = "bbox",
+  allow_null = TRUE,
+  allow_list = TRUE
+) {
   if (!allow_list) {
     cli_abort(
       "{.arg allow_list} must be {.code TRUE} if {.arg x} is a {.cls sf_list}."

@@ -12,14 +12,16 @@
 #' @inheritParams get_paper
 #' @inheritDotParams get_paper
 #' @export
-get_asp <- function(asp = NULL,
-                    paper = NULL,
-                    orientation = NULL,
-                    bbox = NULL,
-                    margin = NULL,
-                    block_asp = FALSE,
-                    allow_null = TRUE,
-                    ...) {
+get_asp <- function(
+  asp = NULL,
+  paper = NULL,
+  orientation = NULL,
+  bbox = NULL,
+  margin = NULL,
+  block_asp = FALSE,
+  allow_null = TRUE,
+  ...
+) {
   type <- dplyr::case_when(
     allow_null && is_null(asp) && is_null(paper) ~ "null",
     is.numeric(asp) ~ "num",
@@ -40,12 +42,25 @@ get_asp <- function(asp = NULL,
     message = "{.arg margin} is ignored if {.arg block_asp} is {.val FALSE}."
   )
 
-  switch(type,
+  switch(
+    type,
     "null" = asp,
     "num" = asp,
-    "char" = as.numeric(str_extract(asp, ".+(?=:)")) / as.numeric(str_extract(asp, "(?<=:).+")),
-    "paper" = get_paper(paper = paper, orientation = orientation, bbox = bbox, ...)[["asp"]],
-    "block" = get_paper(paper = paper, orientation = orientation, bbox = bbox, margin = margin, ...)[["block_asp"]],
+    "char" = as.numeric(str_extract(asp, ".+(?=:)")) /
+      as.numeric(str_extract(asp, "(?<=:).+")),
+    "paper" = get_paper(
+      paper = paper,
+      orientation = orientation,
+      bbox = bbox,
+      ...
+    )[["asp"]],
+    "block" = get_paper(
+      paper = paper,
+      orientation = orientation,
+      bbox = bbox,
+      margin = margin,
+      ...
+    )[["block_asp"]],
     "bbox" = sf_bbox_asp(bbox)
   )
 }

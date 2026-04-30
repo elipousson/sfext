@@ -43,12 +43,22 @@ is_geom_type <- function(x, type = NULL, by_geometry = FALSE, ext = TRUE) {
     "POLYGONS" = sf::st_is(x, c("POLYGON", "MULTIPOLYGON")),
     "LINESTRINGS" = sf::st_is(x, c("LINESTRING", "MULTILINESTRING")),
     "COLLECTION" = sf::st_is(x, "GEOMETRYCOLLECTION"),
-    "OTHER" = sf::st_is(x, c(
-      "GEOMETRY", "CIRCULARSTRING", "COMPOUNDCURVE",
-      "CURVEPOLYGON", "MULTICURVE", "MULTISURFACE",
-      "CURVE", "SURFACE", "POLYHEDRALSURFACE",
-      "TIN", "TRIANGLE"
-    ))
+    "OTHER" = sf::st_is(
+      x,
+      c(
+        "GEOMETRY",
+        "CIRCULARSTRING",
+        "COMPOUNDCURVE",
+        "CURVEPOLYGON",
+        "MULTICURVE",
+        "MULTISURFACE",
+        "CURVE",
+        "SURFACE",
+        "POLYHEDRALSURFACE",
+        "TIN",
+        "TRIANGLE"
+      )
+    )
   )
 }
 

@@ -35,16 +35,18 @@
 #' @return A `sf` object with a number column ordered by sort values.
 #' @export
 #' @importFrom dplyr relocate all_of everything
-number_features <- function(x,
-                            col = NULL,
-                            sort = "dist_xmin_ymax",
-                            to = NULL,
-                            desc = FALSE,
-                            crs = NULL,
-                            num_style = "arabic",
-                            num_start = 1,
-                            suffix = NULL,
-                            .id = "number") {
+number_features <- function(
+  x,
+  col = NULL,
+  sort = "dist_xmin_ymax",
+  to = NULL,
+  desc = FALSE,
+  crs = NULL,
+  num_style = "arabic",
+  num_start = 1,
+  suffix = NULL,
+  .id = "number"
+) {
   check_sf(x, ext = TRUE)
 
   if (!is_sf(x)) {
@@ -94,12 +96,14 @@ number_sf <- number_features
 #'   "xmin", "ymin", "xmax", "ymax"
 #' @export
 #' @importFrom dplyr arrange desc across all_of
-sort_features <- function(x,
-                          col = NULL,
-                          sort = c("lon", "lat"),
-                          to = NULL,
-                          desc = FALSE,
-                          crs = NULL) {
+sort_features <- function(
+  x,
+  col = NULL,
+  sort = c("lon", "lat"),
+  to = NULL,
+  desc = FALSE,
+  crs = NULL
+) {
   latlon_opts <- c("longitude", "latitude", "lon", "lat")
   minmax_opts <- c("xmin", "ymin", "xmax", "ymax")
 
@@ -130,10 +134,14 @@ sort_features <- function(x,
 
   dist_opts <-
     c(
-      "dist_xmin_ymin", "dist_xmax_ymax",
-      "dist_xmin_ymax", "dist_xmax_ymin",
-      "dist_xmin_ymid", "dist_xmax_ymid",
-      "dist_xmid_ymin", "dist_xmid_ymax",
+      "dist_xmin_ymin",
+      "dist_xmax_ymax",
+      "dist_xmin_ymax",
+      "dist_xmax_ymin",
+      "dist_xmin_ymid",
+      "dist_xmax_ymid",
+      "dist_xmid_ymin",
+      "dist_xmid_ymax",
       "dist_xmid_ymid"
     )
 
@@ -174,7 +182,11 @@ sort_features <- function(x,
   }
 
   if (desc) {
-    return(dplyr::arrange(x, dplyr::desc(dplyr::across(dplyr::all_of(sort))), .by_group = by_group))
+    return(dplyr::arrange(
+      x,
+      dplyr::desc(dplyr::across(dplyr::all_of(sort))),
+      .by_group = by_group
+    ))
   }
 
   dplyr::arrange(x, dplyr::across(dplyr::all_of(sort)), .by_group = by_group)

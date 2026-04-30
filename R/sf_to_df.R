@@ -32,11 +32,13 @@
 #' @example examples/sf_to_df.R
 #' @rdname sf_to_df
 #' @export
-sf_to_df <- function(x,
-                     crs = 4326,
-                     coords = c("lon", "lat"),
-                     geometry = "centroid",
-                     keep_all = TRUE) {
+sf_to_df <- function(
+  x,
+  crs = 4326,
+  coords = c("lon", "lat"),
+  geometry = "centroid",
+  keep_all = TRUE
+) {
   if (geometry == "drop") {
     return(sf::st_drop_geometry(x))
   }
@@ -74,22 +76,24 @@ sf_to_df <- function(x,
 #' @export
 #' @importFrom sf st_sf st_geometry st_as_sf
 #' @importFrom rlang has_length has_name
-df_to_sf <- function(x,
-                     crs = NULL,
-                     coords = c("lon", "lat"),
-                     from_crs = 4326,
-                     into = NULL,
-                     sep = ",",
-                     rev = TRUE,
-                     remove_coords = FALSE,
-                     geo = FALSE,
-                     address = "address",
-                     y = NULL,
-                     by = NULL,
-                     ...,
-                     as_tibble = TRUE,
-                     .name_repair = "unique",
-                     call = caller_env()) {
+df_to_sf <- function(
+  x,
+  crs = NULL,
+  coords = c("lon", "lat"),
+  from_crs = 4326,
+  into = NULL,
+  sep = ",",
+  rev = TRUE,
+  remove_coords = FALSE,
+  geo = FALSE,
+  address = "address",
+  y = NULL,
+  by = NULL,
+  ...,
+  as_tibble = TRUE,
+  .name_repair = "unique",
+  call = caller_env()
+) {
   check_data_frame(x, call = call)
 
   type <-
@@ -102,7 +106,8 @@ df_to_sf <- function(x,
     )
 
   x <-
-    switch(type,
+    switch(
+      type,
       "geometry_df" = sf::st_as_sf(x),
       "join_sf" = join_sf_to_df(x, y, by = by, ...),
       "address_df" = address_to_sf(
@@ -174,15 +179,17 @@ wkt_df_to_sf <- function(x, crs = NULL) {
 #'  [tidygeocoder::geo()], [tidygeocoder::geocode()]
 #' @rdname address_to_sf
 #' @export
-address_to_sf <- function(x,
-                          address = "address",
-                          method = "osm",
-                          coords = c("lon", "lat"),
-                          remove_coords = FALSE,
-                          crs = NULL,
-                          full_results = FALSE,
-                          ...,
-                          call = caller_env()) {
+address_to_sf <- function(
+  x,
+  address = "address",
+  method = "osm",
+  coords = c("lon", "lat"),
+  remove_coords = FALSE,
+  crs = NULL,
+  full_results = FALSE,
+  ...,
+  call = caller_env()
+) {
   check_installed("tidygeocoder")
 
   if (is.character(x)) {

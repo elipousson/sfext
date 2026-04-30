@@ -29,14 +29,16 @@
 #' @export
 #' @importFrom sf st_as_sf
 #' @importFrom rlang caller_env has_length
-coords_to_sf <- function(x,
-                         coords = c("lon", "lat"),
-                         into = NULL,
-                         sep = ",",
-                         rev = FALSE,
-                         remove_coords = FALSE,
-                         crs = 4326,
-                         call = caller_env()) {
+coords_to_sf <- function(
+  x,
+  coords = c("lon", "lat"),
+  into = NULL,
+  sep = ",",
+  rev = FALSE,
+  remove_coords = FALSE,
+  crs = 4326,
+  call = caller_env()
+) {
   if (!is_null(into) && has_length(into, 2) && has_length(coords, 1)) {
     x <- separate_coords(x = x, coords = coords, into = into, sep = sep)
     coords <- into
@@ -46,7 +48,8 @@ coords_to_sf <- function(x,
 
   if (identical(has_coords(x, coords), character(0))) {
     cli_warn(
-      c("{.arg x} can't be converted to a {.cls sf} object.",
+      c(
+        "{.arg x} can't be converted to a {.cls sf} object.",
         " " = "Returning a {.cls {class(x)}} object."
       ),
       call = call
@@ -72,11 +75,13 @@ coords_to_sf <- function(x,
 #' @param rev If `TRUE`, reverse `c("lat", "lon")` coords to `c("lon", "lat")`.
 #'   [check_coords()] only.
 #' @export
-check_coords <- function(x = NULL,
-                         coords = NULL,
-                         default = c("lon", "lat"),
-                         rev = FALSE,
-                         call = caller_env()) {
+check_coords <- function(
+  x = NULL,
+  coords = NULL,
+  default = c("lon", "lat"),
+  rev = FALSE,
+  call = caller_env()
+) {
   # If x is a data frame
   if (!is_null(x) && is.data.frame(x)) {
     x_has_coords <-
@@ -84,8 +89,10 @@ check_coords <- function(x = NULL,
 
     if (x_has_coords) {
       coords <- has_coords(x, coords = coords, value = TRUE)
-    } else if (!is_null(coords) &&
-      !identical(has_coords(x, default), character(0))) {
+    } else if (
+      !is_null(coords) &&
+        !identical(has_coords(x, default), character(0))
+    ) {
       cli_warn(
         c(
           "{.arg coords} ({.val {coords}}) can't be found in {.arg x}.",
@@ -124,11 +131,13 @@ check_coords <- function(x = NULL,
 #' @param ignore.case If `TRUE`, pattern matching is not case sensitive.
 #' @export
 rev_coords <- function(coords, pattern = c("lat", "^y"), ignore.case = TRUE) {
-  if (grepl(
-    pattern = paste0(pattern, collapse = "|"),
-    x = coords[1],
-    ignore.case = ignore.case
-  )) {
+  if (
+    grepl(
+      pattern = paste0(pattern, collapse = "|"),
+      x = coords[1],
+      ignore.case = ignore.case
+    )
+  ) {
     return(rev(coords))
   }
 
@@ -186,10 +195,12 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
 #' @param keep_missing If `TRUE`, keep rows with missing coordinate values.
 #'   Defaults to `FALSE` which filters out rows with missing coordinates.
 #' @export
-format_coords <- function(x,
-                          coords = c("lon", "lat"),
-                          keep_missing = FALSE,
-                          call = caller_env()) {
+format_coords <- function(
+  x,
+  coords = c("lon", "lat"),
+  keep_missing = FALSE,
+  call = caller_env()
+) {
   cli_abort_ifnot(
     !is_null(coords) && !identical(coords, character(0)),
     message = "{.arg coords} can't be {.val NULL} or {.val character(0)}.",

@@ -84,7 +84,8 @@ read_sf_ext <- function(...) {
     .default = "sf"
   )
 
-  read_sf_fn <- switch(type,
+  read_sf_fn <- switch(
+    type,
     "path" = read_sf_path,
     "pkg" = read_sf_pkg,
     "url" = read_sf_url,
@@ -98,13 +99,15 @@ read_sf_ext <- function(...) {
 #' @rdname read_sf_ext
 #' @export
 #' @importFrom dplyr case_when
-read_sf_pkg <- function(data,
-                        bbox = NULL,
-                        package = NULL,
-                        pkg = NULL,
-                        fileext = "gpkg",
-                        filetype = NULL,
-                        ...) {
+read_sf_pkg <- function(
+  data,
+  bbox = NULL,
+  package = NULL,
+  pkg = NULL,
+  fileext = "gpkg",
+  filetype = NULL,
+  ...
+) {
   fileext <- fileext %||% filetype
   package <- package %||% pkg
 
@@ -184,15 +187,22 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 #' @rdname read_sf_ext
 #' @inheritParams utils::unzip
 #' @importFrom utils unzip
-read_sf_zip <- function(path,
-                        bbox = NULL,
-                        exdir = NULL,
-                        overwrite = TRUE,
-                        unzip = "internal",
-                        ...) {
+read_sf_zip <- function(
+  path,
+  bbox = NULL,
+  exdir = NULL,
+  overwrite = TRUE,
+  unzip = "internal",
+  ...
+) {
   exdir <- exdir %||% basename(path)
 
-  utils::unzip(path, exdir = basename(path), overwrite = overwrite, unzip = unzip)
+  utils::unzip(
+    path,
+    exdir = basename(path),
+    overwrite = overwrite,
+    unzip = unzip
+  )
 
   path <- grep(".shp$", list.files(exdir), ignore.case = TRUE, value = TRUE)
 
@@ -204,12 +214,14 @@ read_sf_zip <- function(path,
 #' @inheritParams readr::read_rds
 #' @export
 #' @importFrom cliExtras cli_warning_ifnot
-read_sf_rdata <- function(path,
-                          file = NULL,
-                          refhook = NULL,
-                          bbox = NULL,
-                          .name_repair = "check_unique",
-                          ...) {
+read_sf_rdata <- function(
+  path,
+  file = NULL,
+  refhook = NULL,
+  bbox = NULL,
+  .name_repair = "check_unique",
+  ...
+) {
   file <- file %||% path
 
   type <- dplyr::case_when(
@@ -254,17 +266,19 @@ read_sf_rdata <- function(path,
 #' @export
 #' @importFrom sf st_layers read_sf st_zm
 #' @importFrom rlang is_lambda as_function is_function set_names
-read_sf_query <- function(path,
-                          dsn = NULL,
-                          bbox = NULL,
-                          query = NULL,
-                          table = NULL,
-                          name = NULL,
-                          name_col = NULL,
-                          wkt_filter = NULL,
-                          zm_drop = FALSE,
-                          .name_repair = "check_unique",
-                          ...) {
+read_sf_query <- function(
+  path,
+  dsn = NULL,
+  bbox = NULL,
+  query = NULL,
+  table = NULL,
+  name = NULL,
+  name_col = NULL,
+  wkt_filter = NULL,
+  zm_drop = FALSE,
+  .name_repair = "check_unique",
+  ...
+) {
   dsn <- dsn %||% path
 
   query <- make_sf_query(
@@ -302,16 +316,18 @@ read_sf_query <- function(path,
 #' @rdname read_sf_ext
 #' @inheritParams readxl::read_excel
 #' @export
-read_sf_excel <- function(path,
-                          sheet = NULL,
-                          combine_sheets = FALSE,
-                          bbox = NULL,
-                          coords = c("lon", "lat"),
-                          from_crs = 4326,
-                          geo = FALSE,
-                          address = "address",
-                          .name_repair = "check_unique",
-                          ...) {
+read_sf_excel <- function(
+  path,
+  sheet = NULL,
+  combine_sheets = FALSE,
+  bbox = NULL,
+  coords = c("lon", "lat"),
+  from_crs = 4326,
+  geo = FALSE,
+  address = "address",
+  .name_repair = "check_unique",
+  ...
+) {
   check_installed("readxl")
 
   # Convert XLS or XLSX file with coordinates to sf
@@ -375,17 +391,19 @@ read_sf_excel <- function(path,
 #' @param wkt Name of column with well-known text for geometry. Used by
 #'   [read_sf_csv()].
 #' @export
-read_sf_csv <- function(path,
-                        url = NULL,
-                        bbox = NULL,
-                        coords = c("lon", "lat"),
-                        from_crs = 4326,
-                        geo = FALSE,
-                        address = "address",
-                        wkt = NULL,
-                        .name_repair = "check_unique",
-                        show_col_types = FALSE,
-                        ...) {
+read_sf_csv <- function(
+  path,
+  url = NULL,
+  bbox = NULL,
+  coords = c("lon", "lat"),
+  from_crs = 4326,
+  geo = FALSE,
+  address = "address",
+  wkt = NULL,
+  .name_repair = "check_unique",
+  show_col_types = FALSE,
+  ...
+) {
   if (is_missing(path) && !is_null(url)) {
     path <- url
   }
@@ -443,10 +461,7 @@ read_sf_csv <- function(path,
 #' @export
 #' @importFrom sf read_sf st_zm
 #' @importFrom dplyr case_when
-read_sf_url <- function(url,
-                        bbox = NULL,
-                        coords = c("lon", "lat"),
-                        ...) {
+read_sf_url <- function(url, bbox = NULL, coords = c("lon", "lat"), ...) {
   params <- list2(...)
 
   cli_abort_ifnot(
@@ -478,7 +493,8 @@ read_sf_url <- function(url,
   wkt <- params[["wkt"]]
   .name_repair <- params[[".name_repair"]] %||% "check_unique"
 
-  switch(url_type,
+  switch(
+    url_type,
     "csv" = read_sf_csv(
       url = url,
       bbox = bbox,
@@ -577,15 +593,17 @@ read_sf_url <- function(url,
 #' @rdname read_sf_ext
 #' @inheritParams esri2sf::esri2sf
 #' @export
-read_sf_esri <- function(url,
-                         bbox = NULL,
-                         where = NULL,
-                         name = NULL,
-                         name_col = NULL,
-                         coords = c("lon", "lat"),
-                         from_crs = 4326,
-                         .name_repair = "check_unique",
-                         ...) {
+read_sf_esri <- function(
+  url,
+  bbox = NULL,
+  where = NULL,
+  name = NULL,
+  name_col = NULL,
+  coords = c("lon", "lat"),
+  from_crs = 4326,
+  .name_repair = "check_unique",
+  ...
+) {
   check_dev_installed(pkg = "esri2sf", repo = "elipousson/esri2sf")
 
   meta <- esri2sf::esrimeta(url)
@@ -638,11 +656,13 @@ read_sf_esri <- function(url,
 #' @rdname read_sf_ext
 #' @inheritParams feltr::read_felt_map
 #' @export
-read_sf_felt <- function(url = NULL,
-                         bbox = NULL,
-                         map_id = NULL,
-                         .name_repair = "check_unique",
-                         ...) {
+read_sf_felt <- function(
+  url = NULL,
+  bbox = NULL,
+  map_id = NULL,
+  .name_repair = "check_unique",
+  ...
+) {
   check_installed("feltr")
 
   map_id <- map_id %||% url
@@ -666,11 +686,7 @@ read_sf_felt <- function(url = NULL,
 #'   first, 2 for second. Defaults to 1.
 #' @inheritParams gistr::gist
 #' @export
-read_sf_gist <- function(url,
-                         id = NULL,
-                         bbox = NULL,
-                         nth = 1,
-                         ...) {
+read_sf_gist <- function(url, id = NULL, bbox = NULL, nth = 1, ...) {
   check_installed("gistr")
 
   if (!is_missing(url) && is_null(id)) {
@@ -695,12 +711,14 @@ read_sf_gist <- function(url,
 #' @export
 #' @importFrom sf st_layers
 #' @importFrom cli cli_progress_along
-read_sf_gmap <- function(url,
-                         bbox = NULL,
-                         layer = NULL,
-                         combine_layers = FALSE,
-                         zm_drop = TRUE,
-                         .name_repair = "check_unique") {
+read_sf_gmap <- function(
+  url,
+  bbox = NULL,
+  layer = NULL,
+  combine_layers = FALSE,
+  zm_drop = TRUE,
+  .name_repair = "check_unique"
+) {
   url <- make_gmap_url(url)
 
   layer <- layer %||% sf::st_layers(dsn = url)[["name"]]
@@ -802,16 +820,18 @@ make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
 #' @importFrom sf st_crs
 #' @importFrom utils download.file unzip
 #' @importFrom filenamr make_filename get_data_dir
-read_sf_download <- function(url,
-                             filename,
-                             bbox = NULL,
-                             path = NULL,
-                             filetype = "geojson",
-                             prefix = "date",
-                             method = "auto",
-                             unzip = FALSE,
-                             .name_repair = "check_unique",
-                             ...) {
+read_sf_download <- function(
+  url,
+  filename,
+  bbox = NULL,
+  path = NULL,
+  filetype = "geojson",
+  prefix = "date",
+  method = "auto",
+  unzip = FALSE,
+  .name_repair = "check_unique",
+  ...
+) {
   path <- filenamr::get_data_dir(path = path, cache = TRUE)
 
   destfile <- filenamr::make_filename(
@@ -855,17 +875,19 @@ read_sf_download <- function(url,
 #' @export
 #' @importFrom rlang is_missing
 #' @importFrom cliExtras cli_ask
-read_sf_gsheet <- function(url,
-                           sheet = NULL,
-                           ss = NULL,
-                           bbox = NULL,
-                           ask = FALSE,
-                           coords = c("lon", "lat"),
-                           from_crs = 4326,
-                           geo = FALSE,
-                           address = "address",
-                           .name_repair = "check_unique",
-                           ...) {
+read_sf_gsheet <- function(
+  url,
+  sheet = NULL,
+  ss = NULL,
+  bbox = NULL,
+  ask = FALSE,
+  coords = c("lon", "lat"),
+  from_crs = 4326,
+  geo = FALSE,
+  address = "address",
+  .name_repair = "check_unique",
+  ...
+) {
   # Convert Google Sheet with coordinates to sf
   check_installed("googlesheets4")
 
@@ -906,13 +928,19 @@ read_sf_gsheet <- function(url,
 #' @importFrom dplyr left_join
 #' @importFrom sf st_drop_geometry
 #' @importFrom cliExtras cli_yesno
-join_sf_gsheet <- function(data,
-                           ss = NULL,
-                           sheet = 1,
-                           key = NULL,
-                           suffix = c("", "_gsheet")) {
-  if (cli_yesno("Are you ready to sync from Google Sheets
-               back to an sf object?")) {
+join_sf_gsheet <- function(
+  data,
+  ss = NULL,
+  sheet = 1,
+  key = NULL,
+  suffix = c("", "_gsheet")
+) {
+  if (
+    cli_yesno(
+      "Are you ready to sync from Google Sheets
+               back to an sf object?"
+    )
+  ) {
     sheet_data <- sf::st_drop_geometry(
       read_sf_gsheet(
         ss = ss,
@@ -937,10 +965,12 @@ join_sf_gsheet <- function(data,
 #' Make options parameter for read_sf_csv
 #'
 #' @noRd
-make_sf_options <- function(options = NULL,
-                            coords = NULL,
-                            wkt = NULL,
-                            rev = TRUE) {
+make_sf_options <- function(
+  options = NULL,
+  coords = NULL,
+  wkt = NULL,
+  rev = TRUE
+) {
   if (!is_null(wkt) && has_length(wkt, 1)) {
     options <- c(
       options,
@@ -961,12 +991,14 @@ make_sf_options <- function(options = NULL,
 #' Make a wkt_filter from a bbox for read_sf_query
 #'
 #' @noRd
-make_sf_wkt_filter <- function(dsn = NULL,
-                               wkt_filter = NULL,
-                               from_crs = NULL,
-                               n_layer = 1,
-                               options = character(0),
-                               bbox = NULL) {
+make_sf_wkt_filter <- function(
+  dsn = NULL,
+  wkt_filter = NULL,
+  from_crs = NULL,
+  n_layer = 1,
+  options = character(0),
+  bbox = NULL
+) {
   if (is_null(bbox)) {
     return(wkt_filter %||% character(0))
   }
@@ -986,12 +1018,14 @@ make_sf_wkt_filter <- function(dsn = NULL,
 #' Make a query from a name and name_col value for read_sf_query
 #'
 #' @noRd
-make_sf_query <- function(dsn = NULL,
-                          table = NULL,
-                          name = NULL,
-                          name_col = NULL,
-                          options = character(0),
-                          query = NULL) {
+make_sf_query <- function(
+  dsn = NULL,
+  table = NULL,
+  name = NULL,
+  name_col = NULL,
+  options = character(0),
+  query = NULL
+) {
   if (any(c(is_null(name), is_null(name_col), is_geojson_fileext(dsn)))) {
     return(query %||% NA)
   }
@@ -1022,11 +1056,13 @@ make_sf_query <- function(dsn = NULL,
 #' Helper to make query for read_sf_esri
 #'
 #' @noRd
-make_where_query <- function(where = NULL,
-                             name = NULL,
-                             name_col = NULL,
-                             bbox = NULL,
-                             coords = c("lon", "lat")) {
+make_where_query <- function(
+  where = NULL,
+  name = NULL,
+  name_col = NULL,
+  bbox = NULL,
+  coords = c("lon", "lat")
+) {
   if (!is_null(where)) {
     where <- paste0("(", where, ")")
   }

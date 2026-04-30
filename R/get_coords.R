@@ -27,13 +27,15 @@
 #' @importFrom sf st_as_text st_point_on_surface st_coordinates
 #'   st_drop_geometry st_zm
 #' @importFrom dplyr bind_cols
-get_coords <- function(x,
-                       coords = NULL,
-                       geometry = "centroid",
-                       crs = NULL,
-                       keep_all = TRUE,
-                       drop = TRUE,
-                       call = caller_env()) {
+get_coords <- function(
+  x,
+  coords = NULL,
+  geometry = "centroid",
+  crs = NULL,
+  keep_all = TRUE,
+  drop = TRUE,
+  call = caller_env()
+) {
   geometry <-
     arg_match(
       geometry,
@@ -55,12 +57,15 @@ get_coords <- function(x,
     x_coords <- st_transform_ext(x = x, crs = crs)
 
     x_coords <-
-      switch(geometry,
+      switch(
+        geometry,
         "point" = x_coords,
         # FIXME: Double check that this doesn't cause issues for sfc objects
         "centroid" = suppressWarnings(sf::st_centroid(x_coords)),
         # Convert to coordinates at centroid or as a point on surface
-        "surface point" = suppressMessages(sf::st_point_on_surface(sf::st_zm(x_coords)))
+        "surface point" = suppressMessages(sf::st_point_on_surface(sf::st_zm(
+          x_coords
+        )))
       )
 
     x_coords <- as.data.frame(sf::st_coordinates(x_coords))
@@ -135,7 +140,6 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
 
   minmax_df <-
     dplyr::select(minmax_df, -dplyr::all_of(col))
-
 
   if (!keep_all) {
     return(minmax_df)

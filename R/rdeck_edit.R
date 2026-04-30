@@ -3,7 +3,12 @@
 #' @inheritParams rdeck::rdeck
 #' @inheritDotParams rdeck::rdeck
 #' @export
-rdeck_edit <- function(features, mode = rdeck::cur_value(), initial_bounds = NULL, ...) {
+rdeck_edit <- function(
+  features,
+  mode = rdeck::cur_value(),
+  initial_bounds = NULL,
+  ...
+) {
   check_required(features)
   features <- st_wgs84(features)
   check_installed("rdeck")
@@ -30,8 +35,10 @@ rdeck_select <- function(features, ..., mode = "select") {
 #' @rdname rdeck_edit
 #' @inheritParams rdeck::editor_options
 #' @export
-editor_options <- function(mode = rdeck::cur_value(),
-                           features = rdeck::cur_value()) {
+editor_options <- function(
+  mode = rdeck::cur_value(),
+  features = rdeck::cur_value()
+) {
   check_installed("rdeck")
   if (!is_wgs84(features)) {
     features <- st_wgs84(features)

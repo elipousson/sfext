@@ -23,14 +23,16 @@
 #' @importFrom sf st_distance st_crs
 #' @importFrom units drop_units as_units
 #' @importFrom rlang caller_env check_required arg_match
-sf_bbox_dist <- function(bbox,
-                         from,
-                         to,
-                         units = NULL,
-                         drop = TRUE,
-                         by_element = TRUE,
-                         call = caller_env(),
-                         ...) {
+sf_bbox_dist <- function(
+  bbox,
+  from,
+  to,
+  units = NULL,
+  drop = TRUE,
+  by_element = TRUE,
+  call = caller_env(),
+  ...
+) {
   check_required(from)
   check_required(to)
 
@@ -116,10 +118,12 @@ sf_bbox_diagdist <- function(bbox, units = NULL, drop = TRUE) {
 #' @param diag_ratio Proportion of the diagonal distance (ratio of distance to
 #'   the full diagonal distance) across the bounding box.
 #' @export
-sf_bbox_diag_ratio_to_dist <- function(bbox,
-                                       diag_ratio,
-                                       units = NULL,
-                                       drop = TRUE) {
+sf_bbox_diag_ratio_to_dist <- function(
+  bbox,
+  diag_ratio,
+  units = NULL,
+  drop = TRUE
+) {
   if (is_null(diag_ratio) || is_null(bbox)) {
     return(NULL)
   }
@@ -167,8 +171,7 @@ sf_bbox_orientation <- function(bbox, tolerance = 0.1, call = caller_env()) {
 #'   length 2, compare to bounding box x and y distances. Return TRUE if dist
 #'   fits within bounding box or FALSE if dist exceeds bounding box limits.
 #' @export
-sf_bbox_check_fit <- function(bbox,
-                              dist) {
+sf_bbox_check_fit <- function(bbox, dist) {
   units <- units %||% get_dist_units(bbox)
   check_required(dist)
 

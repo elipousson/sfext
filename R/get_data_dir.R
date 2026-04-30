@@ -18,13 +18,19 @@
 #'   path value; defaults to `TRUE`.
 #' @inheritParams base::dir.create
 #' @export
-get_data_dir <- function(path = NULL,
-                         cache = FALSE,
-                         create = TRUE,
-                         pkg = "sfext",
-                         allow_null = TRUE,
-                         recursive = TRUE) {
-  lifecycle::signal_stage("superseded", "get_data_dir()", "filenamr::get_data_dir()")
+get_data_dir <- function(
+  path = NULL,
+  cache = FALSE,
+  create = TRUE,
+  pkg = "sfext",
+  allow_null = TRUE,
+  recursive = TRUE
+) {
+  lifecycle::signal_stage(
+    "superseded",
+    "get_data_dir()",
+    "filenamr::get_data_dir()"
+  )
 
   if (cache) {
     check_installed("rappdirs")
@@ -38,7 +44,9 @@ get_data_dir <- function(path = NULL,
       return(invisible(path))
     }
 
-    cli_abort("{.arg path} can't be {.val NULL} when {.code allow_null = FALSE}")
+    cli_abort(
+      "{.arg path} can't be {.val NULL} when {.code allow_null = FALSE}"
+    )
   }
 
   if (!create) {
@@ -70,14 +78,16 @@ get_data_dir <- function(path = NULL,
 #' @param ... Additional parameters passed to [list.files()]
 #' @rdname get_data_dir
 #' @export
-list_data_files <- function(path = NULL,
-                            pkg = "sfext",
-                            cache = FALSE,
-                            fileext = NULL,
-                            pattern = NULL,
-                            full.names = TRUE,
-                            ignore.case = TRUE,
-                            ...) {
+list_data_files <- function(
+  path = NULL,
+  pkg = "sfext",
+  cache = FALSE,
+  fileext = NULL,
+  pattern = NULL,
+  full.names = TRUE,
+  ignore.case = TRUE,
+  ...
+) {
   path <-
     filenamr::get_data_dir(
       path = path,
@@ -109,7 +119,11 @@ list_data_files <- function(path = NULL,
 #'   most common file types if path has more than n unique file types.
 #' @noRd
 get_path_filetype <- function(path, filetype = NULL, n = 1) {
-  lifecycle::signal_stage("superseded", "get_path_filetype()", "filenamr::get_path_fileext()")
+  lifecycle::signal_stage(
+    "superseded",
+    "get_path_filetype()",
+    "filenamr::get_path_fileext()"
+  )
 
   if (!is_null(filetype)) {
     return(filetype)
@@ -121,7 +135,8 @@ get_path_filetype <- function(path, filetype = NULL, n = 1) {
     file_list <- path
   } else {
     cli_abort(
-      c("A valid file or directory {.arg path} must be provided.",
+      c(
+        "A valid file or directory {.arg path} must be provided.",
         "i" = "The provided {.arg path} {.file {path}} does not exist."
       )
     )
@@ -137,7 +152,8 @@ get_path_filetype <- function(path, filetype = NULL, n = 1) {
   filetype <- names(sort(table(filetype), decreasing = TRUE)[1:n])
 
   cli_warn(
-    c("The directory {.file {path}} has more than {n} unique filetypes.",
+    c(
+      "The directory {.file {path}} has more than {n} unique filetypes.",
       "i" = "Using {n} most frequent filetype{?s}: {.val {filetype}}"
     )
   )
@@ -166,7 +182,8 @@ get_path_files <- function(path, filetype = NULL, full.names = TRUE) {
   }
 
   cli_abort(
-    c("A valid file or directory {.arg path} must be provided.",
+    c(
+      "A valid file or directory {.arg path} must be provided.",
       "i" = "The provided {.arg path} {.file {path}} does not exist."
     )
   )

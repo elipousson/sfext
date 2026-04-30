@@ -35,7 +35,13 @@ NULL
 #' @importFrom sf st_length
 #' @importFrom units drop_units
 #' @importFrom dplyr bind_cols
-get_area <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "area") {
+get_area <- function(
+  x,
+  units = NULL,
+  keep_all = TRUE,
+  drop = FALSE,
+  .id = "area"
+) {
   if (is_multipoint(x) | is_multiline(x)) {
     # FIXME: This probably only returns an sfc object
     convert_geom_type_alert(x, to = "POLYGON", with = "sf::st_polygonize")
@@ -45,7 +51,9 @@ get_area <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "area
   }
 
   if (!is_polygon(x_poly) && !is_multipolygon(x_poly)) {
-    cli_abort("{as.character(is_geom_type(x, ext = FALSE))} type objects are not supported by this function.")
+    cli_abort(
+      "{as.character(is_geom_type(x, ext = FALSE))} type objects are not supported by this function."
+    )
   }
 
   x_area <- sf::st_area(x_poly)
@@ -70,7 +78,13 @@ st_area_ext <- get_area
 #' @export
 #' @importFrom cli cli_alert_info
 #' @importFrom sf st_length
-get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "length") {
+get_length <- function(
+  x,
+  units = NULL,
+  keep_all = TRUE,
+  drop = FALSE,
+  .id = "length"
+) {
   cli_abort_ifnot(
     is_sf(x) || is_sfc(x),
     message = "{.arg x} must be a {.cls sf} or {.cls sfc} object."
@@ -90,7 +104,9 @@ get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "le
 
   if (is_polygon(x)) {
     check_installed("lwgeom")
-    cli_inform("For objects with POLYGON geometry, {.fun get_length} uses {.fun lwgeom::st_perimeter} to return the object perimeter.")
+    cli_inform(
+      "For objects with POLYGON geometry, {.fun get_length} uses {.fun lwgeom::st_perimeter} to return the object perimeter."
+    )
     .id <- "perimeter"
 
     if (sf::st_is_longlat(x)) {
@@ -137,14 +153,16 @@ st_length_ext <- get_length
 #' @family dist
 #' @export
 #' @importFrom sf st_crs st_distance
-get_dist <- function(x,
-                     to,
-                     by_element = TRUE,
-                     units = NULL,
-                     drop = FALSE,
-                     keep_all = TRUE,
-                     .id = "dist",
-                     ...) {
+get_dist <- function(
+  x,
+  to,
+  by_element = TRUE,
+  units = NULL,
+  drop = FALSE,
+  keep_all = TRUE,
+  .id = "dist",
+  ...
+) {
   stopifnot(
     is_sf(x, ext = TRUE),
     is_sf(to, ext = TRUE) | is.character(to)
@@ -210,7 +228,13 @@ st_distance_ext <- get_dist
 #' @name get_bearing
 #' @rdname get_measurements
 #' @export
-get_bearing <- function(x, to = NULL, dir = FALSE, keep_all = TRUE, .id = "bearing") {
+get_bearing <- function(
+  x,
+  to = NULL,
+  dir = FALSE,
+  keep_all = TRUE,
+  .id = "bearing"
+) {
   check_installed("geosphere")
 
   cli_abort_ifnot(
@@ -250,7 +274,8 @@ get_bearing <- function(x, to = NULL, dir = FALSE, keep_all = TRUE, .id = "beari
           p1 = c(start_pts[x, ]$lon, start_pts[x, ]$lat),
           p2 = c(end_pts[x, ]$lon, end_pts[x, ]$lat)
         )
-      }, NA_real_
+      },
+      NA_real_
     )
 
   if (!dir) {
@@ -274,5 +299,7 @@ st_bearing <- get_bearing
 
 #' @noRd
 convert_geom_type_alert <- function(x, to = NULL, with = NULL) {
-  cli_inform("Converting {as.character(is_geom_type(x, ext = FALSE))} object to {to} with {.fun {fn}}.")
+  cli_inform(
+    "Converting {as.character(is_geom_type(x, ext = FALSE))} object to {to} with {.fun {fn}}."
+  )
 }

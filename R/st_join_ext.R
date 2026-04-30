@@ -16,12 +16,7 @@
 #' @export
 #' @importFrom sf st_join
 #' @importFrom dplyr rename select all_of group_by summarize
-st_join_ext <- function(x,
-                        y,
-                        col = NULL,
-                        .id = "name",
-                        join = NULL,
-                        ...) {
+st_join_ext <- function(x, y, col = NULL, .id = "name", join = NULL, ...) {
   check_sf(x, ext = TRUE)
 
   if (is_bbox(x)) {

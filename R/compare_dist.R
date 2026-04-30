@@ -34,13 +34,15 @@
 #' @export
 #' @importFrom rlang arg_match
 #' @importFrom sf st_distance
-compare_dist <- function(dist,
-                         x,
-                         units = NULL,
-                         to = "xdist",
-                         how = "ratio",
-                         tolerance = 1.5e-8,
-                         ...) {
+compare_dist <- function(
+  dist,
+  x,
+  units = NULL,
+  to = "xdist",
+  how = "ratio",
+  tolerance = 1.5e-8,
+  ...
+) {
   # Modify value of to based on x (does not warn when overriding existing to value)
   compare_to <-
     dplyr::case_when(
@@ -69,7 +71,8 @@ compare_dist <- function(dist,
   }
 
   dist_to_compare <-
-    switch(compare_to,
+    switch(
+      compare_to,
       "xdist" = sf_bbox_xdist(x, units = units, drop = TRUE),
       "ydist" = sf_bbox_ydist(x, units = units, drop = TRUE),
       "diagdist" = sf_bbox_diagdist(x, units = units, drop = TRUE),
@@ -81,7 +84,8 @@ compare_dist <- function(dist,
 
   how <- arg_match(how, c("ratio", "fit", "longer", "shorter", "same"))
 
-  switch(how,
+  switch(
+    how,
     "ratio" = dist / dist_to_compare,
     "fit" = round(dist / dist_to_compare, 0),
     "longer" = dist > dist_to_compare,

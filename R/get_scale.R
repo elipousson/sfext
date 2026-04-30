@@ -14,9 +14,7 @@
 #'   match parameters.
 #' @export
 #' @importFrom dplyr filter
-get_scale <- function(scale = NULL,
-                      standard = NULL,
-                      series = NULL) {
+get_scale <- function(scale = NULL, standard = NULL, series = NULL) {
   select_scale <- sfext::standard_scales
 
   if (!is_null(scale)) {
@@ -24,8 +22,15 @@ get_scale <- function(scale = NULL,
   }
 
   if (!is_null(standard)) {
-    standard <- arg_match(standard, c("USGS", "Engineering", "Architectural"), multiple = TRUE)
-    select_scale <- dplyr::filter(select_scale, .data$standard %in% {{ standard }})
+    standard <- arg_match(
+      standard,
+      c("USGS", "Engineering", "Architectural"),
+      multiple = TRUE
+    )
+    select_scale <- dplyr::filter(
+      select_scale,
+      .data$standard %in% {{ standard }}
+    )
   }
 
   if (!is_null(series)) {

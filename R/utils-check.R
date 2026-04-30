@@ -1,11 +1,13 @@
 #' Check if x is NULL
 #'
 #' @noRd
-check_null <- function(x = NULL,
-                       arg = caller_arg(x),
-                       allow_null = FALSE,
-                       null.req = FALSE,
-                       ...) {
+check_null <- function(
+  x = NULL,
+  arg = caller_arg(x),
+  allow_null = FALSE,
+  null.req = FALSE,
+  ...
+) {
   if (null.req) {
     allow_null <- null.req
   }
@@ -24,11 +26,13 @@ check_null <- function(x = NULL,
 #' Check bare numeric
 #'
 #' @noRd
-check_bare_numeric <- function(x,
-                               ...,
-                               allow_null = FALSE,
-                               arg = caller_arg(x),
-                               call = caller_env()) {
+check_bare_numeric <- function(
+  x,
+  ...,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (!missing(x)) {
     if (is_bare_numeric(x)) {
       return(invisible(NULL))
@@ -52,11 +56,13 @@ check_bare_numeric <- function(x,
 #' Check if x is between a min and max length
 #'
 #' @noRd
-check_len <- function(x = NULL,
-                      len = 1,
-                      arg = caller_arg(x),
-                      allow_null = FALSE,
-                      ...) {
+check_len <- function(
+  x = NULL,
+  len = 1,
+  arg = caller_arg(x),
+  allow_null = FALSE,
+  ...
+) {
   check_null(x, arg, allow_null)
   allow_null <- allow_null && is_null(x)
 
@@ -79,14 +85,16 @@ check_len <- function(x = NULL,
 #' Check if x matches pattern with grepl
 #'
 #' @noRd
-check_grepl <- function(x = NULL,
-                        pattern = NULL,
-                        arg = caller_arg(x),
-                        allow_null = FALSE,
-                        ignore.case = FALSE,
-                        perl = FALSE,
-                        message = NULL,
-                        ...) {
+check_grepl <- function(
+  x = NULL,
+  pattern = NULL,
+  arg = caller_arg(x),
+  allow_null = FALSE,
+  ignore.case = FALSE,
+  perl = FALSE,
+  message = NULL,
+  ...
+) {
   check_null(x, arg, allow_null)
   allow_null <- allow_null && is_null(x)
 
@@ -104,28 +112,30 @@ check_grepl <- function(x = NULL,
 #' Check if x starts with pattern
 #'
 #' @noRd
-check_starts_with <- function(x = NULL,
-                              string = NULL,
-                              arg = caller_arg(x),
-                              allow_null = FALSE,
-                              ignore.case = FALSE,
-                              perl = FALSE,
-                              message = NULL,
-                              ...) {
+check_starts_with <- function(
+  x = NULL,
+  string = NULL,
+  arg = caller_arg(x),
+  allow_null = FALSE,
+  ignore.case = FALSE,
+  perl = FALSE,
+  message = NULL,
+  ...
+) {
   check_character(x, allow_null = allow_null, arg = arg)
   allow_null <- allow_null && is_null(x)
 
   starts_with <-
-    grepl(paste0("^", string), x,
-      ignore.case = ignore.case, perl = perl
-    )
+    grepl(paste0("^", string), x, ignore.case = ignore.case, perl = perl)
 
   if (all(starts_with) || allow_null) {
     return(invisible(TRUE))
   }
 
   message <-
-    message %||% c("{.arg {arg}} must start with {.val {string}}.",
+    message %||%
+    c(
+      "{.arg {arg}} must start with {.val {string}}.",
       "i" = "The provided string is {.val {x}}."
     )
 
@@ -135,10 +145,12 @@ check_starts_with <- function(x = NULL,
 #' Check if the data.frame object has the required paper columns
 #'
 #' @noRd
-check_df_paper <- function(x,
-                           ext = FALSE,
-                           arg = caller_arg(x),
-                           call = caller_env()) {
+check_df_paper <- function(
+  x,
+  ext = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   check_required(x, arg = arg, call = call)
 
   # FIXME: Add check to make sure input is a data frame
@@ -156,13 +168,15 @@ check_df_paper <- function(x,
 #'
 #' @noRd
 #' @importFrom cli cli_vec builtin_theme qty
-check_has_name <- function(x,
-                           nm,
-                           allow_any = FALSE,
-                           allow_null = FALSE,
-                           arg = caller_arg(x),
-                           ...,
-                           call = caller_env()) {
+check_has_name <- function(
+  x,
+  nm,
+  allow_any = FALSE,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  ...,
+  call = caller_env()
+) {
   check_required(x, arg = arg, call = call)
 
   if (allow_null && is_null(x)) {

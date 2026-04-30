@@ -21,7 +21,8 @@ st_cast_ext <- function(x, to = "POINT", simplify = TRUE, ...) {
   if (any(geom_type %in% c("MULTIPOLYGON", "POLYGON")) && simplify) {
     repeat {
       type_to <-
-        switch(as.character(geom_type),
+        switch(
+          as.character(geom_type),
           "MULTIPOLYGON" = "POLYGON",
           "POLYGON" = "MULTIPOINT",
           "MULTIPOINT" = "POINT"
@@ -35,9 +36,7 @@ st_cast_ext <- function(x, to = "POINT", simplify = TRUE, ...) {
   } else if (!simplify) {
     repeat {
       type_to <-
-        switch(as.character(geom_type),
-          "MULTIPOINT" = "LINESTRING"
-        )
+        switch(as.character(geom_type), "MULTIPOINT" = "LINESTRING")
 
       x <- sf::st_cast(x, to = type_to, warn = FALSE, ...)
       geom_type <- is_geom_type(x, ext = FALSE)

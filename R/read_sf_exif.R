@@ -29,15 +29,17 @@
 #' @example examples/read_sf_exif.R
 #' @export
 #' @importFrom filenamr read_exif
-read_sf_exif <- function(path = NULL,
-                         fileext = NULL,
-                         filetype = NULL,
-                         bbox = NULL,
-                         sort = NULL,
-                         tags = NULL,
-                         geometry = TRUE,
-                         quiet = TRUE,
-                         ...) {
+read_sf_exif <- function(
+  path = NULL,
+  fileext = NULL,
+  filetype = NULL,
+  bbox = NULL,
+  sort = NULL,
+  tags = NULL,
+  geometry = TRUE,
+  quiet = TRUE,
+  ...
+) {
   cli_quiet(quiet)
   geo_tags <- c("GPSLatitude", "GPSLongitude")
 
@@ -100,14 +102,16 @@ read_sf_exif <- function(path = NULL,
 #' @importFrom rlang has_name
 #' @importFrom sf st_drop_geometry st_join
 #' @importFrom dplyr summarize group_by
-write_exif_from <- function(path,
-                            fileext = NULL,
-                            filetype = NULL,
-                            from,
-                            .id = "name",
-                            tag = "keywords",
-                            join = NULL,
-                            overwrite = TRUE) {
+write_exif_from <- function(
+  path,
+  fileext = NULL,
+  filetype = NULL,
+  from,
+  .id = "name",
+  tag = "keywords",
+  join = NULL,
+  overwrite = TRUE
+) {
   tag <- match.arg(tolower(tag), c("keywords", "title", "description"))
   fileext <- fileext %||% filetype
   if (!is_sf(path)) {
@@ -167,7 +171,9 @@ write_exif_from <- function(path,
 
   cliExtras::cli_list_files(
     path = path,
-    text = c("v" = "Updated EXIF tag {.val {tag}} for {length(path)} file{?s}:"),
+    text = c(
+      "v" = "Updated EXIF tag {.val {tag}} for {length(path)} file{?s}:"
+    ),
     .envir = current_env()
   )
 
@@ -185,15 +191,18 @@ walk_write_exif <- function(path, replacement_vals, tag = "keywords") {
     walk(
       path_seq,
       ~ write_exif(
-        path = path[[.x]], keywords = replacement_vals[[.x]],
-        overwrite = TRUE, append_keywords = FALSE
+        path = path[[.x]],
+        keywords = replacement_vals[[.x]],
+        overwrite = TRUE,
+        append_keywords = FALSE
       )
     )
   } else if (tag == "title") {
     walk(
       path_seq,
       ~ write_exif(
-        path = path[[.x]], title = replacement_vals[[.x]],
+        path = path[[.x]],
+        title = replacement_vals[[.x]],
         overwrite = TRUE
       )
     )
@@ -201,7 +210,8 @@ walk_write_exif <- function(path, replacement_vals, tag = "keywords") {
     walk(
       path_seq,
       ~ write_exif(
-        path = path[[.x]], description = replacement_vals[[.x]],
+        path = path[[.x]],
+        description = replacement_vals[[.x]],
         overwrite = TRUE
       )
     )

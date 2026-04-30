@@ -50,19 +50,23 @@
 }
 
 # Check if x is a sf object or another allowed class
-.check_sf <- function(x,
-                      ...,
-                      allow_empty = TRUE,
-                      allow_null = FALSE,
-                      allow_class = NULL,
-                      allow_bbox = FALSE,
-                      arg = caller_arg(x),
-                      call = caller_env()) {
+.check_sf <- function(
+  x,
+  ...,
+  allow_empty = TRUE,
+  allow_null = FALSE,
+  allow_class = NULL,
+  allow_bbox = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (allow_null && is.null(x)) {
     return(x)
   }
 
-  if (!allow_empty && inherits_any(x, c("sf", "sfc")) && any(sf::st_is_empty(x))) {
+  if (
+    !allow_empty && inherits_any(x, c("sf", "sfc")) && any(sf::st_is_empty(x))
+  ) {
     message <- "{.arg {arg}} can't contain any empty feature geometries."
     cli::cli_abort(message, ..., call = call)
   }
@@ -89,14 +93,16 @@
 }
 
 # Check if x is a sf, sfc, or bbox object
-.check_sfish <- function(x,
-                         ...,
-                         allow_empty = TRUE,
-                         allow_null = FALSE,
-                         allow_class = c("sfc", "sfg"),
-                         allow_bbox = FALSE,
-                         arg = caller_arg(x),
-                         call = caller_env()) {
+.check_sfish <- function(
+  x,
+  ...,
+  allow_empty = TRUE,
+  allow_null = FALSE,
+  allow_class = c("sfc", "sfg"),
+  allow_bbox = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   .check_sf(
     x,
     ...,
@@ -110,12 +116,14 @@
 }
 
 # Tranform a sf, sfc, or bbox object to a supplied CRS
-.sf_transform <- function(x,
-                          crs = NULL,
-                          ...,
-                          allow_null = TRUE,
-                          arg = caller_arg(x),
-                          call = caller_env()) {
+.sf_transform <- function(
+  x,
+  crs = NULL,
+  ...,
+  allow_null = TRUE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   .check_sfish(
     x,
     arg = arg,
@@ -150,15 +158,17 @@
 }
 
 # Convert a sf, sfc, or bbox object to a data frame of coordinates
-.sf_coords <- function(x,
-                       ...,
-                       coords = c("lon", "lat"),
-                       placement = c("surface", "centroid"),
-                       .f = NULL,
-                       crs = 4326,
-                       allow_null = TRUE,
-                       arg = caller_arg(x),
-                       call = caller_env()) {
+.sf_coords <- function(
+  x,
+  ...,
+  coords = c("lon", "lat"),
+  placement = c("surface", "centroid"),
+  .f = NULL,
+  crs = 4326,
+  allow_null = TRUE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   x <- .sf_point(
     x = x,
     placement = placement,
@@ -178,32 +188,45 @@
 
 # Convert a sf or sfc object to POINT geometry with a supplied placement or
 # function
-.sf_point <- function(x,
-                      ...,
-                      placement = c("surface", "centroid"),
-                      .f = NULL,
-                      crs = NULL,
-                      allow_null = TRUE,
-                      arg = caller_arg(x),
-                      call = caller_env()) {
+.sf_point <- function(
+  x,
+  ...,
+  placement = c("surface", "centroid"),
+  .f = NULL,
+  crs = NULL,
+  allow_null = TRUE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (is.null(.f)) {
-    .f <- switch(placement,
+    .f <- switch(
+      placement,
       surface = sf::st_point_on_surface,
       centroid = sf::st_centroid
     )
   }
 
-  .sf_fn(x = x, .f = .f, ..., crs = crs, allow_null = allow_null, arg = arg, call = call)
+  .sf_fn(
+    x = x,
+    .f = .f,
+    ...,
+    crs = crs,
+    allow_null = allow_null,
+    arg = arg,
+    call = call
+  )
 }
 
 # Apply a spatial transformation function while suppressing warnings
-.sf_fn <- function(x,
-                   ...,
-                   .f = sf::st_centroid,
-                   crs = NULL,
-                   allow_null = TRUE,
-                   arg = caller_arg(x),
-                   call = caller_env()) {
+.sf_fn <- function(
+  x,
+  ...,
+  .f = sf::st_centroid,
+  crs = NULL,
+  allow_null = TRUE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   .check_sfish(x, arg = arg, allow_null = allow_null, call = call)
 
   if (is.null(x)) {
@@ -215,14 +238,16 @@
 }
 
 # Apply a buffer
-.sf_buffer <- function(x,
-                       dist = NULL,
-                       unit = NULL,
-                       ...,
-                       crs = NULL,
-                       allow_null = TRUE,
-                       arg = caller_arg(x),
-                       call = caller_env()) {
+.sf_buffer <- function(
+  x,
+  dist = NULL,
+  unit = NULL,
+  ...,
+  crs = NULL,
+  allow_null = TRUE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   .check_sfish(x, arg = arg, allow_null = allow_null, call = call)
 
   if (is.null(x)) {

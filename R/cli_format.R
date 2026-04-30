@@ -18,9 +18,7 @@
 #' @importFrom rlang check_installed
 #' @importFrom cli cli_format pluralize
 #' @importFrom sf st_geometry_type st_crs
-cli_format.sf <- function(x,
-                          style = NULL,
-                          ...) {
+cli_format.sf <- function(x, style = NULL, ...) {
   txt <- "a simple feature collection with"
   txt <- c(txt, cli::pluralize("{nrow(x)} feature{?s},"))
   txt <- c(txt, cli::pluralize("{ncol(x) - 1} field{?s},"))
