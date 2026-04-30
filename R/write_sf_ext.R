@@ -541,3 +541,11 @@ write_sf_svg <- function(data,
 
   invisible(data)
 }
+
+#' @noRd
+write_sf_parquet <- function(data, ...) {
+  check_installed("geoarrow", version = "0.1.0")
+  geoarrow::read_geoparquet_sf(path, ...)
+
+  invisible(data)
+}

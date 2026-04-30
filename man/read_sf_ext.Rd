@@ -9,6 +9,7 @@
 \alias{read_sf_query}
 \alias{read_sf_excel}
 \alias{read_sf_csv}
+\alias{read_sf_parquet}
 \alias{read_sf_url}
 \alias{read_sf_esri}
 \alias{read_sf_felt}
@@ -91,6 +92,8 @@ read_sf_csv(
   show_col_types = FALSE,
   ...
 )
+
+read_sf_parquet(path, ...)
 
 read_sf_url(url, bbox = NULL, coords = c("lon", "lat"), ...)
 

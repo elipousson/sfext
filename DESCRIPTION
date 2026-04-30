@@ -32,9 +32,11 @@ Imports:
     units (>= 0.8-2),
     vctrs
 Suggests: 
+    arrow,
     covr,
     esri2sf (>= 0.1.1),
     exiftoolr,
+    geoarrow,
     geosphere,
     ggplot2,
     gistr,

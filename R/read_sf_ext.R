@@ -437,6 +437,15 @@ read_sf_csv <- function(path,
   st_filter_ext(data, bbox)
 }
 
+#' @name read_sf_parquet
+#' @rdname read_sf_ext
+#' @export
+read_sf_parquet <- function(path,
+                            ...) {
+  check_installed("geoarrow", version = "0.1.0")
+  geoarrow::read_geoparquet_sf(path, ...)
+}
+
 #' @name read_sf_url
 #' @rdname read_sf_ext
 #' @param zm_drop If `TRUE`, drop Z and/or M dimensions using [sf::st_zm]
