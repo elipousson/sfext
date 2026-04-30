@@ -85,7 +85,7 @@ geometry is converted to a polygon using \code{\link[sf:geos_unary]{sf::st_polyg
 determine the coverage area.
 \item \code{\link[=get_length]{get_length()}}: Wraps to \code{\link[sf:geos_measures]{sf::st_length()}} but POINT and MULTIPOINT geometry is
 converted to LINESTRING using \code{\link[=as_lines]{as_lines()}}. If x has POLYGON geometry,
-\code{\link[lwgeom:perimeter]{lwgeom::st_perimeter()}} is used to return the perimeter instead of the length.
+\code{\link[lwgeom:perimeter-deprecated]{lwgeom::st_perimeter()}} is used to return the perimeter instead of the length.
 \item \code{\link[=get_dist]{get_dist()}}: Wraps \code{\link[sf:geos_measures]{sf::st_distance()}} but x is converted to a POINT using
 \code{\link[=st_center]{st_center()}} and "to" can be a POINT, a sf object that can be converted to a
 POINT, or a character vector indicating a point on the overall bounding box
@@ -101,16 +101,19 @@ Additional measurement functions:
 nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
 
 # Get area for North Caroline counties
-get_area(nc[1:2,])$area
-get_area(nc[1:2,], units = "acres")$area
-get_area(nc[1:2,], units = "acres", .id = "acreage")$acreage
+get_area(nc[1:2, ])$area
+get_area(nc[1:2, ], units = "acres")$area
+get_area(nc[1:2, ], units = "acres", .id = "acreage")$acreage
 
 # Get distances for North Caroline counties
-get_dist(nc[1,], to = c("xmax", "ymax"), units = "mile")$dist
-get_dist(nc[1,], to = nc[30,], units = "km")$dist
+get_dist(nc[1, ], to = c("xmax", "ymax"), units = "mile")$dist
+get_dist(nc[1, ], to = nc[30, ], units = "km")$dist
 
 # Create a line between two counties
-nc_line <- as_line(c(as_point(nc[1,]), as_point(nc[30,])), crs = sf::st_crs(nc))
+nc_line <- as_line(
+  c(as_point(nc[1, ]), as_point(nc[30, ])),
+  crs = sf::st_crs(nc)
+)
 
 # Get length and bearing of the line
 get_length(nc_line)

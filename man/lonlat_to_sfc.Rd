@@ -41,6 +41,9 @@ mentioned in error messages as the source of the error. See the
     \item{\code{check_ring_dir}}{see \link[sf]{st_read}}
     \item{\code{dim}}{character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries}
     \item{\code{recompute_bbox}}{logical; use \code{TRUE} to force recomputation of the bounding box}
+    \item{\code{oriented}}{logical; if \code{TRUE}, the ring is oriented such that left of the edges is inside the polygon; this is
+needed for convering polygons larger than half the globe to s2}
+    \item{\code{fall_back_class}}{character; class for return object when no geometries are provided as input}
   }}
 }
 \description{

@@ -68,7 +68,6 @@ st_transform_ext(nc_bbox, crs = 4326)
 sf::st_crs(st_transform_ext(nc_3857, crs = nc))$input
 
 sf::st_crs(st_wgs84(nc_3857))$input
-
 }
 \seealso{
 \code{\link[sf:st_transform]{sf::st_transform()}},\code{\link[sf:st_crs]{sf::st_crs()}}

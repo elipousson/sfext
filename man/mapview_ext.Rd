@@ -31,9 +31,9 @@ mapview_popup_img(
 \arguments{
 \item{x}{a \code{Raster*} or \code{Spatial*} or \code{Satellite} or
 \code{sf} or \code{stars} object or a list of any combination of those. Furthermore,
-  this can also be a \code{data.frame}, a \code{numeric vector} or a
+this can also be a \code{data.frame}, a \code{numeric vector} or a
 \code{character string} pointing to a tile image folder or file on disk.
-  If missing, a blank map will be drawn. A value of NULL will return NULL.}
+If missing, a blank map will be drawn. A value of NULL will return NULL.}
 
 \item{zcol}{attribute name(s) or column number(s) in attribute table
 of the column(s) to be rendered. See also Details.}

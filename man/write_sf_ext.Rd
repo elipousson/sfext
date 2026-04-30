@@ -114,8 +114,6 @@ separate fileext parameter is used. Supported file extensions include
 supported by the available drivers (use \code{\link[sf:st_drivers]{sf::st_drivers()}} to list
 drivers).}
 
-\item{description}{(character) Brief description of gist (optional)}
-
 \item{path}{Path to file or data directory. Optional. If path includes a file
 extension and filename and fileext are both \code{NULL}, the filename and
 extension included with path will be used instead. If multiple file
@@ -147,11 +145,6 @@ when \code{cache = TRUE} for \code{\link[=write_sf_ext]{write_sf_ext()}})}
 If \code{TRUE} and \code{\link[rlang:is_interactive]{rlang::is_interactive()}} is \code{TRUE}, ask user if directory
 should be created. If the session not interactive and create is \code{TRUE}, a
 new directory will be created.}
-
-\item{public}{(logical) Whether gist is public (default: TRUE)}
-
-\item{browse}{(logical) To open newly create gist in default browser
-(default: TRUE)}
 
 \item{token}{A personal access token on GitHub with permission to create
 gists; defaults to Sys.getenv("GITHUB_PAT")}
