@@ -17,4 +17,7 @@ nc_line <- as_line(
 
 # Get length and bearing of the line
 get_length(nc_line)
-get_bearing(nc_line)
+
+if (rlang::is_installed("geosphere")) {
+  get_bearing(nc_line)
+}

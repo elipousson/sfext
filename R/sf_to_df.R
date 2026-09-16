@@ -170,7 +170,13 @@ wkt_df_to_sf <- function(x, crs = NULL) {
 #' @param x Data frame with an address column. Multiple address columns are not
 #'   currently supported.
 #' @param address Address column name, Default: 'address'
-#' @inheritParams tidygeocoder::geo
+#' @param method Geocoding service to use, Default: 'osm'. Passed to
+#'   [tidygeocoder::geocode()] which passes it on to [tidygeocoder::geo()].
+#'   See [tidygeocoder::geo()] for supported services (e.g. "osm", "census",
+#'   "arcgis", "google").
+#' @param full_results If `TRUE`, return all columns from the geocoding
+#'   service in addition to the latitude and longitude columns, Default:
+#'   `FALSE`.
 #' @inheritParams df_to_sf
 #' @inheritDotParams tidygeocoder::geocode
 #' @inheritParams rlang::args_error_context

@@ -32,6 +32,10 @@
 #'   cached files that use the same file name.
 #' @param cache If `TRUE`, write `sf` object to file in cache directory;
 #'   defaults to `FALSE`.
+#' @param description Optional description for the written file. For
+#'   [write_sf_ext()], used as the "DESCRIPTION" layer creation option when
+#'   fileext is "gpkg". For [write_sf_gist()], used as the gist description
+#'   passed to [gistr::gist_create()]. Defaults to `NULL`.
 #' @inheritParams filenamr::make_filename
 #' @inheritParams write_sf_cache
 #' @param ... If data is an sf object and the fileext is "csv" or "xlsx", the
@@ -252,7 +256,10 @@ write_sf_cache <- function(
 
 #' @rdname write_sf_ext
 #' @name write_sf_gist
-#' @inheritParams gistr::gist_create
+#' @param public If `TRUE` (default), create a public gist. Passed to
+#'   [gistr::gist_create()].
+#' @param browse If `TRUE`, open the created gist in a browser after
+#'   creation. Passed to [gistr::gist_create()]. Defaults to `FALSE`.
 #' @param token A personal access token on GitHub with permission to create
 #'   gists; defaults to Sys.getenv("GITHUB_PAT")
 #' @export

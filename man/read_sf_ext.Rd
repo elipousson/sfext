@@ -227,6 +227,10 @@ ArcGIS FeatureServer or MapServer to access with \code{\link[esri2sf:esri2sf]{es
 (the default) only show the column types if they are not explicitly supplied
 by the \code{col_types} argument.}
 
+\item{where}{A where condition (SQL-like syntax) passed to
+\code{\link[esri2sf:esri2sf]{esri2sf::esri2sf()}} to filter features returned from an ArcGIS
+FeatureServer or MapServer, e.g. \code{"POP2000 > 100000"}. Defaults to \code{NULL}.}
+
 \item{id}{The name of a column in which to store the file path. This is
 useful when reading multiple input files and there is data in the file
 paths, such as the data collection date. If \code{NULL} (the default) no extra

@@ -23,6 +23,11 @@ currently supported.}
 
 \item{address}{Address column name, Default: 'address'}
 
+\item{method}{Geocoding service to use, Default: 'osm'. Passed to
+\code{\link[tidygeocoder:geocode]{tidygeocoder::geocode()}} which passes it on to \code{\link[tidygeocoder:geo]{tidygeocoder::geo()}}.
+See \code{\link[tidygeocoder:geo]{tidygeocoder::geo()}} for supported services (e.g. "osm", "census",
+"arcgis", "google").}
+
 \item{coords}{Coordinate columns for input data.frame or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 
@@ -32,6 +37,10 @@ after converting a data frame to simple feature object; defaults to
 
 \item{crs}{Cordinate reference system to return, Default: 4326 for
 \code{\link[=sf_to_df]{sf_to_df()}} and \code{NULL} for \code{\link[=df_to_sf]{df_to_sf()}}.}
+
+\item{full_results}{If \code{TRUE}, return all columns from the geocoding
+service in addition to the latitude and longitude columns, Default:
+\code{FALSE}.}
 
 \item{...}{Other parameters passed onto methods.}
 

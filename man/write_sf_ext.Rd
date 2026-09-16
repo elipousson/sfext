@@ -114,6 +114,11 @@ separate fileext parameter is used. Supported file extensions include
 supported by the available drivers (use \code{\link[sf:st_drivers]{sf::st_drivers()}} to list
 drivers).}
 
+\item{description}{Optional description for the written file. For
+\code{\link[=write_sf_ext]{write_sf_ext()}}, used as the "DESCRIPTION" layer creation option when
+fileext is "gpkg". For \code{\link[=write_sf_gist]{write_sf_gist()}}, used as the gist description
+passed to \code{\link[gistr:gist_create]{gistr::gist_create()}}. Defaults to \code{NULL}.}
+
 \item{path}{Path to file or data directory. Optional. If path includes a file
 extension and filename and fileext are both \code{NULL}, the filename and
 extension included with path will be used instead. If multiple file
@@ -145,6 +150,12 @@ when \code{cache = TRUE} for \code{\link[=write_sf_ext]{write_sf_ext()}})}
 If \code{TRUE} and \code{\link[rlang:is_interactive]{rlang::is_interactive()}} is \code{TRUE}, ask user if directory
 should be created. If the session not interactive and create is \code{TRUE}, a
 new directory will be created.}
+
+\item{public}{If \code{TRUE} (default), create a public gist. Passed to
+\code{\link[gistr:gist_create]{gistr::gist_create()}}.}
+
+\item{browse}{If \code{TRUE}, open the created gist in a browser after
+creation. Passed to \code{\link[gistr:gist_create]{gistr::gist_create()}}. Defaults to \code{FALSE}.}
 
 \item{token}{A personal access token on GitHub with permission to create
 gists; defaults to Sys.getenv("GITHUB_PAT")}

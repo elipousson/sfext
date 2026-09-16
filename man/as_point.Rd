@@ -100,9 +100,11 @@ as_points(nc[1, ], nc[2, ])
 
 nc_line <- as_line(c(as_points(nc[1, ]), as_points(nc[10, ])))
 
-as_startpoint(nc_line)
+if (rlang::is_installed("lwgeom")) {
+  as_startpoint(nc_line)
 
-as_endpoint(nc_line)
+  as_endpoint(nc_line)
+}
 
 as_centroid(nc)
 }

@@ -582,7 +582,9 @@ read_sf_url <- function(url, bbox = NULL, coords = c("lon", "lat"), ...) {
 
 #' @name read_sf_esri
 #' @rdname read_sf_ext
-#' @inheritParams esri2sf::esri2sf
+#' @param where A where condition (SQL-like syntax) passed to
+#'   [esri2sf::esri2sf()] to filter features returned from an ArcGIS
+#'   FeatureServer or MapServer, e.g. `"POP2000 > 100000"`. Defaults to `NULL`.
 #' @export
 read_sf_esri <- function(
   url,

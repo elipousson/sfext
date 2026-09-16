@@ -19,6 +19,8 @@
 * Fix `is_lonlat_in_range()` (used by `lonlat_to_sfc()`) checking longitude twice instead of checking latitude.
 * Fix `as_bbox()` producing invalid duplicated names when building a bbox from an already-named numeric vector.
 * Fix `get_length()` and `get_bearing()` erroring on geometry type conversion (e.g. POINT input) due to a reference to an undefined variable in an internal alert helper.
+* Fix examples for `as_startpoint()`/`as_endpoint()`, `get_bearing()`, and `get_margin()` erroring when the `lwgeom`, `geosphere`, and `ggplot2` packages (respectively) are not installed, by guarding them with `rlang::is_installed()`.
+* Document previously undocumented arguments in `address_to_sf()` (`method`, `full_results`), `read_sf_esri()` (`where`), and `write_sf_ext()`/`write_sf_gist()` (`description`, `public`, `browse`), which relied on `@inheritParams` from Suggests packages that silently failed to resolve.
 
 ## Tests
 
