@@ -43,10 +43,11 @@ test_that("get_length uses lwgeom::st_perimeter for POLYGON geometry", {
   skip_if_not_installed("lwgeom")
 
   nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
+  nc_poly <- sf::st_cast(nc[1:2, ], "POLYGON")
 
-  expect_message(get_length(nc[1:2, ]), "perimeter")
+  expect_message(get_length(nc_poly), "perimeter")
 
-  result <- suppressMessages(get_length(nc[1:2, ]))
+  result <- suppressMessages(get_length(nc_poly))
   expect_true("perimeter" %in% names(result))
 })
 
@@ -92,15 +93,25 @@ test_that("get_bearing works", {
   expect_true(all(get_bearing(nc_line, dir = TRUE)$bearing <= 180))
 })
 
-test_that("get_bearing converts non-line geometry and supports a to argument", {
+test_that("get_bearing supports a to argument", {
   skip_if_not_installed("geosphere")
-  skip_if_not_installed("lwgeom")
 
   nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
 
-  expect_message(get_bearing(nc[1, ], to = nc[30, ]), "Converting")
+  result <- get_bearing(nc[1, ], to = nc[30, ])
+  expect_s3_class(result, "sf")
+  expect_true("bearing" %in% names(result))
+})
 
-  result <- suppressMessages(get_bearing(nc[1, ], to = nc[30, ]))
+test_that("get_bearing converts non-line geometry when to is not supplied", {
+  skip_if_not_installed("geosphere")
+
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
+  pts <- suppressWarnings(sf::st_centroid(nc[1:2, ]))
+
+  expect_message(get_bearing(pts), "Converting")
+
+  result <- suppressMessages(get_bearing(pts))
   expect_s3_class(result, "sf")
   expect_true("bearing" %in% names(result))
 })
