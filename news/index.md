@@ -96,6 +96,14 @@
   GitHub-only `esri2sf` package and makes several live network calls
   (ArcGIS, GitHub Gist, Google Maps) with no offline fallback, which
   previously made `devtools::check()` fail outright.
+- Fix
+  [`st_make_grid_ext()`](https://elipousson.github.io/sfext/reference/st_make_grid_ext.md)
+  using
+  [`dplyr::case_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)
+  with scalar conditions and length-2 vector results, which was
+  deprecated in dplyr 1.2.0 and also silently discarded an already
+  length-2 `n` argument (e.g. `n = c(4, 6)`), causing an unrelated
+  downstream error.
 
 ### Tests
 
@@ -110,6 +118,11 @@
   [`rdeck_edit()`](https://elipousson.github.io/sfext/reference/rdeck_edit.md)),
   and review and improve existing tests (more robust
   `skip_if_not_installed()` guards, removing brittle assertions).
+- Disable the
+  [`st_omerc()`](https://elipousson.github.io/sfext/reference/st_transform_ext.md)
+  `lat_0` assertion in `test-st_transform_ext.R`, which depends on the
+  NAD27 -\> WGS84 datum shift PROJ selects at runtime and is not
+  reproducible across machines/PROJ versions.
 
 ### Changes
 

@@ -307,7 +307,7 @@ is also used to support conversion of address vectors or data frames.
 
 address_to_sf(x = c("350 Fifth Avenue, New York, NY 10118"))
 #> Passing 1 address to the Nominatim single address geocoder
-#> Query completed in: 1 seconds
+#> Query completed in: 7.1 seconds
 #> Simple feature collection with 1 feature and 3 fields
 #> Attribute-geometry relationships: constant (3)
 #> Geometry type: POINT
