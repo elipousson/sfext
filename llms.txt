@@ -1,0 +1,636 @@
+# sfext
+
+The goal of sfext is to extend existing functions from the [{sf}
+package](https://r-spatial.github.io/sf/) and offer a range of
+additional options for working with simple feature objects, bounding
+boxes, and data frame objects with coordinates or other spatial
+information.
+
+## Installation
+
+You can install the development version of sfext like so:
+
+``` r
+
+# pak::pkg_install("elipousson/sfext")
+```
+
+## Usage
+
+``` r
+
+library(sfext)
+```
+
+### Extending existing {sf} functions
+
+[sfext](https://github.com/elipousson/sfext) is built around existing sf
+functions but designed to offer greater flexibility around both inputs
+and outputs. For example,
+[`read_sf_ext()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+is a wrapper for
+[`sf::read_sf()`](https://r-spatial.github.io/sf/reference/st_read.html)
+and offers a similar functionality:
+
+``` r
+
+nc <- read_sf_ext(system.file("shape/nc.shp", package = "sf"))
+```
+
+However,
+[`read_sf_ext()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+also supports URLs for Google Sheets, FeatureLayers, data included with
+an installed package, and a variety of other sources. The function also
+supports an optional bounding box filter.
+
+``` r
+
+read_sf_ext("https://carto.nationalmap.gov/arcgis/rest/services/govunits/MapServer/29", bbox = as_bbox(nc))
+#> ── Downloading "National Park" from <
+#> Layer type: "Feature Layer"
+#> Geometry type: "esriGeometryPolygon"
+#> Service CRS: "EPSG:3857"
+#> Output CRS: "EPSG:3857"
+#> 
+#> Simple feature collection with 11 features and 19 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -13326920 ymin: 4005420 xmax: -7672089 ymax: 5887098
+#> Projected CRS: WGS 84 / Pseudo-Mercator
+#> First 10 features:
+#>    OBJECTID                 PERMANENT_IDENTIFIER SOURCE_FEATUREID
+#> 1      6533 2216d26b-da64-4b83-b316-449f9b44b1d0             MAPR
+#> 2      6564 7086b7cc-08b6-4a4b-8faa-5b9d94d97f4a             KIMO
+#> 3      6669 f135ee2b-e71d-4bce-8cc2-be7cfb7bbcd4             WRBR
+#> 4      6706 d9eec3c0-ae13-4ef9-a17b-dc4858cd39d4             CALO
+#> 5      6755 c248d769-1a64-4b77-a215-d4d58f361cbc             BLRI
+#> 6      6796 643dde5f-5633-4af5-b0b8-f61540ddbf61             CAHA
+#> 7      6804 bc97c677-3de2-478b-9d41-6da7ce83f29e             GRSM
+#> 8      7571 adf43046-fa1b-4bdc-8341-031e00ed799a             CUGA
+#> 9      7574 8aa2a0c5-aec3-4b30-8795-14d18265a8b8             CHAT
+#> 10     7583 7cc31c7a-dda3-4b97-9fac-006c34c5c8b1             GUCO
+#>                          SOURCE_DATASETID                 SOURCE_DATADESC
+#> 1  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020
+#> 2  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020
+#> 3  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020
+#> 4  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020
+#> 5  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020
+#> 6  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020
+#> 7  {562524A1-7D6A-40EA-AA44-2E9AEF4488EB} National Park Boundaries 3/2020
+#> 8  {02A04210-8E12-46EA-89C7-B48F91616971} National Park Boundaries 9/2020
+#> 9  {02A04210-8E12-46EA-89C7-B48F91616971} National Park Boundaries 9/2020
+#> 10 {02A04210-8E12-46EA-89C7-B48F91616971} National Park Boundaries 9/2020
+#>        SOURCE_ORIGINATOR DATA_SECURITY DISTRIBUTION_POLICY     LOADDATE GNIS_ID
+#> 1  National Park Service             5                  E4 1.586355e+12 2775864
+#> 2  National Park Service             5                  E4 1.586355e+12 1223739
+#> 3  National Park Service             5                  E4 1.586355e+12 1027483
+#> 4  National Park Service             5                  E4 1.586355e+12 1000889
+#> 5  National Park Service             5                  E4 1.586355e+12 1009494
+#> 6  National Park Service             5                  E4 1.586355e+12  982628
+#> 7  National Park Service             5                  E4 1.586355e+12 1018241
+#> 8  National Park Service             5                  E4 1.602058e+12  490476
+#> 9  National Park Service             5                  E4 1.602058e+12 1688073
+#> 10 National Park Service             5                  E4 1.602058e+12  986193
+#>                                            NAME     AREASQKM FTYPE FCODE
+#> 1    Manhattan Project National Historical Park    0.4598436   674 67400
+#> 2         Kings Mountain National Military Park   15.9040186   674 67400
+#> 3             Wright Brothers National Memorial    1.7347265   674 67400
+#> 4                Cape Lookout National Seashore  115.0050251   674 67400
+#> 5                            Blue Ridge Parkway  384.0079655   674 67400
+#> 6               Cape Hatteras National Seashore  125.9856098   674 67400
+#> 7           Great Smoky Mountains National Park 2096.4740275   674 67400
+#> 8       Cumberland Gap National Historical Park   98.4687290   674 67400
+#> 9  Chattahoochee River National Recreation Area   48.0789992   674 67400
+#> 10   Guilford Courthouse National Military Park    0.9179617   674 67400
+#>    ADMINTYPE OWNERORMANAGINGAGENCY SHAPE_Length   SHAPE_Area
+#> 1          1                    13     14168.45     776550.8
+#> 2          1                    13     22120.44   23836721.4
+#> 3          1                    13      9434.39    2657056.5
+#> 4          1                    13    233295.32  171056451.0
+#> 5          1                    13   2202935.37  596234809.6
+#> 6          1                    13    345532.78  190369152.0
+#> 7          1                    13    808754.04 3178103336.6
+#> 8          1                    13    164570.70  153181997.9
+#> 9          1                    13    326590.96   70142647.4
+#> 10         1                    13     10228.17    1410140.4
+#>                                       GNIS_NAME                          geoms
+#> 1    Manhattan Project National Historical Park MULTIPOLYGON (((-9394763 42...
+#> 2         Kings Mountain National Military Park MULTIPOLYGON (((-9062982 41...
+#> 3             Wright Brothers National Memorial MULTIPOLYGON (((-8423490 43...
+#> 4                Cape Lookout National Seashore MULTIPOLYGON (((-8468201 41...
+#> 5                            Blue Ridge Parkway MULTIPOLYGON (((-9271423 42...
+#> 6               Cape Hatteras National Seashore MULTIPOLYGON (((-8415559 42...
+#> 7           Great Smoky Mountains National Park MULTIPOLYGON (((-9267417 42...
+#> 8       Cumberland Gap National Historical Park MULTIPOLYGON (((-9313282 43...
+#> 9  Chattahoochee River National Recreation Area MULTIPOLYGON (((-9359559 40...
+#> 10   Guilford Courthouse National Military Park MULTIPOLYGON (((-8886905 43...
+```
+
+[`st_union_ext()`](https://elipousson.github.io/sfext/reference/st_union_ext.md)
+is nearly identical to
+[`sf::st_union()`](https://r-spatial.github.io/sf/reference/geos_combine.html)
+but optionally preserve a name column (collapsing the values of that
+column into a single string):
+
+``` r
+
+random_id <- sample(nrow(nc), size = 8)
+
+nc_union <- st_union_ext(nc[random_id, ], name_col = "NAME")
+
+plot(
+  nc_union
+)
+```
+
+![](reference/figures/README-unnamed-chunk-4-1.png)
+
+[`st_buffer_ext()`](https://elipousson.github.io/sfext/reference/st_buffer_ext.md)
+wraps
+[`sf::st_buffer()`](https://r-spatial.github.io/sf/reference/geos_unary.html)
+but accepts bounding box objects as an input, allows you to set the
+units for the buffer distance using a character string (automatically
+converts the buffer distance units to match the units of the input
+object):
+
+``` r
+
+# Apply a 20 mile buffer to the unioned geometry
+plot(
+  st_buffer_ext(nc_union, dist = 20, unit = "mi")
+)
+```
+
+![](reference/figures/README-unnamed-chunk-5-1.png)
+
+[`st_make_grid_ext()`](https://elipousson.github.io/sfext/reference/st_make_grid_ext.md)
+wraps
+[`sf::st_make_grid()`](https://r-spatial.github.io/sf/reference/st_make_grid.html)
+but makes it easy to set the dimensions of the grid using rows, columns,
+and an overall aspect ratio:
+
+``` r
+
+# Make a 5 by 5 grid with a 8.5 by 11 aspect ratio filtered to x
+plot(
+  st_make_grid_ext(
+    x = nc,
+    asp = 11 / 8.5,
+    ncol = 5,
+    nrow = 5,
+    filter = TRUE
+  )
+)
+```
+
+![](reference/figures/README-unnamed-chunk-6-1.png)
+
+Most functions that include a `crs` parameter can convert the coordinate
+reference system of the output (using
+[`transform_sf()`](https://elipousson.github.io/sfext/reference/misc_sf.md)
+or
+[`sf_bbox_transform()`](https://elipousson.github.io/sfext/reference/sf_bbox_misc.md)).
+The crs parameter also supports sf, sfc, or bbox inputs. Functions that
+include a `class` parameter can convert the class of an object using
+[`as_sf_class()`](https://elipousson.github.io/sfext/reference/as_sf.md).
+There are a set of functions for class conversion that typically wrap
+multiple sf functions with more limited input options.
+
+``` r
+
+nc_bbox <- as_bbox(nc, crs = 4326)
+
+nc_bbox
+#>      xmin      ymin      xmax      ymax 
+#> -84.32377  33.88212 -75.45662  36.58973
+
+as_sfc(nc[1, ], crs = 3857)
+#> Geometry set for 1 feature 
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -9099356 ymin: 4332928 xmax: -9043563 ymax: 4382074
+#> Projected CRS: WGS 84 / Pseudo-Mercator
+#> MULTIPOLYGON (((-9069486 4332928, -9077065 4338...
+
+as_sf(nc_bbox, crs = nc)
+#> Simple feature collection with 1 feature and 0 fields
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -84.32386 ymin: 33.88198 xmax: -75.45697 ymax: 36.58967
+#> Geodetic CRS:  NAD27
+#>                         geometry
+#> 1 POLYGON ((-84.32385 33.8819...
+```
+
+Please note this flexibility make
+[sfext](https://github.com/elipousson/sfext) easy to use (especially in
+an interactive context) but likely *not* appropriate for reproducible
+research. The package is being actively developed and the API may
+change.
+
+### Additional helper functions for `sf` objects
+
+sfext also includes several helper functions that add new features by
+combining functions from the {sf} package, using [affine
+geometry](https://r-spatial.github.io/sf/articles/sf3.html#affine-transformations),
+or adding features from other packages.
+
+For example,
+[`st_edge()`](https://elipousson.github.io/sfext/reference/st_buffer_ext.md)
+combines
+[`sf::st_buffer()`](https://r-spatial.github.io/sf/reference/geos_unary.html)
+and
+[`sf::st_difference()`](https://r-spatial.github.io/sf/reference/geos_binary_ops.html)
+to get the “edges” of any geometry.
+
+``` r
+
+plot(
+  st_edge(nc, dist = 10, unit = "mi"),
+  max.plot = 1
+)
+```
+
+![](reference/figures/README-unnamed-chunk-8-1.png)
+
+[`st_nudge()`](https://elipousson.github.io/sfext/reference/st_nudge.md)
+allows you to shift the position of an `sf` object to a new location:
+
+``` r
+
+nc_nudge <- st_nudge(nc, to = nc[1, ])
+
+plot(
+  st_union_ext(
+    nc,
+    nc_nudge
+  ),
+  max.plot = 1
+)
+```
+
+![](reference/figures/README-unnamed-chunk-9-1.png)
+
+[`st_donut()`](https://elipousson.github.io/sfext/reference/st_misc.md)
+allows you to create donuts around existing features:
+
+``` r
+
+plot(
+  st_donut(nc[c(1, 2, 3), ])
+)
+#> Warning: plotting the first 9 out of 15 attributes; use max.plot = 15 to plot
+#> all
+```
+
+![](reference/figures/README-unnamed-chunk-10-1.png)
+
+Lastly, the package has a whole group of helper functions for bbox
+objects. For example,
+[`sf_bbox_corners()`](https://elipousson.github.io/sfext/reference/sf_bbox_corners.md)
+creates a sf object with POINT geometry based on the corners of a
+bounding box:
+
+``` r
+
+plot(
+  sf_bbox_corners(
+    as_bbox(nc)
+  )
+)
+```
+
+![](reference/figures/README-unnamed-chunk-11-1.png)
+
+## Related projects
+
+[sfext](https://github.com/elipousson/sfext) *depends* on two other
+development packages:
+
+- [{papersize}](https://elipousson.github.io/papersize/): A collection
+  of convenience functions extending grid, ggplot2, and patchwork to
+  help in sizing plots and files for printing to paper, postcards,
+  playing cards, and other physical media.
+- [{filenamr}](https://elipousson.github.io/filenamr/): A package to
+  help create and modify file names and paths (that also supports
+  reading and writing EXIF metadata).
+
+It is also *used* extensively by two other development packages:
+
+- [{getdata}](https://elipousson.github.io/getdata/): A package to make
+  the experience of getting location data easier and more consistent
+  across a wide variety of sources.
+- [{maplayer}](https://elipousson.github.io/maplayer/): A consistent set
+  of functions for creating map layers for
+  [{ggplot2}](https://ggplot2.tidyverse.org/) using simple feature data.
+
+There are *many* packages that build on sf for a variety of specialized
+use cases. A few worth noting include:
+
+- [{sfdep}](https://github.com/JosiahParry/sfdep): A sf and tidyverse
+  friendly interface to the spdep package for spatial dependence.
+- [{sfnetworks}](https://github.com/luukvdmeer/sfnetworks): Tidy
+  Geospatial Networks in R.
+- [{sfhotspot}](https://github.com/mpjashby/sfhotspot): A set of
+  functions to identify and understand clusters of points (typically
+  representing the locations of places or events).
+- [{sfx}](https://seasmith.github.io/packages/sfx/): Extra ‘sf’ Simple
+  Features manipulations.
+
+# Package index
+
+## Read and write spatial data
+
+- [`read_sf_ext()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_pkg()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_path()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_zip()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_rdata()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_query()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_excel()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_csv()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_url()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_esri()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_gist()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_gmap()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_download()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  [`read_sf_gsheet()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  : Read spatial data in a bounding box to a simple feature object from
+  multiple sources
+- [`write_sf_ext()`](https://elipousson.github.io/sfext/reference/write_sf_ext.md)
+  [`write_sf_list()`](https://elipousson.github.io/sfext/reference/write_sf_ext.md)
+  [`write_sf_cache()`](https://elipousson.github.io/sfext/reference/write_sf_ext.md)
+  [`write_sf_gist()`](https://elipousson.github.io/sfext/reference/write_sf_ext.md)
+  [`write_sf_gsheet()`](https://elipousson.github.io/sfext/reference/write_sf_ext.md)
+  : Write or cache a simple feature object to a file
+- [`write_sf_svg()`](https://elipousson.github.io/sfext/reference/write_sf_svg.md)
+  : Write an sf object to an svg file
+- [`read_sf_exif()`](https://elipousson.github.io/sfext/reference/read_sf_exif.md)
+  : Read EXIF metadata to create a simple feature object or write EXIF
+  metadata to image files
+- [`write_exif_from()`](https://elipousson.github.io/sfext/reference/write_exif_from.md)
+  : Write EXIF data for photos on spatial join with a sf object or list
+  of sf objects
+- [`get_data_dir()`](https://elipousson.github.io/sfext/reference/get_data_dir.md)
+  [`list_data_files()`](https://elipousson.github.io/sfext/reference/get_data_dir.md)
+  **\[superseded\]** : Check if data directory exists and create a new
+  directory if needed
+
+## Check and convert sf, sfc, and bbox objects
+
+- [`is_sf()`](https://elipousson.github.io/sfext/reference/is_sf.md)
+  [`is_sfg()`](https://elipousson.github.io/sfext/reference/is_sf.md)
+  [`is_sfc()`](https://elipousson.github.io/sfext/reference/is_sf.md)
+  [`is_bbox()`](https://elipousson.github.io/sfext/reference/is_sf.md)
+  [`is_raster()`](https://elipousson.github.io/sfext/reference/is_sf.md)
+  [`is_sp()`](https://elipousson.github.io/sfext/reference/is_sf.md)
+  [`is_geo_coords()`](https://elipousson.github.io/sfext/reference/is_sf.md)
+  : What is the class or spatial attributes of this feature?
+- [`check_sf()`](https://elipousson.github.io/sfext/reference/check_sf.md)
+  : Check if x is an sf object
+- [`is_geom_type()`](https://elipousson.github.io/sfext/reference/is_geom_type.md)
+  [`is_point()`](https://elipousson.github.io/sfext/reference/is_geom_type.md)
+  [`is_multipoint()`](https://elipousson.github.io/sfext/reference/is_geom_type.md)
+  [`is_line()`](https://elipousson.github.io/sfext/reference/is_geom_type.md)
+  [`is_multiline()`](https://elipousson.github.io/sfext/reference/is_geom_type.md)
+  [`is_polygon()`](https://elipousson.github.io/sfext/reference/is_geom_type.md)
+  [`is_multipolygon()`](https://elipousson.github.io/sfext/reference/is_geom_type.md)
+  [`st_is_ext()`](https://elipousson.github.io/sfext/reference/is_geom_type.md)
+  : What geometry type is this feature?
+- [`as_point()`](https://elipousson.github.io/sfext/reference/as_point.md)
+  [`as_points()`](https://elipousson.github.io/sfext/reference/as_point.md)
+  [`as_startpoint()`](https://elipousson.github.io/sfext/reference/as_point.md)
+  [`as_endpoint()`](https://elipousson.github.io/sfext/reference/as_point.md)
+  [`as_line()`](https://elipousson.github.io/sfext/reference/as_point.md)
+  [`as_lines()`](https://elipousson.github.io/sfext/reference/as_point.md)
+  [`as_polygons()`](https://elipousson.github.io/sfext/reference/as_point.md)
+  [`as_centroid()`](https://elipousson.github.io/sfext/reference/as_point.md)
+  : Convert an sf, numeric, or other object to a POINT (sfg) or POINT,
+  MULTIPOINT, LINESTRING, or MULTILINESTRING (sfc) object
+- [`as_sf()`](https://elipousson.github.io/sfext/reference/as_sf.md)
+  [`as_bbox()`](https://elipousson.github.io/sfext/reference/as_sf.md)
+  [`as_sfc()`](https://elipousson.github.io/sfext/reference/as_sf.md)
+  [`as_sf_class()`](https://elipousson.github.io/sfext/reference/as_sf.md)
+  : Convert an object to a simple feature or bounding box object
+- [`as_sf_list()`](https://elipousson.github.io/sfext/reference/sf_list.md)
+  [`new_sf_list()`](https://elipousson.github.io/sfext/reference/sf_list.md)
+  [`is_sf_list()`](https://elipousson.github.io/sfext/reference/sf_list.md)
+  [`sf_list_rbind()`](https://elipousson.github.io/sfext/reference/sf_list.md)
+  [`map_as_sf_list()`](https://elipousson.github.io/sfext/reference/sf_list.md)
+  [`map_as_sf()`](https://elipousson.github.io/sfext/reference/sf_list.md)
+  : Creating and checking sf lists
+- [`as_xy()`](https://elipousson.github.io/sfext/reference/as_xy.md) :
+  Convert data to a data frame with X/Y coordinate pairs
+- [`as_crs()`](https://elipousson.github.io/sfext/reference/as_crs.md)
+  [`is_same_crs()`](https://elipousson.github.io/sfext/reference/as_crs.md)
+  [`is_wgs84()`](https://elipousson.github.io/sfext/reference/as_crs.md)
+  : Convert object to coordinate reference system or check coordinate
+  reference system
+
+## Converting sf and data frame objects
+
+- [`sf_to_df()`](https://elipousson.github.io/sfext/reference/sf_to_df.md)
+  [`df_to_sf()`](https://elipousson.github.io/sfext/reference/sf_to_df.md)
+  : Convert between simple feature and data frame objects
+- [`address_to_sf()`](https://elipousson.github.io/sfext/reference/address_to_sf.md)
+  : Use tidygeocoder to convert an address or data frame with an address
+  column to an sf object
+- [`coords_to_sf()`](https://elipousson.github.io/sfext/reference/coords_to_sf.md)
+  [`check_coords()`](https://elipousson.github.io/sfext/reference/coords_to_sf.md)
+  [`rev_coords()`](https://elipousson.github.io/sfext/reference/coords_to_sf.md)
+  [`has_coords()`](https://elipousson.github.io/sfext/reference/coords_to_sf.md)
+  [`format_coords()`](https://elipousson.github.io/sfext/reference/coords_to_sf.md)
+  [`separate_coords()`](https://elipousson.github.io/sfext/reference/coords_to_sf.md)
+  : Convert a data.frame with one or more coordinate columns to an sf
+  object
+- [`lonlat_to_sfc()`](https://elipousson.github.io/sfext/reference/lonlat_to_sfc.md)
+  **\[experimental\]** : Convert a lon/lat or lat/lon coordinate pair to
+  a sfc object
+
+## Modify sf, sfc, and bbox objects
+
+- [`st_bbox_ext()`](https://elipousson.github.io/sfext/reference/st_bbox_ext.md)
+  [`st_bbox_asp()`](https://elipousson.github.io/sfext/reference/st_bbox_ext.md)
+  : Get a bounding box buffered a set distance or to match an aspect
+  ratio
+- [`st_buffer_ext()`](https://elipousson.github.io/sfext/reference/st_buffer_ext.md)
+  [`st_edge()`](https://elipousson.github.io/sfext/reference/st_buffer_ext.md)
+  : Buffer a simple feature or bounding box object
+- [`st_erase()`](https://elipousson.github.io/sfext/reference/st_erase.md)
+  [`st_trim()`](https://elipousson.github.io/sfext/reference/st_erase.md)
+  : Erase or trim geometry of a sf or sfc object
+- [`st_clip()`](https://elipousson.github.io/sfext/reference/st_clip.md)
+  : Clip the side or corner of a simple feature or bounding box object
+- [`st_concave_hull_ext()`](https://elipousson.github.io/sfext/reference/st_concave_hull_ext.md)
+  : Make a concave hull around simple feature object by attribute
+- [`st_union_ext()`](https://elipousson.github.io/sfext/reference/st_union_ext.md)
+  [`st_union_by()`](https://elipousson.github.io/sfext/reference/st_union_ext.md)
+  : Union simple feature objects and combine name column values
+- [`st_dissolve()`](https://elipousson.github.io/sfext/reference/st_dissolve.md)
+  : Dissolve geometry preserving existing or supplied grouping variables
+- [`st_join_ext()`](https://elipousson.github.io/sfext/reference/st_join_ext.md)
+  : Complete a spatial join using a simple feature objects or an object
+  and list
+- [`st_filter_ext()`](https://elipousson.github.io/sfext/reference/st_filter_ext.md)
+  [`st_filter_geom_type()`](https://elipousson.github.io/sfext/reference/st_filter_ext.md)
+  : Filter, crop, trim, or erase a simple feature object or list
+- [`st_filter_pct()`](https://elipousson.github.io/sfext/reference/st_filter_pct.md)
+  [`st_filter_pct_area()`](https://elipousson.github.io/sfext/reference/st_filter_pct.md)
+  [`st_filter_pct_length()`](https://elipousson.github.io/sfext/reference/st_filter_pct.md)
+  **\[experimental\]** : Filter by share of length or area of one
+  geometry overlapping with a second geometry
+- [`st_center()`](https://elipousson.github.io/sfext/reference/st_misc.md)
+  [`st_circle()`](https://elipousson.github.io/sfext/reference/st_misc.md)
+  [`st_circumscribed_circle()`](https://elipousson.github.io/sfext/reference/st_misc.md)
+  [`st_donut()`](https://elipousson.github.io/sfext/reference/st_misc.md)
+  : Modify the geometry of a simple feature or bounding box object
+- [`st_square()`](https://elipousson.github.io/sfext/reference/st_square.md)
+  [`st_inscribed_square()`](https://elipousson.github.io/sfext/reference/st_square.md)
+  : Create a square within or around a simple feature object or
+  collection
+- [`st_scale_rotate()`](https://elipousson.github.io/sfext/reference/st_scale_rotate.md)
+  : Scale and rotate a simple feature object, simple feature collection,
+  or bounding box
+- [`st_nudge()`](https://elipousson.github.io/sfext/reference/st_nudge.md)
+  : Nudge a simple feature to the center of another feature and/or a set
+  distance
+- [`st_transform_ext()`](https://elipousson.github.io/sfext/reference/st_transform_ext.md)
+  [`st_omerc()`](https://elipousson.github.io/sfext/reference/st_transform_ext.md)
+  [`st_wgs84()`](https://elipousson.github.io/sfext/reference/st_transform_ext.md)
+  : Transform or convert coordinates of a simple feature or bounding box
+  object
+- [`st_make_valid_ext()`](https://elipousson.github.io/sfext/reference/st_make_valid_ext.md)
+  : Checks if all geometries are already valid and make valid if not
+- [`st_cast_ext()`](https://elipousson.github.io/sfext/reference/st_cast_ext.md)
+  : Cast geometry of a simple feature object or simple feature
+  collection to another type
+- [`st_make_grid_ext()`](https://elipousson.github.io/sfext/reference/st_make_grid_ext.md)
+  : Make a grid over a simple feature bounding box
+
+## Get information about sf, sfc, and bbox objects
+
+- [`get_coords()`](https://elipousson.github.io/sfext/reference/get_coords.md)
+  [`get_minmax()`](https://elipousson.github.io/sfext/reference/get_coords.md)
+  : Get coordinates for a simple feature or bounding box object
+- [`get_area()`](https://elipousson.github.io/sfext/reference/get_measurements.md)
+  [`st_area_ext()`](https://elipousson.github.io/sfext/reference/get_measurements.md)
+  [`get_length()`](https://elipousson.github.io/sfext/reference/get_measurements.md)
+  [`st_length_ext()`](https://elipousson.github.io/sfext/reference/get_measurements.md)
+  [`get_dist()`](https://elipousson.github.io/sfext/reference/get_measurements.md)
+  [`st_distance_ext()`](https://elipousson.github.io/sfext/reference/get_measurements.md)
+  [`get_bearing()`](https://elipousson.github.io/sfext/reference/get_measurements.md)
+  [`st_bearing()`](https://elipousson.github.io/sfext/reference/get_measurements.md)
+  : Get measurements for simple feature objects
+
+## Additional utility functions for sf and bbox objects
+
+- [`transform_sf()`](https://elipousson.github.io/sfext/reference/misc_sf.md)
+  [`relocate_sf_col()`](https://elipousson.github.io/sfext/reference/misc_sf.md)
+  [`rename_sf_col()`](https://elipousson.github.io/sfext/reference/misc_sf.md)
+  [`get_sf_col()`](https://elipousson.github.io/sfext/reference/misc_sf.md)
+  [`get_sf_colnames()`](https://elipousson.github.io/sfext/reference/misc_sf.md)
+  : Additional utility functions for sf objects
+- [`number_features()`](https://elipousson.github.io/sfext/reference/number_features.md)
+  [`number_sf()`](https://elipousson.github.io/sfext/reference/number_features.md)
+  [`sort_features()`](https://elipousson.github.io/sfext/reference/number_features.md)
+  [`sort_sf()`](https://elipousson.github.io/sfext/reference/number_features.md)
+  : Sort and number features by coordinates or distance
+- [`count_features()`](https://elipousson.github.io/sfext/reference/count_features.md)
+  : Count simple features based on relationship with a second simple
+  feature object
+- [`count_sf_ext()`](https://elipousson.github.io/sfext/reference/count_sf_ext.md)
+  : Count extended for working with sf objects
+- [`make_sf_grid_list()`](https://elipousson.github.io/sfext/reference/make_sf_grid_list.md)
+  : Make a sf list by grid position
+- [`sf_bbox_corners()`](https://elipousson.github.io/sfext/reference/sf_bbox_corners.md)
+  : Get bounding box corner points from a bbox, sfc, or sf object
+- [`sf_bbox_dist()`](https://elipousson.github.io/sfext/reference/sf_bbox_dist.md)
+  [`sf_bbox_xdist()`](https://elipousson.github.io/sfext/reference/sf_bbox_dist.md)
+  [`sf_bbox_ydist()`](https://elipousson.github.io/sfext/reference/sf_bbox_dist.md)
+  [`sf_bbox_diagdist()`](https://elipousson.github.io/sfext/reference/sf_bbox_dist.md)
+  [`sf_bbox_diag_ratio_to_dist()`](https://elipousson.github.io/sfext/reference/sf_bbox_dist.md)
+  [`sf_bbox_asp()`](https://elipousson.github.io/sfext/reference/sf_bbox_dist.md)
+  [`sf_bbox_orientation()`](https://elipousson.github.io/sfext/reference/sf_bbox_dist.md)
+  [`sf_bbox_check_fit()`](https://elipousson.github.io/sfext/reference/sf_bbox_dist.md)
+  : Measure a bounding box using x, y, or diagonal distance
+- [`sf_bbox_to_sf()`](https://elipousson.github.io/sfext/reference/sf_bbox_misc.md)
+  [`sf_bbox_to_sfc()`](https://elipousson.github.io/sfext/reference/sf_bbox_misc.md)
+  [`sf_bbox_transform()`](https://elipousson.github.io/sfext/reference/sf_bbox_misc.md)
+  [`sf_bbox_point()`](https://elipousson.github.io/sfext/reference/sf_bbox_misc.md)
+  [`sf_bbox_to_wkt()`](https://elipousson.github.io/sfext/reference/sf_bbox_misc.md)
+  [`sf_bbox_to_lonlat_query()`](https://elipousson.github.io/sfext/reference/sf_bbox_misc.md)
+  [`sf_bbox_to_npc()`](https://elipousson.github.io/sfext/reference/sf_bbox_misc.md)
+  : Convert and tranform bounding boxes
+- [`sf_bbox_shift()`](https://elipousson.github.io/sfext/reference/sf_bbox_shift.md)
+  [`sf_bbox_contract()`](https://elipousson.github.io/sfext/reference/sf_bbox_shift.md)
+  [`sf_bbox_expand()`](https://elipousson.github.io/sfext/reference/sf_bbox_shift.md)
+  : Shift sides, contract, or expand a bounding box
+- [`cli_format(`*`<sf>`*`)`](https://elipousson.github.io/sfext/reference/cli_format.sf.md)
+  : cli_format style for sf objects
+
+## Utility functions for units and scales
+
+- [`is_dist_units()`](https://elipousson.github.io/sfext/reference/is_dist_units.md)
+  [`is_diff_dist()`](https://elipousson.github.io/sfext/reference/is_dist_units.md)
+  [`is_same_dist()`](https://elipousson.github.io/sfext/reference/is_dist_units.md)
+  [`is_longer()`](https://elipousson.github.io/sfext/reference/is_dist_units.md)
+  [`is_shorter()`](https://elipousson.github.io/sfext/reference/is_dist_units.md)
+  [`get_dist_units()`](https://elipousson.github.io/sfext/reference/is_dist_units.md)
+  [`as_dist_units()`](https://elipousson.github.io/sfext/reference/is_dist_units.md)
+  [`is_diff_area()`](https://elipousson.github.io/sfext/reference/is_dist_units.md)
+  [`is_same_area()`](https://elipousson.github.io/sfext/reference/is_dist_units.md)
+  [`is_same_units()`](https://elipousson.github.io/sfext/reference/is_dist_units.md)
+  : General utility functions for working with distance units objects
+- [`convert_dist_units()`](https://elipousson.github.io/sfext/reference/convert_dist_units.md)
+  : Convert distance (and area) values between different units
+- [`convert_dist_scale()`](https://elipousson.github.io/sfext/reference/convert_dist_scale.md)
+  : Convert distance from scale to actual units
+- [`compare_dist()`](https://elipousson.github.io/sfext/reference/compare_dist.md)
+  : Compare a distance to the dimension of a bounding box or another
+  distance value
+- [`bind_units_col()`](https://elipousson.github.io/sfext/reference/bind_units_col.md)
+  : Bind units column to data frame
+- [`get_scale()`](https://elipousson.github.io/sfext/reference/get_scale.md)
+  : Get standard scales and convert to scale distances
+
+## Utility functions for paper and image sizes
+
+- [`get_paper()`](https://elipousson.github.io/sfext/reference/get_paper.md)
+  **\[superseded\]** : Get standard paper and image sizes
+- [`get_social_image()`](https://elipousson.github.io/sfext/reference/get_social_image.md)
+  : Get social media image size to match platform and format
+- [`get_asp()`](https://elipousson.github.io/sfext/reference/get_asp.md)
+  : Get aspect ratio from string or based on specific paper and margins
+- [`get_margin()`](https://elipousson.github.io/sfext/reference/get_margin.md)
+  : Get margins for a ggplot2 plot or map based on style or distance
+
+## Helper functions for interactive mapping
+
+- [`mapview_ext()`](https://elipousson.github.io/sfext/reference/mapview_ext.md)
+  [`mapview_exif()`](https://elipousson.github.io/sfext/reference/mapview_ext.md)
+  [`mapview_popup_img()`](https://elipousson.github.io/sfext/reference/mapview_ext.md)
+  : Use mapview to interactively explore spatial data
+- [`rdeck_edit()`](https://elipousson.github.io/sfext/reference/rdeck_edit.md)
+  [`rdeck_select()`](https://elipousson.github.io/sfext/reference/rdeck_edit.md)
+  [`editor_options()`](https://elipousson.github.io/sfext/reference/rdeck_edit.md)
+  : rdeck editor
+
+## Reference data for units, scales, and paper
+
+- [`dist_units`](https://elipousson.github.io/sfext/reference/dist_units.md)
+  : Distance units (data frame)
+- [`dist_unit_options`](https://elipousson.github.io/sfext/reference/dist_unit_options.md)
+  : Distance units (vector)
+- [`area_unit_options`](https://elipousson.github.io/sfext/reference/area_unit_options.md)
+  : Area units (vector)
+- [`standard_scales`](https://elipousson.github.io/sfext/reference/standard_scales.md)
+  : Standard map, architectural, and engineering scales
+- [`paper_sizes`](https://elipousson.github.io/sfext/reference/paper_sizes.md)
+  : Standard paper and image sizes
+
+# Articles
+
+### All vignettes
+
+- [Introduction to
+  sfext](https://elipousson.github.io/sfext/articles/introduction.md):
