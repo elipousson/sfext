@@ -91,6 +91,11 @@
   [`write_sf_ext()`](https://elipousson.github.io/sfext/reference/write_sf_ext.md)/[`write_sf_gist()`](https://elipousson.github.io/sfext/reference/write_sf_ext.md)
   (`description`, `public`, `browse`), which relied on `@inheritParams`
   from Suggests packages that silently failed to resolve.
+- Move the “Introduction to sfext” vignette to `vignettes/articles/` so
+  it is only built by pkgdown, not `R CMD check`/CRAN. It requires the
+  GitHub-only `esri2sf` package and makes several live network calls
+  (ArcGIS, GitHub Gist, Google Maps) with no offline fallback, which
+  previously made `devtools::check()` fail outright.
 
 ### Tests
 
