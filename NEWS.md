@@ -22,10 +22,12 @@
 * Fix examples for `as_startpoint()`/`as_endpoint()`, `get_bearing()`, and `get_margin()` erroring when the `lwgeom`, `geosphere`, and `ggplot2` packages (respectively) are not installed, by guarding them with `rlang::is_installed()`.
 * Document previously undocumented arguments in `address_to_sf()` (`method`, `full_results`), `read_sf_esri()` (`where`), and `write_sf_ext()`/`write_sf_gist()` (`description`, `public`, `browse`), which relied on `@inheritParams` from Suggests packages that silently failed to resolve.
 * Move the "Introduction to sfext" vignette to `vignettes/articles/` so it is only built by pkgdown, not `R CMD check`/CRAN. It requires the GitHub-only `esri2sf` package and makes several live network calls (ArcGIS, GitHub Gist, Google Maps) with no offline fallback, which previously made `devtools::check()` fail outright.
+* Fix `st_make_grid_ext()` using `dplyr::case_when()` with scalar conditions and length-2 vector results, which was deprecated in dplyr 1.2.0 and also silently discarded an already length-2 `n` argument (e.g. `n = c(4, 6)`), causing an unrelated downstream error.
 
 ## Tests
 
 * Substantially expand unit test coverage across the package, including previously untested functions (e.g. `bind_sf_coverage()`, `count_features()`, `count_sf_ext()`, `st_filter_pct()`, `st_dissolve()`, `mapview_ext()`, `rdeck_edit()`), and review and improve existing tests (more robust `skip_if_not_installed()` guards, removing brittle assertions).
+* Disable the `st_omerc()` `lat_0` assertion in `test-st_transform_ext.R`, which depends on the NAD27 -> WGS84 datum shift PROJ selects at runtime and is not reproducible across machines/PROJ versions.
 
 ## Changes
 
