@@ -4,7 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -51,10 +51,13 @@ However, `read_sf_ext()` also supports URLs for Google Sheets, FeatureLayers, da
 
 
 ```{r}
-read_sf_ext("https://carto.nationalmap.gov/arcgis/rest/services/govunits/MapServer/29", bbox = as_bbox(nc))
+read_sf_ext(
+  "https://carto.nationalmap.gov/arcgis/rest/services/govunits/MapServer/29",
+  bbox = as_bbox(nc)
+)
 ```
 
-`st_union_ext()` is nearly identical to `sf::st_union()` but optionally preserve a name column (collapsing the values of that column into a single string): 
+`st_union_ext()` is nearly identical to `sf::st_union()` but optionally preserve a name column (collapsing the values of that column into a single string):
 
 ```{r}
 random_id <- sample(nrow(nc), size = 8)
