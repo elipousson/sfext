@@ -63,7 +63,6 @@ VignetteBuilder:
 Remotes:
     elipousson/cliExtras,
     elipousson/esri2sf,
-    elipousson/feltr,
     elipousson/filenamr,
     qfes/rdeck
 Config/testthat/edition: 3
