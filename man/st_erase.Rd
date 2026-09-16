@@ -14,22 +14,22 @@ st_trim(x, y, union = TRUE, combine = FALSE, ...)
 
 \item{y}{A \code{sf}, \code{sfc}, or \code{bbox} object to use to erase or trim.}
 
-\item{flip}{If \code{TRUE}, use \code{\link[sf:geos_binary_ops]{sf::st_intersection()}} to "erase" geometry of x
-that intersects y; if \code{FALSE} use \code{\link[sf:geos_binary_ops]{sf::st_difference()}} to trim x to y
+\item{flip}{If \code{TRUE}, use \code{\link[sf:st_intersection]{sf::st_intersection()}} to "erase" geometry of x
+that intersects y; if \code{FALSE} use \code{\link[sf:st_difference]{sf::st_difference()}} to trim x to y
 geometry, Default: \code{FALSE}.}
 
-\item{union}{If \code{TRUE}, union \code{y} with \code{\link[sf:geos_combine]{sf::st_union()}} before applying
+\item{union}{If \code{TRUE}, union \code{y} with \code{\link[sf:st_union]{sf::st_union()}} before applying
 difference/intersection; defaults to \code{TRUE}.}
 
 \item{combine}{If \code{TRUE} and \code{union = TRUE}, combine \code{y} with
-\code{\link[sf:geos_combine]{sf::st_combine()}} before unioning. Defaults to \code{FALSE}.}
+\code{\link[sf:st_combine]{sf::st_combine()}} before unioning. Defaults to \code{FALSE}.}
 
 \item{...}{arguments passed on to \link[s2]{s2_options}}
 }
 \description{
-\code{\link[=st_erase]{st_erase()}} extends \code{\link[sf:geos_binary_ops]{sf::st_difference()}} by unioning the second parameter
+\code{\link[=st_erase]{st_erase()}} extends \code{\link[sf:st_difference]{sf::st_difference()}} by unioning the second parameter
 by default, checking validity of inputs, and optionally (when \code{flip = TRUE})
-using \code{\link[sf:geos_binary_ops]{sf::st_intersection()}} instead of \link[sf:geos_binary_ops]{sf::st_difference}. \code{\link[=st_trim]{st_trim()}} is
+using \code{\link[sf:st_intersection]{sf::st_intersection()}} instead of \link[sf:st_difference]{sf::st_difference}. \code{\link[=st_trim]{st_trim()}} is
 equivalent to \code{\link[=st_erase]{st_erase()}} with flip set to \code{TRUE}.
 }
 \examples{

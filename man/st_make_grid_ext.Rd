@@ -26,7 +26,7 @@ st_make_grid_ext(
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object, Default: \code{NULL}. Required.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=st_bbox_ext]{st_bbox_ext}}
+  Arguments passed on to \code{\link{st_bbox_ext}}
   \describe{
     \item{\code{nudge}}{Passed as to parameter \code{\link[=st_nudge]{st_nudge()}} when not \code{NULL}. A numeric
 vector, a \code{sf} object, or any other object that can be converted to a

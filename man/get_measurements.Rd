@@ -80,13 +80,13 @@ Get measurements for simple feature objects
 \details{
 Wrapper functions for \link[sf:geos_measures]{sf::geos_measures}:
 \itemize{
-\item \code{\link[=get_area]{get_area()}}: Wraps on \code{\link[sf:geos_measures]{sf::st_area()}} but MULTIPOINT or MULTILINESTRING
-geometry is converted to a polygon using \code{\link[sf:geos_unary]{sf::st_polygonize()}} which is used to
+\item \code{\link[=get_area]{get_area()}}: Wraps on \code{\link[sf:st_area]{sf::st_area()}} but MULTIPOINT or MULTILINESTRING
+geometry is converted to a polygon using \code{\link[sf:st_polygonize]{sf::st_polygonize()}} which is used to
 determine the coverage area.
-\item \code{\link[=get_length]{get_length()}}: Wraps to \code{\link[sf:geos_measures]{sf::st_length()}} but POINT and MULTIPOINT geometry is
+\item \code{\link[=get_length]{get_length()}}: Wraps to \code{\link[sf:st_length]{sf::st_length()}} but POINT and MULTIPOINT geometry is
 converted to LINESTRING using \code{\link[=as_lines]{as_lines()}}. If x has POLYGON geometry,
-\code{\link[lwgeom:perimeter-deprecated]{lwgeom::st_perimeter()}} is used to return the perimeter instead of the length.
-\item \code{\link[=get_dist]{get_dist()}}: Wraps \code{\link[sf:geos_measures]{sf::st_distance()}} but x is converted to a POINT using
+\code{\link[lwgeom:st_perimeter]{lwgeom::st_perimeter()}} is used to return the perimeter instead of the length.
+\item \code{\link[=get_dist]{get_dist()}}: Wraps \code{\link[sf:st_distance]{sf::st_distance()}} but x is converted to a POINT using
 \code{\link[=st_center]{st_center()}} and "to" can be a POINT, a sf object that can be converted to a
 POINT, or a character vector indicating a point on the overall bounding box
 for x.
@@ -120,11 +120,11 @@ get_length(nc_line)
 get_bearing(nc_line)
 }
 \seealso{
-Other dist: 
-\code{\link{compare_dist}()},
-\code{\link{convert_dist_scale}()},
-\code{\link{convert_dist_units}()},
-\code{\link{is_dist_units}()},
-\code{\link{sf_bbox_dist}()}
+Other dist:
+\code{\link[=compare_dist]{compare_dist()}},
+\code{\link[=convert_dist_scale]{convert_dist_scale()}},
+\code{\link[=convert_dist_units]{convert_dist_units()}},
+\code{\link[=is_dist_units]{is_dist_units()}},
+\code{\link[=sf_bbox_dist]{sf_bbox_dist()}}
 }
 \concept{dist}

@@ -68,7 +68,7 @@ not; defaults to \code{FALSE}. (used by \link{is_sf})}
 \item{allow_null}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
 
 \item{...}{For \code{\link[=sf_list_rbind]{sf_list_rbind()}}, additional parameters passed to
-\code{\link[purrr:list_c]{purrr::list_rbind()}}. For \code{\link[=map_as_sf]{map_as_sf()}}, additional parameters passed to
+\code{\link[purrr:list_rbind]{purrr::list_rbind()}}. For \code{\link[=map_as_sf]{map_as_sf()}}, additional parameters passed to
 map.}
 
 \item{.f}{A function, specified in one of the following ways:

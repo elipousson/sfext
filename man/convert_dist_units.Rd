@@ -25,17 +25,17 @@ object, the numerator is used as "from"}
 \item{digits}{Number of digits to include in result; defaults to \code{NULL}.}
 }
 \value{
-Object created by \code{\link[units:units]{units::set_units()}}
+Object created by \code{\link[units:set_units]{units::set_units()}}
 }
 \description{
 Convert distance (and area) values between different units
 }
 \seealso{
-Other dist: 
-\code{\link{compare_dist}()},
-\code{\link{convert_dist_scale}()},
+Other dist:
+\code{\link[=compare_dist]{compare_dist()}},
+\code{\link[=convert_dist_scale]{convert_dist_scale()}},
 \code{\link{get_measurements}},
-\code{\link{is_dist_units}()},
-\code{\link{sf_bbox_dist}()}
+\code{\link[=is_dist_units]{is_dist_units()}},
+\code{\link[=sf_bbox_dist]{sf_bbox_dist()}}
 }
 \concept{dist}

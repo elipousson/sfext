@@ -44,16 +44,16 @@ mentioned in error messages as the source of the error. See the
 \item{x}{A \code{sf}, \code{sfc}, or \code{bbox} object.}
 }
 \description{
-Works with sf, sfc, and bbox objects using \code{\link[sf:geos_unary]{sf::st_centroid()}}. Works with
+Works with sf, sfc, and bbox objects using \code{\link[sf:st_centroid]{sf::st_centroid()}}. Works with
 \code{\link[=sf_bbox_point]{sf_bbox_point()}}
 }
 \details{
 Using as_point:
 
 \code{\link[=as_point]{as_point()}} always returns a single point sfg object. The ... parameter is
-passed to \code{\link[sf:geos_unary]{sf::st_centroid()}} if ... is a sf, sfc, or bbox object,
+passed to \code{\link[sf:st_centroid]{sf::st_centroid()}} if ... is a sf, sfc, or bbox object,
 \code{\link[=sf_bbox_point]{sf_bbox_point()}} includes a bbox object and a string indicating the
-requested point position, or \code{\link[sf:st]{sf::st_point()}} if ... includes a numeric
+requested point position, or \code{\link[sf:st_point]{sf::st_point()}} if ... includes a numeric
 vector.
 
 Using as_points:
@@ -67,7 +67,7 @@ Using \link{as_startpoint} and \link{as_endpoint}:
 
 \code{\link[=as_startpoint]{as_startpoint()}} and \code{\link[=as_endpoint]{as_endpoint()}} require a LINESTRING OR MULTILINESTRING
 geometry type sf or sfc object that is passed to \code{\link[lwgeom:st_startpoint]{lwgeom::st_startpoint()}} or
-\code{\link[lwgeom:st_startpoint]{lwgeom::st_endpoint()}} respectively. Both functions always return a sfc
+\code{\link[lwgeom:st_endpoint]{lwgeom::st_endpoint()}} respectively. Both functions always return a sfc
 object matching the CRS of the input geometry.
 
 Using \link{as_lines}:

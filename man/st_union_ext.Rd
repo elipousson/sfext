@@ -32,18 +32,18 @@ Required.}
 \item{label}{Length 1 character vector used if name_col is \code{NULL}.}
 
 \item{ext}{If \code{FALSE}, \code{\link[=st_union_ext]{st_union_ext()}} functions the same as
-\code{\link[sf:geos_combine]{sf::st_union()}}, Default: \code{TRUE}}
+\code{\link[sf:st_union]{sf::st_union()}}, Default: \code{TRUE}}
 
-\item{...}{Additional parameters passed to \code{\link[sf:geos_combine]{sf::st_union()}} or
+\item{...}{Additional parameters passed to \code{\link[sf:st_union]{sf::st_union()}} or
 \code{\link[dplyr:group_by]{dplyr::group_by()}}.}
 }
 \value{
 A \code{sfc} object if y is \code{NULL} and ext is \code{FALSE}. A tibble sf if x is
 a sf object and y is \code{NULL}. If y is provided, \code{\link[=st_union_ext]{st_union_ext()}} is
-identical to \code{\link[sf:geos_combine]{sf::st_union()}}
+identical to \code{\link[sf:st_union]{sf::st_union()}}
 }
 \description{
-Wrapper for \code{\link[sf:geos_combine]{sf::st_union()}} supporting the additional feature of a combined
+Wrapper for \code{\link[sf:st_union]{sf::st_union()}} supporting the additional feature of a combined
 name column collapsed into a single vector with \code{\link[cli:pluralize]{cli::pluralize()}}.
 \code{\link[=st_union_by]{st_union_by()}} wraps \code{\link[dplyr:group_by]{dplyr::group_by()}} and \code{\link[dplyr:summarise]{dplyr::summarise()}} to allow
 quick unioning geometry by the passed parameters.

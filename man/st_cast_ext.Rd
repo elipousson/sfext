@@ -17,7 +17,10 @@ st_cast_ext(x, to = "POINT", simplify = TRUE, ...)
 \item{...}{
   Arguments passed on to \code{\link[sf:st_cast]{sf::st_cast}}
   \describe{
-    \item{\code{}}{}
+    \item{\code{ids}}{integer vector, denoting how geometries should be grouped (default: no grouping)}
+    \item{\code{group_or_split}}{logical; if TRUE, group or split geometries; if FALSE, carry out a 1-1 per-geometry conversion.}
+    \item{\code{warn}}{logical; if \code{TRUE}, warn if attributes are assigned to sub-geometries}
+    \item{\code{do_split}}{logical; if \code{TRUE}, allow splitting of geometries in sub-geometries}
   }}
 }
 \description{

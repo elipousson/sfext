@@ -80,11 +80,11 @@ diag_ratio are \code{NULL}
 }
 }
 \seealso{
-Other dist: 
-\code{\link{compare_dist}()},
-\code{\link{convert_dist_scale}()},
-\code{\link{convert_dist_units}()},
+Other dist:
+\code{\link[=compare_dist]{compare_dist()}},
+\code{\link[=convert_dist_scale]{convert_dist_scale()}},
+\code{\link[=convert_dist_units]{convert_dist_units()}},
 \code{\link{get_measurements}},
-\code{\link{is_dist_units}()}
+\code{\link[=is_dist_units]{is_dist_units()}}
 }
 \concept{dist}

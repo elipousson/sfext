@@ -36,7 +36,7 @@ of the text or content block inside the page margins.}
 without an error.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=get_paper]{get_paper}}
+  Arguments passed on to \code{\link{get_paper}}
   \describe{
     \item{\code{standard}}{Size standard, "ANSI", "ISO", "British Imperial", "JIS",
 "USPS", "Facebook", "Instagram", or "Twitter".}

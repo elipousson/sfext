@@ -11,6 +11,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{filenamr}{\code{\link[filenamr]{make_filename}}}
+  \item{filenamr}{\code{\link[filenamr:make_filename]{make_filename()}}}
 }}
 

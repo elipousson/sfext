@@ -29,7 +29,7 @@ be in the provided units or the units of the coordinate reference system
 \code{\link[=sf_bbox_ydist]{sf_bbox_ydist()}}, or \code{\link[=sf_bbox_diagdist]{sf_bbox_diagdist()}}. If to is a length 2 character
 vector, x, to, and any ... parameters are passed to \code{\link[=sf_bbox_dist]{sf_bbox_dist()}}. If to is
 an sf or sfc object, to and any additional ... parameters are passed to
-\code{\link[sf:geos_measures]{sf::st_distance()}} using x as the first argument and to as the second. If
+\code{\link[sf:st_distance]{sf::st_distance()}} using x as the first argument and to as the second. If
 x is a numeric vector the value of to is ignored.}
 
 \item{how}{If "ratio", dist divided by the comparison distance. If what is
@@ -38,7 +38,7 @@ without remainder. If "longer", "shorter", "same", return a logical vector.}
 
 \item{tolerance}{passed to \code{\link[=all.equal]{all.equal()}} if \code{how = "same"}}
 
-\item{...}{Additional parameters passed to \code{\link[sf:geos_measures]{sf::st_distance()}} if to is an sf
+\item{...}{Additional parameters passed to \code{\link[sf:st_distance]{sf::st_distance()}} if to is an sf
 or sfc object or \code{\link[=sf_bbox_dist]{sf_bbox_dist()}} if to is a length 2 character vector.}
 }
 \value{
@@ -48,7 +48,7 @@ A logical or numeric vector.
 Compare dist to a distance based on x. If to is "xdist" (default), "ydist",
 "diagdist", or any length 2 character vector supported by \code{\link[=sf_bbox_dist]{sf_bbox_dist()}}
 dist is compared to the resulting distance. If to is an sf or sfc object, the
-comparison distance is the results from \code{\link[sf:geos_measures]{sf::st_distance()}} with x as the
+comparison distance is the results from \code{\link[sf:st_distance]{sf::st_distance()}} with x as the
 first parameter and to as the second. x can also be a numeric value with or
 without a units class. Use the "how" argument to determine the type of
 comparison: "ratio" (dist divided by comparison distance) "fit" (how many
@@ -56,11 +56,11 @@ lengths of dist can fit wholly within the comparison distance) "longer",
 "shorter", "same" (uses tolerance parameter).
 }
 \seealso{
-Other dist: 
-\code{\link{convert_dist_scale}()},
-\code{\link{convert_dist_units}()},
+Other dist:
+\code{\link[=convert_dist_scale]{convert_dist_scale()}},
+\code{\link[=convert_dist_units]{convert_dist_units()}},
 \code{\link{get_measurements}},
-\code{\link{is_dist_units}()},
-\code{\link{sf_bbox_dist}()}
+\code{\link[=is_dist_units]{is_dist_units()}},
+\code{\link[=sf_bbox_dist]{sf_bbox_dist()}}
 }
 \concept{dist}

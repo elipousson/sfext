@@ -61,7 +61,7 @@ units, \link{get_dist_units} may return multiple units. Passed to \link[rlang:ar
 
 \item{quiet}{If \code{TRUE}, suppress warning messages.}
 
-\item{combine}{If \code{TRUE}, combine objects with \code{\link[sf:geos_combine]{sf::st_combine()}} before
+\item{combine}{If \code{TRUE}, combine objects with \code{\link[sf:st_combine]{sf::st_combine()}} before
 comparing area with \code{\link[=is_diff_area]{is_diff_area()}} or \code{\link[=is_same_area]{is_same_area()}}, defaults to
 \code{TRUE}.}
 }
@@ -82,15 +82,15 @@ There are two additional functions that support these utility functions:
 \itemize{
 \item \code{\link[=get_dist_units]{get_dist_units()}}: Get the distance units from x (if x is a sf or units
 objects or a character string from \link{dist_unit_options})
-\item \code{\link[=as_dist_units]{as_dist_units()}}: Convert x to units using \link[units:units]{units::as_units}
+\item \code{\link[=as_dist_units]{as_dist_units()}}: Convert x to units using \link[units:as_units]{units::as_units}
 }
 }
 \seealso{
-Other dist: 
-\code{\link{compare_dist}()},
-\code{\link{convert_dist_scale}()},
-\code{\link{convert_dist_units}()},
+Other dist:
+\code{\link[=compare_dist]{compare_dist()}},
+\code{\link[=convert_dist_scale]{convert_dist_scale()}},
+\code{\link[=convert_dist_units]{convert_dist_units()}},
 \code{\link{get_measurements}},
-\code{\link{sf_bbox_dist}()}
+\code{\link[=sf_bbox_dist]{sf_bbox_dist()}}
 }
 \concept{dist}

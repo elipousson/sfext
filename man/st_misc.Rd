@@ -36,7 +36,7 @@ object, as an \code{sf} object (with lon and lat values), the original geometry
 (x), and the original crs. objects; defaults TRUE. If \code{FALSE}, return an
 \code{sf} object.}
 
-\item{...}{Additional parameters passed to \code{\link[sf:geos_unary]{sf::st_centroid()}} by
+\item{...}{Additional parameters passed to \code{\link[sf:st_centroid]{sf::st_centroid()}} by
 \code{\link[=st_center]{st_center()}} or \code{\link[=st_circle]{st_circle()}} by \code{\link[=st_donut]{st_donut()}}.}
 
 \item{scale}{For \code{\link[=st_donut]{st_donut()}}, scale to apply to donut using \code{\link[=st_circle]{st_circle()}}.
@@ -56,10 +56,10 @@ before converting into a donut geometry. If \code{FALSE}, each feature in the
 input data remains a separate feature in the output.}
 
 \item{use_hull}{For \code{\link[=st_circle]{st_circle()}}, if \code{TRUE} use the geometry from
-\code{\link[sf:geos_unary]{sf::st_convex_hull()}} (to address issues with MULTIPOLYGON objects).}
+\code{\link[sf:st_convex_hull]{sf::st_convex_hull()}} (to address issues with MULTIPOLYGON objects).}
 
 \item{use_lwgeom}{If \code{TRUE}, \code{by_feature = TRUE} and \code{inscribed = FALSE}, use
-\code{\link[lwgeom:bounding_circle]{lwgeom::st_minimum_bounding_circle()}}.}
+\code{\link[lwgeom:st_minimum_bounding_circle]{lwgeom::st_minimum_bounding_circle()}}.}
 
 \item{width}{Donut width as proportion of outer size.}
 }
@@ -71,7 +71,7 @@ Support \code{sf}, \code{sfc}, and \code{bbox} and objects as inputs.
 \item Get a donut for a \code{sf} object (may not work if \code{inscribed = TRUE})
 }
 
-st_inscribed_square wraps \code{\link[sf:geos_unary]{sf::st_inscribed_circle()}} but limits the circle
+st_inscribed_square wraps \code{\link[sf:st_inscribed_circle]{sf::st_inscribed_circle()}} but limits the circle
 to 1 segment per quadrant (\code{nQuadSegs = 1}) and then rotates the resulting
 geometry 45 degrees to provide a (mostly) inscribed square. A different
 rotation value can be provided to change the orientation of the shape, e.g.

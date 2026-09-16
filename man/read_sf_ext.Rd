@@ -157,7 +157,7 @@ package is \code{NULL}.}
 \item{fileext}{File extension. If supplied to \code{\link[filenamr:list_path_filenames]{list_path_filenames()}} and
 pattern is \code{NULL}, only return file names matching this extension.}
 
-\item{filetype}{File type supported by \code{\link[sf:st_read]{sf::read_sf()}}; Default: 'gpkg'; used
+\item{filetype}{File type supported by \code{\link[sf:read_sf]{sf::read_sf()}}; Default: 'gpkg'; used
 by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data is in the package
 cache directory or extdata system files.}
 
@@ -227,9 +227,6 @@ ArcGIS FeatureServer or MapServer to access with \code{\link[esri2sf:esri2sf]{es
 (the default) only show the column types if they are not explicitly supplied
 by the \code{col_types} argument.}
 
-\item{where}{string for where condition. Default is \code{NULL} (equivalent to
-\code{1=1}) to return all rows.}
-
 \item{id}{The name of a column in which to store the file path. This is
 useful when reading multiple input files and there is data in the file
 paths, such as the data collection date. If \code{NULL} (the default) no extra
@@ -284,7 +281,7 @@ Processed through \code{\link[googlesheets4:as_sheets_id]{as_sheets_id()}}.}
 not provided to \link{read_sf_gsheet}.}
 }
 \description{
-An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support reading spatial data
+An extended version of \code{\link[sf:read_sf]{sf::read_sf()}} that support reading spatial data
 based on a file path, URL, or the data name and associated package. A RDS,
 RDA, or RData file Optionally provide a bounding box to filter data (data is
 filtered before download or reading into memory where possible).
@@ -329,13 +326,13 @@ provided, a expected layer name is created based on the file path.
 
 \code{\link[=read_sf_url]{read_sf_url()}} pass the where, name_col, and name for any ArcGIS
 FeatureServer or MapServer url (passed to \code{\link[=read_sf_esri]{read_sf_esri()}}) or sheet if the
-url is for a Google Sheet (passed to \code{\link[googlesheets4:range_read]{googlesheets4::read_sheet()}}), or a
+url is for a Google Sheet (passed to \code{\link[googlesheets4:read_sheet]{googlesheets4::read_sheet()}}), or a
 query or wkt filter parameter if the url is some other type (passed to
-\code{\link[sf:st_read]{sf::read_sf()}}).
+\code{\link[sf:read_sf]{sf::read_sf()}}).
 }
 
 \seealso{
-Other read_write: 
-\code{\link{read_sf_exif}()}
+Other read_write:
+\code{\link[=read_sf_exif]{read_sf_exif()}}
 }
 \concept{read_write}

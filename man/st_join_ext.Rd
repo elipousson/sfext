@@ -19,7 +19,7 @@ already.}
 the input \code{sf} object.}
 
 \item{join}{geometry predicate function; defaults to \code{NULL}, set to
-\code{\link[sf:geos_binary_pred]{sf::st_intersects()}} if y contains only POLYGON or MULTIPOLYGON
+\code{\link[sf:st_intersects]{sf::st_intersects()}} if y contains only POLYGON or MULTIPOLYGON
 objects or \code{\link[sf:st_nearest_feature]{sf::st_nearest_feature()}} if y contains other types.}
 
 \item{...}{Additional parameters passed to \code{\link[sf:st_join]{sf::st_join()}}}

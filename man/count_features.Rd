@@ -29,14 +29,14 @@ matching the value of .id. If y is \code{NULL}, count is required. Default: \cod
 (if y is not already an sf list). Defaults to "data".}
 
 \item{join}{geometry predicate function; defaults to \code{NULL}, set to
-\code{\link[sf:geos_binary_pred]{sf::st_intersects()}} if y contains only POLYGON or MULTIPOLYGON
+\code{\link[sf:st_intersects]{sf::st_intersects()}} if y contains only POLYGON or MULTIPOLYGON
 objects or \code{\link[sf:st_nearest_feature]{sf::st_nearest_feature()}} if y contains other types.}
 
 \item{.id}{Column name with the values that should be added as a column to
 the input \code{sf} object.}
 
 \item{by}{A character vector of variables to join by passed to
-\code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.}
+\code{\link[dplyr:left_join]{dplyr::left_join()}}.}
 
 \item{count}{Name of column to count. If \code{NULL}, count is set to \code{names(y)}
 (assuming y is a length 1 named \code{sf} list).}

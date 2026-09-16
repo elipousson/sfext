@@ -67,7 +67,7 @@ it will use \code{nn}. If there's a column called \code{n} and \code{nn}, it'll 
 \code{nnn}, and so on, adding \code{n}s until it gets a new name.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=st_make_grid_ext]{st_make_grid_ext}}
+  Arguments passed on to \code{\link{st_make_grid_ext}}
   \describe{
     \item{\code{ncol,nrow}}{Used to set n if either are not \code{NULL}; defaults to \code{NULL}.
 row and id are added as columns to the grid if they are provided.}

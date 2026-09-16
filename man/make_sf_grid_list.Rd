@@ -29,7 +29,7 @@ row and id are added as columns to the grid if they are provided.}
 \code{NULL} which maintains the crs of the input object.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=st_make_grid_ext]{st_make_grid_ext}}
+  Arguments passed on to \code{\link{st_make_grid_ext}}
   \describe{
     \item{\code{ncol,nrow}}{Used to set n if either are not \code{NULL}; defaults to \code{NULL}.
 row and id are added as columns to the grid if they are provided.}

@@ -98,10 +98,10 @@ used as lower and upper limits on distance buffer). Units must match the
 provided units; defaults to \code{NULL}.}
 
 \item{end_style}{"round" (default), "flat", or "square" passed to the
-endCapStyle parameter of \code{\link[sf:geos_unary]{sf::st_buffer()}}.}
+endCapStyle parameter of \code{\link[sf:st_buffer]{sf::st_buffer()}}.}
 
 \item{join_style}{"round" (default), "mitre", or "bevel" passed to the
-joinStyle parameter of \code{\link[sf:geos_unary]{sf::st_buffer()}}.}
+joinStyle parameter of \code{\link[sf:st_buffer]{sf::st_buffer()}}.}
 
 \item{single_side}{If \code{TRUE}, single-sided buffers are returned for linear
 geometries, in which case negative dist values give buffers on the
@@ -114,7 +114,7 @@ returned with no error.}
 \code{\link[purrr:map]{purrr::map()}} to apply the provided parameters to each object within the
 list to return as a new sf list object.}
 
-\item{...}{Additional parameters passed to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
+\item{...}{Additional parameters passed to \code{\link[sf:st_buffer]{sf::st_buffer()}}}
 }
 \description{
 Return an sf object with a buffer based on \code{dist} or a proportion of the

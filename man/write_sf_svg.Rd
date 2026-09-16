@@ -21,7 +21,7 @@ write_sf_svg(data, filename = NULL, path = NULL, ..., width = 10, height = 10)
 provided. filename is optional if path includes a svg file extension.}
 
 \item{...}{
-  Arguments passed on to \code{\link[grDevices:cairo]{grDevices::svg}}
+  Arguments passed on to \code{\link[grDevices:svg]{grDevices::svg}}
   \describe{
     \item{\code{pointsize}}{the default pointsize of plotted text (in big points).}
     \item{\code{onefile}}{should all plots appear in one file or in separate files?}
@@ -37,6 +37,8 @@ provided. filename is optional if path includes a svg file extension.}
     \code{par("bg")}.}
     \item{\code{antialias}}{string, the type of anti-aliasing (if any) to be used;
     defaults to \code{"default"}.}
+    \item{\code{fallback_resolution}}{numeric: the resolution in dpi used when
+    falling back to bitmap output.}
     \item{\code{symbolfamily}}{
       a length-one character string that specifies the font family to
       be used as the "symbol" font (e.g., for \link[grDevices]{plotmath} output).}

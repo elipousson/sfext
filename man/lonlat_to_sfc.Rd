@@ -35,7 +35,7 @@ mentioned in error messages as the source of the error. See the
 \code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{...}{
-  Arguments passed on to \code{\link[sf:sfc]{sf::st_sfc}}
+  Arguments passed on to \code{\link[sf:st_sfc]{sf::st_sfc}}
   \describe{
     \item{\code{precision}}{numeric; see \link[sf]{st_as_binary}}
     \item{\code{check_ring_dir}}{see \link[sf]{st_read}}
@@ -44,6 +44,11 @@ mentioned in error messages as the source of the error. See the
     \item{\code{oriented}}{logical; if \code{TRUE}, the ring is oriented such that left of the edges is inside the polygon; this is
 needed for convering polygons larger than half the globe to s2}
     \item{\code{fall_back_class}}{character; class for return object when no geometries are provided as input}
+    \item{\code{i}}{record selection. Might also be an \code{sfc}/\code{sf} object to work with the \code{op} argument}
+    \item{\code{j}}{ignored if \code{op} is specified}
+    \item{\code{op}}{function, geometrical binary predicate function to apply when
+\code{i} is a \code{sf}/\code{sfc} object. Additional arguments can be
+specified using \code{...}, see examples.}
   }}
 }
 \description{

@@ -41,8 +41,8 @@ column, Default: \code{NULL}}
 \item{x_arg, coverage_arg, id_arg}{Argument names for error messages if
 \code{\link[=bind_sf_coverage]{bind_sf_coverage()}} is used as a wrapper function.}
 
-\item{combine}{If \code{TRUE}, use \code{\link[sf:geos_combine]{sf::st_combine()}} before passing x to
-\code{\link[sf:geos_combine]{sf::st_union()}}}
+\item{combine}{If \code{TRUE}, use \code{\link[sf:st_combine]{sf::st_combine()}} before passing x to
+\code{\link[sf:st_union]{sf::st_union()}}}
 
 \item{error_call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be

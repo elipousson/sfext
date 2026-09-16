@@ -192,135 +192,161 @@ export(write_sf_gsheet)
 export(write_sf_list)
 export(write_sf_svg)
 import(rlang)
-importFrom(cli,builtin_theme)
-importFrom(cli,cli_abort)
-importFrom(cli,cli_alert_danger)
-importFrom(cli,cli_alert_info)
-importFrom(cli,cli_alert_success)
-importFrom(cli,cli_alert_warning)
-importFrom(cli,cli_bullets)
-importFrom(cli,cli_format)
-importFrom(cli,cli_inform)
-importFrom(cli,cli_progress_along)
-importFrom(cli,cli_vec)
-importFrom(cli,cli_warn)
-importFrom(cli,pluralize)
-importFrom(cli,qty)
-importFrom(cliExtras,cli_ask)
-importFrom(cliExtras,cli_list_files)
-importFrom(cliExtras,cli_warning_ifnot)
-importFrom(cliExtras,cli_yesno)
-importFrom(dplyr,across)
-importFrom(dplyr,all_of)
-importFrom(dplyr,arrange)
-importFrom(dplyr,between)
-importFrom(dplyr,bind_cols)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,case_when)
-importFrom(dplyr,count)
-importFrom(dplyr,desc)
-importFrom(dplyr,everything)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,group_keys)
-importFrom(dplyr,group_nest)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,relocate)
-importFrom(dplyr,rename)
-importFrom(dplyr,right_join)
-importFrom(dplyr,row_number)
-importFrom(dplyr,select)
-importFrom(dplyr,summarise)
-importFrom(dplyr,summarize)
-importFrom(dplyr,tibble)
-importFrom(filenamr,check_file_overwrite)
-importFrom(filenamr,get_data_dir)
-importFrom(filenamr,list_path_filenames)
-importFrom(filenamr,make_filename)
-importFrom(filenamr,read_exif)
-importFrom(glue,glue)
-importFrom(glue,glue_collapse)
-importFrom(grDevices,dev.off)
-importFrom(grDevices,svg)
-importFrom(lifecycle,badge)
-importFrom(lifecycle,deprecated)
-importFrom(lifecycle,signal_stage)
+importFrom(cli,
+  builtin_theme,
+  cli_abort,
+  cli_alert_danger,
+  cli_alert_info,
+  cli_alert_success,
+  cli_alert_warning,
+  cli_bullets,
+  cli_format,
+  cli_inform,
+  cli_progress_along,
+  cli_vec,
+  cli_warn,
+  pluralize,
+  qty
+)
+importFrom(cliExtras,
+  cli_ask,
+  cli_list_files,
+  cli_warning_ifnot,
+  cli_yesno
+)
+importFrom(dplyr,
+  across,
+  all_of,
+  arrange,
+  between,
+  bind_cols,
+  bind_rows,
+  case_when,
+  count,
+  desc,
+  everything,
+  filter,
+  group_by,
+  group_keys,
+  group_nest,
+  left_join,
+  mutate,
+  relocate,
+  rename,
+  right_join,
+  row_number,
+  select,
+  summarise,
+  summarize,
+  tibble
+)
+importFrom(filenamr,
+  check_file_overwrite,
+  get_data_dir,
+  list_path_filenames,
+  make_filename,
+  read_exif
+)
+importFrom(glue,
+  glue,
+  glue_collapse
+)
+importFrom(grDevices,
+  dev.off,
+  svg
+)
+importFrom(lifecycle,
+  badge,
+  deprecated,
+  signal_stage
+)
 importFrom(purrr,map_dfr)
-importFrom(rlang,.data)
-importFrom(rlang,arg_match)
-importFrom(rlang,as_function)
-importFrom(rlang,caller_env)
-importFrom(rlang,check_installed)
-importFrom(rlang,check_required)
-importFrom(rlang,current_env)
-importFrom(rlang,exec)
-importFrom(rlang,has_length)
-importFrom(rlang,has_name)
-importFrom(rlang,is_function)
-importFrom(rlang,is_lambda)
-importFrom(rlang,is_missing)
-importFrom(rlang,is_named)
-importFrom(rlang,is_null)
-importFrom(rlang,list2)
-importFrom(rlang,set_names)
-importFrom(rlang,try_fetch)
-importFrom(rlang,zap)
-importFrom(sf,NA_crs_)
-importFrom(sf,read_sf)
-importFrom(sf,st_area)
-importFrom(sf,st_as_sf)
-importFrom(sf,st_as_sfc)
-importFrom(sf,st_as_text)
-importFrom(sf,st_bbox)
-importFrom(sf,st_buffer)
-importFrom(sf,st_cast)
-importFrom(sf,st_centroid)
-importFrom(sf,st_combine)
-importFrom(sf,st_concave_hull)
-importFrom(sf,st_convex_hull)
-importFrom(sf,st_coordinates)
-importFrom(sf,st_crop)
-importFrom(sf,st_crs)
-importFrom(sf,st_difference)
-importFrom(sf,st_dimension)
-importFrom(sf,st_distance)
-importFrom(sf,st_drop_geometry)
-importFrom(sf,st_filter)
-importFrom(sf,st_geometry)
-importFrom(sf,st_geometry_type)
-importFrom(sf,st_inscribed_circle)
-importFrom(sf,st_intersection)
-importFrom(sf,st_intersects)
-importFrom(sf,st_is)
-importFrom(sf,st_is_longlat)
-importFrom(sf,st_is_valid)
-importFrom(sf,st_join)
-importFrom(sf,st_layers)
-importFrom(sf,st_length)
-importFrom(sf,st_make_grid)
-importFrom(sf,st_make_valid)
-importFrom(sf,st_nearest_feature)
-importFrom(sf,st_point)
-importFrom(sf,st_point_on_surface)
-importFrom(sf,st_set_crs)
-importFrom(sf,st_set_geometry)
-importFrom(sf,st_sf)
-importFrom(sf,st_sfc)
-importFrom(sf,st_transform)
-importFrom(sf,st_union)
-importFrom(sf,st_zm)
-importFrom(sf,write_sf)
-importFrom(tibble,as_tibble)
-importFrom(tibble,enframe)
-importFrom(tibble,is_tibble)
-importFrom(tibble,tibble)
-importFrom(units,as_units)
-importFrom(units,drop_units)
-importFrom(units,set_units)
-importFrom(utils,data)
-importFrom(utils,download.file)
-importFrom(utils,unzip)
-importFrom(vctrs,vec_as_names)
-importFrom(vctrs,vec_cbind)
-importFrom(vctrs,vec_rbind)
+importFrom(rlang,
+  .data,
+  arg_match,
+  as_function,
+  caller_env,
+  check_installed,
+  check_required,
+  current_env,
+  exec,
+  has_length,
+  has_name,
+  is_function,
+  is_lambda,
+  is_missing,
+  is_named,
+  is_null,
+  list2,
+  set_names,
+  try_fetch,
+  zap
+)
+importFrom(sf,
+  NA_crs_,
+  read_sf,
+  st_area,
+  st_as_sf,
+  st_as_sfc,
+  st_as_text,
+  st_bbox,
+  st_buffer,
+  st_cast,
+  st_centroid,
+  st_combine,
+  st_concave_hull,
+  st_convex_hull,
+  st_coordinates,
+  st_crop,
+  st_crs,
+  st_difference,
+  st_dimension,
+  st_distance,
+  st_drop_geometry,
+  st_filter,
+  st_geometry,
+  st_geometry_type,
+  st_inscribed_circle,
+  st_intersection,
+  st_intersects,
+  st_is,
+  st_is_longlat,
+  st_is_valid,
+  st_join,
+  st_layers,
+  st_length,
+  st_make_grid,
+  st_make_valid,
+  st_nearest_feature,
+  st_point,
+  st_point_on_surface,
+  st_set_crs,
+  st_set_geometry,
+  st_sf,
+  st_sfc,
+  st_transform,
+  st_union,
+  st_zm,
+  write_sf
+)
+importFrom(tibble,
+  as_tibble,
+  enframe,
+  is_tibble,
+  tibble
+)
+importFrom(units,
+  as_units,
+  drop_units,
+  set_units
+)
+importFrom(utils,
+  data,
+  download.file,
+  unzip
+)
+importFrom(vctrs,
+  vec_as_names,
+  vec_cbind,
+  vec_rbind
+)

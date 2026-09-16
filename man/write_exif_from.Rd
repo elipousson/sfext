@@ -34,12 +34,12 @@ data used to assign keywords based on photo locations.}
 or "description".}
 
 \item{join}{geometry predicate function; defaults to \code{NULL}, set to
-\link[sf:geos_binary_pred]{sf::st_intersects} if from contains only POLYGON or MULTIPOLYGON objects
+\link[sf:st_intersects]{sf::st_intersects} if from contains only POLYGON or MULTIPOLYGON objects
 or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if from contains other types.}
 
 \item{overwrite}{If \code{TRUE}, overwrite any existing EXIF metadata present in
 the provided fields; defaults to \code{TRUE}}
 }
 \description{
-Extends \code{\link[=read_sf_exif]{read_sf_exif()}} and \code{\link[filenamr:read_exif]{filenamr::write_exif()}}
+Extends \code{\link[=read_sf_exif]{read_sf_exif()}} and \code{\link[filenamr:write_exif]{filenamr::write_exif()}}
 }

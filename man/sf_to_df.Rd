@@ -72,10 +72,10 @@ to \code{FALSE}.}
 \item{address}{Address column name passed to \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode()}} or
 \link[tidygeocoder:geo]{tidygeocoder::geo}}
 
-\item{y}{A sf object passed as y argument to \code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.}
+\item{y}{A sf object passed as y argument to \code{\link[dplyr:left_join]{dplyr::left_join()}}.}
 
 \item{by}{A character vector of variables to join by passed to
-\code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.}
+\code{\link[dplyr:left_join]{dplyr::left_join()}}.}
 
 \item{...}{Other parameters passed onto methods.}
 

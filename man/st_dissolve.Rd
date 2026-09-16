@@ -12,7 +12,7 @@ st_dissolve(
   do_union = TRUE,
   .data_key = "data",
   .dissolve_key = "group.comp.id",
-  call = caller_env
+  call = caller_env()
 )
 }
 \arguments{
@@ -37,8 +37,8 @@ details and examples, see \link[dplyr:dplyr_by]{?dplyr_by}.}
 ("nest"), input data is converted to a nested list column with the name
 from \code{.data_key}. Any other values}
 
-\item{do_union}{Use \code{\link[sf:geos_combine]{sf::st_union()}} to dissolve geometry if \code{TRUE}
-(default). Use \code{\link[sf:geos_combine]{sf::st_combine()}} if \code{FALSE}.}
+\item{do_union}{Use \code{\link[sf:st_union]{sf::st_union()}} to dissolve geometry if \code{TRUE}
+(default). Use \code{\link[sf:st_combine]{sf::st_combine()}} if \code{FALSE}.}
 
 \item{.data_key}{Passed to \code{.data} argument of \code{\link[tidyr:nest]{tidyr::nest()}}}
 

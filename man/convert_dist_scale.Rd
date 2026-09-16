@@ -44,7 +44,7 @@ defaults to \code{NULL}.}
 'portrait'.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=get_paper]{get_paper}}
+  Arguments passed on to \code{\link{get_paper}}
   \describe{
     \item{\code{standard}}{Size standard, "ANSI", "ISO", "British Imperial", "JIS",
 "USPS", "Facebook", "Instagram", or "Twitter".}
@@ -78,11 +78,11 @@ This function converts scale distances to actual units based on named
 \link{standard_scales}.
 }
 \seealso{
-Other dist: 
-\code{\link{compare_dist}()},
-\code{\link{convert_dist_units}()},
+Other dist:
+\code{\link[=compare_dist]{compare_dist()}},
+\code{\link[=convert_dist_units]{convert_dist_units()}},
 \code{\link{get_measurements}},
-\code{\link{is_dist_units}()},
-\code{\link{sf_bbox_dist}()}
+\code{\link[=is_dist_units]{is_dist_units()}},
+\code{\link[=sf_bbox_dist]{sf_bbox_dist()}}
 }
 \concept{dist}

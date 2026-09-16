@@ -29,11 +29,11 @@ a \code{sf}, \code{sfc}, \code{bbox}, or \code{crs} class object supported by \c
 \item{allow_null}{If \code{TRUE} and crs is \code{NULL}, return x.}
 
 \item{...}{Additional parameters passed to \code{\link[sf:st_transform]{sf::st_transform()}} by
-\code{\link[=transform_sf]{transform_sf()}} or to \code{\link[sf:st_read]{sf::read_sf()}} by \code{\link[=get_sf_colnames]{get_sf_colnames()}} if x is not
+\code{\link[=transform_sf]{transform_sf()}} or to \code{\link[sf:read_sf]{sf::read_sf()}} by \code{\link[=get_sf_colnames]{get_sf_colnames()}} if x is not
 \code{NULL}.}
 
 \item{.after}{The location to place sf column after; defaults to
-\code{\link[dplyr:reexports]{dplyr::everything()}}.}
+\code{\link[dplyr:everything]{dplyr::everything()}}.}
 
 \item{sf_col}{Name to use for the sf column after renaming; defaults to
 "geometry".}
@@ -57,15 +57,15 @@ use the \code{query} argument.}
 \itemize{
 \item \code{\link[=transform_sf]{transform_sf()}} is similar to \code{\link[sf:st_transform]{sf::st_transform()}} but supports sf, sfc,
 or bbox objects as the crs parameter, supports sfg objects (transformed to
-sfc), and uses \code{\link[sf:st_crs]{sf::st_set_crs()}} if the CRS for the provided object is \code{NA}.
+sfc), and uses \code{\link[sf:st_set_crs]{sf::st_set_crs()}} if the CRS for the provided object is \code{NA}.
 This function does not support bounding box transformations.
 \item \code{\link[=relocate_sf_col]{relocate_sf_col()}} relocates the sf geometry column after specified column
 (by default after everything).
-\item \code{\link[=rename_sf_col]{rename_sf_col()}} a wrapper for \code{\link[sf:st_geometry]{sf::st_set_geometry()}} that renames the sf
+\item \code{\link[=rename_sf_col]{rename_sf_col()}} a wrapper for \code{\link[sf:st_set_geometry]{sf::st_set_geometry()}} that renames the sf
 column.
 \item \code{\link[=get_sf_col]{get_sf_col()}} returns the "sf_column" attribute.
 \item \code{\link[=get_sf_colnames]{get_sf_colnames()}} returns the column names of a file that can be read
-with \code{\link[sf:st_read]{sf::read_sf()}} to allow you to use column names to build a query (or
+with \code{\link[sf:read_sf]{sf::read_sf()}} to allow you to use column names to build a query (or
 provide a value for name_col) without reading the whole file.
 }
 }

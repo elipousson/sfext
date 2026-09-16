@@ -34,7 +34,7 @@ ignored.}
 \item{crs}{Coordinate reference system to return.}
 
 \item{.predicate}{geometry predicate function with the same profile as
-\code{\link[sf:geos_binary_pred]{sf::st_intersects()}}; see details for \code{\link[sf:st_join]{sf::st_filter()}} for more options.}
+\code{\link[sf:st_intersects]{sf::st_intersects()}}; see details for \code{\link[sf:st_filter]{sf::st_filter()}} for more options.}
 
 \item{type}{Geometry type.}
 
@@ -43,13 +43,17 @@ If \code{FALSE}, only \code{sf}, \code{sfc}, or \code{bbox} objects are supporte
 \code{TRUE}.}
 
 \item{...}{
-  Arguments passed on to \code{\link[sf:st_join]{sf::st_filter}}
+  Arguments passed on to \code{\link[sf:st_filter]{sf::st_filter}}
   \describe{
-    \item{\code{}}{}
+    \item{\code{join}}{geometry predicate function with the same profile as \link[sf]{st_intersects}; see details}
+    \item{\code{suffix}}{length 2 character vector; see \link[base]{merge}}
+    \item{\code{left}}{logical; if \code{TRUE} return the left join, otherwise an inner join; see details.
+see also \link[dplyr:mutate-joins]{left_join}}
+    \item{\code{largest}}{logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578}
   }}
 }
 \description{
-Extend \code{\link[sf:st_join]{sf::st_filter()}} to filter a sf list or a \code{sf}, \code{sfc}, or \code{bbox} with
+Extend \code{\link[sf:st_filter]{sf::st_filter()}} to filter a sf list or a \code{sf}, \code{sfc}, or \code{bbox} with
 options to crop, trim or erase the geometry of the input object based on a
 predicate function. Returns x transformed to match crs if y is \code{NULL}.
 }

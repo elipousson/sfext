@@ -23,23 +23,6 @@ currently supported.}
 
 \item{address}{Address column name, Default: 'address'}
 
-\item{method}{the geocoding service to be used. API keys are loaded from environmental variables. Run \code{usethis::edit_r_environ()} to open your .Renviron file and add an API key as an environmental variable. For example, add the line \code{GEOCODIO_API_KEY="YourAPIKeyHere"}
-\itemize{
-\item \code{"osm"}: \href{https://nominatim.org}{Nominatim}.
-\item \code{"census"}: \href{https://geocoding.geo.census.gov/}{US Census}. Geographic coverage is limited to the United States. Batch geocoding is supported.
-\item \code{"arcgis"}: \href{https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm}{ArcGIS}.
-\item \code{"geocodio"}: \href{https://www.geocod.io/}{Geocodio}. Geographic coverage is limited to the United States and Canada. Batch geocoding is supported. Store an API key in the environmental variable \code{"GEOCODIO_API_KEY"}.
-\item \code{"iq"}: \href{https://locationiq.com/}{Location IQ}.   Store an API key in the environmental variable \code{"LOCATIONIQ_API_KEY"}.
-\item \code{"google"}: \href{https://developers.google.com/maps/documentation/geocoding/overview}{Google}.   Store an API key in the environmental variable \code{"GOOGLEGEOCODE_API_KEY"}.
-\item \code{"opencage"}: \href{https://opencagedata.com}{OpenCage}.   Store an API key in the environmental variable \code{"OPENCAGE_KEY"}.
-\item \code{"mapbox"}: \href{https://docs.mapbox.com/api/search/}{Mapbox}.   Store an API key in the environmental variable \code{"MAPBOX_API_KEY"}.
-\item \code{"here"}: \href{https://www.here.com/platform/geocoding}{HERE}.  Batch geocoding is supported, but must be explicitly called with \code{mode = "batch"}. Store an API key in the environmental variable \code{"HERE_API_KEY"}.
-\item \code{"tomtom"}: \href{https://developer.tomtom.com/search-api/search-api-documentation}{TomTom}.  Batch geocoding is supported. Store an API key in the environmental variable \code{"TOMTOM_API_KEY"}.
-\item \code{"mapquest"}: \href{https://developer.mapquest.com/documentation/api/geocoding}{MapQuest}.  Batch geocoding is supported. Store an API key in the environmental variable \code{"MAPQUEST_API_KEY"}.
-\item \code{"bing"}: \href{https://learn.microsoft.com/en-us/bingmaps/rest-services/locations/}{Bing}.  Batch geocoding is supported, but must be explicitly called with \code{mode = "batch"}. Store an API key in the environmental variable \code{"BINGMAPS_API_KEY"}.
-\item \code{"geoapify"}: \href{https://www.geoapify.com/geocoding-api}{Geoapify}.   Store an API key in the environmental variable \code{"GEOAPIFY_KEY"}.
-}}
-
 \item{coords}{Coordinate columns for input data.frame or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 
@@ -50,28 +33,7 @@ after converting a data frame to simple feature object; defaults to
 \item{crs}{Cordinate reference system to return, Default: 4326 for
 \code{\link[=sf_to_df]{sf_to_df()}} and \code{NULL} for \code{\link[=df_to_sf]{df_to_sf()}}.}
 
-\item{full_results}{returns all available data from the geocoding service if TRUE. If FALSE (default) then only latitude and longitude columns are returned from the geocoding service.}
-
-\item{...}{
-  Arguments passed on to \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode}}
-  \describe{
-    \item{\code{.tbl}}{dataframe containing addresses}
-    \item{\code{street}}{street address column name}
-    \item{\code{city}}{city column name}
-    \item{\code{county}}{county column name}
-    \item{\code{state}}{state column name}
-    \item{\code{postalcode}}{postal code column name (zip code if in the United States)}
-    \item{\code{country}}{country column name}
-    \item{\code{lat}}{latitude column name. Can be quoted or unquoted (ie. \code{lat} or \code{"lat"}).}
-    \item{\code{long}}{longitude column name. Can be quoted or unquoted (ie. \code{long} or \code{"long"}).}
-    \item{\code{return_input}}{if TRUE then the input dataset will be combined with the geocoder query results
-and returned. If FALSE only the geocoder results will be returned.}
-    \item{\code{limit}}{maximum number of results to return per input address. For many geocoding services the maximum value of the limit parameter is 100. Pass \code{limit = NULL} to use the default \code{limit} value of the selected geocoding service. For batch geocoding, limit must be set to 1 (default) if \code{return_addresses = TRUE}.To use \code{limit > 1} or \code{limit = NULL} set return_input to FALSE. Refer to \link[tidygeocoder]{api_parameter_reference} for more details.}
-    \item{\code{return_addresses}}{if TRUE return input addresses. Defaults to TRUE if \code{return_input} is FALSE
-and FALSE if \code{return_input} is TRUE. This argument is passed to the \code{geo()} function.}
-    \item{\code{unique_only}}{if TRUE then only unique results will be returned and
-return_input will be set to FALSE.}
-  }}
+\item{...}{Other parameters passed onto methods.}
 
 \item{call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be

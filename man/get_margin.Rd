@@ -39,8 +39,8 @@ well with header and footers and should be improved in the future.}
 note: headers and footers are not currently supported for "px" units.}
 }
 \value{
-A \code{\link[ggplot2:element]{ggplot2::margin()}} element intended for use with
-\code{\link[ggplot2:element]{ggplot2::element_rect()}} and the \code{plot.background} theme element.
+A \code{\link[ggplot2:margin]{ggplot2::margin()}} element intended for use with
+\code{\link[ggplot2:element_rect]{ggplot2::element_rect()}} and the \code{plot.background} theme element.
 }
 \description{
 This function works in combination with the \code{\link[=get_paper]{get_paper()}} function to make it
@@ -59,5 +59,5 @@ get_margin(dist = 25, unit = "mm")
 get_margin(paper = "letter", block_width = 5.5)
 }
 \seealso{
-\code{\link[ggplot2:element]{ggplot2::margin()}}
+\code{\link[ggplot2:margin]{ggplot2::margin()}}
 }

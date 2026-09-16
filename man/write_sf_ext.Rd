@@ -114,8 +114,6 @@ separate fileext parameter is used. Supported file extensions include
 supported by the available drivers (use \code{\link[sf:st_drivers]{sf::st_drivers()}} to list
 drivers).}
 
-\item{description}{(character) Brief description of gist (optional)}
-
 \item{path}{Path to file or data directory. Optional. If path includes a file
 extension and filename and fileext are both \code{NULL}, the filename and
 extension included with path will be used instead. If multiple file
@@ -136,8 +134,8 @@ filename), save a sf list as a multilayer GeoPackage file where names for
 list items are used as layer names.}
 
 \item{...}{If data is an sf object and the fileext is "csv" or "xlsx", the
-... parameters are passed to \code{\link[=sf_to_df]{sf_to_df()}} or to \code{\link[sf:st_write]{sf::write_sf()}} otherwise. If
-fileext is "rda" ... parameters are passed to \code{\link[readr:read_rds]{readr::write_rds()}}.}
+... parameters are passed to \code{\link[=sf_to_df]{sf_to_df()}} or to \code{\link[sf:write_sf]{sf::write_sf()}} otherwise. If
+fileext is "rda" ... parameters are passed to \code{\link[readr:write_rds]{readr::write_rds()}}.}
 
 \item{data_dir}{cache data directory, defaults to \code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}
 when data_dir is \code{NULL}. (only used for \code{\link[=write_sf_cache]{write_sf_cache()}}; default is used
@@ -147,11 +145,6 @@ when \code{cache = TRUE} for \code{\link[=write_sf_ext]{write_sf_ext()}})}
 If \code{TRUE} and \code{\link[rlang:is_interactive]{rlang::is_interactive()}} is \code{TRUE}, ask user if directory
 should be created. If the session not interactive and create is \code{TRUE}, a
 new directory will be created.}
-
-\item{public}{(logical) Whether gist is public (default: TRUE)}
-
-\item{browse}{(logical) To open newly create gist in default browser
-(default: TRUE)}
 
 \item{token}{A personal access token on GitHub with permission to create
 gists; defaults to Sys.getenv("GITHUB_PAT")}
@@ -167,7 +160,7 @@ the column name provided to key. Defaults to \code{FALSE}.}
 provided data.}
 }
 \description{
-The write_sf_ext and write_sf_cache helper functions wrap the \code{\link[sf:st_write]{sf::write_sf()}}
+The write_sf_ext and write_sf_cache helper functions wrap the \code{\link[sf:write_sf]{sf::write_sf()}}
 function to provide some additional options including consistent file naming
 with \code{\link[=make_filename]{make_filename()}} and features including:
 }
@@ -176,7 +169,7 @@ with \code{\link[=make_filename]{make_filename()}} and features including:
 \item If fileext is "csv", "xlsx", or "gsheet" the file is converted to a
 dataframe using \code{\link[=df_to_sf]{df_to_sf()}}
 \item If the data is not an \code{sf} object and none of these filenames are provided,
-the user is prompted to save the file as an rda file with \code{\link[readr:read_rds]{readr::write_rds()}}.
+the user is prompted to save the file as an rda file with \code{\link[readr:write_rds]{readr::write_rds()}}.
 \item If cache is \code{TRUE} use \code{\link[=write_sf_cache]{write_sf_cache()}} to cache file after writing a copy to
 the path provided.
 \item If data is a named sf list, pass the name of each sf object in the list to

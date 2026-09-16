@@ -62,7 +62,7 @@ IPTC:Caption-Abstract
 }
 }
 \seealso{
-Other read_write: 
-\code{\link{read_sf_ext}()}
+Other read_write:
+\code{\link[=read_sf_ext]{read_sf_ext()}}
 }
 \concept{read_write}
