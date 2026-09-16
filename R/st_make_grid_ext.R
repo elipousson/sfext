@@ -154,7 +154,6 @@ st_make_grid_ext <- function(
 #' @noRd
 #' @importFrom rlang has_length
 #' @importFrom cli cli_alert_danger cli_alert_info
-#' @importFrom dplyr case_when
 get_grid_params <- function(
   bbox,
   cellsize = NULL,
@@ -203,22 +202,19 @@ get_grid_params <- function(
   }
 
   if (is_null(n) && is_null(cellsize)) {
-    n <-
-      dplyr::case_when(
-        (!is_null(ncol) && (style == "square")) ~ c(ncol, ncol / bbox_asp),
-        (!is_null(ncol) && is_null(nrow)) ~ c(ncol, ncol),
-        (!is_null(ncol) && !is_null(nrow)) ~ c(ncol, nrow)
-      )
-
-    n <-
-      dplyr::case_when(
-        (is_null(ncol) && !is_null(nrow) && (style == "square")) ~ c(
-          nrow * bbox_asp,
-          nrow
-        ),
-        (is_null(ncol) && !is_null(nrow)) ~ c(nrow, nrow),
-        TRUE ~ n
-      )
+    if (!is_null(ncol) && (style == "square")) {
+      n <- c(ncol, ncol / bbox_asp)
+    } else if (!is_null(ncol) && is_null(nrow)) {
+      n <- c(ncol, ncol)
+    } else if (!is_null(ncol) && !is_null(nrow)) {
+      n <- c(ncol, nrow)
+    } else if (!is_null(nrow) && (style == "square")) {
+      n <- c(nrow * bbox_asp, nrow)
+    } else if (!is_null(nrow)) {
+      n <- c(nrow, nrow)
+    } else {
+      n <- c(NA_real_, NA_real_)
+    }
 
     # FIXME: Check this and see what the issue actually is and if a warning is needed
     cli_warn_ifnot(
@@ -226,11 +222,11 @@ get_grid_params <- function(
       message = "row and columns values for the output sf grid are inconsistent when style is {style}.",
     )
   } else if (!is_null(n)) {
-    n <-
-      dplyr::case_when(
-        has_length(n, 1) && (style == "square") ~ c(n, n / bbox_asp),
-        has_length(n, 1) ~ c(n, n)
-      )
+    if (has_length(n, 1) && (style == "square")) {
+      n <- c(n, n / bbox_asp)
+    } else if (has_length(n, 1)) {
+      n <- c(n, n)
+    }
   }
 
   if (is_null(cellsize)) {
