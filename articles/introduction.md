@@ -67,7 +67,10 @@ glimpse(nc)
 
 bbox <- as_bbox(nc[10, ])
 
-nc_in_bbox <- read_sf_ext(path = system.file("shape/nc.shp", package = "sf"), bbox = bbox)
+nc_in_bbox <- read_sf_ext(
+  path = system.file("shape/nc.shp", package = "sf"),
+  bbox = bbox
+)
 
 nc_basemap <-
   ggplot() +
@@ -104,7 +107,11 @@ states <- read_sf_esri(url = sample_esri_url)
 
 # read_sf_esri and read_sf_query both support the name and name_col parameters
 # These parameters also work with read_sf_pkg for cached and extdata files
-nc_esri <- read_sf_ext(url = sample_esri_url, name_col = "STATE_NAME", name = "North Carolina")
+nc_esri <- read_sf_ext(
+  url = sample_esri_url,
+  name_col = "STATE_NAME",
+  name = "North Carolina"
+)
 #> ── Downloading "USA_State" from <https://services.arcgis.com/P3ePLMYs2RVChkJx/Ar
 #> Layer type: "Feature Layer"
 #> Geometry type: "esriGeometryPolygon"
@@ -124,7 +131,9 @@ first file in the Gist is a spatial data file) or Google MyMaps.
 
 ``` r
 
-gmap_data <- read_sf_ext(url = "https://www.google.com/maps/d/u/0/viewer?mid=1CEssu_neU7lx_vAZs5qpufOBoUQ&ll=-3.81666561775622e-14%2C0&z=1")
+gmap_data <- read_sf_ext(
+  url = "https://www.google.com/maps/d/u/0/viewer?mid=1CEssu_neU7lx_vAZs5qpufOBoUQ&ll=-3.81666561775622e-14%2C0&z=1"
+)
 
 ggplot() +
   geom_sf(data = gmap_data[2, ])
@@ -307,7 +316,7 @@ is also used to support conversion of address vectors or data frames.
 
 address_to_sf(x = c("350 Fifth Avenue, New York, NY 10118"))
 #> Passing 1 address to the Nominatim single address geocoder
-#> Query completed in: 7.1 seconds
+#> Query completed in: 1 seconds
 #> Simple feature collection with 1 feature and 3 fields
 #> Attribute-geometry relationships: constant (3)
 #> Geometry type: POINT
@@ -378,7 +387,8 @@ The
 [`get_length()`](https://elipousson.github.io/sfext/reference/get_measurements.md)
 function wraps
 [`sf::st_length`](https://r-spatial.github.io/sf/reference/geos_measures.html)
-and (for POLYGON geometries only) `lwgeom::st_perimeter`:
+and (for POLYGON geometries only)
+[`sf::st_perimeter`](https://r-spatial.github.io/sf/reference/geos_measures.html):
 
 ``` r
 
@@ -429,7 +439,12 @@ box.
 nc <- sf::st_transform(nc, 3857)
 
 # use drop = TRUE, to drop the units class and return a numeric column
-dist_example_min <- get_dist(nc, to = c("xmin", "ymin"), unit = "mi", drop = TRUE)
+dist_example_min <- get_dist(
+  nc,
+  to = c("xmin", "ymin"),
+  unit = "mi",
+  drop = TRUE
+)
 
 glimpse(select(dist_example_min, NAME, dist))
 #> Rows: 100
@@ -447,7 +462,12 @@ nc_basemap +
 ``` r
 
 
-dist_example_mid <- get_dist(nc, to = c("xmid", "ymid"), unit = "mi", drop = TRUE)
+dist_example_mid <- get_dist(
+  nc,
+  to = c("xmid", "ymid"),
+  unit = "mi",
+  drop = TRUE
+)
 
 nc_basemap +
   geom_sf(data = dist_example_mid, aes(fill = dist), alpha = 0.5)

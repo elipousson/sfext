@@ -128,7 +128,10 @@ feature objects.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_sf.html">as_bbox</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">10</span>, <span class="op">]</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">nc_in_bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>, bbox <span class="op">=</span> <span class="va">bbox</span><span class="op">)</span></span>
+<span><span class="va">nc_in_bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>,</span>
+<span>  bbox <span class="op">=</span> <span class="va">bbox</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">nc_basemap</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -157,7 +160,11 @@ value (generating a simple SQL query) based on the provided values.</p>
 <span></span>
 <span><span class="co"># read_sf_esri and read_sf_query both support the name and name_col parameters</span></span>
 <span><span class="co"># These parameters also work with read_sf_pkg for cached and extdata files</span></span>
-<span><span class="va">nc_esri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">sample_esri_url</span>, name_col <span class="op">=</span> <span class="st">"STATE_NAME"</span>, name <span class="op">=</span> <span class="st">"North Carolina"</span><span class="op">)</span></span>
+<span><span class="va">nc_esri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span></span>
+<span>  url <span class="op">=</span> <span class="va">sample_esri_url</span>,</span>
+<span>  name_col <span class="op">=</span> <span class="st">"STATE_NAME"</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"North Carolina"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; ── Downloading <span style="color: #0000BB;">"USA_State"</span> from <span style="color: #0000BB; font-style: italic;">&lt;https://services.arcgis.com/P3ePLMYs2RVChkJx/Ar</span></span></span>
 <span><span class="co">#&gt; Layer type: <span style="color: #0000BB;">"Feature Layer"</span></span></span>
 <span><span class="co">#&gt; Geometry type: <span style="color: #0000BB;">"esriGeometryPolygon"</span></span></span>
@@ -172,7 +179,9 @@ value (generating a simple SQL query) based on the provided values.</p>
 <p>The read functions also support URLs for GitHub Gists (assuming the
 first file in the Gist is a spatial data file) or Google MyMaps.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gmap_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span>url <span class="op">=</span> <span class="st">"https://www.google.com/maps/d/u/0/viewer?mid=1CEssu_neU7lx_vAZs5qpufOBoUQ&amp;ll=-3.81666561775622e-14%2C0&amp;z=1"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">gmap_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_sf_ext.html">read_sf_ext</a></span><span class="op">(</span></span>
+<span>  url <span class="op">=</span> <span class="st">"https://www.google.com/maps/d/u/0/viewer?mid=1CEssu_neU7lx_vAZs5qpufOBoUQ&amp;ll=-3.81666561775622e-14%2C0&amp;z=1"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">gmap_data</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -312,7 +321,7 @@ frames.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/address_to_sf.html">address_to_sf</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"350 Fifth Avenue, New York, NY 10118"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Passing 1 address to the Nominatim single address geocoder</span></span>
-<span><span class="co">#&gt; Query completed in: 7.1 seconds</span></span>
+<span><span class="co">#&gt; Query completed in: 1 seconds</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 3 fields</span></span>
 <span><span class="co">#&gt; Attribute-geometry relationships: constant (3)</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
@@ -373,7 +382,7 @@ information as a new column to an existing sf input (and convert sfc
 input objects to sf results).</p>
 <p>The <code><a href="../reference/get_measurements.html">get_length()</a></code> function wraps
 <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_length</a></code> and (for POLYGON geometries only)
-<code>lwgeom::st_perimeter</code>:</p>
+<code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_perimeter</a></code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_point.html">as_line</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="../reference/as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span></span>
@@ -411,7 +420,12 @@ input sf object bounding box.</p>
 <code class="sourceCode R"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># use drop = TRUE, to drop the units class and return a numeric column</span></span>
-<span><span class="va">dist_example_min</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_measurements.html">get_dist</a></span><span class="op">(</span><span class="va">nc</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xmin"</span>, <span class="st">"ymin"</span><span class="op">)</span>, unit <span class="op">=</span> <span class="st">"mi"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">dist_example_min</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_measurements.html">get_dist</a></span><span class="op">(</span></span>
+<span>  <span class="va">nc</span>,</span>
+<span>  to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xmin"</span>, <span class="st">"ymin"</span><span class="op">)</span>,</span>
+<span>  unit <span class="op">=</span> <span class="st">"mi"</span>,</span>
+<span>  drop <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">dist_example_min</span>, <span class="va">NAME</span>, <span class="va">dist</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 100</span></span>
@@ -425,7 +439,12 @@ input sf object bounding box.</p>
 <p><img src="introduction_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">dist_example_mid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_measurements.html">get_dist</a></span><span class="op">(</span><span class="va">nc</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xmid"</span>, <span class="st">"ymid"</span><span class="op">)</span>, unit <span class="op">=</span> <span class="st">"mi"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">dist_example_mid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_measurements.html">get_dist</a></span><span class="op">(</span></span>
+<span>  <span class="va">nc</span>,</span>
+<span>  to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xmid"</span>, <span class="st">"ymid"</span><span class="op">)</span>,</span>
+<span>  unit <span class="op">=</span> <span class="st">"mi"</span>,</span>
+<span>  drop <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">nc_basemap</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dist_example_mid</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">dist</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
