@@ -21,7 +21,7 @@ theme_set(theme_void())
 The {sfext} package has several categories of functions:
 
 - Functions for reading and writing spatial data
-- Converting the class or geometry of objects 
+- Converting the class or geometry of objects
 - Modifying sf, sfc, and bbox objects
 - Getting information about sf, sfc, and bbox objects
 - Working with units and scales
@@ -33,9 +33,9 @@ The {sfext} package has several categories of functions:
 `read_sf_ext()` calls one of four other functions depending on the input parameters:
 
 - `read_sf_path()`
-- `read_sf_url()` 
-- `read_sf_pkg()` 
-- `read_sf_query()` 
+- `read_sf_url()`
+- `read_sf_pkg()`
+- `read_sf_query()`
 
 `read_sf_path()` is similar to `sf::read_sf` but has a few additional features. It checks the existence of a file before reading, supports the creation of wkt_filter parameters based on a bounding box, and supports conversion of tabular data to simple feature objects.
 
@@ -50,7 +50,10 @@ glimpse(nc)
 ```{r}
 bbox <- as_bbox(nc[10, ])
 
-nc_in_bbox <- read_sf_ext(path = system.file("shape/nc.shp", package = "sf"), bbox = bbox)
+nc_in_bbox <- read_sf_ext(
+  path = system.file("shape/nc.shp", package = "sf"),
+  bbox = bbox
+)
 
 nc_basemap <-
   ggplot() +
@@ -70,7 +73,11 @@ states <- read_sf_esri(url = sample_esri_url)
 
 # read_sf_esri and read_sf_query both support the name and name_col parameters
 # These parameters also work with read_sf_pkg for cached and extdata files
-nc_esri <- read_sf_ext(url = sample_esri_url, name_col = "STATE_NAME", name = "North Carolina")
+nc_esri <- read_sf_ext(
+  url = sample_esri_url,
+  name_col = "STATE_NAME",
+  name = "North Carolina"
+)
 
 ggplot() +
   geom_sf(data = states) +
@@ -80,7 +87,9 @@ ggplot() +
 The read functions also support URLs for GitHub Gists (assuming the first file in the Gist is a spatial data file) or Google MyMaps.
 
 ```{r}
-gmap_data <- read_sf_ext(url = "https://www.google.com/maps/d/u/0/viewer?mid=1CEssu_neU7lx_vAZs5qpufOBoUQ&ll=-3.81666561775622e-14%2C0&z=1")
+gmap_data <- read_sf_ext(
+  url = "https://www.google.com/maps/d/u/0/viewer?mid=1CEssu_neU7lx_vAZs5qpufOBoUQ&ll=-3.81666561775622e-14%2C0&z=1"
+)
 
 ggplot() +
   geom_sf(data = gmap_data[2, ])
@@ -92,7 +101,7 @@ The fourth, `read_sf_query()`, is most similar to `sf::read_sf` but provides an 
 
 ### Writing sf objects
 
-`write_sf_ext()` wraps `sf::write_sf` but uses `filenamr::make_filename()` to support the creation of consistent file names using labels or date prefixes to organize exports. 
+`write_sf_ext()` wraps `sf::write_sf` but uses `filenamr::make_filename()` to support the creation of consistent file names using labels or date prefixes to organize exports.
 
 ```{r}
 filenamr::make_filename(
@@ -186,7 +195,7 @@ address_to_sf(x = c("350 Fifth Avenue, New York, NY 10118"))
 
 ## Modifying sf objects
 
-The next group of functions often provide similar functionality to standard {sf} functions but, again, allow a wider range of inputs and outputs or offer extra features. For example, `st_bbox_ext()` also wraps `sf::st_buffer` and uses a helper function based on `units::set_units` to a buffer distance of any valid distance unit.  
+The next group of functions often provide similar functionality to standard {sf} functions but, again, allow a wider range of inputs and outputs or offer extra features. For example, `st_bbox_ext()` also wraps `sf::st_buffer` and uses a helper function based on `units::set_units` to a buffer distance of any valid distance unit.
 
 ```{r}
 nc_bbox <- st_bbox_ext(nc, class = "sf")
@@ -210,7 +219,7 @@ Other notable functions in this category include:
 
 There are also several functions that return information about the geometry of input objects. Typically, these functions bind the information as a new column to an existing sf input (and convert sfc input objects to sf results).
 
-The `get_length()` function wraps `sf::st_length` and (for POLYGON geometries only) `lwgeom::st_perimeter`:
+The `get_length()` function wraps `sf::st_length` and (for POLYGON geometries only) `sf::st_perimeter`:
 
 ```{r}
 example_line <- as_line(as_point(nc[1, ]), as_point(nc[2, ]), crs = 4326)
@@ -230,16 +239,25 @@ glimpse(get_area(nc[1:3, ], unit = "mi^2"))
 nc <- sf::st_transform(nc, 3857)
 
 # use drop = TRUE, to drop the units class and return a numeric column
-dist_example_min <- get_dist(nc, to = c("xmin", "ymin"), unit = "mi", drop = TRUE)
+dist_example_min <- get_dist(
+  nc,
+  to = c("xmin", "ymin"),
+  unit = "mi",
+  drop = TRUE
+)
 
 glimpse(select(dist_example_min, NAME, dist))
 
 nc_basemap +
   geom_sf(data = dist_example_min, aes(fill = dist), alpha = 0.5)
 
-dist_example_mid <- get_dist(nc, to = c("xmid", "ymid"), unit = "mi", drop = TRUE)
+dist_example_mid <- get_dist(
+  nc,
+  to = c("xmid", "ymid"),
+  unit = "mi",
+  drop = TRUE
+)
 
 nc_basemap +
   geom_sf(data = dist_example_mid, aes(fill = dist), alpha = 0.5)
 ```
-
