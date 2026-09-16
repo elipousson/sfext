@@ -73,7 +73,74 @@ address_to_sf(
 
 - ...:
 
-  Other parameters passed onto methods.
+  Arguments passed on to
+  [`tidygeocoder::geocode`](https://jessecambon.github.io/tidygeocoder/reference/geocode.html)
+
+  `.tbl`
+
+  :   dataframe containing addresses
+
+  `street`
+
+  :   street address column name
+
+  `city`
+
+  :   city column name
+
+  `county`
+
+  :   county column name
+
+  `state`
+
+  :   state column name
+
+  `postalcode`
+
+  :   postal code column name (zip code if in the United States)
+
+  `country`
+
+  :   country column name
+
+  `lat`
+
+  :   latitude column name. Can be quoted or unquoted (ie. `lat` or
+      `"lat"`).
+
+  `long`
+
+  :   longitude column name. Can be quoted or unquoted (ie. `long` or
+      `"long"`).
+
+  `return_input`
+
+  :   if TRUE then the input dataset will be combined with the geocoder
+      query results and returned. If FALSE only the geocoder results
+      will be returned.
+
+  `limit`
+
+  :   maximum number of results to return per input address. For many
+      geocoding services the maximum value of the limit parameter
+      is 100. Pass `limit = NULL` to use the default `limit` value of
+      the selected geocoding service. For batch geocoding, limit must be
+      set to 1 (default) if `return_addresses = TRUE`.To use `limit > 1`
+      or `limit = NULL` set return_input to FALSE. Refer to
+      [api_parameter_reference](https://jessecambon.github.io/tidygeocoder/reference/api_parameter_reference.html)
+      for more details.
+
+  `return_addresses`
+
+  :   if TRUE return input addresses. Defaults to TRUE if `return_input`
+      is FALSE and FALSE if `return_input` is TRUE. This argument is
+      passed to the `geo()` function.
+
+  `unique_only`
+
+  :   if TRUE then only unique results will be returned and return_input
+      will be set to FALSE.
 
 - call:
 

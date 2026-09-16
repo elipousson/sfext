@@ -107,7 +107,50 @@ service in addition to the latitude and longitude columns, Default:
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other parameters passed onto methods.</p></dd>
+<dd><p>Arguments passed on to <code><a href="https://jessecambon.github.io/tidygeocoder/reference/geocode.html" class="external-link">tidygeocoder::geocode</a></code></p><dl><dt><code>.tbl</code></dt>
+<dd><p>dataframe containing addresses</p></dd>
+
+    <dt><code>street</code></dt>
+<dd><p>street address column name</p></dd>
+
+    <dt><code>city</code></dt>
+<dd><p>city column name</p></dd>
+
+    <dt><code>county</code></dt>
+<dd><p>county column name</p></dd>
+
+    <dt><code>state</code></dt>
+<dd><p>state column name</p></dd>
+
+    <dt><code>postalcode</code></dt>
+<dd><p>postal code column name (zip code if in the United States)</p></dd>
+
+    <dt><code>country</code></dt>
+<dd><p>country column name</p></dd>
+
+    <dt><code>lat</code></dt>
+<dd><p>latitude column name. Can be quoted or unquoted (ie. <code>lat</code> or <code>"lat"</code>).</p></dd>
+
+    <dt><code>long</code></dt>
+<dd><p>longitude column name. Can be quoted or unquoted (ie. <code>long</code> or <code>"long"</code>).</p></dd>
+
+    <dt><code>return_input</code></dt>
+<dd><p>if TRUE then the input dataset will be combined with the geocoder query results
+and returned. If FALSE only the geocoder results will be returned.</p></dd>
+
+    <dt><code>limit</code></dt>
+<dd><p>maximum number of results to return per input address. For many geocoding services the maximum value of the limit parameter is 100. Pass <code>limit = NULL</code> to use the default <code>limit</code> value of the selected geocoding service. For batch geocoding, limit must be set to 1 (default) if <code>return_addresses = TRUE</code>.To use <code>limit &gt; 1</code> or <code>limit = NULL</code> set return_input to FALSE. Refer to <a href="https://jessecambon.github.io/tidygeocoder/reference/api_parameter_reference.html" class="external-link">api_parameter_reference</a> for more details.</p></dd>
+
+    <dt><code>return_addresses</code></dt>
+<dd><p>if TRUE return input addresses. Defaults to TRUE if <code>return_input</code> is FALSE
+and FALSE if <code>return_input</code> is TRUE. This argument is passed to the <code>geo()</code> function.</p></dd>
+
+    <dt><code>unique_only</code></dt>
+<dd><p>if TRUE then only unique results will be returned and
+return_input will be set to FALSE.</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-call">call<a class="anchor" aria-label="anchor" href="#arg-call"></a></dt>
