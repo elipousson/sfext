@@ -227,20 +227,22 @@ st_donut <- function(
     x_list <-
       map(
         x_list,
-        ~ st_erase(
-          st_circle(
-            .x,
-            scale = scale,
-            inscribed = inscribed,
-            by_feature = FALSE
-          ),
-          st_circle(
-            .x,
-            scale = (scale - width),
-            inscribed = inscribed,
-            by_feature = FALSE
+        function(x) {
+          st_erase(
+            st_circle(
+              x,
+              scale = scale,
+              inscribed = inscribed,
+              by_feature = FALSE
+            ),
+            st_circle(
+              x,
+              scale = (scale - width),
+              inscribed = inscribed,
+              by_feature = FALSE
+            )
           )
-        )
+        }
       )
 
     geom <- as_sfc(as_sf(x_list), crs)
@@ -252,24 +254,23 @@ st_donut <- function(
     return(sf::st_set_geometry(x, geom))
   }
 
-  x <-
-    st_erase(
-      x = st_circle(
-        x,
-        scale = scale,
-        inscribed = inscribed,
-        by_feature = by_feature,
-        ...
-      ),
-      y = st_circle(
-        x,
-        scale = (scale - width),
-        inscribed = inscribed,
-        by_feature = by_feature,
-        ...
-      ),
-      union = TRUE
-    )
+  x <- st_erase(
+    x = st_circle(
+      x,
+      scale = scale,
+      inscribed = inscribed,
+      by_feature = by_feature,
+      ...
+    ),
+    y = st_circle(
+      x,
+      scale = (scale - width),
+      inscribed = inscribed,
+      by_feature = by_feature,
+      ...
+    ),
+    union = TRUE
+  )
 
   sf::st_set_crs(x, crs)
 }
