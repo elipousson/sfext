@@ -7,7 +7,7 @@
 #' determine the coverage area.
 #' - [get_length()]: Wraps to [sf::st_length()] but POINT and MULTIPOINT geometry is
 #' converted to LINESTRING using [as_lines()]. If x has POLYGON geometry,
-#' [lwgeom::st_perimeter()] is used to return the perimeter instead of the length.
+#' [sf::st_perimeter()] is used to return the perimeter instead of the length.
 #' - [get_dist()]: Wraps [sf::st_distance()] but x is converted to a POINT using
 #' [st_center()] and "to" can be a POINT, a sf object that can be converted to a
 #' POINT, or a character vector indicating a point on the overall bounding box
@@ -105,7 +105,7 @@ get_length <- function(
   if (is_polygon(x)) {
     check_installed("lwgeom")
     cli_inform(
-      "For objects with POLYGON geometry, {.fun get_length} uses {.fun lwgeom::st_perimeter} to return the object perimeter."
+      "For objects with POLYGON geometry, {.fun get_length} uses {.fun sf::st_perimeter} to return the object perimeter."
     )
     .id <- "perimeter"
 
@@ -115,7 +115,7 @@ get_length <- function(
       x <- sf::st_transform(x, 3857)
     }
 
-    x_len <- lwgeom::st_perimeter(x)
+    x_len <- sf::st_perimeter(x)
   }
 
   if (is_line(x) | is_multiline(x)) {

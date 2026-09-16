@@ -39,11 +39,13 @@ test_that("get_length converts POINT geometry to LINESTRING", {
   expect_true("length" %in% names(result))
 })
 
-test_that("get_length uses lwgeom::st_perimeter for POLYGON geometry", {
+test_that("get_length uses sf::st_perimeter for POLYGON geometry", {
   skip_if_not_installed("lwgeom")
 
   nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
-  nc_poly <- sf::st_cast(nc[1:2, ], "POLYGON")
+  nc_poly <- suppressWarnings(
+    sf::st_cast(nc[1:2, ], "POLYGON")
+  )
 
   expect_message(get_length(nc_poly), "perimeter")
 
