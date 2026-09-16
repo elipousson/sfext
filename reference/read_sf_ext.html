@@ -318,6 +318,12 @@ ArcGIS FeatureServer or MapServer to access with <code><a href="https://rdrr.io/
 by the <code>col_types</code> argument.</p></dd>
 
 
+<dt id="arg-where">where<a class="anchor" aria-label="anchor" href="#arg-where"></a></dt>
+<dd><p>A where condition (SQL-like syntax) passed to
+<code><a href="https://rdrr.io/pkg/esri2sf/man/esri2sf.html" class="external-link">esri2sf::esri2sf()</a></code> to filter features returned from an ArcGIS
+FeatureServer or MapServer, e.g. <code>"POP2000 &gt; 100000"</code>. Defaults to <code>NULL</code>.</p></dd>
+
+
 <dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
 <dd><p>The name of a column in which to store the file path. This is
 useful when reading multiple input files and there is data in the file

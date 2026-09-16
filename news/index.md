@@ -75,6 +75,22 @@
   [`get_bearing()`](https://elipousson.github.io/sfext/reference/get_measurements.md)
   erroring on geometry type conversion (e.g. POINT input) due to a
   reference to an undefined variable in an internal alert helper.
+- Fix examples for
+  [`as_startpoint()`](https://elipousson.github.io/sfext/reference/as_point.md)/[`as_endpoint()`](https://elipousson.github.io/sfext/reference/as_point.md),
+  [`get_bearing()`](https://elipousson.github.io/sfext/reference/get_measurements.md),
+  and
+  [`get_margin()`](https://elipousson.github.io/sfext/reference/get_margin.md)
+  erroring when the `lwgeom`, `geosphere`, and `ggplot2` packages
+  (respectively) are not installed, by guarding them with
+  [`rlang::is_installed()`](https://rlang.r-lib.org/reference/is_installed.html).
+- Document previously undocumented arguments in
+  [`address_to_sf()`](https://elipousson.github.io/sfext/reference/address_to_sf.md)
+  (`method`, `full_results`),
+  [`read_sf_esri()`](https://elipousson.github.io/sfext/reference/read_sf_ext.md)
+  (`where`), and
+  [`write_sf_ext()`](https://elipousson.github.io/sfext/reference/write_sf_ext.md)/[`write_sf_gist()`](https://elipousson.github.io/sfext/reference/write_sf_ext.md)
+  (`description`, `public`, `browse`), which relied on `@inheritParams`
+  from Suggests packages that silently failed to resolve.
 
 ### Tests
 

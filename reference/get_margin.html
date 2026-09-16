@@ -118,16 +118,15 @@ note: headers and footers are not currently supported for "px" units.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">get_margin</span><span class="op">(</span><span class="st">"standard"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1inches 1inches 1inches 1inches</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/is_installed.html" class="external-link">is_installed</a></span><span class="op">(</span><span class="st">"ggplot2"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">get_margin</span><span class="op">(</span><span class="st">"standard"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">get_margin</span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0inches 0inches 0inches 0inches</span>
+<span class="r-in"><span>  <span class="fu">get_margin</span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">get_margin</span><span class="op">(</span>dist <span class="op">=</span> <span class="fl">25</span>, unit <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 25mm 25mm 25mm 25mm</span>
+<span class="r-in"><span>  <span class="fu">get_margin</span><span class="op">(</span>dist <span class="op">=</span> <span class="fl">25</span>, unit <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">get_margin</span><span class="op">(</span>paper <span class="op">=</span> <span class="st">"letter"</span>, block_width <span class="op">=</span> <span class="fl">5.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">get_margin</span><span class="op">(</span>paper <span class="op">=</span> <span class="st">"letter"</span>, block_width <span class="op">=</span> <span class="fl">5.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.5inches 1.5inches 1.5inches 1.5inches</span>
 </code></pre></div>
     </div>

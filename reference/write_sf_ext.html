@@ -170,6 +170,13 @@ supported by the available drivers (use <code><a href="https://r-spatial.github.
 drivers).</p></dd>
 
 
+<dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
+<dd><p>Optional description for the written file. For
+<code>write_sf_ext()</code>, used as the "DESCRIPTION" layer creation option when
+fileext is "gpkg". For <code>write_sf_gist()</code>, used as the gist description
+passed to <code><a href="https://rdrr.io/pkg/gistr/man/gist_create.html" class="external-link">gistr::gist_create()</a></code>. Defaults to <code>NULL</code>.</p></dd>
+
+
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
 <dd><p>Path to file or data directory. Optional. If path includes a file
 extension and filename and fileext are both <code>NULL</code>, the filename and
@@ -216,6 +223,16 @@ when <code>cache = TRUE</code> for <code>write_sf_ext()</code>)</p></dd>
 If <code>TRUE</code> and <code><a href="https://rlang.r-lib.org/reference/is_interactive.html" class="external-link">rlang::is_interactive()</a></code> is <code>TRUE</code>, ask user if directory
 should be created. If the session not interactive and create is <code>TRUE</code>, a
 new directory will be created.</p></dd>
+
+
+<dt id="arg-public">public<a class="anchor" aria-label="anchor" href="#arg-public"></a></dt>
+<dd><p>If <code>TRUE</code> (default), create a public gist. Passed to
+<code><a href="https://rdrr.io/pkg/gistr/man/gist_create.html" class="external-link">gistr::gist_create()</a></code>.</p></dd>
+
+
+<dt id="arg-browse">browse<a class="anchor" aria-label="anchor" href="#arg-browse"></a></dt>
+<dd><p>If <code>TRUE</code>, open the created gist in a browser after
+creation. Passed to <code><a href="https://rdrr.io/pkg/gistr/man/gist_create.html" class="external-link">gistr::gist_create()</a></code>. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-token">token<a class="anchor" aria-label="anchor" href="#arg-token"></a></dt>

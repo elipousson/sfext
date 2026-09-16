@@ -284,6 +284,13 @@ read_sf_gsheet(
   default) only show the column types if they are not explicitly
   supplied by the `col_types` argument.
 
+- where:
+
+  A where condition (SQL-like syntax) passed to
+  [`esri2sf::esri2sf()`](https://rdrr.io/pkg/esri2sf/man/esri2sf.html)
+  to filter features returned from an ArcGIS FeatureServer or MapServer,
+  e.g. `"POP2000 > 100000"`. Defaults to `NULL`.
+
 - id:
 
   The name of a column in which to store the file path. This is useful

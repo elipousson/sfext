@@ -133,6 +133,14 @@ write_sf_gsheet(
   [`sf::st_drivers()`](https://r-spatial.github.io/sf/reference/st_drivers.html)
   to list drivers).
 
+- description:
+
+  Optional description for the written file. For `write_sf_ext()`, used
+  as the "DESCRIPTION" layer creation option when fileext is "gpkg". For
+  `write_sf_gist()`, used as the gist description passed to
+  [`gistr::gist_create()`](https://rdrr.io/pkg/gistr/man/gist_create.html).
+  Defaults to `NULL`.
+
 - path:
 
   Path to file or data directory. Optional. If path includes a file
@@ -187,6 +195,18 @@ write_sf_gsheet(
   [`rlang::is_interactive()`](https://rlang.r-lib.org/reference/is_interactive.html)
   is `TRUE`, ask user if directory should be created. If the session not
   interactive and create is `TRUE`, a new directory will be created.
+
+- public:
+
+  If `TRUE` (default), create a public gist. Passed to
+  [`gistr::gist_create()`](https://rdrr.io/pkg/gistr/man/gist_create.html).
+
+- browse:
+
+  If `TRUE`, open the created gist in a browser after creation. Passed
+  to
+  [`gistr::gist_create()`](https://rdrr.io/pkg/gistr/man/gist_create.html).
+  Defaults to `FALSE`.
 
 - token:
 

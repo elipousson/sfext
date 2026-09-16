@@ -130,16 +130,12 @@ as_points(nc[1, ], nc[2, ])
 
 nc_line <- as_line(c(as_points(nc[1, ]), as_points(nc[10, ])))
 
-as_startpoint(nc_line)
-#> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
-#> Geometry set for 1 feature 
-#> Geometry type: POINT
-#> Dimension:     XY
-#> Bounding box:  xmin: -81.49823 ymin: 36.4314 xmax: -81.49823 ymax: 36.4314
-#> Geodetic CRS:  NAD27
-#> POINT (-81.49823 36.4314)
+if (rlang::is_installed("lwgeom")) {
+  as_startpoint(nc_line)
 
-as_endpoint(nc_line)
+  as_endpoint(nc_line)
+}
+#> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 #> Geometry set for 1 feature 
 #> Geometry type: POINT
 #> Dimension:     XY

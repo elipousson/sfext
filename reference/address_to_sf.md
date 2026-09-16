@@ -37,6 +37,16 @@ address_to_sf(
 
   Address column name, Default: 'address'
 
+- method:
+
+  Geocoding service to use, Default: 'osm'. Passed to
+  [`tidygeocoder::geocode()`](https://jessecambon.github.io/tidygeocoder/reference/geocode.html)
+  which passes it on to
+  [`tidygeocoder::geo()`](https://jessecambon.github.io/tidygeocoder/reference/geo.html).
+  See
+  [`tidygeocoder::geo()`](https://jessecambon.github.io/tidygeocoder/reference/geo.html)
+  for supported services (e.g. "osm", "census", "arcgis", "google").
+
 - coords:
 
   Coordinate columns for input data.frame or output sf object (if
@@ -55,6 +65,11 @@ address_to_sf(
   [`sf_to_df()`](https://elipousson.github.io/sfext/reference/sf_to_df.md)
   and `NULL` for
   [`df_to_sf()`](https://elipousson.github.io/sfext/reference/sf_to_df.md).
+
+- full_results:
+
+  If `TRUE`, return all columns from the geocoding service in addition
+  to the latitude and longitude columns, Default: `FALSE`.
 
 - ...:
 

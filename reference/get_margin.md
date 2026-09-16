@@ -74,15 +74,14 @@ and the `plot.background` theme element.
 ## Examples
 
 ``` r
-get_margin("standard")
-#> [1] 1inches 1inches 1inches 1inches
+if (rlang::is_installed("ggplot2")) {
+  get_margin("standard")
 
-get_margin("none")
-#> [1] 0inches 0inches 0inches 0inches
+  get_margin("none")
 
-get_margin(dist = 25, unit = "mm")
-#> [1] 25mm 25mm 25mm 25mm
+  get_margin(dist = 25, unit = "mm")
 
-get_margin(paper = "letter", block_width = 5.5)
+  get_margin(paper = "letter", block_width = 5.5)
+}
 #> [1] 1.5inches 1.5inches 1.5inches 1.5inches
 ```

@@ -77,6 +77,13 @@ currently supported.</p></dd>
 <dd><p>Address column name, Default: 'address'</p></dd>
 
 
+<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
+<dd><p>Geocoding service to use, Default: 'osm'. Passed to
+<code><a href="https://jessecambon.github.io/tidygeocoder/reference/geocode.html" class="external-link">tidygeocoder::geocode()</a></code> which passes it on to <code><a href="https://jessecambon.github.io/tidygeocoder/reference/geo.html" class="external-link">tidygeocoder::geo()</a></code>.
+See <code><a href="https://jessecambon.github.io/tidygeocoder/reference/geo.html" class="external-link">tidygeocoder::geo()</a></code> for supported services (e.g. "osm", "census",
+"arcgis", "google").</p></dd>
+
+
 <dt id="arg-coords">coords<a class="anchor" aria-label="anchor" href="#arg-coords"></a></dt>
 <dd><p>Coordinate columns for input data.frame or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").</p></dd>
@@ -91,6 +98,12 @@ after converting a data frame to simple feature object; defaults to
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
 <dd><p>Cordinate reference system to return, Default: 4326 for
 <code><a href="sf_to_df.html">sf_to_df()</a></code> and <code>NULL</code> for <code><a href="sf_to_df.html">df_to_sf()</a></code>.</p></dd>
+
+
+<dt id="arg-full-results">full_results<a class="anchor" aria-label="anchor" href="#arg-full-results"></a></dt>
+<dd><p>If <code>TRUE</code>, return all columns from the geocoding
+service in addition to the latitude and longitude columns, Default:
+<code>FALSE</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

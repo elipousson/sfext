@@ -176,7 +176,10 @@ get_length(nc_line)
 #>    length                                geometry
 #>       [m]                        <LINESTRING [°]>
 #> 1 239236. (-81.49823 36.4314, -78.87809 36.02862)
-get_bearing(nc_line)
+
+if (rlang::is_installed("geosphere")) {
+  get_bearing(nc_line)
+}
 #> Simple feature collection with 1 feature and 1 field
 #> Geometry type: LINESTRING
 #> Dimension:     XY
