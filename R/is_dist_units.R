@@ -232,10 +232,10 @@ as_dist_units <- function(
 #' @importFrom sf st_union st_area
 is_diff_area <- function(x, y, units = NULL, combine = TRUE) {
   if (combine) {
-    return(diff(st_combined_area(x), st_combined_area(y)))
+    return(diff(c(st_combined_area(x), st_combined_area(y))))
   }
 
-  diff(sf::st_area(x), sf::st_area(y))
+  diff(c(sf::st_area(x), sf::st_area(y)))
 }
 
 #' @noRd
@@ -276,19 +276,15 @@ as_units_attr <- function(x) {
 #' @export
 #' @importFrom units as_units
 is_same_units <- function(x, y = NULL) {
-  if (any(is_null(c(x, y)))) {
+  if (is_null(x) || is_null(y)) {
     return(FALSE)
   }
 
   x <- as_units_attr(x)
   y <- as_units_attr(y)
 
-  nums <- c(x$numerator, y$numerator)
-  dens <- c(x$denominator, y$denominator)
-
-  if (all(dens == character(0)) || (dens[1] == dens[2])) {
-    return(TRUE)
-  }
-
-  units::as_units(x) == units::as_units(y)
+  tryCatch(
+    isTRUE(units::as_units(1, x) == units::as_units(1, y)),
+    error = function(cnd) FALSE
+  )
 }

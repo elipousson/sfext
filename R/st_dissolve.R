@@ -57,7 +57,7 @@ st_dissolve <- function(
   do_union = TRUE,
   .data_key = "data",
   .dissolve_key = "group.comp.id",
-  call = caller_env
+  call = caller_env()
 ) {
   .check_sfish(x, allow_class = c("sfc"), call = call)
   check_string(.dissolve_key, call = call)

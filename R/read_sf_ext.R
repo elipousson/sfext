@@ -417,7 +417,7 @@ read_sf_csv <- function(
       ...
     )
   } else {
-    options <- make_sf_options(options, coords, wkt)
+    options <- make_sf_options(coords = coords, wkt = wkt)
 
     data <- sf::read_sf(
       path,
@@ -471,7 +471,6 @@ read_sf_url <- function(url, bbox = NULL, coords = c("lon", "lat"), ...) {
 
   url_type <- dplyr::case_when(
     is_esri_url(url) ~ "esri",
-    is_felt_url(url) ~ "felt",
     is_csv_fileext(url) ~ "csv",
     is_excel_fileext(url) ~ "excel",
     is_gist_url(url) ~ "gist",
@@ -535,14 +534,6 @@ read_sf_url <- function(url, bbox = NULL, coords = c("lon", "lat"), ...) {
       name_col = params[["name_col"]],
       coords = coords,
       from_crs = from_crs,
-      .name_repair = .name_repair
-    ),
-    "felt" = read_sf_felt(
-      url = url,
-      map_id = params[["map_id"]],
-      bbox = bbox,
-      token = params[["token"]],
-      crs = params[["crs"]],
       .name_repair = .name_repair
     ),
     "gist" = read_sf_gist(

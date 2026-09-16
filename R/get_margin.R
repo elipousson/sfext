@@ -38,8 +38,9 @@ get_margin <- function(
 ) {
   check_installed("ggplot2")
 
+  margin <- margin %||% "none"
+
   if (is.character(margin)) {
-    margin <- margin %||% "none"
     margin <-
       arg_match(
         margin,

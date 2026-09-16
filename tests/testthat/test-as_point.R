@@ -38,3 +38,33 @@ test_that("as_point works", {
 
   expect_s3_class(as_centroid(as_bbox(nc)), "sfc")
 })
+
+test_that("as_polygons works", {
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
+
+  expect_true(is_polygon(as_polygons(nc[1, ])))
+  expect_true(is_polygon(as_polygons(sf::st_geometry(nc)[1])))
+})
+
+test_that("as_xy works", {
+  expect_equal(as_xy(x = c(0, 1)), data.frame(x = 0, y = 1))
+
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
+  xy <- as_xy(x = c("xmin", "ymax"), bbox = as_bbox(nc))
+
+  expect_equal(names(xy), c("x", "y"))
+  expect_equal(nrow(xy), 1)
+})
+
+test_that("as_startpoint and as_endpoint work", {
+  skip_if_not_installed("lwgeom")
+
+  nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
+  nc_line <- as_line(c(as_points(nc[1, ]), as_points(nc[10, ])))
+
+  expect_s3_class(as_startpoint(nc_line), "sfc")
+  expect_s3_class(as_endpoint(nc_line), "sfc")
+
+  expect_error(as_startpoint(nc[1, ]))
+  expect_error(as_endpoint(nc[1, ]))
+})

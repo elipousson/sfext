@@ -20,7 +20,7 @@ st_join_ext <- function(x, y, col = NULL, .id = "name", join = NULL, ...) {
   check_sf(x, ext = TRUE)
 
   if (is_bbox(x)) {
-    x <- sf_bbox_to_sfc(x)
+    x <- as_sf(x)
   }
 
   join <- set_join_by_geom_type(y, join = join)

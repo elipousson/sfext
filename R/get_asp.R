@@ -23,7 +23,7 @@ get_asp <- function(
   ...
 ) {
   type <- dplyr::case_when(
-    allow_null && is_null(asp) && is_null(paper) ~ "null",
+    allow_null && is_null(asp) && is_null(paper) && is_null(bbox) ~ "null",
     is.numeric(asp) ~ "num",
     is.character(asp) && grepl(":", asp) ~ "char",
     !is_null(paper) && is_null(asp) && !block_asp ~ "paper",

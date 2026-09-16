@@ -36,10 +36,12 @@ test_that("st_transform_ext works", {
     nc
   )
 
-  skip()
   omerc <- st_omerc(nc, 30)
-  expect_identical(
-    sf::st_crs(omerc)$input,
-    "+proj=omerc +lat_0=35.559466717973 +lonc=-79.400416805857\n+datum=WGS84 +units=m +no_defs +gamma=30"
-  )
+  proj4 <- sf::st_crs(omerc)$input
+
+  expect_s3_class(omerc, "sf")
+  expect_match(proj4, "\\+proj=omerc")
+  expect_match(proj4, "\\+gamma=30")
+  expect_match(proj4, "\\+lat_0=35\\.55946")
+  expect_match(proj4, "\\+lonc=-79\\.40041")
 })

@@ -121,5 +121,5 @@ is_lonlat_in_range <- function(
   lon_in_range <- (x[[1]] >= range[["xmin"]]) && (x[[1]] <= range[["xmax"]])
   lat_in_range <- (x[[2]] >= range[["ymin"]]) && (x[[2]] <= range[["ymax"]])
 
-  lon_in_range && lon_in_range
+  lon_in_range && lat_in_range
 }

@@ -5,6 +5,24 @@
 * Correct several small typos in standalone sf utilities.
 * Correct typo for `id_arg` default value in `bind_sf_coverage()`
 * Correct typos for internal `cli_abort_ifnot()` and `cli_warn_ifnot()` functions.
+* Fix `st_filter_pct()` always erroring due to eager evaluation of `dplyr::case_when()` branches, and forward the `pct` argument to `st_filter_pct_area()`/`st_filter_pct_length()` (it was previously dropped).
+* Fix `st_filter_pct_area()` computing trim area with `get_length()` instead of `get_area()`.
+* Fix `st_dissolve()` erroring on its own argument validation due to a missing `()` on the `call` default.
+* Fix `st_join_ext()` erroring when `x` is a `bbox` object by converting it with `as_sf()` instead of `sf_bbox_to_sfc()`, which `sf::st_join()` cannot dispatch on.
+* Fix `read_sf_csv()` passing the base `options()` function instead of the local `options` variable to `make_sf_options()`.
+* Remove dangling references to `read_sf_felt()`/`is_felt_url()` in `read_sf_url()` left over from removing the `feltr` dependency.
+* Fix `is_diff_area()` misusing `diff()`'s `lag` argument instead of differencing a combined vector.
+* Fix `is_same_units()` only comparing unit denominators, which incorrectly returned `TRUE` for different units (e.g. `"mi"` vs `"km"`).
+* Fix `get_margin()` erroring when called with no arguments.
+* Fix `has_coords()` erroring when auto-detecting coordinate columns (`coords = NULL`) due to a `NULL` branch in `dplyr::case_when()`.
+* Fix `get_asp()` always returning `NULL` when `bbox` was supplied.
+* Fix `is_lonlat_in_range()` (used by `lonlat_to_sfc()`) checking longitude twice instead of checking latitude.
+* Fix `as_bbox()` producing invalid duplicated names when building a bbox from an already-named numeric vector.
+* Fix `get_length()` and `get_bearing()` erroring on geometry type conversion (e.g. POINT input) due to a reference to an undefined variable in an internal alert helper.
+
+## Tests
+
+* Substantially expand unit test coverage across the package, including previously untested functions (e.g. `bind_sf_coverage()`, `count_features()`, `count_sf_ext()`, `st_filter_pct()`, `st_dissolve()`, `mapview_ext()`, `rdeck_edit()`), and review and improve existing tests (more robust `skip_if_not_installed()` guards, removing brittle assertions).
 
 ## Changes
 

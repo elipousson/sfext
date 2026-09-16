@@ -162,18 +162,26 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
 
   x_coords <- NULL
 
-  x_coords <-
-    dplyr::case_when(
-      all(coords %in% x_names) ~ coords,
-      all(has_name(x, coords)) ~ coords,
-      has_name(x, "lon") ~ c("lon", "lat"),
-      has_name(x, "long") ~ c("long", "lat"),
-      has_name(x, "lng") ~ c("lng", "lat"),
-      has_name(x, "longitude") ~ c("longitude", "latitude"),
-      has_name(x, "y") ~ c("y", "x"),
-      has_name(x, "geo_y") ~ c("geo_y", "geo_x"),
-      has_name(x, "geo_longitude") ~ c("geo_longitude", "geo_latitude")
-    )
+  if (
+    !is_null(coords) &&
+      (all(coords %in% x_names) || all(has_name(x, coords)))
+  ) {
+    x_coords <- coords
+  } else if (has_name(x, "lon")) {
+    x_coords <- c("lon", "lat")
+  } else if (has_name(x, "long")) {
+    x_coords <- c("long", "lat")
+  } else if (has_name(x, "lng")) {
+    x_coords <- c("lng", "lat")
+  } else if (has_name(x, "longitude")) {
+    x_coords <- c("longitude", "latitude")
+  } else if (has_name(x, "y")) {
+    x_coords <- c("y", "x")
+  } else if (has_name(x, "geo_y")) {
+    x_coords <- c("geo_y", "geo_x")
+  } else if (has_name(x, "geo_longitude")) {
+    x_coords <- c("geo_longitude", "geo_latitude")
+  }
 
   x_has_coords <-
     grep(

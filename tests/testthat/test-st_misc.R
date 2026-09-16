@@ -5,7 +5,6 @@ test_that("st_misc functions work", {
 
   expect_error(st_inscribed_square("x"))
 
-  skip_if_not_installed("lwgeom")
   expect_s3_class(st_square(nc_6543), "sf")
   expect_s3_class(st_square(nc_latlon), "sf")
   expect_s3_class(st_square(nc_6543, inscribed = FALSE), "sf")

@@ -11,11 +11,17 @@
 #' @return A filtered version of the input sf object.
 #' @rdname st_filter_pct
 #' @export
-#' @importFrom dplyr case_when
 st_filter_pct <- function(x, y, pct = NULL, ...) {
-  dplyr::case_when(
-    is_line(x) | is_multiline(x) ~ st_filter_pct_length(x, y, ...),
-    is_polygon(x) | is_multipolygon(x) ~ st_filter_pct_area(x, y, ...),
+  if (is_line(x) || is_multiline(x)) {
+    return(st_filter_pct_length(x, y, pct = pct, ...))
+  }
+
+  if (is_polygon(x) || is_multipolygon(x)) {
+    return(st_filter_pct_area(x, y, pct = pct, ...))
+  }
+
+  cli_abort(
+    "{.arg x} must have LINESTRING, MULTILINESTRING, POLYGON, or MULTIPOLYGON geometry."
   )
 }
 
@@ -38,7 +44,7 @@ st_filter_pct_area <- function(x, y, pct = NULL) {
   x_trim <- st_trim(x, y)
 
   x_trim <- sf::st_drop_geometry(
-    get_length(x_trim, .id = "trim_area", drop = TRUE)
+    get_area(x_trim, .id = "trim_area", drop = TRUE)
   )
 
   x <- dplyr::filter(dplyr::left_join(x, x_trim), !is.na(trim_area))

@@ -133,10 +133,10 @@ as_bbox <- function(x, crs = NULL, ext = TRUE, ..., call = caller_env()) {
       "sf_or_sfc" = sf::st_bbox(x, ...),
       "num_bbox" = sf::st_bbox(
         c(
-          xmin = x[1],
-          ymin = x[2],
-          xmax = x[3],
-          ymax = x[4]
+          xmin = unname(x[1]),
+          ymin = unname(x[2]),
+          xmax = unname(x[3]),
+          ymax = unname(x[4])
         ),
         crs = crs,
         ...

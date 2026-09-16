@@ -68,6 +68,8 @@ get_data_dir <- function(
     dir.create(path, recursive = recursive)
     cli_inform(c("v" = "New directory created at {.file {path}}"))
   }
+
+  path
 }
 
 

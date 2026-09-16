@@ -300,6 +300,6 @@ st_bearing <- get_bearing
 #' @noRd
 convert_geom_type_alert <- function(x, to = NULL, with = NULL) {
   cli_inform(
-    "Converting {as.character(is_geom_type(x, ext = FALSE))} object to {to} with {.fun {fn}}."
+    "Converting {as.character(is_geom_type(x, ext = FALSE))} object to {to} with {.fun {with}}."
   )
 }
