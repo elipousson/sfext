@@ -21,6 +21,7 @@
 * Fix `get_length()` and `get_bearing()` erroring on geometry type conversion (e.g. POINT input) due to a reference to an undefined variable in an internal alert helper.
 * Fix examples for `as_startpoint()`/`as_endpoint()`, `get_bearing()`, and `get_margin()` erroring when the `lwgeom`, `geosphere`, and `ggplot2` packages (respectively) are not installed, by guarding them with `rlang::is_installed()`.
 * Document previously undocumented arguments in `address_to_sf()` (`method`, `full_results`), `read_sf_esri()` (`where`), and `write_sf_ext()`/`write_sf_gist()` (`description`, `public`, `browse`), which relied on `@inheritParams` from Suggests packages that silently failed to resolve.
+* Move the "Introduction to sfext" vignette to `vignettes/articles/` so it is only built by pkgdown, not `R CMD check`/CRAN. It requires the GitHub-only `esri2sf` package and makes several live network calls (ArcGIS, GitHub Gist, Google Maps) with no offline fallback, which previously made `devtools::check()` fail outright.
 
 ## Tests
 

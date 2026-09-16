@@ -1,10 +1,6 @@
 ---
 title: "Introduction to sfext"
 output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Introduction to sfext}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
