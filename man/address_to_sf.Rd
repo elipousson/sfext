@@ -42,7 +42,26 @@ after converting a data frame to simple feature object; defaults to
 service in addition to the latitude and longitude columns, Default:
 \code{FALSE}.}
 
-\item{...}{Other parameters passed onto methods.}
+\item{...}{
+  Arguments passed on to \code{\link[tidygeocoder:geocode]{tidygeocoder::geocode}}
+  \describe{
+    \item{\code{.tbl}}{dataframe containing addresses}
+    \item{\code{street}}{street address column name}
+    \item{\code{city}}{city column name}
+    \item{\code{county}}{county column name}
+    \item{\code{state}}{state column name}
+    \item{\code{postalcode}}{postal code column name (zip code if in the United States)}
+    \item{\code{country}}{country column name}
+    \item{\code{lat}}{latitude column name. Can be quoted or unquoted (ie. \code{lat} or \code{"lat"}).}
+    \item{\code{long}}{longitude column name. Can be quoted or unquoted (ie. \code{long} or \code{"long"}).}
+    \item{\code{return_input}}{if TRUE then the input dataset will be combined with the geocoder query results
+and returned. If FALSE only the geocoder results will be returned.}
+    \item{\code{limit}}{maximum number of results to return per input address. For many geocoding services the maximum value of the limit parameter is 100. Pass \code{limit = NULL} to use the default \code{limit} value of the selected geocoding service. For batch geocoding, limit must be set to 1 (default) if \code{return_addresses = TRUE}.To use \code{limit > 1} or \code{limit = NULL} set return_input to FALSE. Refer to \link[tidygeocoder]{api_parameter_reference} for more details.}
+    \item{\code{return_addresses}}{if TRUE return input addresses. Defaults to TRUE if \code{return_input} is FALSE
+and FALSE if \code{return_input} is TRUE. This argument is passed to the \code{geo()} function.}
+    \item{\code{unique_only}}{if TRUE then only unique results will be returned and
+return_input will be set to FALSE.}
+  }}
 
 \item{call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be
