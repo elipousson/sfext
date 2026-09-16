@@ -190,7 +190,7 @@ group_by_col <- function(
     return(data)
   }
 
-  check_name(col, call = call)
+  check_string(col, allow_empty = FALSE, call = call)
   check_data_frame(data, call = call)
 
   if ((has_length(col, 1)) && has_name(data, col)) {
@@ -259,7 +259,7 @@ has_same_name_col <- function(
     return(x)
   }
 
-  check_name(col, call = call)
+  check_string(col, allow_empty = FALSE, call = call)
 
   cli_quiet(quiet)
 
